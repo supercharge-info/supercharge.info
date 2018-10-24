@@ -1,0 +1,64 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Html/Body
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.error {
+    color: #a94442;
+    font-weight: normal;
+}
+
+a.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Layout
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.layout-header {
+    flex: 0 50px;
+}
+
+.layout-content {
+    flex: 1;
+}
+
+.page{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Bootstrap modal dialogs
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/* This to make the dialog have a scroll bar inside of it, rather than causing the page to scroll. */
+.modal-dialog,
+.modal-content {
+    max-height: 80%;
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

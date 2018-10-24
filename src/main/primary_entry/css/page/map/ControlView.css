@@ -1,0 +1,46 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ Slider styling
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.slider-value-label {
+    display: inline-block;
+    text-align: center;
+    font-size: larger;
+    width: 45px;
+    color: dimgray;
+    margin-bottom: 2px;
+    border:transparent;
+}
+
+.slider-control {
+    display: inline-block !important;
+    width: 270px !important;
+    vertical-align: middle;
+    margin-bottom: 1px;
+}
+
+/* Overwrite the Bootstrap z-index so that these buttons don't get on top of the Feedback form */
+#range-unit-mi-label, #range-unit-km-label {
+    z-index: auto;
+}
+
+label.control {
+    font-size: larger;
+    margin: 0 .5em .2em 1em;
+    vertical-align: middle;
+}
+
+.status-checkbox-panel {
+    display: inline-block;
+    font-size: larger;
+}
+
+.status-checkbox-panel img {
+    vertical-align: top;
+    margin-right: .3em;
+}
+
+.status-checkbox-panel div {
+    display: inline-block;
+    margin-right: 1em;
+    cursor: pointer;
+}

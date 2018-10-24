@@ -1,0 +1,44 @@
+#way-back-container {
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#way-back-button-panel {
+    width: 30%;
+    float: left;
+    padding-left: 10px;
+    text-align: left;
+}
+
+#way-back-date {
+    width: 30%;
+    color: #777777;
+    font-size: 3em;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+#way-back-close-trigger {
+    width: 30%;
+    float: right;
+    padding: 5px;
+    text-align: right;
+}
+
+#way-back-delay {
+    font-size: .8em;
+    color: #777777;
+}
+
+.way-back-info .title {
+    font-weight: bold;
+    font-size: larger;
+}
+
+.way-back-info .date {
+    font-size: small;
+    text-align: right;
+}

@@ -1,0 +1,34 @@
+.adp-marker {
+    margin: 5px;
+}
+
+.adp-summary span {
+    font-weight: bold;
+}
+
+.adp-summary span a {
+    font-weight: normal;
+}
+
+.adp-directions {
+    display: none;
+}
+
+.list-group-item {
+    cursor: pointer;
+}
+
+#routing-panel .panel-title a {
+    text-decoration: none;
+    color: dimgray;
+    padding: 3px;
+}
+
+#clear-route-trigger {
+    padding-top: 0;
+}
+
+.routing-panel-message {
+    padding: 5px 5px 5px 15px;
+    margin-bottom: 5px;
+}

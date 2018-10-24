@@ -1,0 +1,151 @@
+#map-main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+}
+
+#routing-panel {
+    flex: 0 0 0;
+    order: 0;
+    overflow: auto;
+    margin-bottom: 0;
+    border-radius: 0;
+    transition: 0.5s;
+    flex-basis: 0; /* for IE11 */
+    z-index: 3;
+}
+
+#page-control {
+    z-index: 0;
+    flex: 0 30px;
+    padding: 2px;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Canvas
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#map-canvas {
+    margin-left: -21px;
+    flex: 1;
+    order: 2;
+    min-height: 450px; /* for IE10, otherwise has zero height */
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Info Window
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.info-window-content {
+    width: 100%;
+    height: 100%;
+    min-width: 210px;
+    min-height: 80px;
+    padding: 0;
+    margin: 0;
+}
+
+.info-window-content .title {
+    font-weight: bold !important;
+    font-size: 1.5em !important;
+}
+
+.info-window-content .construction {
+    color: orange;
+    font-size: smaller;
+    font-weight: bold
+}
+
+.info-window-content .permit {
+    color: #0000ff;
+    font-size: smaller;
+    font-weight: bold
+}
+
+.info-window-content .closed {
+    color: gray;
+    font-size: smaller;
+    font-weight: bold
+}
+
+.info-window-content .links-container {
+    border: 0 solid black;
+}
+
+.info-window-content .links-container a {
+    line-height: 2em;
+    margin: 0 1em 0 0;
+}
+
+.info-window-content th {
+    padding-right: 5px;
+    text-align: right;
+}
+
+.info-window-details {
+    margin-top: 4px;
+    padding-top: 4px;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-top: 1px solid #e0e0e0;
+}
+
+a.pin {
+    color: dimgrey;
+    font-size: medium;
+    text-decoration: none;
+}
+
+a.unpin {
+    color: #e34646;
+    font-size: medium;
+    text-decoration: none;
+}
+
+#routing-panel-toggle-button {
+    width: 21px;
+    height: 45px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.9);
+    border-left: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    z-index: 2;
+    align-self: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#route-panel-close-trigger {
+    display: none; /* this close button is only used on small screens */
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+For smaller screens
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (max-width: 480px) {
+    #map-main-content {
+        flex-direction: column;
+    }
+
+    #map-canvas {
+        margin-left: 0;
+        order: 0;
+        flex: 0 2 100%;
+        min-height: 200px;
+    }
+
+    #routing-panel-toggle-button {
+        width: 0;
+        height: 0;
+    }
+
+    #routing-panel {
+        order: 2;
+        flex: 0 1 0;
+    }
+
+    #route-panel-close-trigger {
+        display: block;
+    }
+}

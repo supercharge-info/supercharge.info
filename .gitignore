@@ -1,0 +1,16 @@
+#------------
+# Intellij
+#------------
+*.iml
+/.idea/
+
+#------------
+# build
+#------------
+/webcontent-built/
+
+#------------
+# nodejs
+#------------
+node_modules/
+npm-debug.log

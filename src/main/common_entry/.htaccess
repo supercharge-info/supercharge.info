@@ -1,0 +1,8 @@
+<IfModule mod_expires.c>
+    ExpiresByType text/css "modification plus 20 years"
+    ExpiresByType application/javascript "modification plus 20 years"
+    ExpiresByType image/gif "modification plus 20 years"
+    ExpiresByType image/png "modification plus 20 years"
+    ExpiresByType image/jpg "modification plus 20 years"
+    ExpiresByType image/jpeg "modification plus 20 years"
+</IfModule>

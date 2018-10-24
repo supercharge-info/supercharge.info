@@ -1,0 +1,316 @@
+
+---------------------------------
+Global -- Login Dialog
+---------------------------------
+
+() Login
+    () Required fields: username, password
+    () Test failures:
+        () user does not exist
+        () bad password
+    () If you close the dialog, or navigate to a different login panel, all fields should be reset and messages clear.
+    () Success
+        () Page should refresh.
+        () Username should show up instead of "Sign In" button.  Username dropdown menu.
+    () After login
+        () Button should be updated to show user's username.
+        () Page should refresh and show all of the users custom markers, custom location, etc.
+    () Logout
+        () Cookie named 'user' should go away.
+        () Username should go away and "Sign In" is displayed which is now link to login dialog.
+
+() Registration
+    () Verify these fields are required: username, password, email
+    () Errors -- server side
+        () username already exists
+        () email already exists
+    () Errors -- server side
+        () password meets minimum length
+        () username meets minimum length
+        () email address is a valid format
+    () Verify "Thank you...logging in..." message is displayed for four seconds, then goes away.
+    () Verify that user really is logged in; still logged in after page refresh, able to save custom markers, etc.
+
+() Password Reset
+    () Error message displayed for non existing user.
+    () Error message displayed for non existing email.
+    () Email send and reset key works.
+    () Reset key should only work once.
+
+---------------------------------
+Global -- Other
+---------------------------------
+
+() Site specific fav icon should show up in all browsers.
+
+() Navigation Menu
+    () Collapsed Menu (for small screens)
+        () Menu should auto close after select any menu item (main menu or dropdown menu).
+        () Menu should auto close after clicking anywhere in the body.
+        () Menu should auto close after clicking anywhere in the body, including in form-controls (region/country).
+        () Menu should NOT close when clicking in 'Zoom to Location' input box in menu.
+        () Menu should close after pressing enter in 'Zoom to Location' input box.
+
+() Change Password
+    () Minimum password length is enforced.
+    () Dialog forces you to type the SAME password twice
+    () Existing values and errors are cleared when, instead of submit, user closes dialog by clicking elsewhere.
+    () Password is actually changed to new value.
+
+() History API.
+    () Default path updates location URL to /map:
+        () http://localhost:9090/        TO: http://localhost:9090/map
+        () http://localhost:9090?zoom=10 TO: http://localhost:9090/map?zoom=10
+    () Changing tabs updates to path in browser location URL.
+    () Clicking back forward actually moves you between tabs and updates browser location URL correctly.
+    () If landing page has parameters http://localhost:9090/map?center=41.615648,-87.304997&zoom=9 those URL params are
+       still present when going forward and coming back with browser back button.
+    () Clicking on user profile adds /profile to browser location bar.
+    () Can use browser back forward buttons for profile.
+    () Can navigate directly to each URL:
+        () http://localhost:9090/map
+        () http://localhost:9090/changes
+        () http://localhost:9090/data
+        () http://localhost:9090/charts
+        () http://localhost:9090/about
+        () http://localhost:9090/profile
+
+---------------------------------
+Map Page
+---------------------------------
+
+() Map View Initialization
+    () When User Settings NOT available:
+        () Should prompt for allowing geolocation and only then display the map center at users location.
+        () If user to rejects geolocation should show map centered as US.
+        () Should not prompt for location if 'center' url parameter is used.
+        () Should not prompt for location if 'page' url parameter is used with non 'map' value. (Until user clicks 'map' tab).
+    () When user settings ARE available.
+        () Map should have center and zoom values from user settings, geolocation should never appear.
+        () 'center' and 'zoom' parameters can still be used to override user settings
+        () All custom markers should be displayed.
+
+() Map Options Menu
+    () All range circles on
+        () should set default range to 50 miles if range is currently zero.
+        () should turn on just one range circle, if just one already off.
+        () should work when only displaying various combinations of OPEN, CONSTRUCTION, PERMIT, USER_ADDED
+        () should turn on circles that are outside of the current viewport
+        () should turn on circles on user added markers
+        () should update the circle on/off link on any open info windows
+    () All range circles off.
+        () toggle all circles on, then all off, then toggle status (opened for example). All circles should remain off.
+        () should turn off circles that are outside of the current viewport
+        () should turn off circles on user added markers
+        () should update the circle on/off link on any open info windows
+    () Range Adjuster
+        () Should be able to click on range text and type it in.
+            () Does not allow more than min/max value.
+            () Slider adjusts to typed value.
+            () Text continues to update when slider is changed.
+    () Status Selection
+    () Rendering Options
+        () Fill color
+        () Border color
+        () Fill opacity
+        () Border opacity
+    () Link to this view.
+        () Verify link in dialog contains the current coordinates, zoom, range, and unit.
+        () Verify link really takes you to the same coordinates, zoom, range, and unit.
+        () If you "Link to this view" and "Go To" multiple times repeatedly the view coordinates should not change at all.
+        () Verify that if you zoom out and pan around the entire world more than once latitude in link is still in [-180,180]
+
+() Map Context Menu
+    () Should be able to right-click and get context menu inside or outside of a range circle.
+    () Context menu should be hidden after a context menu item is selected.
+    () Right clicking again somewhere else should MOVE the context menu, not show two.
+
+() Map Custom Markers
+    () Creation
+        () New marker dialog should appear after selecting "Add custom marker..." from map context menu.
+        () Dialog should have title "New Marker"
+        () Add and cancel buttons should work.
+        () Text input field (Marker Name) should have focus when dialog is visible.
+        () Each time the dialog appears the text input should be blank (After 'Add' or 'Cancel', enter, or escape).
+        () Pressing escape should be equivalent to clicking 'Cancel'.
+        () Pressing enter should be equivalent to clicking 'Add'.
+    () Info Window
+        () Info windows is displayed automatically after custom marker creation.
+        () Any existing (non-pinned) info windows are automatically closed when the custom marker is created
+        () When info windows overlap, the one that is opened later should always be on top
+        () When info windows overlap, clicking on the one behind should bring it forward
+        () User provided name shows up.
+        () Correct links show up: 'zoom in', 'circle off', 'add to route', 'details', 'remove',
+        () Links
+            () zoom in
+            () circle on
+            () add to route
+            () details
+                () should show 'GPS' field only.
+            () remove
+                () should remove from map and from user config
+            () remove all
+                () should remove all custom markers from map and user config.  Should remove all markers even if
+                   some are out of the view and not yet initialized yet.
+
+() Map Normal Markers
+    () Info window shown on click.
+        () Title is bold and larger font.
+        () Status is shown orange for under construction markers, blue for permit.
+        () Street address is shown.
+        () Actions
+            () Zoom In
+            () Toggle Circle
+            () Add To Route
+            () Details
+                () Elevation (in ft or m)
+                () GPS
+                () Hours
+                () Stalls
+                () Power
+                () Solar Canopy
+                () Battery Storage
+            () URL
+            () URL Discuss
+    () Clicking another marker closes any open info windows.
+
+() Map Total Count Panel
+    () Verify counts are correct for all statuses.
+    () Verify count font color matches status color.
+    () Verify that country changes when map is centered over: USA, Canada, Europe, Asia, Australia, Japan
+    () Verify that country display correctly when Center parameter is used:
+        () China: http://supercharge.info/?Center=32.428601,113.547982&Zoom=6&RangeKm=177
+        () Europe: http://supercharge.info/?Center=51.093993,10.107583&Zoom=9&RangeKm=177
+
+() Control: Zoom to location
+    () Should be able to use GPS coordinates: "41.615648,-87.304997"
+    () Should be able to use place names: "miami"
+
+() Control: Status checkboxes
+    () Mouse pointer should be type 'pointer' when hovering over checkbox, icon, or label.
+    () Should be able to toggle values by clicking on checkbox, icon, or label
+
+() Routing
+    () Should be able to add sites with any status.
+    () Should be able to add arbitrary location on map.
+    () Route panel and toggle button should be displayed when first site is added to route.
+    () Route panel should close/expand with the click of the toggle button.
+    () After route panel is closed with the toggle button, adding a site should make it appear again.
+    () Route panel should close and the toggle button should disappear when the last waypoint is removed from route.
+    () Each waypoint should be listed (above directions panel) and have:
+        () Badge 'A', 'B', 'C', etc.
+        () Friendly display name.
+        () Close icon.
+    () Directions should be displayed below list of waypoints.
+    () Clicking 'x' on one waypoint removes it.
+        () Directions to removed waypoint should go away.
+        () Rendered directions on map should go away.
+    () Clicking 'Clear' in route panel title should close the panel and remove all existing waypoints.
+    () When user is not logged in, "save route" button is not available, instead "log in first to save your route".
+    () When user is logged in, "save route" button shows up in the routing panel heading.
+    () After planning a route, a logged in user should be able to click "save route" button to save the route.
+        () User must enter a route name.
+        () New routes can NOT be saved with names matching existing routes.
+        () Existing routes can be saved with a new name, in which case they are duplicated and saved.
+    () Logged in user should be able to see all saved routes under user drop-down -> saved routes.
+        () When there's no saved route, a message should be shown.
+    () User should be able to load a saved route from the "saved routes" dialog.
+    () User should be able to delete a saved route from the "saved routes" dialog
+        () When there's no more saved route after deletion, a message should be shown.
+    () Unit (km/mi) used in route description should match unit selected in user's settings.
+
+---------------------------------
+Data Page
+---------------------------------
+
+() Default sort should be by opened date descending (with null opened dates listed last/bottom).
+() Should NOT show custom markers.
+() GPS coordinates should be displayed in monospace font.
+() Elevation values should be in monospaced font, right aligned, and should sort correctly.
+() All three statuses should show up correctly in status column.
+() Status values should be colors (Construction=orange, Permit=blue)
+() Table should sort when clicking each table header.
+() Clicking on a row should open that site on map view. Unless clicked cell is a link.
+() Link Columns.
+    () Two link columns should be displayed:
+        () Tesla supercharger page.
+        () Discussion thread.
+    () Links should open in a new tab.
+
+
+---------------------------------
+Charts Page
+---------------------------------
+
+() Open Superchargers -- globally
+() Open Superchargers -- per region
+    () Individual curves should be correct: North America, Europe, Asia
+() Open superchargers per Country Pie Chart
+() Superchargers per US state.
+() Superchargers per country.
+() Construction/Permit Status days
+    () Should be larger than other charts, 1000px height.
+
+---------------------------------
+Changes Page
+---------------------------------
+
+() Latest supercharger changes should be present.
+() Changes to 'Open' status should have background color green.
+() Status column should be color coded: orange for construction, blue for permit, black for open, etc.
+() Click on a row in the status table should take you to the map for that supercharger.
+    () This should work if map was the first page loaded.
+    () This should work if map was NOT the first page loaded.
+
+---------------------------------
+About Page
+---------------------------------
+
+() Verify email address is inserted correctly.
+() Email address should not appear followed by period or other punctuation that user will copy when copying-and-pasting into their mail client.
+() Verify version (last changed date) is loaded correctly.
+() About Form
+    () Validation should prevent submitting empty feedback.
+    () Validation messages should go away after the dialog closes.
+    () Thank you message should be displayed after successful submit.
+    () Thank you message should be gone if feedback dialog is opened again.
+
+
+---------------------------------
+URL parameters
+---------------------------------
+
+() Site allows parameter names to have any case (upper or lower).
+() Test each parameter:
+    () Page (deprecated)
+        () http://localhost:9090/?page=Changes
+        () http://localhost:9090/?page=dAtA
+        () http://localhost:9090/?page=charTs
+        () http://localhost:9090?page=about
+    () Zoom
+        () http://localhost:9090/?page=map&zoom=20
+    () Center
+        () Good: http://localhost:9090/?Center=41.615648,-87.304997&zoom=9
+        () Use default center if values (either lat or long) cannot be parsed.
+            () http://localhost:9090/?Center=41.615648,bad&zoom=9
+            () http://localhost:9090/?Center=bad,-87.304997&zoom=9
+        () Should work even if lat/lon coordinates have spaces (%20) on either side.
+            () http://localhost:9090/?Center=41.615648%20,%20-87.304997&zoom=9
+        () Should work even if user has previously allowed geolocation API.
+    () RangeMi/RangeKm
+        () http://localhost:9090/?Center=41.615648%20,%20-87.304997&zoom=9&RangeMi=20
+        () http://localhost:9090/?Center=41.615648%20,%20-87.304997&zoom=9&RangeKm=20
+        () Range control slider should be positioned correctly and its text label should show the correct range.
+        () Range unit selection (mi/km) should reflect the unit of the requested parameter, mi or km, for RangMi, RangeKm respectively.
+    () Controls
+        () http://localhost:9090/map?controls=  (default controls)
+        () http://localhost:9090/map?controls=render,range,status
+    () http://localhost:9090/map?wayback=start
+
+
+---------------------------------
+Other tests.
+---------------------------------
+
+() HTTPS: https://www.ssllabs.com/ssltest
+() IPv6 : https://ip6.nl/

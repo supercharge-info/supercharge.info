@@ -1,0 +1,49 @@
+#supercharger-data-table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#supercharger-data-table span.PERMIT {
+    color: #0000ff;
+}
+
+#supercharger-data-table span.CONSTRUCTION {
+    color: orange;
+}
+
+#supercharger-data-table th {
+    text-align: left;
+}
+
+#supercharger-data-table td {
+    text-align: left;
+}
+
+#supercharger-data-table td.link {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#supercharger-data-table td.gps {
+    font-family: monospace;
+    font-size: .75em;
+}
+
+#supercharger-data-table td.number {
+    text-align: right;
+}
+
+
+/* ---- */
+
+#data-filter-div {
+    text-align: center;
+    margin: 1em 0 1em 0;
+}
+
+#data-filter-div select {
+    max-width: 300px;
+    margin: auto;
+    min-width: 150px;
+}

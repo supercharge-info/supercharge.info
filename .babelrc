@@ -1,0 +1,16 @@
+// The babel-loader plugins seems to use this config to determine
+// target environment (browser versions or node version) and based
+// on that decide which es2015 language features need to be replaced.
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": "last 2 versions"
+        },
+        "debug": false
+      }
+    ]
+  ]
+}

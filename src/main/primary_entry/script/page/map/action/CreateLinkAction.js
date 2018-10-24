@@ -1,0 +1,67 @@
+import EventBus from "../../../util/EventBus";
+import rangeModel from "../RangeModel";
+import $ from 'jquery';
+
+/**
+ *
+ * @constructor
+ */
+const Action = function (googleMap) {
+    this.googleMap = googleMap;
+    EventBus.addListener("create-link-event", this.createLink, this);
+};
+
+// See notes elsewhere in the codebase where we do the same thing for explanation of why this is necessary.
+Action.prototype.getCenter = function () {
+    const center = this.googleMap.getCenter();
+    return new google.maps.LatLng(center.lat(), this.googleMap.getCenter().lng(), false);
+};
+
+Action.prototype.createLink = function (event) {
+    const zoom = this.googleMap.getZoom();
+    const latLng = this.getCenter();
+    let linkStr = window.location.href.split('?')[0];
+    linkStr += '?Center=' + latLng.toUrlValue() + '&Zoom=' + zoom;
+    if (rangeModel.getRangeMeters() !== 0) {
+        if (rangeModel.displayUnit.isKilometers()) {
+            linkStr += '&RangeKm=' + rangeModel.getCurrent();
+        }
+        else if (rangeModel.displayUnit.isMiles()) {
+            linkStr += '&RangeMi=' + rangeModel.getCurrent();
+        }
+    }
+    $('#create-link-input').val(linkStr);
+    $("#go-to-button").attr('disabled', false);
+
+    showLinkModal();
+};
+
+/**
+ * show the modal with a link to the current view.
+ */
+function showLinkModal() {
+    const linkDialog = $("#link-dialog");
+    const linkInput = $("#create-link-input");
+    const goButton = $("#go-to-button");
+
+    // Go to URL when "Go to! button is pressed"
+    goButton.on('click', function () {
+        window.location.href = linkInput.val();
+    });
+
+    // Focus on input field after dialog is shown
+    // and select its contents for quick copy & paste
+    linkDialog.on('shown.bs.modal', function (e) {
+        linkInput.focus().select();
+    });
+    // Clear input field after any type of dialog close
+    linkDialog.on('hidden.bs.modal', function (e) {
+        linkInput.val("");
+    });
+
+    linkDialog.modal();
+}
+
+
+export default Action;
+

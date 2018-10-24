@@ -1,0 +1,43 @@
+#page-map {
+    padding: 0 !important;
+}
+
+#create-link-input {
+    width: 100%;
+}
+
+#navbar {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Collapse navbar earlier than bootstrap's default 768px
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (max-width: 1010px) {
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+    .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    .navbar-header .collapse, .navbar-toggle {
+        display:block !important;
+    }
+    .navbar-header {
+        float:none;
+    }
+}
+
+#new-feature-notify {
+    text-align: center;
+    margin:0;
+    padding: .5em;
+}
+
+#new-feature-notify a {
+    color: blue;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
