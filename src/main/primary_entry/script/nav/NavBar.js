@@ -47,8 +47,8 @@ export default class NavBar {
         // won't get a page back in our "popstate" listener, and hence won't be able to re-render
         // first page in history.
         this.currentPage = QueryStrings.getPage();
-        // Always add / as /map in the history
-        const adjustedPath = window.location.pathname === "/" ? "/map" : window.location.pathname;
+        // Always add / as /changes in the history
+        const adjustedPath = window.location.pathname === "/" ? "/changes" : window.location.pathname;
         history.replaceState(this.currentPage, null, adjustedPath + window.location.search);
         this.changePage(this.currentPage);
 
