@@ -1,12 +1,12 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const isWindowsBash = require('is-windows-bash');
 
 module.exports = {
+    mode: 'production',
     entry: {
         primary: './src/main/primary_entry/script/primary_entry.js'
     },
@@ -24,7 +24,10 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
                 }
             },
             //
@@ -35,10 +38,12 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: "css-loader"
-                })
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    "css-loader"
+                ]
             },
             //
             // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
@@ -63,7 +68,13 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin("[name].[chunkhash].css"),
+        //
+        // https://webpack.js.org/plugins/mini-css-extract-plugin/
+        //
+        new MiniCssExtractPlugin({
+            filename: "[name].css",
+            chunkFilename: "[id].css"
+        }),
         //
         // https://github.com/jantimon/html-webpack-plugin
         //
