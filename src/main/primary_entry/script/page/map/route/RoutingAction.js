@@ -93,7 +93,8 @@ export default class RoutingAction {
             lastSummarySpan.show();
         });
 
-        $(".adp-summary a").on("click", function (event) {
+        $(".adp-summary a").on("click", (event) => {
+            event.preventDefault();
             $(event.target).parents(".adp-summary").next().find(".adp-directions").toggle();
         });
     };
