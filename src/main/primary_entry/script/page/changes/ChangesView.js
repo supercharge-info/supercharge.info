@@ -7,6 +7,7 @@ import ServiceURL from "../../common/ServiceURL";
 import userConfig from "../../common/UserConfig";
 import CountryRegionControl from "../../common/CountryRegionControl";
 import SiteStatus from "../../site/SiteStatus";
+import Sites from "../../site/Sites";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 
@@ -49,11 +50,24 @@ export default class ChangesView {
 
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
-            const clickedSiteId = parseInt($(event.target).closest('tr').data('siteid'));
-            console.log("CLICKED: " + clickedSiteId);
-            EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+            const target = $(event.target);
+            if (!target.is("a")) {
+                const clickedSiteId = parseInt(target.closest('tr').data('siteid'));
+                EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+            }
         }
     };
+
+    static buildDiscussionLink(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        return site.urlDiscuss ?
+            ChangesView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
+            'none';
+    }
+
+    static asLink(href, content) {
+        return `<a href='${href}'  target='_blank'>${content}</a>`;
+    }
 
     initDataTableOptions() {
         const changesView = this;
@@ -70,7 +84,7 @@ export default class ChangesView {
             "pageLength": 50,
             "ajax": {
                 url: ServiceURL.CHANGES,
-                dataFilter: function (data) {
+                dataFilter: (data) => {
                     const json = jQuery.parseJSON(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
@@ -100,7 +114,13 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return `<span class='${row.siteStatus}'>${SiteStatus.fromString(row.siteStatus).displayName}</span>`;
                     }
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return ChangesView.buildDiscussionLink(row);
+                    }
                 }
+
             ],
             "createdRow": (row, data, index) => {
                 const rowJq = $(row);
@@ -110,11 +130,11 @@ export default class ChangesView {
                 }
             },
             "dom": "" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-12 text-center'l>>" +
-            "<'row'<'col-sm-12 text-center'p>>" +
-            "<'row'<'col-sm-12 text-center'i>>" +
-            ""
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 text-center'l>>" +
+                "<'row'<'col-sm-12 text-center'p>>" +
+                "<'row'<'col-sm-12 text-center'i>>" +
+                ""
 
         }
 
