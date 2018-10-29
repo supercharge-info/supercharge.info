@@ -6,7 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
     entry: {
         primary: './src/main/primary_entry/script/primary_entry.js'
     },
@@ -14,7 +13,6 @@ module.exports = {
         filename: "[name].[chunkhash].js",
         path: path.resolve(__dirname, 'webcontent-built')
     },
-    devtool: 'source-map',
     module: {
         rules: [
             //
@@ -33,7 +31,6 @@ module.exports = {
             //
             // CSS
             //
-            // https://github.com/webpack-contrib/style-loader
             // https://github.com/webpack-contrib/css-loader
             {
                 test: /\.css$/,
@@ -72,8 +69,8 @@ module.exports = {
         // https://webpack.js.org/plugins/mini-css-extract-plugin/
         //
         new MiniCssExtractPlugin({
-            filename: "[name].css",
-            chunkFilename: "[id].css"
+            filename: "[name].[hash].css",
+            chunkFilename: "[id].[hash].css"
         }),
         //
         // https://github.com/jantimon/html-webpack-plugin
@@ -109,31 +106,5 @@ module.exports = {
             {from: 'src/main/common_entry/favicon.ico'},
             {from: 'src/main/common_entry/sitemap.xml'}
         ])
-    ],
-    //
-    // Dev server config options here: https://webpack.js.org/configuration/dev-server/
-    // https://github.com/webpack/webpack-dev-server
-    devServer: {
-        compress: true,
-        port: 9090,
-        noInfo: false,
-        proxy: {
-            "/service": {
-                target: "https://supercharge.info:443",
-                secure: true,
-                changeOrigin: true
-            }
-        },
-        historyApiFallback: {
-            rewrites: [
-                // For these otherwise not found paths send to index.html
-                { from: /^\/map/, to: '/index.html' },
-                { from: /^\/changes/, to: '/index.html' },
-                { from: /^\/data/, to: '/index.html' },
-                { from: /^\/charts/, to: '/index.html' },
-                { from: /^\/about/, to: '/index.html' },
-                { from: /^\/profile/, to: '/index.html' },
-            ],
-        },
-    }
+    ]
 };

@@ -12,13 +12,8 @@ git push origin HEAD --tags
 #
 # Actually create the packaged webcontent-build directory.
 #
-rm -rf webcontent-built
+npm run clean
 npm run package
-
-#
-# Delete the source maps, don't deploy our source code to prod.
-#
-find webcontent-built -type f -name '*.map' -exec rm -v {} \;
 
 #
 # Zip it and upload to nexus.

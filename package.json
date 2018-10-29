@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "mocha --opts src/test/mocha.opts src/test",
-    "package": "NODE_ENV=production rm -rf webcontent-built/* && webpack --progress --optimize-minimize",
-    "start": "node_modules/.bin/webpack-dev-server",
+    "package": "NODE_ENV=production webpack --progress --config webpack.prod.js",
+    "start": "webpack-dev-server --open --config webpack.dev.js",
     "clean": "rm -rf webcontent-built"
   },
   "repository": {
@@ -31,7 +31,8 @@
     "url-loader": "1.1.2",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "3.1.10"
+    "webpack-dev-server": "3.1.10",
+    "webpack-merge": "^4.1.4"
   },
   "dependencies": {
     "bootstrap": "3.3.7",
