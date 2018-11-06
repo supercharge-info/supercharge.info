@@ -58,15 +58,37 @@ export default class ChangesView {
         }
     };
 
-    static buildDiscussionLink(changeRow) {
+    static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        return site.urlDiscuss ?
+        return `<span title="${site.address.street}">${changeRow.siteName}</span>`
+    }
+    
+    static buildLinks(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        const addr = site.address;
+        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, 'gmap', site.location.toUrlValue());
+        const discussLink = site.urlDiscuss ?
             ChangesView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
-            'none';
+            ChangesView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');
+        const teslaLink = site.locationId ?
+            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, 'tesla') :
+            '';
+        return `${gmapLink} | ${discussLink}${teslaLink}`;
     }
 
-    static asLink(href, content) {
-        return `<a href='${href}'  target='_blank'>${content}</a>`;
+    static buildDetails(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        const stalls = `${site.numStalls} stalls`
+        const kw = site.powerKilowatt > 0 ?
+            ` | ${site.powerKilowatt} kW` :
+            '';
+        return stalls + kw;
+    }
+
+    static asLink(href, content, title) {
+        const titleAttr = title ? `title='${title}'` : '';
+        return `<a href='${href}' ${titleAttr} target='_blank'>${content}</a>`;
     }
 
     initDataTableOptions() {
@@ -108,7 +130,9 @@ export default class ChangesView {
                     }
                 },
                 {
-                    "data": "siteName"
+                    "data": (row, type, val, meta) => {
+                        return ChangesView.buildSiteName(row);
+                    }
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -117,10 +141,14 @@ export default class ChangesView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return ChangesView.buildDiscussionLink(row);
+                        return ChangesView.buildLinks(row);
+                    }
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return ChangesView.buildDetails(row);
                     }
                 }
-
             ],
             "createdRow": (row, data, index) => {
                 const rowJq = $(row);

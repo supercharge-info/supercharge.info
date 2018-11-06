@@ -49,10 +49,24 @@ export default class DataView {
         }
     };
 
-    static asLink(href, content) {
-        return `<a href='${href}'  target='_blank'>${content}</a>`;
+    static asLink(href, content, title) {
+        const titleAttr = title ? `title='${title}'` : '';
+        return `<a href='${href}' ${titleAttr} target='_blank'>${content}</a>`;
     }
 
+    static buildLinks(supercharger) {
+        const site = supercharger;
+        const addr = site.address;
+        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+        const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, 'gmap');
+        const discussLink = site.urlDiscuss ?
+            DataView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
+            DataView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');
+        const teslaLink = site.locationId ?
+            " | " + DataView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, 'tesla') :
+            '';
+        return `${gmapLink} | ${discussLink}${teslaLink}`;
+    }
     static buildDiscussionLink(supercharger) {
         return supercharger.urlDiscuss ?
             DataView.asLink(`${ServiceURL.DISCUSS}?siteId=${supercharger.id}`, 'forum') :
@@ -121,9 +135,7 @@ export default class DataView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return DataView.asLink(ServiceURL.TESLA_WEB_PAGE + row.locationId, 'tesla') +
-                            " " +
-                            DataView.buildDiscussionLink(row);
+                        return DataView.buildLinks(row);
                     },
                     "className": "link",
                     "orderable": false

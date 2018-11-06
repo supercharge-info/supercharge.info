@@ -1,3 +1,11 @@
+#supercharger-data-table_wrapper .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+#supercharger-data-table_wrapper .row div {
+    padding: 0;
+}
+
 #supercharger-data-table {
     border-collapse: collapse;
     margin: 0 auto;
@@ -20,9 +28,8 @@
     text-align: left;
 }
 
-#supercharger-data-table td.link {
+#supercharger-data-table td.link, #supercharger-data-table th.link {
     text-align: center;
-    vertical-align: middle;
 }
 
 #supercharger-data-table td.gps {
