@@ -82,7 +82,7 @@ export default class MarkerFactory {
         return (supercharger.isOpen() && statusModel.showOpen) ||
             (supercharger.isConstruction() && statusModel.showConstruction) ||
             (supercharger.isPermit() && statusModel.showPermit) ||
-            (supercharger.isClosed() && statusModel.showClosed) ||
+            ((supercharger.isClosedTemp() || supercharger.isClosedPerm()) && statusModel.showClosed) ||
             supercharger.isUserAdded();
     };
 

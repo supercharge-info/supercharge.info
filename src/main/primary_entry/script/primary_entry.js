@@ -14,6 +14,7 @@ import "../images/construction-cone.png";
 import "../images/construction-cone_20.png";
 import "../images/feed-icon.png";
 import "../images/dots/blue_dot_16.png";
+import "../images/dots/black_dot_16.png";
 import "../images/dots/gray_dot_16.png";
 import "../images/dots/green_dot_16.png";
 import "../images/dots/red_dot_16.png";

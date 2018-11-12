@@ -61,8 +61,14 @@ Info Window
     font-weight: bold
 }
 
-.info-window-content .closed {
+.info-window-content .closed-temp {
     color: gray;
+    font-size: smaller;
+    font-weight: bold
+}
+
+.info-window-content .closed-perm {
+    color: black;
     font-size: smaller;
     font-weight: bold
 }

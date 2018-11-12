@@ -257,9 +257,13 @@ export default class Renderer {
         else if (site.isPermit()) {
             popupContent += `<div class='permit'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
         }
-        else if (site.isClosed()) {
-            popupContent += `<div class='closed'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
+        else if (site.isClosedTemp()) {
+            popupContent += `<div class='closed-temp'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
         }
+        else if (site.isClosedPerm()) {
+            popupContent += `<div class='closed-perm'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
+        }
+
 
         //
         // Street Address

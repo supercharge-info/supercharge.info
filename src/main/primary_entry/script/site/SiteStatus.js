@@ -4,9 +4,17 @@ import Strings from "../util/Strings";
 const imagesDir = '/images';
 
 const Status = {
-    CLOSED: {
-        value: 'CLOSED',
+    CLOSED_PERM: {
+        value: 'CLOSED_PERM',
         sort: 0,
+        displayName: "Permanently Closed",
+        getIconUrl: function (supercharger) {
+            return imagesDir + '/dots/black_dot_16.png';
+        }
+    },
+    CLOSED_TEMP: {
+        value: 'CLOSED_TEMP',
+        sort: 1,
         displayName: "Temporarily Closed",
         getIconUrl: function (supercharger) {
             return imagesDir + '/dots/gray_dot_16.png';
@@ -14,7 +22,7 @@ const Status = {
     },
     PERMIT: {
         value: 'PERMIT',
-        sort: 1,
+        sort: 2,
         displayName: "Permit",
         getIconUrl: function (supercharger) {
             return imagesDir + '/dots/blue_dot_16.png';
@@ -22,7 +30,7 @@ const Status = {
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
-        sort: 2,
+        sort: 3,
         displayName: "Construction",
         getIconUrl: function (supercharger) {
             return imagesDir + '/construction-cone.png';
@@ -30,7 +38,7 @@ const Status = {
     },
     OPEN: {
         value: 'OPEN',
-        sort: 3,
+        sort: 4,
         displayName: "Open",
         getIconUrl: function (supercharger) {
             if (Strings.isNotEmpty(supercharger.hours)) {
@@ -57,8 +65,10 @@ Status.fromString = function (string) {
         return Status.CONSTRUCTION;
     } else if (s === 'PERMIT') {
         return Status.PERMIT;
-    } else if (s === 'CLOSED') {
-        return Status.CLOSED;
+    } else if (s === 'CLOSED_TEMP') {
+        return Status.CLOSED_TEMP;
+    } else if (s === 'CLOSED_PERM') {
+        return Status.CLOSED_PERM;
     } else if (s === 'USER_ADDED') {
         return Status.USER_ADDED;
     }

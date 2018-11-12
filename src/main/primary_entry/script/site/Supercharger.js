@@ -33,8 +33,11 @@ export default class Supercharger {
     isOpen() {
         return this.status === Status.OPEN;
     };
-    isClosed() {
-        return this.status === Status.CLOSED;
+    isClosedTemp() {
+        return this.status === Status.CLOSED_TEMP;
+    };
+    isClosedPerm() {
+        return this.status === Status.CLOSED_PERM;
     };
     isUserAdded() {
         return this.status === Status.USER_ADDED;
