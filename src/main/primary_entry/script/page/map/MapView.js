@@ -81,6 +81,7 @@ export default class MapView {
             zoom: initialZoom,
             scaleControl: true,
             mapTypeControl: true,
+            streetViewControl: false,
             mapTypeControlOptions: {
                 mapTypeIds: [google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN],
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
