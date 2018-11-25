@@ -80,7 +80,7 @@ export default class MapView {
             center: new google.maps.LatLng(initialLat, initialLng),
             zoom: initialZoom,
             scaleControl: true,
-            mapTypeControl: true,
+            mapTypeControl: false,
             streetViewControl: false,
             mapTypeControlOptions: {
                 mapTypeIds: [google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN],
