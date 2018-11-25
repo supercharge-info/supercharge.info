@@ -10,7 +10,14 @@ module.exports = merge(common, {
     devServer: {
         compress: true,
         port: 9090,
+        // Configure your local DNS (/etc/hosts) such that this host points to your local machine.  If not doing
+        // map development can change this to simply localhost.
+        host: "test.supercharge.info",
         noInfo: false,
+        // Must use https for local development because the backend server now returns a cookie flagged for https only.
+        // This will cause webpack-dev-server to generate a new self signed cert which you must instruct your browser
+        // to trust.
+        https: true,
         proxy: {
             "/service": {
                 target: "https://supercharge.info:443",
