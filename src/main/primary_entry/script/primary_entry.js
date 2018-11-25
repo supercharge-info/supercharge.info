@@ -19,6 +19,7 @@ import "../images/dots/gray_dot_16.png";
 import "../images/dots/green_dot_16.png";
 import "../images/dots/red_dot_16.png";
 import "../images/dots/red_black_dot_16.png";
+import "../images/become_a_patron_button@2x.png";
 
 
 /**
