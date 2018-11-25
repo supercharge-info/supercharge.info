@@ -9,7 +9,7 @@ export default class ProfileView {
 
     constructor() {
         const view = this;
-        this.origData = {username: null, email: null, unit: null, description: null};
+        this.origData = {email: null, unit: null, description: null};
 
         this.form = $("#profile-form");
         this.errorBox = $("#profile-error-box");
@@ -18,6 +18,7 @@ export default class ProfileView {
         //
         // Read only stuff.
         //
+        this.username = $("#profile-username");
         this.infoCreationDate = $("#profile-data-creation-date");
         this.infoMarkerCount = $("#profile-data-marker-count");
         this.infoRouteCount = $("#profile-data-route-count");
@@ -36,7 +37,7 @@ export default class ProfileView {
 
         if (QueryStrings.isEmailVerifyRequired()) {
             this.form.prepend(
-                `<h3 class="text-danger">Email verification is required before signing into forum. Use below "Send Verification Email" link.<h3>`
+                `<h3 class="text-danger">Email verification is required before signing in to forum. Use below "Send Verification Email" link.<h3>`
             )
         }
     }
@@ -56,7 +57,6 @@ export default class ProfileView {
     onSaveButton(event) {
         event.preventDefault();
         const data = {
-            username: this.getUsername(),
             email: this.getEmail(),
             unit: this.getUnit(),
             description: this.getDescription(),
@@ -105,7 +105,7 @@ export default class ProfileView {
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // getters -- immutable fields
+    // setters
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     setCreationDate(date) {
@@ -131,6 +131,10 @@ export default class ProfileView {
         this.verifyMessage.html("");
     }
 
+    setUsername(u) {
+        this.username.html(u);
+    }
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // getters / setters -- mutable fields
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -138,11 +142,6 @@ export default class ProfileView {
     setEmail(e) {
         this.origData.email = e;
         this.form.find("input[name=email]").val(e);
-    }
-
-    setUsername(u) {
-        this.origData.username = u;
-        this.form.find("input[name=username]").val(u);
     }
 
     setUnit(u) {
@@ -176,7 +175,6 @@ export default class ProfileView {
     valuesHaveChanged() {
         return (
             (this.origData.email !== this.getEmail()) ||
-            (this.origData.username !== this.getUsername()) ||
             (this.origData.unit !== this.getUnit()) ||
             (this.origData.description !== this.getDescription())
         );
