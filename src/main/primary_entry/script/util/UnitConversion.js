@@ -1,17 +1,11 @@
+import _ from 'lodash'
+
 /**
- * Utility class for converting between units.
- *
- * @constructor
+ * Utility function for converting between units.
  */
-const UnitConversion = function (sourceUnit, targetUnit) {
-    this.sourceUnit = sourceUnit;
-    this.targetUnit = targetUnit;
+const unitConversion = (sourceUnit, targetUnit, precision) =>  (value) => {
+    const valueInMeters = 1.0 * value * sourceUnit.meters;
+    return _.round(valueInMeters / targetUnit.meters, precision);
 };
 
-UnitConversion.prototype.convert = function (value) {
-    const valueInMeters = value * this.sourceUnit.meters;
-    return Math.round(valueInMeters / this.targetUnit.meters);
-};
-
-export default UnitConversion;
-
+export default unitConversion;

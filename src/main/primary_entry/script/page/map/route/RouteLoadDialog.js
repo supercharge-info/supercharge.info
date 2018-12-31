@@ -15,6 +15,7 @@ export default class RouteLoadDialog {
     addListeners() {
         this.dialog.on('shown.bs.modal', $.proxy(this.onDialogOpen, this));
         this.dialog.on('hidden.bs.modal', $.proxy(this.onDialogClose, this));
+        this.dialog.find($(".btn-primary")).on('click', $.proxy(this.handleLoadButton, this));
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -22,8 +23,6 @@ export default class RouteLoadDialog {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     onDialogOpen() {
-        this.dialog.find($(".btn-primary")).on('click', $.proxy(this.handleLoadButton, this));
-
         $.getJSON(ServiceURL.USER_ROUTE)
             .done($.proxy(this.handleLoadRoutesResponse, this))
             .fail($.proxy(this.handleLoadRoutesFailure, this));

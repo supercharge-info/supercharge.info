@@ -2,8 +2,9 @@ import Address from "./Address";
 import Objects from "../util/Objects";
 import Dates from "../util/Dates";
 import Units from "../util/Units";
-import UnitConversion from "../util/UnitConversion";
+import unitConversion from "../util/UnitConversion";
 import Status from "./SiteStatus";
+import L from 'leaflet';
 
 
 /**
@@ -56,7 +57,7 @@ export default class Supercharger {
     };
 
     formatLocation() {
-        return Objects.isNullOrUndef(this.location) ? "" : this.location.toUrlValue().replace(",", ", ");
+        return Objects.isNullOrUndef(this.location) ? "" : `${this.location.lat}, ${this.location.lng}`;
     };
 
     formatDateOpened() {
@@ -74,8 +75,7 @@ export default class Supercharger {
         if (Objects.isNullOrUndef(this.elevation)) {
             return "";
         }
-        const conversion = new UnitConversion(Units.M, targetUnits);
-        const elevationNumber = conversion.convert(this.elevation);
+        const elevationNumber = unitConversion(Units.M, targetUnits, 0)(this.elevation);
         return elevationNumber.toLocaleString();
     };
 
@@ -94,7 +94,7 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.status = Status.fromString(jsonObject.status);
     supercharger.statusDays = jsonObject.statusDays;
     supercharger.address = Address.fromJSON(jsonObject.address);
-    supercharger.location = new google.maps.LatLng(jsonObject.gps.latitude, jsonObject.gps.longitude);
+    supercharger.location = L.latLng(jsonObject.gps.latitude, jsonObject.gps.longitude);
     supercharger.elevation = jsonObject.elevationMeters;
     supercharger.urlDiscuss = jsonObject.urlDiscuss;
     supercharger.count = jsonObject.counted;

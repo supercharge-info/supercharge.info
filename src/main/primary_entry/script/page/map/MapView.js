@@ -1,70 +1,60 @@
 import EventBus from "../../util/EventBus";
 import Analytics from "../../util/Analytics";
-import Objects from "../../util/Objects";
 import userConfig from "../../common/UserConfig";
 import SiteIterator from "../../site/SiteIterator";
 import SitePredicates from "../../site/SitePredicates";
 import Sites from "../../site/Sites";
-import MapViewContextMenu from "./MapViewContextMenu";
+import MapContextMenu from "./context/MapContextMenu";
 import MarkerFactory from "./MarkerFactory";
-import RoutingWaypoint from "./route/RoutingWaypoint";
 import $ from "jquery";
-import Events from "../../util/Events";
+import L from 'leaflet';
+import 'leaflet-control-geocoder';
+import mapLayers from './MapLayers'
 import RouteEvents from "./route/RouteEvents";
-
+import routeResultModel from './route/RouteResultModel'
+import polyline from '@mapbox/polyline'
 
 export default class MapView {
 
     constructor(lat, lng, initialZoom) {
-        this.viewDiv = $("#map-canvas");
         this.searchMarker = null;
 
         this.initMap(lat, lng, initialZoom);
         this.addCustomMarkers();
 
-        // handle clicks to toggle supercharger circle
-        $(document).on('click', '.circle-toggle-trigger', $.proxy(this.handleCircleToggle, this));
-        // handle clicks to remove supercharger marker
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
         $(document).on('click', '.marker-toggle-all-trigger', $.proxy(this.handleMarkerRemoveAll, this));
-        // handle clicks to remove supercharger marker
-        $(document).on('click', '.add-to-route-trigger', $.proxy(this.handleAddToRoute, this));
-        // handle clicks to remove supercharger marker
-        $(document).on('click', '.zoom-to-site-trigger', $.proxy(this.zoomToMarker, this));
 
         //
         // Map context menu
         //
-        new MapViewContextMenu(this.googleMap);
-        EventBus.addListener("context-menu-add-to-route-event", $.proxy(this.handleAddToRouteContextMenu, this));
-
-        EventBus.addListener("status-model-changed-event", this.handleStatusModelChange, this);
-        EventBus.addListener("range-model-range-changed-event", this.redrawCircles, this);
-        EventBus.addListener("render-model-changed-event", this.redrawCircles, this);
+        new MapContextMenu(this.mapApi);
+        //EventBus.addListener(MapEvents.context_menu_add_route, $.proxy(this.handleAddToRouteContextMenu, this));
         EventBus.addListener("way-back-trigger-event", this.setupForWayBack, this);
         EventBus.addListener("places-changed-event", this.handlePlacesChange, this);
+        EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
 
-        google.maps.event.addListener(this.googleMap, 'idle', $.proxy(this.handleViewportChange, this));
+        this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
+        // draw map for first time.
+        this.handleViewportChange();
     }
-
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Getter/Setter
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /**
-     * Delegates to this.googleMap and returns { lat: , lng: } coordinate, but accounting for a weird behavior in
-     * the google maps API: If the user pans around the globe this.googleMap.getCenter() will return lng values
+     * Delegates to this.mapApi and returns { lat: , lng: } coordinate, but accounting for a weird behavior in
+     * the maps API: If the user pans around the globe this.mapApi.getCenter() will return lng values
      * outside of [-180, 180]. Here we takes steps to ensure that the longitude value returned for center is always
      * in [-180,180].
      *
-     * Note that this.googleMap.getBounds().getCenter() returns a lng that is always in [-180,180] but for some
+     * Note that this.mapApi.getBounds().getCenter() returns a lng that is always in [-180,180] but for some
      * reason the latitude returned by the function does no exactly equal the current center latitude.  If
      * we use a latitude value that is slightly off each time the map moves up each time the user visits.
      */
     getCenter() {
-        const center = this.googleMap.getCenter();
-        return new google.maps.LatLng(center.lat(), this.googleMap.getCenter().lng(), false);
+        return this.mapApi.getCenter().wrap();
     };
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -76,22 +66,33 @@ export default class MapView {
      */
     initMap(initialLat, initialLng, initialZoom) {
 
-        const mapOptions = {
-            center: new google.maps.LatLng(initialLat, initialLng),
+        // map API
+        //
+        this.mapApi = L.map('map-canvas', {
+            center: [initialLat, initialLng],
             zoom: initialZoom,
-            scaleControl: true,
-            mapTypeControl: false,
-            streetViewControl: false,
-            mapTypeControlOptions: {
-                mapTypeIds: [google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN],
-                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
-            },
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+            layers: mapLayers.getInitialLayers()
+        });
 
-        this.googleMap = new google.maps.Map(this.viewDiv.get(0), mapOptions);
+        // layers control
+        //
+        L.control.layers(mapLayers.getBaseMaps(), mapLayers.getOverlayMaps()).addTo(this.mapApi);
 
-        this.markerFactory = new MarkerFactory(this.googleMap);
+        // geocode (search) control
+        //
+        L.Control.geocoder().addTo(this.mapApi);
+
+        // scale control TODO: update scale unit when user changes it on profile/UI.
+        //
+        L.control.scale({
+            metric: userConfig.getUnit().isMetric(),
+            imperial: !userConfig.getUnit().isMetric(),
+            updateWhenIdle: true
+        }).addTo(this.mapApi);
+
+        // marker factory
+        //
+        this.markerFactory = new MarkerFactory(this.mapApi);
     };
 
     /**
@@ -101,7 +102,7 @@ export default class MapView {
         const customMarkers = userConfig.customMarkers;
         for (let i = 0; i < customMarkers.length; i++) {
             const cm = customMarkers[i];
-            Sites.addCustomSite(cm.name, new google.maps.LatLng(cm.lat, cm.lng));
+            Sites.addCustomSite(cm.name, L.latLng(cm.lat, cm.lng));
         }
     };
 
@@ -109,65 +110,23 @@ export default class MapView {
     // Drawing
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    handleViewportChange(event) {
+    handleViewportChange() {
 
-        const latLngBounds = this.googleMap.getBounds();
+        const latLngBounds = this.mapApi.getBounds();
         const northEast = latLngBounds.getNorthEast();
         const southWest = latLngBounds.getSouthWest();
-        const newNorthEast = new google.maps.LatLng(northEast.lat() + 4, northEast.lng() + 8);
-        const newSouthWest = new google.maps.LatLng(southWest.lat() - 4, southWest.lng() - 8);
-        const expandedBounds = new google.maps.LatLngBounds(newSouthWest, newNorthEast);
+        const newNorthEast = L.latLng(northEast.lat + 1, northEast.lng + 2);
+        const newSouthWest = L.latLng(southWest.lat - 1, southWest.lng - 2);
+        const expandedBounds = L.latLngBounds(newSouthWest, newNorthEast);
 
-        const markerFactory = this.markerFactory;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(expandedBounds))
-            .iterate(function (supercharger) {
-                    markerFactory.createMarker(supercharger);
-                }
-            );
+            .iterate((supercharger) => this.markerFactory.createMarker(supercharger));
         EventBus.dispatch("map-viewport-change-event", latLngBounds);
 
         const mapCenter = this.getCenter();
-        userConfig.setLatLngZoom(mapCenter.lat(), mapCenter.lng(), this.googleMap.getZoom());
-    };
-
-    handleStatusModelChange(event) {
-        new SiteIterator()
-            .withPredicate(SitePredicates.HAS_MARKER)
-            .withPredicate(SitePredicates.NOT_USER_ADDED)
-            .iterate(function (supercharger) {
-                const visible = MarkerFactory.shouldBeVisible(supercharger);
-                supercharger.marker.setVisible(visible);
-                supercharger.circle.setVisible(visible && supercharger.circleOn);
-                if (Objects.isNotNullOrUndef(supercharger.marker.infoWindow)) {
-                    supercharger.marker.infoWindow.close();
-                    supercharger.marker.infoWindow = null;
-                }
-            });
-    };
-
-    setAllRangeCircleVisibility(isVisible) {
-        new SiteIterator()
-            .iterate(function (supercharger) {
-                    supercharger.circleOn = isVisible;
-                    if (supercharger.marker && supercharger.marker.visible) {
-                        supercharger.circle.setVisible(isVisible);
-                    }
-                }
-            );
-    };
-
-    redrawCircles() {
-        const rangeCircleOptions = this.markerFactory.buildRangeCircleOptions();
-
-        new SiteIterator()
-            .withPredicate(SitePredicates.HAS_MARKER)
-            .iterate(function (supercharger) {
-                    rangeCircleOptions.center = supercharger.location;
-                    supercharger.circle.setOptions(rangeCircleOptions);
-                }
-            );
+        userConfig.setLatLngZoom(mapCenter.lat, mapCenter.lng, this.mapApi.getZoom());
     };
 
     setupForWayBack() {
@@ -175,34 +134,30 @@ export default class MapView {
         const markerFactory = this.markerFactory;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .iterate(function (supercharger) {
-                    markerFactory.createMarker(supercharger);
-                }
-            );
+            .iterate((supercharger) => markerFactory.createMarker(supercharger));
         EventBus.dispatch("way-back-start-event");
     };
 
+    handleRouteResult() {
+        if(routeResultModel.isEmpty()) {
+            this.routeLine.removeFrom(this.mapApi);
+            this.routeLine.remove();
+            this.routeLine = null;
+        } else {
+            const geomString = routeResultModel.getBestRoute().geometry;
+            const geomArray = polyline.decode(geomString);
+            this.routeLine = L.polyline(geomArray, {
+                color: '#3388ff',
+                weight: 6,
+                opacity: 0.75
+            }).addTo(this.mapApi);
+            this.mapApi.fitBounds(this.routeLine.getBounds());
+        }
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // InfoWindow Event handlers
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    handleCircleToggle(event) {
-        const eventDetail = Events.eventDetail(event);
-        const id = parseInt(eventDetail.actionName);
-        const supercharger = Sites.getById(id);
-        if (supercharger.circle.getVisible()) {
-            eventDetail.link.text("circle on");
-            supercharger.circle.setVisible(false);
-            supercharger.circleOn = false;
-            Analytics.sendEvent("map", "turn-off-single-circle");
-        } else {
-            eventDetail.link.text("circle off");
-            supercharger.circle.setVisible(true);
-            supercharger.circleOn = true;
-            Analytics.sendEvent("map", "turn-on-single-circle");
-        }
-    };
 
     handleMarkerRemove(event) {
         event.preventDefault();
@@ -229,38 +184,14 @@ export default class MapView {
 
     removeCustomMarker(supercharger) {
         if (supercharger.marker) {
-            supercharger.circle.setMap(null);
-            supercharger.marker.setMap(null);
+            supercharger.marker.remove();
+        }
+        if(supercharger.circle) {
+            supercharger.circle.remove();
         }
         Sites.removeById(supercharger.id);
-        userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat(), supercharger.location.lng());
-        userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat(), supercharger.location.lng());
-    };
-
-    handleAddToRoute(event) {
-        const eventDetail = Events.eventDetail(event);
-        const id = parseInt(eventDetail.actionName);
-        const supercharger = Sites.getById(id);
-        EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(supercharger.location, supercharger.displayName));
-        Analytics.sendEvent("route", "add-marker-to-route", "pop up");
-    };
-
-    zoomToMarker(event) {
-        const eventDetail = Events.eventDetail(event);
-        const id = parseInt(eventDetail.actionName);
-        const supercharger = Sites.getById(id);
-
-        this.googleMap.setZoom(15);
-        this.googleMap.panTo(supercharger.location);
-    };
-
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // Context menu handlers.
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    handleAddToRouteContextMenu(event, currentLatLng) {
-        EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(currentLatLng, "Custom Location"));
-        Analytics.sendEvent("route", "add-marker-to-route", "context menu");
+        userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
+        userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
     };
 
     handlePlacesChange(event, places) {
@@ -270,13 +201,13 @@ export default class MapView {
         }
 
         if (this.searchMarker) {
-            this.searchMarker.setMap(null);
+            this.searchMarker.remove();
         }
 
         // For each place, get the icon, name and location.
-        const bounds = new google.maps.LatLngBounds();
+        const bounds = L.latLngBounds();
         const mapView = this;
-        const map = this.googleMap;
+        const map = this.mapApi;
         places.forEach((place) => {
             if (place.geometry) {
                 // Create a marker for each place.
@@ -293,7 +224,7 @@ export default class MapView {
                 }
             }
         });
-        this.googleMap.fitBounds(bounds);
+        this.mapApi.fitBounds(bounds);
     };
 
 }

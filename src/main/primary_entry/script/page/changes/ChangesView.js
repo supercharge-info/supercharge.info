@@ -67,7 +67,7 @@ export default class ChangesView {
         const site = Sites.getById(changeRow.siteId);
         const addr = site.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, 'gmap', site.location.toUrlValue());
+        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, 'gmap', site.location.toString());
         const discussLink = site.urlDiscuss ?
             ChangesView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
             ChangesView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');

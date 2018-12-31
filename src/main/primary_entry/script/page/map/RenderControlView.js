@@ -66,7 +66,6 @@ export default class RenderView {
      * Handle border color change.
      */
     handleBorderColorChange(newColorEvent) {
-        console.log("INFO: handleBorderColorChange");
         renderModel.borderColor = newColorEvent.toHexString();
         renderModel.fireRenderModelChangeEvent();
     };

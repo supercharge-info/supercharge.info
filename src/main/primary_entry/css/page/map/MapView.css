@@ -98,13 +98,13 @@ Info Window
 a.pin {
     color: dimgrey;
     font-size: medium;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 a.unpin {
-    color: #e34646;
+    color: #e34646 !important;
     font-size: medium;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 #routing-panel-toggle-button {

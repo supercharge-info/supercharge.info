@@ -8,7 +8,6 @@ export default class NavBarDropdown {
 
     constructor() {
         this.rangeControlMenuItem = $("#range-menu-item").find(".glyphicon");
-        this.statusControlMenuItem = $("#status-menu-item").find(".glyphicon");
         this.renderControlMenuItem = $("#rendering-menu-item").find(".glyphicon");
         EventBus.addListener("control-visible-model-changed-event", this.handleControlVisibilityChange, this);
     }
@@ -19,10 +18,6 @@ export default class NavBarDropdown {
         if (eventDetail.actionName === "range-menu-item") {
             EventBus.dispatch("toggle-range-control-event");
             Analytics.sendEvent("control", "toggle-range-control");
-        }
-        else if (eventDetail.actionName === "status-menu-item") {
-            EventBus.dispatch("toggle-status-control-event");
-            Analytics.sendEvent("control", "toggle-status-control");
         }
         else if (eventDetail.actionName === "rendering-menu-item") {
             EventBus.dispatch("toggle-render-control-event");
@@ -48,7 +43,6 @@ export default class NavBarDropdown {
 
     handleControlVisibilityChange(event, controlVisibilityModel) {
         NavBarDropdown.checkboxUpdate(this.rangeControlMenuItem, controlVisibilityModel.rangeControlVisible);
-        NavBarDropdown.checkboxUpdate(this.statusControlMenuItem, controlVisibilityModel.statusControlVisible);
         NavBarDropdown.checkboxUpdate(this.renderControlMenuItem, controlVisibilityModel.renderControlVisible);
     };
 

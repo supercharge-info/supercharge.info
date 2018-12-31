@@ -6,22 +6,21 @@ import $ from 'jquery';
  *
  * @constructor
  */
-const Action = function (googleMap) {
-    this.googleMap = googleMap;
+const Action = function (mapApi) {
+    this.mapApi = mapApi;
     EventBus.addListener("create-link-event", this.createLink, this);
 };
 
 // See notes elsewhere in the codebase where we do the same thing for explanation of why this is necessary.
 Action.prototype.getCenter = function () {
-    const center = this.googleMap.getCenter();
-    return new google.maps.LatLng(center.lat(), this.googleMap.getCenter().lng(), false);
+    return this.mapApi.getCenter();
 };
 
 Action.prototype.createLink = function (event) {
-    const zoom = this.googleMap.getZoom();
+    const zoom = this.mapApi.getZoom();
     const latLng = this.getCenter();
     let linkStr = window.location.href.split('?')[0];
-    linkStr += '?Center=' + latLng.toUrlValue() + '&Zoom=' + zoom;
+    linkStr += '?Center=' + latLng.toString() + '&Zoom=' + zoom;
     if (rangeModel.getRangeMeters() !== 0) {
         if (rangeModel.displayUnit.isKilometers()) {
             linkStr += '&RangeKm=' + rangeModel.getCurrent();

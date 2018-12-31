@@ -1,6 +1,6 @@
 import $ from "jquery";
 import ServiceURL from "../../../common/ServiceURL";
-import routingModel from "./RoutingModel";
+import routeInputModel from "./RouteInputModel";
 
 export default class RouteSaveDialog {
 
@@ -20,8 +20,8 @@ export default class RouteSaveDialog {
         // Focus on input field after dialog is shown.
         this.dialog.on('shown.bs.modal', function (e) {
             that.routeNameInput.focus();
-            if (routingModel.routeName !== null) {
-                that.routeNameInput.val(routingModel.routeName);
+            if (routeInputModel.routeName !== null) {
+                that.routeNameInput.val(routeInputModel.routeName);
             }
         });
 
@@ -54,8 +54,8 @@ export default class RouteSaveDialog {
         this.dialog.find("#save-route-confirm").show();
 
         // CASE 1: update saved route
-        if (formRouteName === routingModel.routeName) {
-            this.saveRoute(routingModel.routeId, routingModel.routeName)
+        if (formRouteName === routeInputModel.routeName) {
+            this.saveRoute(routeInputModel.routeId, routeInputModel.routeName)
         }
         // CASE 2: save for the first time, OR save copy of route using new name.
         else {
@@ -68,8 +68,8 @@ export default class RouteSaveDialog {
     saveRoute(routeId, routeName) {
         const route = {id: routeId, name: routeName, waypoints: []};
 
-        routingModel.getWaypoints().forEach((waypoint) => {
-            const routeWaypoint = {name: waypoint.displayName, lat: waypoint.latLng.lat(), lng: waypoint.latLng.lng()};
+        routeInputModel.getWaypoints().forEach((waypoint) => {
+            const routeWaypoint = {name: waypoint.displayName, lat: waypoint.latLng.lat, lng: waypoint.latLng.lng};
             route.waypoints.push(routeWaypoint)
         });
 
@@ -85,7 +85,7 @@ export default class RouteSaveDialog {
                     // If the routeId passed into this method is -1 that means the user has saved a new route.
                     // Update the model with the new routeId (from response) and name (passed in above).
                     if (routeId === -1) {
-                        routingModel.updateRoute(response.routeName, routeName, routingModel.getWaypoints());
+                        routeInputModel.updateRoute(response.routeName, routeName, routeInputModel.getWaypoints());
                     }
                 }
             }

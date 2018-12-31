@@ -3,19 +3,18 @@ import Analytics from "../../util/Analytics";
 import QueryStrings from "../../common/QueryStrings";
 import userConfig from "../../common/UserConfig";
 import TotalCountPanel from "./TotalCountPanel";
-import StatusControlView from "./StatusControlView";
 import RangeControlView from "./RangeControlView";
 import WayBackAction from "./action/WayBackAction";
-import ToggleRangeCirclesAction from "./action/ToggleRangeCirclesAction";
+import ToggleRangeCircleAllAction from "./action/ToggleRangeCircleAllAction";
+import ToggleRangeCircleAction from "./action/ToggleRangeCircleAction";
+import CircleRedrawAction from './action/CircleRedrawAction';
 import ControlToggleAction from "./action/ControlToggleAction";
-import StatusSelectionAction from "./action/StatusSelectionAction";
 import PanZoomAction from "./action/PanZoomAction";
 import RoutingAction from "./route/RoutingAction";
 import CreateLinkAction from "./action/CreateLinkAction";
 import AddCustomMarkerAction from "./action/AddCustomMarkerAction";
 import MapView from "./MapView";
 import RenderControlView from "./RenderControlView";
-import SearchForLocationView from "./SearchForLocationView";
 import RoutingPanel from "./route/RoutingPanel";
 import rangeModel from "./RangeModel";
 import $ from "jquery";
@@ -36,14 +35,6 @@ export default class MapPage {
         $("#navbar-map-dropdown").show();
         $("#navbar-map-search").show();
         $("#total-count-table").show();
-
-        //TODO 2017/5/25 - quick fix for existing tesla browser.  Need to see how the site behaves after the next browser update and determine if a long term fix is needed
-        if (navigator.userAgent.indexOf('AppleWebKit/534.34') !== -1) {
-            $("#page-control").remove();
-            $("#routing-panel").remove();
-            $("#routing-panel-toggle-button").remove();
-            $("#map-canvas").css('margin', '0');
-        }
     };
 
     onPageHide() {
@@ -55,9 +46,7 @@ export default class MapPage {
     initialize() {
 
         new RenderControlView();
-        new StatusControlView();
         new RangeControlView();
-        new SearchForLocationView();
         new RoutingPanel();
         new TotalCountPanel();
 
@@ -134,13 +123,14 @@ export default class MapPage {
             rangeModel.setDisplayUnit(userConfig.getUnit());
         }
 
-        new RoutingAction(this.mapView.googleMap);
-        new WayBackAction(this.mapView.googleMap);
-        new ToggleRangeCirclesAction(this.mapView);
+        new RoutingAction(this.mapView.mapApi);
+        new WayBackAction(this.mapView.mapApi);
+        new ToggleRangeCircleAllAction(this.mapView.mapApi);
+        new ToggleRangeCircleAction(this.mapView.mapApi);
+        new CircleRedrawAction(this.mapApi);
         new ControlToggleAction();
-        new StatusSelectionAction();
-        new PanZoomAction(this.mapView.googleMap);
-        new CreateLinkAction(this.mapView.googleMap);
+        new PanZoomAction(this.mapView.mapApi);
+        new CreateLinkAction(this.mapView.mapApi);
         new AddCustomMarkerAction(this.mapView);
 
         if (QueryStrings.getWayBack()) {

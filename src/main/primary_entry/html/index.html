@@ -10,8 +10,6 @@
 
     <title>supercharge.info</title>
 
-    <!-- google maps api -->
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB43_4OTJDH7REegECW9B6rmfuXPOTT1R4&amp;libraries=places&amp;callback=supercharge.initApp"></script>
     <!-- google analytics: https://developers.google.com/analytics/devguides/collection/gtagjs/ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-45477233-2"></script>
     <script>
@@ -23,6 +21,7 @@
                 setTimeout(supercharge.initApp, 25);
             }
         };
+        window.supercharge.initApp();
         <!-- Google Analytics -->
         if(!window.location.hostname.startsWith("localhost") && !window.location.hostname.startsWith("test")) {
             window.dataLayer = window.dataLayer || [];
@@ -80,10 +79,6 @@ Navigation Bar
                                         class="glyphicon glyphicon-check"></span>&nbsp;Range Adjuster</a>
                             </li>
                             <li>
-                                <a id="status-menu-item" href="#status-menu-item"><span
-                                        class="glyphicon glyphicon-check"></span>&nbsp;Status Selection</a>
-                            </li>
-                            <li>
                                 <a id="rendering-menu-item" href="#rendering-menu-item"><span
                                         class="glyphicon glyphicon-unchecked"></span>&nbsp;Rendering Options</a>
                             </li>
@@ -99,16 +94,6 @@ Navigation Bar
                         </ul>
                     </li>
                 </ul>
-
-                <!--
-                 Search for Location
-                -->
-                <form class="navbar-form navbar-left" role="form" id="navbar-map-search" hidden>
-                    <div class="form-group">
-                        <input id="search-for-location-input" type="text" class="form-control"
-                               placeholder="Search for Location">&nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
-                </form>
 
                 <!--
                 Counts Table
@@ -200,23 +185,6 @@ PAGE: map
                 </label>
             </div>
 
-        </div>
-        <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Status-->
-        <div id="control-row-status" class="col-md-6" style="text-align: center">
-            <div class="status-checkbox-panel">
-                <div id="status-open-check">
-                    <span class="glyphicon glyphicon-check"></span>
-                    <img src="images/dots/red_dot_16.png" alt="open" style="margin-top: 4px"/>Open
-                </div>
-                <div id="status-construction-check">
-                    <span class="glyphicon glyphicon-check"></span>
-                    <img src="images/construction-cone_20.png" alt="construction"/>Construction
-                </div>
-                <div id="status-permit-check">
-                    <span class="glyphicon glyphicon-check"></span>
-                    <img src="images/dots/blue_dot_16.png" alt="permit" style="margin-top: 4px"/>Permit
-                </div>
-            </div>
         </div>
     </div>
     <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->

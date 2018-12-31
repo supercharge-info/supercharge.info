@@ -21,10 +21,18 @@ const SitePredicates = {
 
     HAS_MARKER: (site) => Objects.isNotNullOrUndef(site.marker),
 
+    HAS_CIRCLE: (site) => Objects.isNotNullOrUndef(site.circle),
+
+    HAS_NO_CIRCLE: (site) => Objects.isNullOrUndef(site.circle),
+
+    HAS_SHOWN_UNPINNED_INFO_WINDOW: (site) =>
+        site.marker &&
+        site.marker.infoWindow &&
+        site.marker.infoWindow.isShown() &&
+        !site.marker.infoWindow.isPinned(),
+
     buildInViewPredicate: function (bounds) {
-        return (site) => {
-            return bounds.contains(site.location);
-        };
+        return (site) => bounds.contains(site.location);
     },
 
     buildRegionPredicate: (regionId) => {
