@@ -5,9 +5,7 @@ import routeInputModel from "./RouteInputModel";
 import routeResultModel from "./RouteResultModel";
 import RouteEvents from "./RouteEvents";
 import RouteSaveDialog from "./RouteSaveDialog";
-import userConfig from '../../../common/UserConfig'
-import unitConversion from '../../../util/UnitConversion'
-import Units from "../../../util/Units";
+import directionFormatter from './DirectionFormatter';
 
 export default class RoutingPanel {
 
@@ -36,22 +34,13 @@ export default class RoutingPanel {
 
         const waypointsList = document.getElementById('route-waypoints-list');
 
-        //TODO 2017/5/25 - quick fix for existing tesla browser.  Need to see how the site behaves after the next browser update and determine if a long term fix is needed
-        if (navigator.userAgent.indexOf('AppleWebKit/534.34') === -1) {
-            Sortable.create(waypointsList, {
-                onEnd: function (event) {
-                    panel.handleSortWaypoint(event);
-                }
-            });
-        }
+        Sortable.create(waypointsList, {
+            onEnd: (event) => this.handleSortWaypoint(event)
+        });
 
         EventBus.addListener(RouteEvents.input_model_changed, this.updatePanelView, this);
         EventBus.addListener(RouteEvents.result_model_changed, this.updateDirections, this);
     }
-
-    clearDirections() {
-        this.directionPanel.html("");
-    };
 
     toggleRoutingPanel(event) {
         if (this.routingPanel.css("flex-basis") !== "0px") { // is open
@@ -115,43 +104,7 @@ export default class RoutingPanel {
     };
 
     updateDirections() {
-        const convert = unitConversion(Units.M, userConfig.getUnit(), 1);
-        const toHourMinSec = (seconds) => new Date(seconds * 1000).toISOString().substr(11, 8);
-        const formatDistance = (meters) => (meters === 0) ? '' : `${convert(meters)} ${userConfig.getUnit().code}`;
-
-        this.clearDirections();
-        if (!routeResultModel.isEmpty()) {
-            const route = routeResultModel.getBestRoute();
-            this.directionPanel.append(
-                `
-                <b>duration</b>: ${toHourMinSec(route.duration)}<br/>
-                <b>distance</b>: ${formatDistance(route.distance)}<br/>
-                legs: ${route.legs.length}
-                <br/>
-                <br/>
-                `
-            );
-            route.legs.forEach((leg, index) => {
-                // If more than one leg, show a summary for each.
-                if (route.legs.length > 1) {
-                    this.directionPanel.append(
-                        `<div class='route-panel-leg-summary'>
-                        Leg ${index + 1}: <br/>${leg.summary} ${leg.steps.length} <br/>
-                        <b>${formatDistance(leg.distance)}</b>
-                     </div>`
-                    );
-                }
-                this.directionPanel.append('<ol>');
-                leg.steps.forEach(step => {
-                    this.directionPanel.append(
-                        `
-                        <li>${step.maneuver.instruction} <b>${formatDistance(step.distance)}</b></li>
-                        `
-                    );
-                });
-                this.directionPanel.append('</ol>');
-            });
-        }
+        this.directionPanel.html(directionFormatter.format());
     }
 
     handleSortWaypoint(event) {

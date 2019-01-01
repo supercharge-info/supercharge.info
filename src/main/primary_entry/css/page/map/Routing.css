@@ -17,11 +17,20 @@
     margin-bottom: 5px;
 }
 
+.route-panel-summary {
+    padding-top: 1em;
+    border-top: 1px solid gray;
+}
+
 .route-panel-leg-summary {
     background: #eeeeee;
     font-size: 1.1em;
-    margin-top: 1em;
+    margin: 1em 0 1em 0;
     padding: 5px;
+}
+
+.route-panel-directions {
+    
 }
 
 #routing-panel-toggle-button {
