@@ -10,7 +10,7 @@ export default class PanZoomAction {
 
     zoomToLocation(event, data) {
         this.mapApi.setZoom(data.zoom);
-        this.mapApi.panTo(data.latLng);
+        this.mapApi.setView(data.latLng);
     };
 
 };

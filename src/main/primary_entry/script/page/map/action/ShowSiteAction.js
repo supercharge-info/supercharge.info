@@ -3,7 +3,6 @@ import MapEvents from "../MapEvents";
 import $ from "jquery";
 import MapPage from "../../map/MapPage";
 import Sites from "../../../site/Sites";
-import Objects from "../../../util/Objects";
 
 
 /**
@@ -27,8 +26,8 @@ export default class ShowSiteAction {
         /*
          * If user navigated directly to changes page then map page may not be initialized yet.  Wait for it.
          *
-         * We cant just call the logic of the PanZoom action here because it uses a googleMap object to do its
-         * thing which may not bee initialized yet.
+         * We can't just call the logic of the PanZoom action here because it uses a mapApi object to do its
+         * thing which may not be initialized yet.
          */
         $.doTimeout(75, function () {
             if (MapPage.initComplete) {
@@ -38,8 +37,8 @@ export default class ShowSiteAction {
                 /* Now the map is initialized, but the selected marker may not be because we initialize markers
                  * in response to viewport changes on the map. */
                 $.doTimeout(75, function () {
-                    if (Objects.isNotNullOrUndef(supercharger.marker)) {
-                        new google.maps.event.trigger(supercharger.marker, 'click');
+                    if (supercharger && supercharger.marker) {
+                        supercharger.marker.fire('click');
                         return false;
                     }
                     else {
