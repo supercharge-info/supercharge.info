@@ -139,11 +139,13 @@ export default class MapView {
     };
 
     handleRouteResult() {
-        if(routeResultModel.isEmpty()) {
+        // We can only display one route at a time, so in any case, remove the existing line on a route model update.
+        if (this.routeLine) {
             this.routeLine.removeFrom(this.mapApi);
             this.routeLine.remove();
             this.routeLine = null;
-        } else {
+        }
+        if (!routeResultModel.isEmpty()) {
             const geomString = routeResultModel.getBestRoute().geometry;
             const geomArray = polyline.decode(geomString);
             this.routeLine = L.polyline(geomArray, {
@@ -186,7 +188,7 @@ export default class MapView {
         if (supercharger.marker) {
             supercharger.marker.remove();
         }
-        if(supercharger.circle) {
+        if (supercharger.circle) {
             supercharger.circle.remove();
         }
         Sites.removeById(supercharger.id);

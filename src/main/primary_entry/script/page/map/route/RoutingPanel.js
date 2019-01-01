@@ -110,15 +110,11 @@ export default class RoutingPanel {
     handleSortWaypoint(event) {
         const beginIdx = event.oldIndex;
         const endIdx = event.newIndex;
-        // clear the route result model (ultimately causing existing render route to be cleared from map).
-        routeResultModel.setResult(null);
         routeInputModel.moveWaypoint(beginIdx, endIdx);
     };
 
     handleRemoveWaypoint(event) {
         const index = $(event.target).data('index');
-        // clear the route result model so that exiting lines are removed.
-        routeResultModel.setResult(null);
         routeInputModel.removeWaypoint(index);
     };
 

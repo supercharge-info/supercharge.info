@@ -30,10 +30,6 @@ export default class RoutingAction {
         route.waypoints.forEach((waypoint) => {
             routeWaypoints.push(new RoutingWaypoint(L.latLng(waypoint.lat, waypoint.lng), waypoint.name));
         });
-
-        if(!routeResultModel.isEmpty()) {
-            routeResultModel.setResult(null);
-        }
         routeInputModel.updateRoute(route.id, route.name, routeWaypoints);
     };
 
