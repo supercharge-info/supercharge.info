@@ -1,6 +1,6 @@
 {
   "name": "tesla-supercharger-map",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "map",
   "main": "main.js",
   "scripts": {
