@@ -1,6 +1,7 @@
 import Address from "../../site/Address";
 import TotalOpenWorldLineChart from "./TotalOpenWorldLineChart";
 import TotalOpenRegionLineChart from "./TotalOpenRegionLineChart";
+import MonthlyOpenRegionBarChart from "./MonthlyOpenRegionBarChart";
 import CountryBarChart from "./CountryBarChart";
 import CountryPieChart from "./CountryPieChart";
 import StateBarChart from "./StateBarChart";
@@ -14,6 +15,7 @@ export default class ChartsPage {
         if (!this.initialized) {
             new TotalOpenWorldLineChart().draw();
             new TotalOpenRegionLineChart().draw();
+            new MonthlyOpenRegionBarChart().draw();
             new StallCountChart().draw();
             new CountryPieChart().draw();
             new CountryBarChart().draw();
