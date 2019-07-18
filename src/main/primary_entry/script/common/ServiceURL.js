@@ -15,7 +15,8 @@ export default {
     USER_ROUTE: base + "/userRoute",
     USER_ROUTE_COUNT: base + "/userRoute/count",
 
-    CHANGES: base + '/changes',
+    CHANGES: base + '/allChanges',
+    CHANGES_PAGE: base + '/changes',
 
     COUNTRY: base + '/country',
 

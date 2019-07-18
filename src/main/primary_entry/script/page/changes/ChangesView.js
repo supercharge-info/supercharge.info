@@ -105,7 +105,7 @@ export default class ChangesView {
                 [10, 25, 50, 100, 1000, 10000]],
             "pageLength": 50,
             "ajax": {
-                url: ServiceURL.CHANGES,
+                url: ServiceURL.CHANGES_PAGE,
                 dataFilter: (data) => {
                     const json = jQuery.parseJSON(data);
                     json.draw = json.pageId;

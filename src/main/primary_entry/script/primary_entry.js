@@ -2,6 +2,7 @@ import $ from "jquery";
 import NavBar from "./nav/NavBar";
 import FeatureCheck from "./common/FeatureCheck";
 import Sites from "./site/Sites";
+import Changes from "./site/Changes";
 import userConfig from "./common/UserConfig";
 import LoginCheckAction from "./common/login/LoginCheckAction"
 // Tell webpack to build a css bundle starting with this file.
@@ -39,8 +40,10 @@ window.supercharge.start = function () {
     $.when(
         userConfig.load(),
         Sites.load(),
+        Changes.load(),
         docReadyDeferred
     ).done(() => {
+        Changes.addToSites();
         new NavBar();
         new LoginCheckAction().loginCheck();
         new FeatureCheck().doCheck();
@@ -50,4 +53,4 @@ window.supercharge.start = function () {
 
 
 
-    
+
