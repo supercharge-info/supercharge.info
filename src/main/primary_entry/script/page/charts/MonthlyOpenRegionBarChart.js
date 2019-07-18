@@ -1,3 +1,4 @@
+import TotalOpen from "./TotalOpen";
 import SiteSorting from "../../site/SiteSorting";
 import SitePredicates from "../../site/SitePredicates";
 import SiteIterator from "../../site/SiteIterator";
@@ -9,50 +10,40 @@ export default class MonthlyOpenRegionBarChart {
     draw() {
 
         const livePerMonthByRegion = {};
-        const monthDateList = [];
         const today = new Date();
         const thisMonth = Date.UTC(today.getFullYear(), today.getMonth());
 
         new SiteIterator()
             .withPredicate(SitePredicates.IS_OPEN)
             .withPredicate(SitePredicates.IS_COUNTED)
-            .withSort(SiteSorting.BY_OPENED_DATE)
             .iterate((supercharger) => {
                 const date = supercharger.dateOpened;
                 const monthUTC = Date.UTC(date.getFullYear(), date.getMonth());
 
+                // Skip partial month data to avoid a dropoff
                 if(monthUTC == thisMonth) {
                     return;
                 }
-                if(monthDateList.length == 0) {
-                    monthDateList.push(monthUTC);
-                }
+
                 // This method supports new regions (ie. Africa)
-                if(Object.keys(livePerMonthByRegion).indexOf(supercharger.address.region) < 0) {
-                    livePerMonthByRegion[supercharger.address.region] = [];
+                if(!(supercharger.address.region in livePerMonthByRegion)) {
+                    livePerMonthByRegion[supercharger.address.region] = {};
                 }
 
+                // Get region data
                 const regionCountList = livePerMonthByRegion[supercharger.address.region];
 
-                // Add missing months to data
-                while(monthDateList[monthDateList.length - 1] != monthUTC) {
-                    let prev = new Date(monthDateList[monthDateList.length - 1]);
-                    monthDateList.push(Date.UTC(prev.getUTCFullYear(), prev.getUTCMonth() + 1));
-                }
-                while(regionCountList.length != monthDateList.length) {
-                    regionCountList.push(0);
+                // Initialize new month
+                if(!(monthUTC in regionCountList)) {
+                    regionCountList[monthUTC] = 0;
                 }
 
-                regionCountList[regionCountList.length - 1]++;
+                // Increment supercharger count for this month for this region
+                regionCountList[monthUTC]++;
             });
 
-        const regionNameList = Object.keys(livePerMonthByRegion);
-        for(let regionName in livePerMonthByRegion) {
-            let regionCountList = livePerMonthByRegion[regionName];
-            while(monthDateList.length != regionCountList.length) {
-                regionCountList.push(0);
-            }
-        }
+        let seriesData = Object.entries(livePerMonthByRegion).map(a => ({ name: a[0], data: Object.entries(a[1]).map(b => [ Number(b[0]), b[1] ]) }));
+        let plotLinesArray = TotalOpen.buildVerticalYearEndPlotLines();
 
         Highcharts.chart("monthly-open-region-bar-chart", {
             chart: {
@@ -73,13 +64,17 @@ export default class MonthlyOpenRegionBarChart {
                 reversed: true
             },
             xAxis: {
-                categories: monthDateList.map(d => new Date(d).toLocaleString('default', { timeZone: 'UTC', month: 'short', year: 'numeric' } ) )
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                    month: '%b %Y'
+                },
+                plotLines: plotLinesArray
             },
             yAxis: {
                 title: {
-                    text: 'Superchargers Opened'
+                    text: 'New Superchargers'
                 },
-                allowDeecimals: false
+                allowDecimals: false
             },
             plotOptions: {
                 column: {
@@ -89,7 +84,7 @@ export default class MonthlyOpenRegionBarChart {
                     }
                 }
             },
-            series: Object.entries(livePerMonthByRegion).map(a => ({ name: a[0], data: a[1] }))
+            series: seriesData
         });
     };
 
