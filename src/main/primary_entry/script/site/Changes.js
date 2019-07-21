@@ -8,10 +8,13 @@ export default class Changes {
 
     static addToSites() {
         Object.entries(SITE_CHANGES).forEach((changeHistory) => {
-            if(changeHistory[1][0].changeType != 'ADD') {
-                console.log(changeHistory[0]);
+            const supercharger = Sites.getById(Number(changeHistory[0]));
+            if(supercharger.history[0].siteStatus != changeHistory[1][0].siteStatus && new Date(supercharger.history[0].date) < new Date(changeHistory[1][0].date)) {
+                changeHistory[1].unshift(supercharger.history[0]);
+            } else if(supercharger.history[0].siteStatus != changeHistory[1][changeHistory[1].length - 1].siteStatus && new Date(supercharger.history[0].date) > new Date(changeHistory[1][changeHistory[1].length - 1].date)) {
+                changeHistory[1].push(supercharger.history[0]);
             }
-            Sites.getById(Number(changeHistory[0])).history = changeHistory[1]
+            supercharger.history = changeHistory[1];
         });
     }
 
@@ -26,12 +29,12 @@ export default class Changes {
                     let replaceEntries = 0;
                     for (var index = 0; index < changeHistory.length; index++) {
                         if (new Date(changeHistory[index].date) > new Date(change.date)) {
-                            // Found older item; we'll insert change entry before it
+                            // Our change entry is older so we'll insert change entry now
                             break;
                         } else if (changeHistory[index].date == change.date) {
                             // Found item with same date
                             if (changeHistory[index].id < change.id) {
-                                // Our change ID is newer so we'll replace it
+                                // Our change entry is newer so we'll replace it
                                 replaceEntries = 1;
                                 break;
                             } else {

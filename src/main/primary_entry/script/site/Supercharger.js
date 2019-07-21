@@ -87,6 +87,7 @@ export default class Supercharger {
 };
 
 Supercharger.fromJSON = function (jsonObject) {
+    const today = new Date();
     const supercharger = new Supercharger();
     supercharger.id = jsonObject.id;
     supercharger.locationId = jsonObject.locationId;
@@ -104,6 +105,12 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.powerKilowatt = jsonObject.powerKilowatt;
     supercharger.solarCanopy = jsonObject.solarCanopy;
     supercharger.battery = jsonObject.battery;
+    supercharger.history = [{
+        siteStatus: jsonObject.status,
+        date: jsonObject.status == 'OPEN'
+            ? jsonObject.dateOpened
+            : new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() - jsonObject.statusDays)).toISOString().split('T')[0]
+    }];
     return supercharger;
 };
 
