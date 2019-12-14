@@ -44,7 +44,7 @@ export default {
     STATIC_CONTENT: window.location.origin + "/static",
 
 
-    TESLA_WEB_PAGE: 'http://www.teslamotors.com/findus/location/supercharger/',
+    TESLA_WEB_PAGE: 'http://www.tesla.com/findus/location/supercharger/',
 
     DEFAULT_DISCUSS_URL: 'https://teslamotorsclub.com/tmc/forums/charging-standards-and-infrastructure.77/'
 
