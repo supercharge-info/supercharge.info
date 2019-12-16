@@ -88,7 +88,7 @@ const Status = {
     OPEN: {
         value: 'OPEN',
         sort: 4,
-        displayName: "Open (Unknown kW)",
+        displayName: "Open",
         getIcon: getOpenIcon
     },
     USER_ADDED: {
