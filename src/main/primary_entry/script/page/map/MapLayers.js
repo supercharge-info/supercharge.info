@@ -2,14 +2,27 @@ import L from "leaflet";
 import Status from "../../site/SiteStatus";
 import MapBox from './MapBox'
 
-//'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-// attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-const streetsLayer = L.tileLayer(MapBox.url, {
+const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const osmAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+
+//
+// Mapbox maps are nicer, but usage was exceeding free tier.
+//
+const useMapBox = false;
+
+const mapUrl = useMapBox ? MapBox.url : osmUrl;
+
+const mapOptions = useMapBox ? {
     attribution: MapBox.attributionText,
     id: 'mapbox.streets',
     maxZoom: 19,
     accessToken: MapBox.accessToken
-});
+} : {
+    attribution: osmAttribution,
+    maxZoom: 19,
+};
+
+const streetsLayer = L.tileLayer(mapUrl, mapOptions);
 
 const satelliteLayer = L.tileLayer(MapBox.url, {
     attribution: MapBox.attributionText,
