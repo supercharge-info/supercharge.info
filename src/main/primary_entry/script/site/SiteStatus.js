@@ -3,6 +3,13 @@ import L from 'leaflet';
 
 const imagesDir = '/images';
 
+const createActiveIcon = (moniker, hasSpecialHours) => {
+    return L.icon({
+        iconUrl: `${imagesDir}/dots/red_${hasSpecialHours ? 'black_' : ''}dot${moniker ? '_' : ''}${moniker}_16.png`,
+        iconAnchor: [8, 8]
+    });
+};
+
 const I_CONSTRUCTION = L.icon({
     iconUrl: imagesDir + '/construction-cone.png',
     iconAnchor: [11, 15]
@@ -23,20 +30,35 @@ const I_CLOSED_TEMP = L.icon({
     iconAnchor: [8, 8]
 });
 
-const I_OPEN = L.icon({
-    iconUrl: imagesDir + '/dots/red_dot_16.png',
-    iconAnchor: [8, 8]
-});
+const I_OPEN = createActiveIcon('unknown', false);
+const I_OPEN_HOURS = createActiveIcon('unknown', true);
 
-const I_OPEN_HOURS = L.icon({
-    iconUrl: imagesDir + '/dots/red_black_dot_16.png',
-    iconAnchor: [8, 8]
-});
+const I_OPEN_V3 = createActiveIcon('v3', false);
+const I_OPEN_V3_HOURS = createActiveIcon('v3', true);
+
+const I_OPEN_URBAN = createActiveIcon('urban', false);
+const I_OPEN_URBAN_HOURS = createActiveIcon('urban', true);
+
+const I_OPEN_STANDARD = createActiveIcon('', false);
+const I_OPEN_STANDARD_HOURS = createActiveIcon('', true);
 
 const I_CUSTOM = L.icon({
     iconUrl: imagesDir + '/dots/green_dot_16.png',
     iconAnchor: [8, 8]
 });
+
+function getOpenIcon(supercharger) {
+    const powerKilowatt = supercharger.powerKilowatt || 0;
+    if (powerKilowatt >= 250) {
+        return ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_V3_HOURS : I_OPEN_V3)
+    } else if (powerKilowatt >= 120) {
+        return ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_STANDARD_HOURS : I_OPEN_STANDARD)
+    } else if (powerKilowatt >= 72) {
+        return ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_URBAN_HOURS : I_OPEN_URBAN)
+    } else {
+        return ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN)
+    }
+}
 
 const Status = {
     CLOSED_PERM: {
@@ -66,8 +88,8 @@ const Status = {
     OPEN: {
         value: 'OPEN',
         sort: 4,
-        displayName: "Open",
-        getIcon: (supercharger) => ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN)
+        displayName: "Open (Unknown kW)",
+        getIcon: getOpenIcon
     },
     USER_ADDED: {
         value: 'USER_ADDED',
@@ -95,4 +117,3 @@ Status.fromString = function (string) {
 };
 
 export default Status;
-

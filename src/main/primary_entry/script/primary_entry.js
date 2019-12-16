@@ -17,8 +17,16 @@ import "../images/dots/blue_dot_16.png";
 import "../images/dots/black_dot_16.png";
 import "../images/dots/gray_dot_16.png";
 import "../images/dots/green_dot_16.png";
-import "../images/dots/red_dot_16.png";
+import "../images/dots/red_dot_16.png"; // the per-kW values replace; leaving asset in place now
+import "../images/dots/red_dot_standard_16.png";
+import "../images/dots/red_dot_v3_16.png";
+import "../images/dots/red_dot_unknown_16.png";
+import "../images/dots/red_dot_urban_16.png";
 import "../images/dots/red_black_dot_16.png";
+import "../images/dots/red_black_dot_v3_16.png";
+import "../images/dots/red_black_dot_unknown_16.png";
+import "../images/dots/red_black_dot_urban_16.png";
+import "../images/dots/red_black_dot_standard_16.png";
 import "../images/become_a_patron_button@2x.png";
 
 
