@@ -21,7 +21,7 @@ export default class InfoWindow {
 
         // state fields
         this.popup = null;
-        this.showDetails = false;
+        this.showDetails = true;
         this.showNearby = false;
         this.pinned = false;
     }
@@ -90,7 +90,7 @@ export default class InfoWindow {
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // private 
+    // private
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     _resetStateToClosed() {
@@ -159,7 +159,7 @@ export default class InfoWindow {
             popupContent += _buildNearbyDiv(site);
         }
 
-        popupContent += _buildLinksDiv(site);
+        popupContent += _buildLinksDiv(site, this.showDetails);
 
         popupContent += "</div>";
         return popupContent;
@@ -187,7 +187,7 @@ function _buildNearbyDiv(supercharger) {
     return div;
 }
 
-function _buildLinksDiv(supercharger) {
+function _buildLinksDiv(supercharger, showDetails) {
     let content = "<div class='links-container'>";
 
     const linkList = [
@@ -196,7 +196,7 @@ function _buildLinksDiv(supercharger) {
         buildLinkZoom(supercharger),
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
-        buildLinkDetails(supercharger),
+        buildLinkDetails(supercharger, showDetails),
         buildLinkNearby(supercharger),
 
         // links that are NOT always present.
@@ -271,8 +271,8 @@ function buildLinkRemoveAllMarkers(supercharger) {
     return null;
 }
 
-function buildLinkDetails(supercharger) {
-    return `<a class='details-trigger' href='#${supercharger.id}'>details</a>`;
+function buildLinkDetails(supercharger, showDetails) {
+    return `<a class='details-trigger' href='#${supercharger.id}'>${showDetails ? "hide" : "show"} details</a>`;
 }
 
 function buildPinMarker(supercharger, isPinned) {
