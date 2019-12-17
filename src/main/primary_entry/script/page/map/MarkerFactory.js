@@ -19,7 +19,7 @@ export default class MarkerFactory {
 
     createMarker(supercharger) {
         const markerOptions = {
-            title: supercharger.displayName,
+            title: supercharger.getMarkerTitle(),
             icon: supercharger.status.getIcon(supercharger),
         };
         const marker = L.marker(supercharger.location, markerOptions);
