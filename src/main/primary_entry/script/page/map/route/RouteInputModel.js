@@ -3,18 +3,20 @@ import Analytics from "../../../util/Analytics";
 import $ from "jquery";
 import RouteEvents from "./RouteEvents";
 
-class RoutingModel {
+/**
+ * This represents the user INPUT to routing, not the server generated route.
+ */
+class RouteInputModel {
 
     constructor() {
         this.waypointList = [];
-
         // these will be non-null if we are currently working on a saved route.
         this.routeId = null;
         this.routeName = null;
     }
 
     static fireChangeEvent() {
-        EventBus.dispatch(RouteEvents.model_changed);
+        EventBus.dispatch(RouteEvents.input_model_changed);
     };
 
     getWaypoints() {
@@ -25,19 +27,19 @@ class RoutingModel {
         this.routeId = routeId;
         this.routeName = routeName;
         this.waypointList = waypointList.slice();
-        RoutingModel.fireChangeEvent();
+        RouteInputModel.fireChangeEvent();
     };
 
     addWaypoint(waypoint) {
         this.waypointList.push(waypoint);
-        RoutingModel.fireChangeEvent();
+        RouteInputModel.fireChangeEvent();
     };
 
     clearWaypoints() {
         this.waypointList = [];
         this.routeId = null;
         this.routeName = null;
-        RoutingModel.fireChangeEvent();
+        RouteInputModel.fireChangeEvent();
         Analytics.sendEvent("route", "clear-waypoints");
     }
 
@@ -47,7 +49,7 @@ class RoutingModel {
             this.routeId = null;
             this.routeName = null;
         }
-        RoutingModel.fireChangeEvent();
+        RouteInputModel.fireChangeEvent();
         Analytics.sendEvent("route", "remove-waypoint-from-route");
     };
 
@@ -55,7 +57,7 @@ class RoutingModel {
         const waypoint = this.waypointList[beginIdx];
         this.waypointList.splice(beginIdx, 1);
         this.waypointList.splice(endIdx, 0, waypoint);
-        RoutingModel.fireChangeEvent();
+        RouteInputModel.fireChangeEvent();
 
         Analytics.sendEvent("route", "move-waypoint");
     };
@@ -95,5 +97,5 @@ class RoutingModel {
 
 }
 
-export default new RoutingModel();
+export default new RouteInputModel();
 

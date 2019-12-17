@@ -8,12 +8,18 @@ const RouteEvents = {
     /**
      * Data in the route model has changed.
      */
-    model_changed: "route-model-changed-event",
+    input_model_changed: "route-model-changed-event",
+
+    /**
+     * New route result from server.
+     */
+    result_model_changed: "route-result-model-changed-event",
 
     /**
      * Fired when a new waypoint should be added to the current route.  Data is the waypoint to add.
      */
-    add_waypoint : "route-add-waypoint-event"
+    add_waypoint: "route-add-waypoint-event",
+
 
 };
 

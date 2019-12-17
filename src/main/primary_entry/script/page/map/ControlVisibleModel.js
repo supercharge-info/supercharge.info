@@ -2,10 +2,10 @@ import EventBus from "../../util/EventBus";
 import QueryStrings from "../../common/QueryStrings";
 
 class ControlVisibleModel {
+
     constructor() {
         const controlsParameter = QueryStrings.getControls();
         this.rangeControlVisible = controlsParameter.indexOf("range") >= 0;
-        this.statusControlVisible = controlsParameter.indexOf("status") >= 0;
         this.renderControlVisible = controlsParameter.indexOf("render") >= 0;
     }
 
@@ -17,10 +17,6 @@ class ControlVisibleModel {
         this.setRangeControlVisible(!this.rangeControlVisible);
     };
 
-    toggleStatusControlVisible() {
-        this.setStatusControlVisible(!this.statusControlVisible);
-    };
-
     toggleRenderControlVisible() {
         this.setRenderControlVisible(!this.renderControlVisible);
     };
@@ -29,10 +25,6 @@ class ControlVisibleModel {
 
     setRangeControlVisible(visible) {
         this.rangeControlVisible = visible;
-    };
-
-    setStatusControlVisible(visible) {
-        this.statusControlVisible = visible;
     };
 
     setRenderControlVisible(visible) {

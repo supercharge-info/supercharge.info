@@ -14,7 +14,7 @@ npm install
 
 npm start
 
-http://localhost:9090/
+https://test.supercharge.info:9090/  (configure DNS such that this points to localhost)
 
 
 ## Forum

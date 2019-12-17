@@ -6,7 +6,6 @@ import SiteIterator from "../../../site/SiteIterator";
 import SiteSorting from "../../../site/SiteSorting";
 import SitePredicates from "../../../site/SitePredicates";
 import $ from "jquery";
-import statusModel from "../StatusModel";
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MONTH_NAMES_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -68,8 +67,6 @@ export default class WayBack {
      */
     start() {
         this.googleMap.setZoom(3);
-        statusModel.setAllOff();
-        statusModel.fireModelChangeEvent();
         EventBus.dispatch("hide-all-control-event");
         this.wayBackContainer.show();
         this.wayBackContainer.css('opacity', '1.0');

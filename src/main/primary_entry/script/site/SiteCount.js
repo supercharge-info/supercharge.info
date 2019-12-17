@@ -79,7 +79,7 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction)
                 referenceMap[aggregateKeyValue].permit++;
                 totalPermit++;
             }
-            else if (supercharger.isClosed()) {
+            else if (supercharger.isClosedTemp() || supercharger.isClosedPerm()) {
                 // nothing
             } else {
                 throw new Error("unexpected supercharger status" + supercharger);

@@ -29,18 +29,3 @@ label.control {
     vertical-align: middle;
 }
 
-.status-checkbox-panel {
-    display: inline-block;
-    font-size: larger;
-}
-
-.status-checkbox-panel img {
-    vertical-align: top;
-    margin-right: .3em;
-}
-
-.status-checkbox-panel div {
-    display: inline-block;
-    margin-right: 1em;
-    cursor: pointer;
-}

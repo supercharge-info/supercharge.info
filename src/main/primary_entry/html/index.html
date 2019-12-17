@@ -10,8 +10,6 @@
 
     <title>supercharge.info</title>
 
-    <!-- google maps api -->
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB43_4OTJDH7REegECW9B6rmfuXPOTT1R4&amp;libraries=places&amp;callback=supercharge.initApp"></script>
     <!-- google analytics: https://developers.google.com/analytics/devguides/collection/gtagjs/ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-45477233-2"></script>
     <script>
@@ -23,6 +21,7 @@
                 setTimeout(supercharge.initApp, 25);
             }
         };
+        window.supercharge.initApp();
         <!-- Google Analytics -->
         if(!window.location.hostname.startsWith("localhost") && !window.location.hostname.startsWith("test")) {
             window.dataLayer = window.dataLayer || [];
@@ -80,10 +79,6 @@ Navigation Bar
                                         class="glyphicon glyphicon-check"></span>&nbsp;Range Adjuster</a>
                             </li>
                             <li>
-                                <a id="status-menu-item" href="#status-menu-item"><span
-                                        class="glyphicon glyphicon-check"></span>&nbsp;Status Selection</a>
-                            </li>
-                            <li>
                                 <a id="rendering-menu-item" href="#rendering-menu-item"><span
                                         class="glyphicon glyphicon-unchecked"></span>&nbsp;Rendering Options</a>
                             </li>
@@ -99,16 +94,6 @@ Navigation Bar
                         </ul>
                     </li>
                 </ul>
-
-                <!--
-                 Search for Location
-                -->
-                <form class="navbar-form navbar-left" role="form" id="navbar-map-search" hidden>
-                    <div class="form-group">
-                        <input id="search-for-location-input" type="text" class="form-control"
-                               placeholder="Search for Location">&nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
-                </form>
 
                 <!--
                 Counts Table
@@ -200,23 +185,6 @@ PAGE: map
                 </label>
             </div>
 
-        </div>
-        <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Status-->
-        <div id="control-row-status" class="col-md-6" style="text-align: center">
-            <div class="status-checkbox-panel">
-                <div id="status-open-check">
-                    <span class="glyphicon glyphicon-check"></span>
-                    <img src="images/dots/red_dot_16.png" alt="open" style="margin-top: 4px"/>Open
-                </div>
-                <div id="status-construction-check">
-                    <span class="glyphicon glyphicon-check"></span>
-                    <img src="images/construction-cone_20.png" alt="construction"/>Construction
-                </div>
-                <div id="status-permit-check">
-                    <span class="glyphicon glyphicon-check"></span>
-                    <img src="images/dots/blue_dot_16.png" alt="permit" style="margin-top: 4px"/>Permit
-                </div>
-            </div>
         </div>
     </div>
     <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
@@ -411,19 +379,47 @@ PAGE: about
     <h3>About</h3>
 
     <p>
-    This site was created by Tesla forum member Blueshift. Tesla enthusiasts from around the globe have
-    contributed by sending notification of new sites, status updates, and corrections. Anyone may write with new
-    information. Include a link to the information source if possible.
-
-    <br/><br/>
-    To provide supercharger updates or general feedback visit <a href="https://forum.supercharge.info">the forum (forum.supercharge.info)</a>.
+        Long distance electric travel was not possible for decades until suddenly, quite recently, Tesla made it
+        practical.
+        Supercharge.info is a community of enthusiasts who enjoy tracking this world-wide transition in transportation.
+        To contribute news regarding supercharger construction or updates
+        <a href="https://supercharge.info/about?sign-in=true">create an account</a> and visit the
+        <a href="https://forum.supercharge.info">forum (forum.supercharge.info)</a>.
     </p>
+    <br/>
+    <p>
+        <a id="features-dialog-trigger" href="#" data-toggle="modal" data-target="#features-dialog">
+            Click here</a> to view the latest feature updates.
+    </p>
+    <br/>
+    <p>
+    <a href="https://www.patreon.com/bePatron?u=2359674" target="_blank">
+        <img style="max-height: 3em" src="images/become_a_patron_button@2x.png" alt="Become A Patron"/>
+    </a>
+    </p>
+    <br/>
+    <p>
+    Supercharge.info is not produced by Tesla. Related sites from Tesla:
+
+    <table class="table table-condensed table-bordered">
+        <tr>
+            <td>Trip Planner</td>
+            <td><a href="https://www.tesla.com/trips">https://www.tesla.com/trips</a></td>
+        </tr>
+        <tr>
+            <td>Location Finder</td>
+            <td><a href="https://www.tesla.com/findus">https://www.tesla.com/findus</a></td>
+        </tr>
+    </table>
 
 
     <h3 class="margin-top">Supercharger Status</h3>
 
     <ul class="about-page-list">
-        <li><img src="images/dots/gray_dot_16.png" alt="closed"/>&nbsp;Closed - Site is temporarily
+        <li><img src="images/dots/black_dot_16.png" alt="closed perm"/>&nbsp;Closed - Site is permanently
+            closed. Charging not possible.
+        </li>
+        <li><img src="images/dots/gray_dot_16.png" alt="closed temp"/>&nbsp;Closed - Site is temporarily
             closed. Charging not possible.
         </li>
         <li><img src="images/dots/blue_dot_16.png" alt="permit"/>&nbsp;Permit - Tesla has submitted
@@ -511,12 +507,6 @@ PAGE: about
 
     <div id="page-about-version-container"></div>
 
-    <br/>
-    <p>
-        <a id="features-dialog-trigger" href="#" data-toggle="modal" data-target="#features-dialog">
-            Click here</a> to view the latest feature updates.
-    </p>
-
 </div>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -540,7 +530,7 @@ PAGE: profile
                                 <tr>
                                     <td><label>Username</label></td>
                                     <td>
-                                        <input type="text" name="username" class="form-control" size="30"/>
+                                        <span id="profile-username"></span>
                                     </td>
                                 </tr>
                                 <tr>

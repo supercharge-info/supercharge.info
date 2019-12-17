@@ -12,8 +12,11 @@
     color: orange;
 }
 
-#changes-table td span.CLOSED {
+#changes-table td span.CLOSED_TEMP {
     color: gray;
+}
+#changes-table td span.CLOSED_PERM {
+    color: black;
 }
 
 #changes-filter-div {

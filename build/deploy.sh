@@ -17,10 +17,10 @@ set -e
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ENV=$1
 VERSION=$2
-if [ "$1" = "test" ]; then
+if [[ "$1" = "test" ]]; then
     REMOTE_HOST="test.supercharge.info"
     DIR_DEPLOY="/var/www/test.supercharge.info"
-elif [ "$1" = "prod" ]; then
+elif [[ "$1" = "prod" ]]; then
     REMOTE_HOST="super01.supercharge.info"
     DIR_DEPLOY="/var/www/supercharge.info"
 else
@@ -37,7 +37,7 @@ DIR_STAGE=${DIR_DEPLOY}_`date +'%Y_%m_%d_%H_%M_%S'`
 # Download artifact from nexus if a version was specified.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 WEB_APP_DIR="webcontent-built"
-if [ "$VERSION" != "" ]; then
+if [[ "$VERSION" != "" ]]; then
     NEXUS_URL="https://redshiftsoft.com/nexus/repository/releases"
     ARTIFACT="supercharge.info-${VERSION}.tgz"
     NEXUS_DOWNLOAD_URL="${NEXUS_URL}/com/redshiftsoft/supercharge/map/${ARTIFACT}"

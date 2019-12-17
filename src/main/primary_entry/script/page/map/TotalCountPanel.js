@@ -2,6 +2,7 @@ import EventBus from "../../util/EventBus";
 import SiteCount from "../../site/SiteCount";
 import Address from "../../site/Address";
 import $ from "jquery";
+import L from 'leaflet';
 
 /**
  *
@@ -19,13 +20,13 @@ class TotalCountPanel {
         // These (private constants) must be in the constructor because they use
         // a reference to google.* which may not be defined when code outside the
         // class methods is initialized.
-        TotalCountPanel.USA = new google.maps.LatLngBounds(new google.maps.LatLng(24.44715, -125.15625), new google.maps.LatLng(49.0, -65.961914));
-        TotalCountPanel.CANADA = new google.maps.LatLngBounds(new google.maps.LatLng(49.0, -140.976562), new google.maps.LatLng(70.318738, -57.744141));
-        TotalCountPanel.EUROPE = new google.maps.LatLngBounds(new google.maps.LatLng(35.38905, -14.501953), new google.maps.LatLng(70.902268, 37.265625));
-        TotalCountPanel.ASIA = new google.maps.LatLngBounds(new google.maps.LatLng(-43.580391, 50.097656), new google.maps.LatLng(70.728979, 175.429688));
-        TotalCountPanel.AUSTRALIA = new google.maps.LatLngBounds(new google.maps.LatLng(-40.111689, 109.951172), new google.maps.LatLng(-11.092166, 156.796875));
-        TotalCountPanel.CHINA = new google.maps.LatLngBounds(new google.maps.LatLng(21.616579, 100.371094), new google.maps.LatLng(42.130821, 124.233398));
-        TotalCountPanel.JAPAN = new google.maps.LatLngBounds(new google.maps.LatLng(30.600094, 129.089355), new google.maps.LatLng(42.130821, 147.436523));
+        TotalCountPanel.USA = L.latLngBounds(L.latLng(24.44715, -125.15625), L.latLng(49.0, -65.961914));
+        TotalCountPanel.CANADA = L.latLngBounds(L.latLng(49.0, -140.976562), L.latLng(70.318738, -57.744141));
+        TotalCountPanel.EUROPE = L.latLngBounds(L.latLng(35.38905, -14.501953), L.latLng(70.902268, 37.265625));
+        TotalCountPanel.ASIA = L.latLngBounds(L.latLng(-43.580391, 50.097656), L.latLng(70.728979, 175.429688));
+        TotalCountPanel.AUSTRALIA = L.latLngBounds(L.latLng(-40.111689, 109.951172), L.latLng(-11.092166, 156.796875));
+        TotalCountPanel.CHINA = L.latLngBounds(L.latLng(21.616579, 100.371094), L.latLng(42.130821, 124.233398));
+        TotalCountPanel.JAPAN = L.latLngBounds(L.latLng(30.600094, 129.089355), L.latLng(42.130821, 147.436523));
     }
 
     mapViewPortChanged(event, latLngBounds) {
