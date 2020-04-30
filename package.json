@@ -40,7 +40,7 @@
     "datatables.net": "1.10.20",
     "datatables.net-bs": "1.10.20",
     "highcharts": "6.2.0",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "jquery-validation": "1.19.1",
     "jquery.browser": "0.1.0",
     "leaflet": "1.6.0",
