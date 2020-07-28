@@ -5,7 +5,7 @@ import SiteIterator from "../../site/SiteIterator";
 import Highcharts from "highcharts";
 
 
-export default class MonthlyOpenRegionBarChart {
+export default class MonthlyOpenLocationBarChart {
 
     draw() {
 

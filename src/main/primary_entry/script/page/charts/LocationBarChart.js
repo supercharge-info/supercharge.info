@@ -4,7 +4,7 @@ import SiteCount from "../../site/SiteCount";
 import ChartColor from "./ChartColor";
 import Highcharts from "highcharts";
 
-export default class CountryBarChart {
+export default class LocationBarChart {
 
     draw() {
 

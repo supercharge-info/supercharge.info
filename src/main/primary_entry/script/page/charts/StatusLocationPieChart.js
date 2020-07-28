@@ -4,7 +4,7 @@ import SiteCount from "../../site/SiteCount";
 import Highcharts from "highcharts";
 
 
-export default class CountryPieChart {
+export default class StatusLocationPieChart {
 
     draw() {
 

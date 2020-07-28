@@ -4,7 +4,7 @@ import TotalOpen from "./TotalOpen";
 import SiteIterator from "../../site/SiteIterator";
 import Highcharts from "highcharts";
 
-export default class TotalOpenWorldLineChart {
+export default class TotalOpenLocationLineChart {
 
     draw() {
 

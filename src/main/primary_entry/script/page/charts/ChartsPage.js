@@ -1,9 +1,9 @@
 import Address from "../../site/Address";
-import TotalOpenWorldLineChart from "./TotalOpenWorldLineChart";
+import TotalOpenLocationLineChart from "./TotalOpenLocationLineChart";
 import StatusTotalChart from "./StatusTotalChart";
-import MonthlyOpenRegionBarChart from "./MonthlyOpenRegionBarChart";
-import CountryBarChart from "./CountryBarChart";
-import CountryPieChart from "./CountryPieChart";
+import MonthlyOpenLocationBarChart from "./MonthlyOpenLocationBarChart";
+import LocationBarChart from "./LocationBarChart";
+import StatusLocationPieChart from "./StatusLocationPieChart";
 import StateBarChart from "./StateBarChart";
 import StatusDaysBarChart from "./StatusDaysBarChart";
 import StallCountChart from "./StallCountChart";
@@ -12,12 +12,12 @@ export default class ChartsPage {
 
     onPageShow() {
         if (!this.initialized) {
-            new TotalOpenWorldLineChart().draw();
+            new TotalOpenLocationLineChart().draw();
             new StatusTotalChart('OPEN').draw();
-            new MonthlyOpenRegionBarChart().draw();
+            new MonthlyOpenLocationBarChart().draw();
             new StallCountChart().draw();
-            new CountryPieChart().draw();
-            new CountryBarChart().draw();
+            new StatusLocationPieChart().draw();
+            new LocationBarChart().draw();
             new StateBarChart(Address.COUNTRY_USA).draw();
             new StateBarChart(Address.COUNTRY_CHINA).draw();
             new StatusDaysBarChart().draw();
