@@ -34,7 +34,7 @@ class Address {
 /**
  * Country name constants.
  */
-Address.COUNTRY_AUSTRAILIA = "Australia";
+Address.COUNTRY_AUSTRALIA = "Australia";
 Address.COUNTRY_CHINA = "China";
 Address.COUNTRY_JAPAN = "Japan";
 Address.COUNTRY_USA = "USA";

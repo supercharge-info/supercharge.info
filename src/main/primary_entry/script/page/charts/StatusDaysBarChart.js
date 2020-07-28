@@ -7,15 +7,27 @@ import Highcharts from "highcharts";
 
 export default class StatusDaysBarChart {
 
+    constructor(type, locationId) {
+
+        this.type = type;
+        this.locationId = locationId;
+
+    }
+
     draw() {
 
         const siteNameList = [];
         const constructionDaysList = [];
         const permitDaysList = [];
 
-        new SiteIterator()
-            .withPredicate(SitePredicates.or(SitePredicates.IS_CONSTRUCTION, SitePredicates.IS_PERMIT))
-            .withSort(SiteSorting.BY_STATUS_DAYS)
+        let iter = new SiteIterator()
+            .withPredicate(SitePredicates.or(SitePredicates.IS_CONSTRUCTION, SitePredicates.IS_PERMIT));
+        if (this.type == 'Region') {
+            iter.withPredicate(SitePredicates.buildRegionPredicate(this.locationId));
+        } else if (this.type == 'Country') {
+            iter.withPredicate(SitePredicates.buildCountryPredicate(this.locationId));
+        }
+        iter.withSort(SiteSorting.BY_STATUS_DAYS)
             .iterate((supercharger) => {
                 siteNameList.push(supercharger.displayName);
                 if (supercharger.isConstruction()) {
@@ -27,10 +39,10 @@ export default class StatusDaysBarChart {
                 }
             });
 
-
-        Highcharts.chart("status-days-bar-chart",
-            StatusDaysBarChart._options(siteNameList, constructionDaysList, permitDaysList));
-
+        if (siteNameList.length > 0) {
+            Highcharts.chart("status-days-bar-chart",
+                StatusDaysBarChart._options(siteNameList, constructionDaysList, permitDaysList));
+        }
 
     };
 
@@ -38,7 +50,7 @@ export default class StatusDaysBarChart {
         return {
             chart: {
                 type: 'bar',
-                height: 2500
+                height: siteNameList.length * 17 + 154
             },
             credits: {
                 enabled: false

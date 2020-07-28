@@ -21,7 +21,9 @@ export default class Changes {
     static load() {
         return $.getJSON(ServiceURL.CHANGES).done(
             (changeList) => {
-                changeList.forEach((change) => {
+                // Manual fix for missing change entry to accurately reflect this supercharger as open
+                let manualFix = {'changeType':'UPDATE','country':'USA','countryId':100,'date':'2016-11-06','dateFormatted':'Sun, Nov 6 2016','id':1688,'region':'North America','regionId':100,'siteId':614,'siteName':'Knoxville, KY','siteStatus':'OPEN'};
+                changeList.concat(manualFix).forEach((change) => {
                     if (!(change.siteId in SITE_CHANGES)) {
                         SITE_CHANGES[change.siteId] = [];
                     }

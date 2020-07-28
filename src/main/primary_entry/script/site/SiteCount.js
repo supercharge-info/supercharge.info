@@ -94,11 +94,13 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction)
 
 // - - - - - - By Country
 
-SiteCount.getCountListByCountry = function () {
+SiteCount.getCountListByCountry = function (region) {
+    // Region filter parameter is optional
 
     const siteIterator = new SiteIterator()
         .withPredicate(SitePredicates.NOT_USER_ADDED)
-        .withPredicate(SitePredicates.IS_COUNTED);
+        .withPredicate(SitePredicates.IS_COUNTED)
+        .withPredicate(s => !region || region === s.address.region);
 
     return SiteCount.getCountListImpl(siteIterator, 'country', sort);
 

@@ -49,7 +49,7 @@ class TotalCountPanel {
         }
         /* Australia is inside of Asia */
         else if (TotalCountPanel.AUSTRALIA.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_AUSTRAILIA]);
+            this.updateView(1, this.countMapCountry[Address.COUNTRY_AUSTRALIA]);
         }
         else if (TotalCountPanel.ASIA.contains(center)) {
             this.updateView(1, this.countMapRegion[Address.REGION_ASIA_PACIFIC]);

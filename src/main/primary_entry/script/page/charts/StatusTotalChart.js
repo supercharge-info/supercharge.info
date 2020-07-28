@@ -7,19 +7,27 @@ import Highcharts from "highcharts";
 
 export default class StatusTotalChart {
 
-    constructor(status) {
+    constructor(status, type, location, locationId) {
         this.status = status;
+        this.type = type || 'Region';
+        this.location = location || 'World Wide';
+        this.locationId = locationId;
     }
 
     draw() {
 
-        const byCountry = {};
-        const byRegion = {};
+        const byType = {};
 
-        new SiteIterator()
-            .withPredicate(SitePredicates.IS_COUNTED)
-            .iterate((supercharger) => {
+        let iter = new SiteIterator()
+            .withPredicate(SitePredicates.IS_COUNTED);
+        if (this.type == 'Country') {
+            iter.withPredicate(SitePredicates.buildRegionPredicate(this.locationId));
+        } else if (this.type != 'Region') {
+            iter.withPredicate(SitePredicates.buildCountryPredicate(this.locationId));
+        }
+        iter.iterate((supercharger) => {
 
+                const location = this.type == 'Region' ? supercharger.address.region : this.type == 'Country' ? supercharger.address.country : supercharger.address.state;
                 const statusHistory = supercharger.history.map( change => [Date.parse(change.date), change.siteStatus] );
                 let enteredStatus = false;
 
@@ -29,57 +37,35 @@ export default class StatusTotalChart {
                     if(!enteredStatus && curEntry[1] == this.status) {
 
                         enteredStatus = true;
-                        if(!(supercharger.address.country in byCountry)) {
-                            byCountry[supercharger.address.country] = {};
+                        if(!(location in byType)) {
+                            byType[location] = {};
                         }
-                        byCountry[supercharger.address.country][curEntry[0]] = (byCountry[supercharger.address.country][curEntry[0]] || 0) + 1;
-
-                        if(!(supercharger.address.region in byRegion)) {
-                            byRegion[supercharger.address.region] = {};
-                        }
-                        byRegion[supercharger.address.region][curEntry[0]] = (byRegion[supercharger.address.region][curEntry[0]] || 0) + 1;
+                        byType[location][curEntry[0]] = (byType[location][curEntry[0]] || 0) + 1;
 
                     } else if(enteredStatus && curEntry[1] != this.status) {
 
                         enteredStatus = false;
-                        byCountry[supercharger.address.country][curEntry[0]] = (byCountry[supercharger.address.country][curEntry[0]] || 0) - 1;
-                        byRegion[supercharger.address.region][curEntry[0]] = (byRegion[supercharger.address.region][curEntry[0]] || 0) - 1;
+                        byType[location][curEntry[0]] = (byType[location][curEntry[0]] || 0) - 1;
 
                     }
                 }
             });
 
         // Convert changes to cumulative totals
-        let regionData = [];
-        for(let region in byRegion) {
+        const locationData = Object.entries(byType).map(a => {
             let count = 0;
-            regionData.push({
-                name: region,
-                data: Object.entries(byRegion[region])
+            return {
+                name: a[0],
+                data: Object.entries(a[1])
                     .sort((a,b) => a[0] - b[0])
-                    .map( statusChange => [Number(statusChange[0]), count += statusChange[1]] ),
+                    .map(a => [Number(a[0]), count += a[1]]),
                 count: count // This will have incremented from the .map() call 1 line above
-            });
-        }
-
-        let countryData = [];
-        for(let country in byCountry) {
-            let count = 0;
-            countryData.push({
-                name: country,
-                data: Object.entries(byCountry[country])
-                    .sort((a,b) => a[0] - b[0])
-                    .map( statusChange => [Number(statusChange[0]), count += statusChange[1]] ),
-                count: count // This will have incremented from the .map() call 1 line above
-            });
-        }
-
-        // Use only top 5 countries as of today's count
-        countryData = countryData.sort((a,b) => b.count - a.count).slice(0, 5);
+            };
+        }).sort((a,b) => b.count - a.count).slice(0, 10);
 
         let plotLinesArray = TotalOpen.buildVerticalYearPlotLines();
 
-        Highcharts.chart("total-open-region-line-chart", {
+        Highcharts.chart("total-open-by-location-line-chart", {
             chart: {
                 zoomType: 'x',
                 type: 'spline'
@@ -88,7 +74,7 @@ export default class StatusTotalChart {
                 enabled: false
             },
             title: {
-                text: 'Open Superchargers by Region'
+                text: 'Open Superchargers by ' + this.type + ': ' + this.location + (locationData.length != Object.keys(byType).length ? ' <span style="color:#aaaaaa">(top ten)</span>' : '')
             },
             subtitle: {
                 text: null
@@ -119,11 +105,14 @@ export default class StatusTotalChart {
                 }
             },
 
-            series: regionData.map(r => ({
+            series: locationData.map(r => ({
                 name: r.name,
                 data: r.data,
                 lineWidth: 1,
-                marker: { radius: 3 }
+                marker: {
+                    enabled: false,
+                    radius: 3
+                }
             }))
         });
     }

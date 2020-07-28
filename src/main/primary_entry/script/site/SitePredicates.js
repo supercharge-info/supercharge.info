@@ -36,11 +36,13 @@ const SitePredicates = {
     },
 
     buildRegionPredicate: (regionId) => {
-        return (site) => regionId === null || site.address.regionId === regionId;
+        // Use lazy == to match strings with integers
+        return (site) => regionId === null || site.address.regionId == regionId;
     },
 
     buildCountryPredicate: (countryId) => {
-        return (site) => countryId === null || site.address.countryId === countryId;
+        // Use lazy == to match strings with integers
+        return (site) => countryId === null || site.address.countryId == countryId;
     },
 
     not: function (predicate) {

@@ -13,6 +13,8 @@
 @import "page/map/WayBack.css";
 /* - - - - - - - - - - - - - - - - - - - - PAGE: Data */
 @import "page/data/Data.css";
+/* - - - - - - - - - - - - - - - - - - - - PAGE: Charts */
+@import "page/charts/Charts.css";
 /* - - - - - - - - - - - - - - - - - - - - PAGE: Changes*/
 @import "page/changes/Changes.css";
 /* - - - - - - - - - - - - - - - - - - - - PAGE: About */

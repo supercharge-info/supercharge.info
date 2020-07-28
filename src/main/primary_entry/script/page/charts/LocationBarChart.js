@@ -1,30 +1,44 @@
 import $ from "jquery";
 import Address from "../../site/Address";
 import SiteCount from "../../site/SiteCount";
-import ChartColor from "./ChartColor";
 import Highcharts from "highcharts";
+import ChartColor from "./ChartColor";
+
 
 export default class LocationBarChart {
+    constructor(type, location) {
+        this.type = type || 'Country';
+        this.location = location;
+    }
 
     draw() {
 
-        const stateSiteCountList = SiteCount.getCountListByCountry();
+        const stateSiteCountList = this.type == 'Country' ? SiteCount.getCountListByCountry(this.location) : SiteCount.getCountListByState(this.location);
 
-        const countryNameList = [];
-        const countryOpenCountList = [];
-        const countryConstructionCountList = [];
-        const countryPermitCountList = [];
+        const locationNameList = [];
+        const locationOpenCountList = [];
+        const locationConstructionCountList = [];
+        const locationPermitCountList = [];
+
+        const type = this.type;
+        const location = this.location;
+        let titleLocation = location || 'World Wide';
 
         $.each(stateSiteCountList, function (index, value) {
-            if (value.key !== Address.COUNTRY_WORLD && value.key !== Address.COUNTRY_USA && value.key !== Address.COUNTRY_CHINA) {
-                countryNameList.push(value.key);
-                countryOpenCountList.push(value.open);
-                countryConstructionCountList.push(value.construction);
-                countryPermitCountList.push(value.permit);
+            if (value.key !== Address.COUNTRY_WORLD && value.key !== Address.COUNTRY_CHINA && value.key !== Address.COUNTRY_USA && value.key !== 'CA') {
+                locationNameList.push(value.key);
+                locationOpenCountList.push(value.open);
+                locationConstructionCountList.push(value.construction);
+                locationPermitCountList.push(value.permit);
+            } else if (value.key !== Address.COUNTRY_WORLD) {
+                titleLocation = (location || 'World Wide') + ' <span style="color:#aaaaaa">(excluding '
+                              + (type == 'Country' ? location ? value.key : 'USA/China' : 'California') + ')</span>';
             }
         });
 
-        Highcharts.chart("chart-country-bar", {
+        const chartTitle = 'Superchargers per ' + this.type + ': ' + titleLocation;
+
+        Highcharts.chart("open-per-location-bar-chart", {
             chart: {
                 type: 'column'
             },
@@ -32,7 +46,7 @@ export default class LocationBarChart {
                 enabled: false
             },
             title: {
-                text: 'Superchargers per Country <span style="color:#aaaaaa">(excluding USA/China)</span>'
+                text: chartTitle
             },
             subtitle: {
                 text: null
@@ -43,7 +57,7 @@ export default class LocationBarChart {
                 reversed: true
             },
             xAxis: {
-                categories: countryNameList
+                categories: locationNameList
             },
             yAxis: {
                 title: {
@@ -63,17 +77,17 @@ export default class LocationBarChart {
             series: [
                 {
                     name: "Permit",
-                    data: countryPermitCountList,
+                    data: locationPermitCountList,
                     color: ChartColor.STATUS_PERMIT
                 },
                 {
                     name: "Construction",
-                    data: countryConstructionCountList,
+                    data: locationConstructionCountList,
                     color: ChartColor.STATUS_CONSTRUCTION
                 },
                 {
                     name: "Open",
-                    data: countryOpenCountList,
+                    data: locationOpenCountList,
                     color: ChartColor.STATUS_OPEN
                 }
             ]
@@ -83,4 +97,5 @@ export default class LocationBarChart {
     };
 
 };
+
 

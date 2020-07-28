@@ -1,44 +1,46 @@
 import $ from "jquery";
 import Address from "../../site/Address";
+import PieColors from "./PieColors";
 import SiteCount from "../../site/SiteCount";
 import Highcharts from "highcharts";
 
 
 export default class StatusLocationPieChart {
 
+    constructor(status, type, location) {
+        this.status = status;
+        this.type = type || 'Country';
+        this.location = location;
+    }
+
     draw() {
 
-        // Make monochrome colors and set them as default for all pies
-        Highcharts.getOptions().plotOptions.pie.colors = (function () {
-            const colors = [],
-                base = '#FF6666';
-            let i;
+        const statusSiteCountList = this.location ?
+            this.type == 'Country' ?
+                SiteCount.getCountListByCountry(this.location) :
+                SiteCount.getCountListByState(this.location) :
+                SiteCount.getCountListByCountry();
+        const status = this.status.toLowerCase();
+        const statusLocationCountList = [];
 
-            for (i = 0; i < 10; i += 1) {
-                // Start out with a darkened base color (negative brighten), and end up with a much brighter color
-                colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
-            }
-            return colors;
-        }());
-
-        const stateSiteCountList = SiteCount.getCountListByCountry();
-        const countryOpenCountList = [];
         let otherSum = 0;
-
         let count = 0;
-        $.each(stateSiteCountList, function (index, value) {
+        $.each(statusSiteCountList.sort((a, b) => b[status] - a[status]), function (index, value) {
             if (value.key !== Address.COUNTRY_WORLD) {
                 count++;
                 if (count <= 5) {
-                    countryOpenCountList.push([value.key, value.open]);
+                    statusLocationCountList.push([value.key, value[status]]);
                 } else {
-                    otherSum = otherSum + value.open;
+                    otherSum = otherSum + value[status];
                 }
             }
         });
-        countryOpenCountList.push(['Other', otherSum]);
+        statusLocationCountList.push(['Other', otherSum]);
+        while (statusLocationCountList.length > 0 && statusLocationCountList[statusLocationCountList.length - 1][1] == 0) {
+            statusLocationCountList.pop();
+        }
 
-        Highcharts.chart("chart-country-pie", {
+        Highcharts.chart(status + "-by-location-pie-chart", {
             credits: {
                 enabled: false
             },
@@ -48,7 +50,7 @@ export default class StatusLocationPieChart {
                 plotShadow: false
             },
             title: {
-                text: 'Open Superchargers per Country <span style="color:#aaaaaa">(top five)</span>'
+                text: this.status + ' Superchargers per ' + this.type + (otherSum > 0 ? ' <span style="color:#aaaaaa">(top five)</span>' : '')
             },
             tooltip: {
                 pointFormat: '{series.name}: {point.y}, <b>{point.percentage:.0f}%</b>'
@@ -59,6 +61,7 @@ export default class StatusLocationPieChart {
             plotOptions: {
                 pie: {
                     allowPointSelect: true,
+                    colors: PieColors['STATUS_' + status.toUpperCase()],
                     cursor: 'pointer',
                     dataLabels: {
                         enabled: true,
@@ -74,8 +77,8 @@ export default class StatusLocationPieChart {
             series: [
                 {
                     type: 'pie',
-                    name: "Open",
-                    data: countryOpenCountList
+                    name: this.status,
+                    data: statusLocationCountList
                 }
             ]
         });

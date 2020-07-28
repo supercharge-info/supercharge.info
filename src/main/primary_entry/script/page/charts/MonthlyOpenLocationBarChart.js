@@ -7,11 +7,19 @@ import Highcharts from "highcharts";
 
 export default class MonthlyOpenLocationBarChart {
 
+    constructor(type, location) {
+        this.type = type || 'Region';
+        this.location = location;
+    }
+
     draw() {
 
-        const livePerMonthByRegion = {};
+        const liveByLocationCounts = {};
+        const livePerMonthByLocation = {};
         const today = new Date();
         const thisMonth = Date.UTC(today.getFullYear(), today.getMonth());
+        const type = (this.type == 'Province' ? 'State' : this.type).toLowerCase();
+        const location = this.location;
 
         new SiteIterator()
             .withPredicate(SitePredicates.IS_OPEN)
@@ -21,31 +29,40 @@ export default class MonthlyOpenLocationBarChart {
                 const monthUTC = Date.UTC(date.getFullYear(), date.getMonth());
 
                 // Skip partial month data to avoid a dropoff
-                if(monthUTC == thisMonth) {
+                if (monthUTC == thisMonth) {
+                    return;
+                } else if (type == 'country' && supercharger.address.region !== location) {
+                    return;
+                } else if (type == 'state' && supercharger.address.country !== location) {
                     return;
                 }
 
-                // This method supports new regions (ie. Africa)
-                if(!(supercharger.address.region in livePerMonthByRegion)) {
-                    livePerMonthByRegion[supercharger.address.region] = {};
+                // Initialize new location
+                if (!(supercharger.address[type] in livePerMonthByLocation)) {
+                    livePerMonthByLocation[supercharger.address[type]] = {};
+                    liveByLocationCounts[supercharger.address[type]] = 0;
                 }
 
-                // Get region data
-                const regionCountList = livePerMonthByRegion[supercharger.address.region];
+                // Get location data
+                const locationCountList = livePerMonthByLocation[supercharger.address[type]];
 
                 // Initialize new month
-                if(!(monthUTC in regionCountList)) {
-                    regionCountList[monthUTC] = 0;
+                if (!(monthUTC in locationCountList)) {
+                    locationCountList[monthUTC] = 0;
                 }
 
-                // Increment supercharger count for this month for this region
-                regionCountList[monthUTC]++;
+                // Increment supercharger count for this month for this location
+                locationCountList[monthUTC]++;
+                liveByLocationCounts[supercharger.address[type]]++;
             });
 
-        let seriesData = Object.entries(livePerMonthByRegion).map(a => ({ name: a[0], data: Object.entries(a[1]).map(b => [ Number(b[0]), b[1] ]) }));
-        let plotLinesArray = TotalOpen.buildVerticalYearEndPlotLines();
+        const plotLinesArray = TotalOpen.buildVerticalYearEndPlotLines();
+        const locations = Object.entries(liveByLocationCounts).sort((a, b) => b[1] - a[1]).slice(0, 5).map(a => a[0]);
+        let seriesData = Object.entries(livePerMonthByLocation).filter(a => locations.includes(a[0]))
+            .sort((a, b) => locations.indexOf(b[0]) - locations.indexOf(a[0])) // Provide consistent order across charts
+            .map(a => ({ name: a[0], data: Object.entries(a[1]).map(b => [ Number(b[0]), b[1] ]) }));
 
-        Highcharts.chart("monthly-open-region-bar-chart", {
+        Highcharts.chart("monthly-open-location-bar-chart", {
             chart: {
                 type: 'column'
             },
@@ -53,7 +70,7 @@ export default class MonthlyOpenLocationBarChart {
                 enabled: false
             },
             title: {
-                text: 'Superchargers Opened each Month by Region'
+                text: 'Superchargers Opened each Month by ' + this.type + ': ' + (this.location || 'World Wide') + (Object.keys(liveByLocationCounts).length > 5 ? ' <span style="color:#aaaaaa">(top five)</span>' : '')
             },
             subtitle: {
                 text: null

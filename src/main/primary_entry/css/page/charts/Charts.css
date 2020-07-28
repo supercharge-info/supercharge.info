@@ -1,0 +1,19 @@
+#charts-filter-div {
+    text-align: center;
+    margin: 1em 0 1em 0;
+}
+
+#charts-filter-div select {
+    max-width: 300px;
+    margin: auto;
+    min-width: 150px;
+}
+
+#location-pie-charts {
+    display: flex;
+    flex-direction: row;
+}
+
+#location-pie-charts > * {
+    width: 33.3%;
+}
