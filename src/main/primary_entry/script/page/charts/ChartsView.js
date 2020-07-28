@@ -38,7 +38,7 @@ export default class ChartsView {
             if (newValue) {
                 this.drawCountry(this.regionControl.countrySelect.find('option:selected').text(), newValue);
             } else if (this.regionControl.regionSelect.val()) {
-                this.drawRegion(this.regionControl.regionSelect.find('option:selected').text(), newValue);
+                this.drawRegion(this.regionControl.regionSelect.find('option:selected').text(), this.regionControl.regionSelect.find('option:selected').val());
             } else {
                 this.drawWorld();
             }
