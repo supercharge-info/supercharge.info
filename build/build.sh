@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Exit on any error.
-set -e
+# exit script on any error
+trap 'exit' ERR
 
 #
 # This increments version in package.json, commits and pushes that change, and tags the commit with that version.
@@ -14,9 +14,3 @@ git push origin HEAD --tags
 #
 npm run clean
 npm run package
-
-#
-# Zip it and upload to nexus.
-#
-./build/create-artifact.sh
-./build/upload-to-nexus.sh
