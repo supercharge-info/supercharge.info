@@ -42,10 +42,10 @@ export default class TotalOpenLocationLineChart {
 
         // Extend chart from 0 to today
         const today = Number(new Date(new Date().toISOString().split('T')[0]));
-        livePerDate.unshift([livePerDate[0][0] - 24 * 60 * 60 * 1000, 0]);
         if(livePerDate[livePerDate.length - 1][0] < today) {
             livePerDate.push([today, livePerDate[livePerDate.length - 1][1]]);
         }
+        livePerDate.unshift([livePerDate[0][0] - Math.max((livePerDate[1][0] - livePerDate[0][0]) / 30, 24 * 60 * 60 * 1000), 0]);
         const plotLinesArray = TotalOpen.buildVerticalYearPlotLines();
         const location = this.location;
 

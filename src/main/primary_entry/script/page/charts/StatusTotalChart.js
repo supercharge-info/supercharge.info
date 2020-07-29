@@ -60,10 +60,10 @@ export default class StatusTotalChart {
                 .map(a => [Number(a[0]), count += a[1]]);
 
             // Extend chart from 0 to today
-            data.unshift([data[0][0] - 24 * 60 * 60 * 1000, 0]);
             if(data[data.length - 1][0] < today) {
                 data.push([today, data[data.length - 1][1]]);
             }
+            data.unshift([data[0][0] - Math.max((data[1][0] - data[0][0]) / 30, 24 * 60 * 60 * 1000), 0]);
             return {
                 name: a[0],
                 data: data,
