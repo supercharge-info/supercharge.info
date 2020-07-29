@@ -21,7 +21,19 @@ class InfoWindowListeners {
             const infoWindow = supercharger.marker.infoWindow;
 
             infoWindow.toggleNearby(false);
+            infoWindow.toggleHistory(false);
             infoWindow.toggleDetails();
+            infoWindow.redraw();
+
+        });
+
+        $(document).on('click', '.history-trigger', (event) => {
+            const supercharger = toSupercharger(event);
+            const infoWindow = supercharger.marker.infoWindow;
+
+            infoWindow.toggleNearby(false);
+            infoWindow.toggleDetails(false);
+            infoWindow.toggleHistory();
             infoWindow.redraw();
 
         });

@@ -22,6 +22,7 @@ export default class InfoWindow {
         // state fields
         this.popup = null;
         this.showDetails = false;
+        this.showHistory = false;
         this.showNearby = false;
         this.pinned = false;
     }
@@ -60,6 +61,18 @@ export default class InfoWindow {
 
         if (this.showDetails) {
             Analytics.sendEvent("map", "view-marker-details");
+        }
+    };
+
+    toggleHistory(showHistory) {
+        if (!Objects.isNullOrUndef(showHistory)) {
+            this.showHistory = showHistory;
+        } else {
+            this.showHistory = !this.showHistory;
+        }
+
+        if (this.showHistory) {
+            Analytics.sendEvent("map", "view-marker-history");
         }
     };
 
@@ -155,6 +168,10 @@ export default class InfoWindow {
             popupContent += buildDetailsDiv(site, rangeModel.getDisplayUnit());
         }
 
+        if (this.showHistory) {
+            popupContent += _buildHistoryDiv(site);
+        }
+
         if (this.showNearby) {
             popupContent += _buildNearbyDiv(site);
         }
@@ -167,6 +184,23 @@ export default class InfoWindow {
 
 };
 
+
+/**
+ * This is the content in the InfoWindow that shows up when the user clicks 'details'.
+ */
+function _buildHistoryDiv(supercharger) {
+    let div = "";
+    div += `<div class='info-window-details' id='nearby-details-${supercharger.id}'>`;
+    div += "<table style='width:100%;'>";
+
+    div += "<tr style='font-weight:bold;'><td>Date</td><td>Status</td></tr>";
+
+    div += supercharger.history.map(a => `<tr><td>${a.date}</td><td class='${a.siteStatus.toLowerCase().replace('_','-')}'>${a.siteStatus}</td></tr>`).join('');
+
+    div += "</table>";
+    div += "</div>";
+    return div;
+}
 
 /**
  * This is the content in the InfoWindow that shows up when the user clicks 'details'.
@@ -197,6 +231,7 @@ function _buildLinksDiv(supercharger) {
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
         buildLinkDetails(supercharger),
+        buildLinkHistory(supercharger),
         buildLinkNearby(supercharger),
 
         // links that are NOT always present.
@@ -273,6 +308,10 @@ function buildLinkRemoveAllMarkers(supercharger) {
 
 function buildLinkDetails(supercharger) {
     return `<a class='details-trigger' href='#${supercharger.id}'>details</a>`;
+}
+
+function buildLinkHistory(supercharger) {
+    return `<a class='history-trigger' href='#${supercharger.id}'>history</a>`;
 }
 
 function buildPinMarker(supercharger, isPinned) {

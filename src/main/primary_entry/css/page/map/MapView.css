@@ -49,6 +49,11 @@ Info Window
     font-size: 1.5em !important;
 }
 
+.info-window-content .open {
+    font-size: smaller;
+    font-weight: bold
+}
+
 .info-window-content .construction {
     color: orange;
     font-size: smaller;
