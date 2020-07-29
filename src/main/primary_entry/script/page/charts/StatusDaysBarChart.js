@@ -50,7 +50,7 @@ export default class StatusDaysBarChart {
         return {
             chart: {
                 type: 'bar',
-                height: siteNameList.length * 17 + 154
+                height: siteNameList.length * 16 + 170
             },
             credits: {
                 enabled: false
