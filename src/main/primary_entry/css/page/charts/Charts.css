@@ -9,11 +9,13 @@
     min-width: 150px;
 }
 
-#location-pie-charts {
-    display: flex;
-    flex-direction: row;
-}
+@media (min-width: 768px) {
+    #location-pie-charts {
+        display: flex;
+        flex-direction: row;
+    }
 
-#location-pie-charts > * {
-    width: 33.3%;
+    #location-pie-charts > * {
+        width: 33.3%;
+    }
 }

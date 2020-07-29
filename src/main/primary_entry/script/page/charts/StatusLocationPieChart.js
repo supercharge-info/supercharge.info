@@ -81,6 +81,22 @@ export default class StatusLocationPieChart {
                     data: statusLocationCountList
                 }
             ]
+        }, c => {
+            if(!statusLocationCountList.length) {
+                c.renderer.circle({
+                    fill: 'white',
+                    r: '25%',
+                    stroke: 'black',
+                    'stroke-width': 1
+                }).translate(0, 18)
+                .align({ align: 'center', verticalAlign: 'middle' })
+                .add();
+                c.renderer.text('N/A')
+                    .align({ align: 'center', verticalAlign: 'middle' })
+                    .translate(-18, 25)
+                    .css({ fontSize: '18px' })
+                    .add();
+            }
         });
 
     }

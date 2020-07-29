@@ -52,13 +52,21 @@ export default class StatusTotalChart {
             });
 
         // Convert changes to cumulative totals
+        const today = Number(new Date(new Date().toISOString().split('T')[0]));
         const locationData = Object.entries(byType).map(a => {
             let count = 0;
+            const data = Object.entries(a[1])
+                .sort((a,b) => a[0] - b[0])
+                .map(a => [Number(a[0]), count += a[1]]);
+
+            // Extend chart from 0 to today
+            data.unshift([data[0][0] - 24 * 60 * 60 * 1000, 0]);
+            if(data[data.length - 1][0] < today) {
+                data.push([today, data[data.length - 1][1]]);
+            }
             return {
                 name: a[0],
-                data: Object.entries(a[1])
-                    .sort((a,b) => a[0] - b[0])
-                    .map(a => [Number(a[0]), count += a[1]]),
+                data: data,
                 count: count // This will have incremented from the .map() call 1 line above
             };
         }).sort((a,b) => b.count - a.count).slice(0, 10);

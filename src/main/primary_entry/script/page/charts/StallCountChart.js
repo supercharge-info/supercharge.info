@@ -64,11 +64,7 @@ export default class StallCountChart {
                     data: stallCounts,
                     color: '#B22222',
                     lineWidth: 1,
-                    marker: {
-                        enabled: true,
-                        radius: 3,
-                        fillColor: '#B22222'
-                    }
+                    marker: { radius: 3 }
                 }
 
             ]
