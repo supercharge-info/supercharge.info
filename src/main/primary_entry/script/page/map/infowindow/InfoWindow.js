@@ -21,8 +21,8 @@ export default class InfoWindow {
 
         // state fields
         this.popup = null;
-        this.showDetails = false;
-        this.showHistory = true;
+        this.showDetails = true;
+        this.showHistory = false;
         this.showNearby = false;
         this.pinned = false;
     }
@@ -176,7 +176,7 @@ export default class InfoWindow {
             popupContent += _buildNearbyDiv(site);
         }
 
-        popupContent += _buildLinksDiv(site, this.showDetails);
+        popupContent += _buildLinksDiv(site, this);
 
         popupContent += "</div>";
         return popupContent;
@@ -221,7 +221,7 @@ function _buildNearbyDiv(supercharger) {
     return div;
 }
 
-function _buildLinksDiv(supercharger, showDetails) {
+function _buildLinksDiv(supercharger, info) {
     let content = "<div class='links-container'>";
 
     const linkList = [
@@ -230,8 +230,8 @@ function _buildLinksDiv(supercharger, showDetails) {
         buildLinkZoom(supercharger),
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
-        buildLinkDetails(supercharger, showDetails),
-        buildLinkHistory(supercharger),
+        buildLinkDetails(supercharger, info),
+        buildLinkHistory(supercharger, info),
         buildLinkNearby(supercharger),
 
         // links that are NOT always present.
@@ -306,12 +306,12 @@ function buildLinkRemoveAllMarkers(supercharger) {
     return null;
 }
 
-function buildLinkDetails(supercharger, showDetails) {
-    return `<a class='details-trigger' href='#${supercharger.id}'>${showDetails ? "hide" : "show"} details</a>`;
+function buildLinkDetails(supercharger, info) {
+    return `<a class='details-trigger' href='#${supercharger.id}'>${info.showDetails ? "hide" : "show"} details</a>`;
 }
 
-function buildLinkHistory(supercharger) {
-    return `<a class='history-trigger' href='#${supercharger.id}'>history</a>`;
+function buildLinkHistory(supercharger, info) {
+    return `<a class='history-trigger' href='#${supercharger.id}'>${info.showHistory ? "hide" : "show"} history</a>`;
 }
 
 function buildPinMarker(supercharger, isPinned) {
