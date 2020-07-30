@@ -104,9 +104,19 @@ export default class CountryRegionControl {
         return isNaN(id) ? null : id;
     };
 
+    getCountryName() {
+        const name = (this.countrySelect.find('option:selected').text() || '').trim();
+        return !name || name.match(/--.+--/) ? null : name;
+    };
+
     getRegionId() {
         const id = parseInt(this.regionSelect.val());
         return isNaN(id) ? null : id;
+    };
+
+    getRegionName() {
+        const name = (this.regionSelect.find('option:selected').text() || '').trim();
+        return !name || name.match(/--.+--/) ? null : name;
     };
 
     setCountryId(countryId) {

@@ -1,7 +1,9 @@
 import $ from "jquery";
 import countryClient from '../../common/CountryClient';
+import userConfig from "../../common/UserConfig";
 
 import Address from "../../site/Address";
+import Analytics from "../../util/Analytics";
 import CountryRegionControl from "../../common/CountryRegionControl";
 import TotalOpenLocationLineChart from "./TotalOpenLocationLineChart";
 import StatusTotalChart from "./StatusTotalChart";
@@ -10,9 +12,6 @@ import StatusLocationPieChart from "./StatusLocationPieChart";
 import LocationBarChart from "./LocationBarChart";
 import StatusDaysBarChart from "./StatusDaysBarChart";
 import StallCountChart from "./StallCountChart";
-//import Analytics from "../../util/Analytics";
-//import WindowUtil from "../../util/WindowUtil";
-//import ServiceURL from "../../common/ServiceURL";
 
 export default class ChartsView {
 
@@ -23,26 +22,30 @@ export default class ChartsView {
         );
 
         const changesView = this;
-        this.regionControl.init().done($.proxy(this.drawWorld, this));
+        this.regionControl.init(userConfig.chartsPageRegionId, userConfig.chartsPageCountryId).done($.proxy(this.drawWorld, this));
     }
 
     regionControlCallback(whichSelect, newValue) {
         $('.highcharts-container').remove();
         if (whichSelect == 'region') {
             if (newValue) {
-                this.drawRegion(this.regionControl.regionSelect.find('option:selected').text(), newValue);
+                this.drawRegion(this.regionControl.getRegionName(), newValue);
             } else {
                 this.drawWorld();
             }
         } else {
             if (newValue) {
-                this.drawCountry(this.regionControl.countrySelect.find('option:selected').text(), newValue);
+                this.drawCountry(this.regionControl.getCountryName(), newValue);
             } else if (this.regionControl.regionSelect.val()) {
-                this.drawRegion(this.regionControl.regionSelect.find('option:selected').text(), this.regionControl.regionSelect.find('option:selected').val());
+                this.drawRegion(this.regionControl.getRegionName(), this.regionControl.getRegionId());
             } else {
                 this.drawWorld();
             }
         }
+
+        userConfig.setRegionCountryId("charts", "region", this.regionControl.getRegionId());
+        userConfig.setRegionCountryId("charts", "country", this.regionControl.getCountryId());
+        Analytics.sendEvent("charts", "select-" + whichSelect, newValue);
     }
 
     drawWorld() {
@@ -66,7 +69,6 @@ export default class ChartsView {
         new StatusLocationPieChart('Permit', 'Country', region).draw();
         new LocationBarChart('Country', region).draw();
         new StatusDaysBarChart('Region', regionId).draw();
-        //Analytics.sendEvent("charts", "select-region", newValue);
     }
 
     drawCountry(country, countryId) {
@@ -83,7 +85,6 @@ export default class ChartsView {
             new LocationBarChart(state, country).draw();
         }
         new StatusDaysBarChart('Country', countryId).draw();
-        //Analytics.sendEvent("charts", "select-country", newValue);
     }
 
 }

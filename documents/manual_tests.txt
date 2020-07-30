@@ -140,12 +140,11 @@ Map Page
         () When info windows overlap, the one that is opened later should always be on top
         () When info windows overlap, clicking on the one behind should bring it forward
         () User provided name shows up.
-        () Correct links show up: 'zoom in', 'circle off', 'add to route', 'details', 'remove',
-        () Links
+        () Correct links show up:
             () zoom in
             () circle on
             () add to route
-            () details
+            () hide details
                 () should show 'GPS' field only.
             () remove
                 () should remove from map and from user config
@@ -160,9 +159,10 @@ Map Page
         () Street address is shown.
         () Actions
             () Zoom In
-            () Toggle Circle
+            () Circle On
             () Add To Route
-            () Details
+            () Hide Details
+                () Date Opened
                 () Elevation (in ft or m)
                 () GPS
                 () Hours
@@ -170,8 +170,16 @@ Map Page
                 () Power
                 () Solar Canopy
                 () Battery Storage
-            () URL
-            () URL Discuss
+            () Show History
+                () Date
+                () Status
+                    () PERMIT
+                    () CONSTRUCTION
+                    () OPEN
+                    () CLOSED_TEMP
+                    () CLOSED_PERM
+            () Web Page
+            () Discuss
     () Clicking another marker closes any open unpinned info windows.
     () Pinned windows stay open when other info windows are opened/closed.
     () Clicking the close 'x' on an info windows will unpin it.
@@ -245,14 +253,64 @@ Data Page
 Charts Page
 ---------------------------------
 
-() Open Superchargers -- globally
-() Open Superchargers -- per region
-    () Individual curves should be correct: North America, Europe, Asia
-() Open superchargers per Country Pie Chart
-() Superchargers per US state.
-() Superchargers per country.
-() Construction/Permit Status days
-    () Should be larger than other charts, 1000px height.
+() Open Superchargers
+    () Historical Line Chart
+    () Should show selected location
+    () Should start from 0 and end today
+() Open Superchargers
+    () Historical Line Chart
+    () Chart should show sub-locations of selected location
+        () Only selected countries should show state data:
+            () Australia
+            () Canada
+            () China
+            () USA
+        () Chart should be limited to top ten sub-locations
+    () Each line should start from 0 and end today
+() Superchargers Opened each Month
+    () Stacked Historical Bar Chart
+    () Chart should show sub-locations of selected location
+        () Only selected countries should show state data:
+            () Australia
+            () Canada
+            () China
+            () USA
+        () Chart should be limited to top five sub-locations
+    () Chart should skip current month (incomplete data)
+() Open Supercharger Stalls
+    () Historical Line Chart
+    () Chart should only be shown if no filter is applied (only world-wide data is available)
+() Open Superchargers
+    () 3 Pie Charts
+        () One for each status as of today:
+            () Open
+            () Construction
+            () Permit
+        () Should be shown stacked horizontally on desktop, vertically on mobile
+    () Chart should show sub-locations of selected location
+        () Sub-locations shown only include either state/province or country (even if no filter is applied)
+        () Only selected countries should show state data:
+            () Australia
+            () Canada
+            () China
+            () USA
+        () Chart should be limited to top five sub-locations and "Other" for remaining data
+    () Chart should show N/A if no data exists for a particular location and status
+() Superchargers
+    () Stacked Bar Chart
+    () Each stack includes open, construction and permit counts as of today
+    () Chart should show sub-locations of selected location
+        () Sub-locations shown only include either state/province or country (even if no filter is applied)
+        () Chart should exclude the following sub-locations which dwarf counts of sibling sub-locations:
+            () USA
+            () China
+            () California
+() Construction/Permit Status Days
+    () Bar Chart
+    () Chart should show individual supercharger locations
+        () Chart should first show superchargers in permit then superchargers under construction
+        () If a filter is applied, only those locations should be included
+    () Chart should vertically resize upon a new filter being selected so every label should be visible (>=16px height)
 
 ---------------------------------
 Changes Page

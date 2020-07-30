@@ -15,6 +15,8 @@ class UserConfig {
 
         this.changesPageRegionId = null;
         this.changesPageCountryId = null;
+        this.chartsPageRegionId = null;
+        this.chartsPageCountryId = null;
         this.dataPageRegionId = null;
         this.dataPageCountryId = null;
 
@@ -46,6 +48,12 @@ class UserConfig {
                 this.changesPageRegionId = newValue;
             } else if (whichSelect === "country") {
                 this.changesPageCountryId = newValue;
+            }
+        } else if (page == "charts") {
+            if (whichSelect === "region") {
+                this.chartsPageRegionId = newValue;
+            } else if (whichSelect === "country") {
+                this.chartsPageCountryId = newValue;
             }
         } else if (page === "data") {
             if (whichSelect === "region") {
@@ -107,6 +115,8 @@ class UserConfig {
 
                 config.changesPageRegionId = userConfigJson.changesPageRegionId;
                 config.changesPageCountryId = userConfigJson.changesPageCountryId;
+                config.chartsPageRegionId = userConfigJson.chartsPageRegionId;
+                config.chartsPageCountryId = userConfigJson.chartsPageCountryId;
                 config.dataPageRegionId = userConfigJson.dataPageRegionId;
                 config.dataPageCountryId = userConfigJson.dataPageCountryId;
 
