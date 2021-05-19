@@ -14,7 +14,8 @@ module.exports = merge(common, {
         https: false,
         proxy: {
             "/service": {
-                target: "https://supercharge.info:443",
+                // Remove "test." prefix from this hostname to test locally with prod API/data.
+                target: "https://test.supercharge.info:443",
                 secure: true,
                 changeOrigin: true
             }
