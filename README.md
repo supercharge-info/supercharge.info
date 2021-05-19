@@ -1,6 +1,6 @@
 # About
 
-Source code for the javascript portion of [supercharge.info](https://supercharge.info).
+Source code for the web portion of [supercharge.info](https://supercharge.info).
 
 ## Environment Setup
 
@@ -14,7 +14,7 @@ npm install
 
 npm start
 
-https://test.supercharge.info:9090/  (configure DNS such that this points to localhost)
+https://localhost:9090/
 
 
 ## Forum
