@@ -5,6 +5,7 @@ import ServiceURL from "../../../common/ServiceURL";
 import SiteIterator from "../../../site/SiteIterator";
 import SiteSorting from "../../../site/SiteSorting";
 import SitePredicates from "../../../site/SitePredicates";
+import MapLayers from "../MapLayers";
 import $ from "jquery";
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -13,8 +14,8 @@ const MONTH_NAMES_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug
 
 export default class WayBack {
 
-    constructor(googleMap) {
-        this.googleMap = googleMap;
+    constructor(mapApi) {
+        this.mapApi = mapApi;
         this.lastInfoWindow = null;
         this.index = -1;
         this.wayBackContainer = $("#way-back-container");
@@ -53,7 +54,7 @@ export default class WayBack {
         this.index = 99999;
         this.wayBackContainer.hide();
         if (Objects.isNotNullOrUndef(this.lastInfoWindow)) {
-            this.lastInfoWindow.close();
+            this.mapApi.closePopup(this.lastInfoWindow);
             this.lastInfoWindow = null;
         }
         if (Objects.isNotNullOrUndef(this.sound)) {
@@ -66,7 +67,7 @@ export default class WayBack {
      * Start animation.
      */
     start() {
-        this.googleMap.setZoom(3);
+        this.mapApi.setZoom(3);
         EventBus.dispatch("hide-all-control-event");
         this.wayBackContainer.show();
         this.wayBackContainer.css('opacity', '1.0');
@@ -79,9 +80,9 @@ export default class WayBack {
             .withPredicate(SitePredicates.IS_OPEN_AND_COUNTED)
             .toArray();
 
-        $.each(this.superchargers, function (index, site) {
-            site.marker.setVisible(false);
-        });
+        Object.values(MapLayers.getOverlayMaps()).forEach(function (l) {
+            this.mapApi.removeLayer(l);
+        }, this);
         this.doNext();
     };
 
@@ -97,29 +98,19 @@ export default class WayBack {
 
     showNextMarker() {
         const supercharger = this.superchargers[this.index];
-        supercharger.marker.setVisible(true);
+        supercharger.marker.addTo(this.mapApi);
     };
 
     showNextInfoWindow() {
         const supercharger = this.superchargers[this.index];
-        if (this.lastInfoWindow !== null) {
-            this.lastInfoWindow.unbindAll();
-            this.lastInfoWindow.close();
-        }
 
         const dateOpened = supercharger.dateOpened;
         const dateString = MONTH_NAMES_SHORT[dateOpened.getMonth()] + " " + dateOpened.getDate() + ", " + dateOpened.getFullYear();
-        const infoWindow = new google.maps.InfoWindow({
-            content: "<div class='way-back-info'>" +
-            "<div class='title'>" + supercharger.displayName + "</div>" +
-            "<div class='date'>" + dateString + "</div>" +
-            "<div>"
-        });
-        infoWindow.open(this.googleMap, supercharger.marker);
+        const infoWindow = this.mapApi.openPopup("<div class='way-back-info'>" +
+                                        "<div class='title'>" + supercharger.displayName + "</div>" +
+                                        "<div class='date'>" + dateString + "</div>" +
+                                        "<div>", supercharger.location);
         this.lastInfoWindow = infoWindow;
-        google.maps.event.addListener(infoWindow, 'domready', function () {
-            $(".gm-style-iw").next("div").remove();
-        });
     };
 
 
