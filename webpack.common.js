@@ -11,7 +11,7 @@ module.exports = {
     },
     output: {
         filename: "[name].[chunkhash].js",
-        path: path.resolve(__dirname, 'webcontent-built')
+        path: path.resolve(__dirname, 'build')
     },
     module: {
         rules: [
@@ -46,7 +46,7 @@ module.exports = {
             // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
             // https://github.com/webpack-contrib/url-loader
             {
-                test: [/\.woff?$/, /\.woff2?$/, /\.ttf?$/, /\.eot?$/, /\.svg?$/],
+                test: /(\.woff?$|\.woff2?$|\.ttf?$|.eot?$|\.svg?$)/,
                 loader: 'url-loader'
             },
             //

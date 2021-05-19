@@ -1,7 +1,7 @@
 #!/bin/bash
 #==============================================================================================
 # Deploy
-# ./build/deploy.sh <test|prod> [version]
+# ./deploy.sh <test|prod>
 #==============================================================================================
 
 # exit script on any error
@@ -11,26 +11,25 @@ trap 'exit' ERR
 # validate command line args
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ENV=$1
-VERSION=$2
 if [[ "$1" = "test" ]]; then
-    REMOTE_HOST="test.supercharge.info"
-    DIR_DEPLOY="/var/www/test.supercharge.info"
+    REMOTE_HOST="super01.supercharge.info"
+    DIR_DEPLOY="/var/www/test/supercharge.info"
+    SSH_USER="tomcat_test"
 elif [[ "$1" = "prod" ]]; then
     REMOTE_HOST="super01.supercharge.info"
-    DIR_DEPLOY="/var/www/supercharge.info"
+    DIR_DEPLOY="/var/www/prod/supercharge.info"
+    SSH_USER="tomcat"
 else
     echo "unknown environment: ${ENV}";
     echo "usage: deploy.sh <test|prod> [version]";
     exit;
 fi
 
-SSH_USER="tomcat"
-WEB_APP_DIR="webcontent-built"
+WEB_APP_DIR="build"
 
 
 echo "##########################################################";
 echo "ENV                = ${ENV}"
-echo "VERSION            = ${VERSION}"
 echo "WEB_APP_DIR        = ${WEB_APP_DIR}"
 echo "- - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
 echo "REMOTE_HOST        = ${REMOTE_HOST}"

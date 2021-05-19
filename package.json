@@ -1,17 +1,16 @@
 {
-  "name": "tesla-supercharger-map",
+  "name": "supercharge.info",
   "version": "3.0.9",
   "description": "map",
-  "main": "main.js",
   "scripts": {
-    "test": "mocha --opts src/test/mocha.opts src/test",
-    "package": "NODE_ENV=production webpack --progress --config webpack.prod.js",
+    "build": "NODE_ENV=production webpack --progress --config webpack.prod.js",
     "start": "webpack-dev-server --open --config webpack.dev.js",
-    "clean": "rm -rf webcontent-built"
+    "clean": "rm -rf build",
+    "release": "npm version --message 'RELEASE: %s' patch && git push origin master && git push origin --tags"
   },
   "repository": {
     "type": "git",
-    "url": "git@git.redshiftsoft.com:apps/tesla-supercharger-map.git"
+    "url": "git@github.com:supercharge-info/supercharge.info.git"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +24,6 @@
     "html-minifier": "4.0.0",
     "html-webpack-plugin": "3.2.0",
     "mini-css-extract-plugin": "0.8.2",
-    "mocha": "6.2.2",
     "style-loader": "1.0.2",
     "url-loader": "3.0.0",
     "webpack": "4.41.4",
