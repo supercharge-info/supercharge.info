@@ -50,7 +50,7 @@ export default class NavBarUserDropdown {
         this.loginLink.hide();
 
         $("#username-link").html(
-            `<span class='glyphicon glyphicon-user' aria-hidden='true'/> ${data.username} <span class='caret'/>`
+            `<span class='glyphicon glyphicon-user' aria-hidden='true'></span> ${data.username} <span class='caret'/>`
         ).show();
 
         $("#save-route-trigger").show();
