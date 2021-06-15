@@ -54,7 +54,7 @@
     "leaflet": "1.6.0",
     "leaflet-control-geocoder": "1.10.0",
     "leaflet-routing-machine": "3.2.12",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "sortablejs": "1.10.1",
     "spectrum-colorpicker": "1.8.0"
   }
