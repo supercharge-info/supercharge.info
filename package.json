@@ -49,7 +49,7 @@
     "datatables.net-bs": "1.10.20",
     "highcharts": "6.2.0",
     "jquery": "3.5.1",
-    "jquery-validation": "1.19.1",
+    "jquery-validation": "1.19.3",
     "jquery.browser": "0.1.0",
     "leaflet": "1.6.0",
     "leaflet-control-geocoder": "1.10.0",
