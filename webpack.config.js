@@ -6,13 +6,38 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    //
+    // Dev server config options here: https://webpack.js.org/configuration/dev-server/
+    // https://github.com/webpack/webpack-dev-server
+    devServer: {
+        port: 9090,
+        host: "localhost",
+        noInfo: false,
+        https: false,
+        proxy: {
+            "/service": {
+                // Remove "test." prefix from this hostname to test locally with prod API/data.
+                target: "https://test.supercharge.info:443",
+                secure: true,
+                changeOrigin: true
+            }
+        },
+        historyApiFallback: {
+            rewrites: [
+                // For these otherwise not found paths send to index.html
+                {from: /^\/map/, to: '/index.html'},
+                {from: /^\/changes/, to: '/index.html'},
+                {from: /^\/data/, to: '/index.html'},
+                {from: /^\/charts/, to: '/index.html'},
+                {from: /^\/about/, to: '/index.html'},
+                {from: /^\/profile/, to: '/index.html'},
+            ],
+        },
+    },
     entry: {
         primary: './src/main/primary_entry/script/primary_entry.js'
     },
-    output: {
-        filename: "[name].[chunkhash].js",
-        path: path.resolve(__dirname, 'build')
-    },
+    mode: 'production',
     module: {
         rules: [
             //
@@ -22,10 +47,7 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
+                    loader: 'babel-loader'
                 }
             },
             //
@@ -35,42 +57,48 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    "css-loader"
-                ]
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             },
             //
             // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
             // https://github.com/webpack-contrib/url-loader
             {
-                test: /(\.woff?$|\.woff2?$|\.ttf?$|.eot?$|\.svg?$)/,
+                test: /(\.woff?$|\.woff2?$|\.ttf?$|.eot?$|\.svg?$|\.gif?$)/,
                 loader: 'url-loader'
             },
             //
-            // Have webpack copy our images into the build directory. Lots of advanced options available here.
-            // For now this is configured to just copy.
+            // Make images available to import/reference from JS.
             //
-            // https://github.com/webpack-contrib/file-loader
+            // https://webpack.js.org/guides/asset-modules/
             {
-                test: /\.(jpe?g|png|gif)$/i,
-                loader: "file-loader",
-                query: {
-                    name: "[path][name].[ext]",
-                    context: "src/main/primary_entry"
+                test: /\.png$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'images/[name][ext]'
                 }
             }
         ]
+    },
+    output: {
+        filename: "[name].[chunkhash].js",
+        path: path.resolve(__dirname, 'build'),
+        clean: true
+    },
+    //
+    // https://webpack.js.org/configuration/performance
+    //
+    performance: {
+        // Suppress warnings about max asset size for now so that any other warnings are more visible.
+        maxEntrypointSize: 2*1000*1000,
+        maxAssetSize: 2*1000*1000
     },
     plugins: [
         //
         // https://webpack.js.org/plugins/mini-css-extract-plugin/
         //
         new MiniCssExtractPlugin({
-            filename: "[name].[hash].css",
-            chunkFilename: "[id].[hash].css"
+            filename: "[name].[chunkhash].css",
+            chunkFilename: "[id].[chunkhash].css"
         }),
         //
         // https://github.com/jantimon/html-webpack-plugin
@@ -100,6 +128,7 @@ module.exports = {
         }),
         //
         // Simply copy these files to the build directory.
+        // https://webpack.js.org/plugins/copy-webpack-plugin/
         //
         new CopyWebpackPlugin([
             {from: 'src/main/common_entry/.htaccess'},

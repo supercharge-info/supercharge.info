@@ -13,12 +13,12 @@ import "../images/avatar-placeholder.png";
 import "../images/construction-cone.png";
 import "../images/construction-cone_20.png";
 import "../images/feed-icon.png";
-import "../images/dots/blue_dot_16.png";
-import "../images/dots/black_dot_16.png";
-import "../images/dots/gray_dot_16.png";
-import "../images/dots/green_dot_16.png";
-import "../images/dots/red_dot_16.png";
-import "../images/dots/red_black_dot_16.png";
+import "../images/blue_dot_16.png";
+import "../images/black_dot_16.png";
+import "../images/gray_dot_16.png";
+import "../images/green_dot_16.png";
+import "../images/red_dot_16.png";
+import "../images/red_black_dot_16.png";
 import "../images/become_a_patron_button@2x.png";
 
 
