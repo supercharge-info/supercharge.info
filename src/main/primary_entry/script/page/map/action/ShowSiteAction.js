@@ -38,7 +38,10 @@ export default class ShowSiteAction {
                  * in response to viewport changes on the map. */
                 $.doTimeout(75, () => {
                     if (supercharger && supercharger.marker) {
-                        supercharger.marker.fire('click');
+                        if (!supercharger.marker.infoWindow || !supercharger.marker.infoWindow.isShown()) {
+                            // Do not remove popup if it exists
+                            supercharger.marker.fire('click');
+                        }
                         return false;
                     }
                     else {

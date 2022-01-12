@@ -1,53 +1,61 @@
 {
-  "name": "tesla-supercharger-map",
-  "version": "3.0.7",
+  "name": "supercharge.info",
+  "version": "3.0.13",
   "description": "map",
-  "main": "main.js",
   "scripts": {
-    "test": "mocha --opts src/test/mocha.opts src/test",
-    "package": "NODE_ENV=production webpack --progress --config webpack.prod.js",
-    "start": "webpack-dev-server --open --config webpack.dev.js",
-    "clean": "rm -rf webcontent-built"
+    "build": "NODE_ENV=production webpack --mode=production",
+    "start": "NODE_ENV=development webpack serve",
+    "clean": "rm -rf build",
+    "release": "npm version --message 'RELEASE: %s' patch && git push origin master && git push origin --tags"
   },
   "repository": {
     "type": "git",
-    "url": "git@git.redshiftsoft.com:apps/tesla-supercharger-map.git"
+    "url": "git@github.com:supercharge-info/supercharge.info.git"
   },
   "author": "",
   "license": "ISC",
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "usage",
+          "corejs": "3.14.0"
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "@babel/core": "7.2.2",
-    "@babel/preset-env": "7.2.3",
-    "babel-loader": "8.0.4",
-    "copy-webpack-plugin": "4.6.0",
-    "css-loader": "2.1.0",
-    "file-loader": "3.0.1",
-    "html-minifier": "3.5.21",
-    "html-webpack-plugin": "3.2.0",
-    "mini-css-extract-plugin": "0.5.0",
-    "mocha": "5.2.0",
-    "style-loader": "0.23.1",
-    "url-loader": "1.1.2",
-    "webpack": "4.28.3",
-    "webpack-cli": "3.1.2",
-    "webpack-dev-server": "3.1.14",
-    "webpack-merge": "4.1.5"
+    "@babel/core": "7.14.6",
+    "@babel/preset-env": "7.14.5",
+    "babel-loader": "8.2.2",
+    "copy-webpack-plugin": "5.1.2",
+    "css-loader": "5.2.6",
+    "html-minifier": "4.0.0",
+    "html-webpack-plugin": "5.3.1",
+    "mini-css-extract-plugin": "1.6.0",
+    "style-loader": "2.0.0",
+    "url-loader": "4.1.1",
+    "webpack": "5.39.0",
+    "webpack-cli": "4.7.2",
+    "webpack-dev-server": "3.11.2"
   },
   "dependencies": {
-    "@mapbox/mapbox-sdk": "^0.4.1",
-    "@mapbox/polyline": "^1.0.0",
+    "@mapbox/mapbox-sdk": "0.9.0",
+    "@mapbox/polyline": "1.1.0",
     "bootstrap": "3.4.1",
-    "datatables.net": "1.10.19",
-    "datatables.net-bs": "1.10.19",
+    "core-js": "3.14.0",
+    "datatables.net": "1.10.25",
+    "datatables.net-bs": "1.10.20",
     "highcharts": "6.2.0",
-    "jquery": "3.4.1",
-    "jquery-validation": "1.19.0",
+    "jquery": "3.5.1",
+    "jquery-validation": "1.19.3",
     "jquery.browser": "0.1.0",
-    "leaflet": "1.4.0",
-    "leaflet-control-geocoder": "1.6.0",
-    "leaflet-routing-machine": "^3.2.12",
-    "lodash": "^4.17.11",
-    "sortablejs": "1.7.0",
+    "leaflet": "1.6.0",
+    "leaflet-control-geocoder": "1.10.0",
+    "leaflet-routing-machine": "3.2.12",
+    "lodash": "4.17.21",
+    "sortablejs": "1.10.1",
     "spectrum-colorpicker": "1.8.0"
   }
 }

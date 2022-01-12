@@ -20,7 +20,7 @@ Action.prototype.createLink = function (event) {
     const zoom = this.mapApi.getZoom();
     const latLng = this.getCenter();
     let linkStr = window.location.href.split('?')[0];
-    linkStr += '?Center=' + latLng.toString() + '&Zoom=' + zoom;
+    linkStr += '?Center=' + latLng.lat + ',' + latLng.lng + '&Zoom=' + zoom;
     if (rangeModel.getRangeMeters() !== 0) {
         if (rangeModel.displayUnit.isKilometers()) {
             linkStr += '&RangeKm=' + rangeModel.getCurrent();

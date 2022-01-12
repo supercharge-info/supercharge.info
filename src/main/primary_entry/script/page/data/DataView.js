@@ -115,6 +115,14 @@ export default class DataView {
                     "className": "number"
                 },
                 {
+                    "data": "powerKilowatt",
+                    "sorting": false,
+                    "render": (data, type, row, meta) => {
+                        return data || ''
+                    },
+                    "className": "number"
+                },
+                {
                     "data": (row, type, val, meta) => {
                         return `${row.gps.latitude}, ${row.gps.longitude}`
                     },

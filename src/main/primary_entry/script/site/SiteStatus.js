@@ -9,32 +9,32 @@ const I_CONSTRUCTION = L.icon({
 });
 
 const I_PERMIT = L.icon({
-    iconUrl: imagesDir + '/dots/blue_dot_16.png',
+    iconUrl: imagesDir + '/blue_dot_16.png',
     iconAnchor: [8, 8]
 });
 
 const I_CLOSED_PERM = L.icon({
-    iconUrl: imagesDir + '/dots/black_dot_16.png',
+    iconUrl: imagesDir + '/black_dot_16.png',
     iconAnchor: [8, 8]
 });
 
 const I_CLOSED_TEMP = L.icon({
-    iconUrl: imagesDir + '/dots/gray_dot_16.png',
+    iconUrl: imagesDir + '/gray_dot_16.png',
     iconAnchor: [8, 8]
 });
 
 const I_OPEN = L.icon({
-    iconUrl: imagesDir + '/dots/red_dot_16.png',
+    iconUrl: imagesDir + '/red_dot_16.png',
     iconAnchor: [8, 8]
 });
 
 const I_OPEN_HOURS = L.icon({
-    iconUrl: imagesDir + '/dots/red_black_dot_16.png',
+    iconUrl: imagesDir + '/red_black_dot_16.png',
     iconAnchor: [8, 8]
 });
 
 const I_CUSTOM = L.icon({
-    iconUrl: imagesDir + '/dots/green_dot_16.png',
+    iconUrl: imagesDir + '/green_dot_16.png',
     iconAnchor: [8, 8]
 });
 

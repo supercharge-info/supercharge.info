@@ -83,7 +83,17 @@ export default class Supercharger {
         return Objects.isNullOrUndef(this.hours) ? "24/7" : this.hours;
     };
 
+    formatPower() {
+        return Objects.isNullOrUndef(this.powerKilowatt) ? "" : this.powerKilowatt;
+    };
 
+    getMarkerTitle() {
+        return `${this.displayName} (${this.status.displayName})` +
+            (Objects.isNullOrUndef(this.hours) ? "" : `\r\nLimited hours: ${this.hours}`) +
+            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : `\r\n${this.numStalls} stalls`) +
+            (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : `\r\n${this.powerKilowatt} kW`);
+		
+	};
 };
 
 Supercharger.fromJSON = function (jsonObject) {
