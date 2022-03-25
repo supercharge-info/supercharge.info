@@ -17,10 +17,10 @@ export default class MarkerFactory {
         this.mapApi = mapApi;
     };
 
-    createMarker(supercharger) {
+    createMarker(supercharger, zoom) {
         const markerOptions = {
             title: supercharger.getMarkerTitle(),
-            icon: supercharger.status.getIcon(supercharger),
+            icon: zoom > 11 ? supercharger.status.getIcon(supercharger) : (zoom > 8 ? supercharger.status.getIconM(supercharger) : supercharger.status.getIconS(supercharger))
         };
         const marker = L.marker(supercharger.location, markerOptions);
         supercharger.marker = marker;

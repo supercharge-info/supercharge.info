@@ -19,6 +19,18 @@ import "../images/gray_dot_16.png";
 import "../images/green_dot_16.png";
 import "../images/red_dot_16.png";
 import "../images/red_black_dot_16.png";
+import "../images/black_dot_10.png";
+import "../images/gray_dot_10.png";
+import "../images/blue_dot_10.png";
+import "../images/orange_cone_10.png";
+import "../images/red_dot_10.png";
+import "../images/red_black_dot_10.png";
+import "../images/black_dot_6.png";
+import "../images/gray_dot_6.png";
+import "../images/blue_dot_6.png";
+import "../images/orange_cone_6.png";
+import "../images/red_dot_6.png";
+import "../images/red_black_dot_6.png";
 import "../images/become_a_patron_button@2x.png";
 
 

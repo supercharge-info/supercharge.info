@@ -20,6 +20,7 @@ export default class MapView {
         this.searchMarker = null;
 
         this.initMap(lat, lng, initialZoom);
+        this.oldZoom = initialZoom;
         this.addCustomMarkers();
 
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
@@ -111,7 +112,6 @@ export default class MapView {
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     handleViewportChange() {
-
         const latLngBounds = this.mapApi.getBounds();
         const northEast = latLngBounds.getNorthEast();
         const southWest = latLngBounds.getSouthWest();
@@ -119,11 +119,21 @@ export default class MapView {
         const newSouthWest = L.latLng(southWest.lat - 1, southWest.lng - 2);
         const expandedBounds = L.latLngBounds(newSouthWest, newNorthEast);
 
+        var newZoom = this.mapApi.getZoom();
+        if ((this.oldZoom <= 8 && newZoom > 8) || (this.oldZoom <= 11 && newZoom > 11) || (newZoom <= 8 && this.oldZoom > 8) || (newZoom <= 11 && this.oldZoom > 11)) {
+            new SiteIterator()
+                .withPredicate(SitePredicates.HAS_MARKER)
+                .iterate((supercharger) => {
+                    supercharger.marker.remove();
+                    supercharger.marker = null;
+                });
+        }
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(expandedBounds))
-            .iterate((supercharger) => this.markerFactory.createMarker(supercharger));
+            .iterate((supercharger) => this.markerFactory.createMarker(supercharger, newZoom));
         EventBus.dispatch("map-viewport-change-event", latLngBounds);
+        this.oldZoom = newZoom;
 
         const mapCenter = this.getCenter();
         userConfig.setLatLngZoom(mapCenter.lat, mapCenter.lng, this.mapApi.getZoom());
@@ -134,7 +144,7 @@ export default class MapView {
         const markerFactory = this.markerFactory;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .iterate((supercharger) => markerFactory.createMarker(supercharger));
+            .iterate((supercharger) => markerFactory.createMarker(supercharger, this.oldZoom));
         EventBus.dispatch("way-back-start-event");
     };
 
