@@ -15,14 +15,24 @@ const RangeControlView = function () {
 
     this.miUnitLabel = $("#range-unit-mi-label");
     this.kmUnitLabel = $("#range-unit-km-label");
+    this.markerLabels = {
+        "S": $("#marker-s-label"),
+        "M": $("#marker-m-label"),
+        "L": $("#marker-l-label"),
+        "Z": $("#marker-z-label"),
+        "D": $("#marker-d-label"),
+        "C": $("#marker-c-label")
+    };
 
     this.initRangeSlider();
     this.initRangeUnit();
+    this.initMarkerSizes();
     this.updateRangeUnit();
     this.handleVisibilityModelChange();
 
     EventBus.addListener("range-model-range-changed-event", this.handleRangeChange, this);
     EventBus.addListener("range-model-unit-changed-event", this.handleRangeUnitChange, this);
+    EventBus.addListener("marker-sizes-changed-event", this.handleMarkerSizesChange, this);
     EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
 };
 
@@ -65,6 +75,26 @@ RangeControlView.prototype.updateRangeUnit = function () {
     }
 };
 
+RangeControlView.prototype.initMarkerSizes = function () {
+    const control = this;
+    for (var markerLabel in this.markerLabels) {
+        const ml = markerLabel;
+        this.markerLabels[ml].click(function () {
+            rangeModel.setMarkerSizes(ml);
+            control.updateMarkerSizes();
+            Analytics.sendEvent("map", "change-marker-sizes", ml);
+        });
+    }
+};
+
+RangeControlView.prototype.updateMarkerSizes = function () {
+    var markerSizes = rangeModel.getMarkerSizes();
+    for (var markerLabel in this.markerLabels) {
+        this.markerLabels[markerLabel].removeClass("active");
+    }
+    this.markerLabels[markerSizes].addClass("active");
+};
+
 RangeControlView.prototype.updateRangeSlider = function () {
     this.rangeSlider.setMin(rangeModel.getMin());
     this.rangeSlider.setMax(rangeModel.getMax());
@@ -78,6 +108,10 @@ RangeControlView.prototype.handleRangeChange = function () {
 RangeControlView.prototype.handleRangeUnitChange = function () {
     this.updateRangeSlider();
     this.updateRangeUnit();
+};
+
+RangeControlView.prototype.handleMarkerSizesChange = function () {
+    this.updateMarkerSizes();
 };
 
 RangeControlView.prototype.handleVisibilityModelChange = function () {

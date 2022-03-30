@@ -21,6 +21,7 @@ class UserConfig {
         this.latitude = null;
         this.longitude = null;
         this.zoom = null;
+        this.markerSizes = "C";
         this.customMarkers = [];
     }
 
@@ -39,6 +40,11 @@ class UserConfig {
         this.zoom = zoom;
         this.scheduleSave();
     };
+
+    setMarkerSizes(markerSizes) {
+        this.markerSizes = markerSizes;
+        this.scheduleSave();
+    }
 
     setRegionCountryId(page, whichSelect, newValue) {
         if (page === "changes") {
@@ -86,7 +92,7 @@ class UserConfig {
 
     getUnit() {
         return Units.fromString(this.unit);
-    }
+    };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // load/save
@@ -104,6 +110,7 @@ class UserConfig {
                 config.latitude = userConfigJson.latitude;
                 config.longitude = userConfigJson.longitude;
                 config.zoom = userConfigJson.zoom;
+                config.markerSizes = userConfigJson.markerSizes || "C";
 
                 config.changesPageRegionId = userConfigJson.changesPageRegionId;
                 config.changesPageCountryId = userConfigJson.changesPageCountryId;

@@ -39,6 +39,8 @@ class RangeModel {
             this.rangeMeters = METERS_DEFAULT;
             this.displayUnit = Units.MI;
         }
+
+        this.markerSizes = "C";
     }
 
 
@@ -97,6 +99,15 @@ class RangeModel {
         return this.displayUnit;
     };
 
+    getMarkerSizes() {
+        return this.markerSizes;
+    }
+
+    setMarkerSizes(newMarkerSizes) {
+        this.markerSizes = newMarkerSizes;
+        RangeModel.fireMarkerSizesChangedEvent();
+        userConfig.setMarkerSizes(newMarkerSizes);
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // events
@@ -110,6 +121,9 @@ class RangeModel {
         EventBus.dispatch("range-model-unit-changed-event");
     };
 
+    static fireMarkerSizesChangedEvent() {
+        EventBus.dispatch("marker-sizes-changed-event");
+    };
 
 }
 

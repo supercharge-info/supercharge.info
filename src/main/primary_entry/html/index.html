@@ -168,7 +168,7 @@ PAGE: map
 
     <div id="page-control">
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
-        <div id="control-row-range" class="col-md-6" style="text-align: center">
+        <div id="control-row-range" class="col-md-12" style="text-align: center">
             <label for="range-slider" class="control">Range</label>
             <input id="range-slider" type="range" min="0" max="350" step="10" value="175"
                    class="slider-control"/>
@@ -182,6 +182,38 @@ PAGE: map
                 </label>
                 <label id="range-unit-km-label" class="btn btn-default btn-xs">
                     <input type="radio" name="options" id="option2">km
+                </label>
+            </div>
+
+            <label for="marker-selector" class="control">Marker Sizes</label>
+
+            <div id="marker-selector" class="btn-group" data-toggle="buttons" style="vertical-align: top">
+                <label id="marker-c-label" class="btn btn-default btn-xs active">
+                    <input type="radio" name="markers" id="marker-c" checked>By Cluster
+                </label>
+                <label id="marker-d-label" class="btn btn-default btn-xs">
+                    <input type="radio" name="markers" id="marker-d" checked>By Density
+                </label>
+                <label id="marker-z-label" class="btn btn-default btn-xs">
+                    <input type="radio" name="markers" id="marker-z" checked>By Zoom
+                </label>
+                <label id="marker-l-label" class="btn btn-default btn-xs">
+                    <input type="radio" name="markers" id="marker-l" checked>
+                    <img src="/images/red_dot_16.png" alt="open"/>
+                    <img src="images/construction-cone_16.png" alt="construction"/>
+                    Large
+                </label>
+                <label id="marker-m-label" class="btn btn-default btn-xs">
+                    <input type="radio" name="markers" id="marker-m" checked>
+                    <img src="/images/red_dot_8.png" alt="open"/>
+                    <img src="images/construction-cone_10.png" alt="construction"/>
+                    Medium
+                </label>
+                <label id="marker-s-label" class="btn btn-default btn-xs">
+                    <input type="radio" name="markers" id="marker-s" checked>
+                    <img src="/images/red_dot_5.png" alt="open"/>
+                    <img src="images/construction-cone_6.png" alt="construction"/>
+                    Small
                 </label>
             </div>
 
@@ -426,7 +458,7 @@ PAGE: about
         <li><img src="images/blue_dot_16.png" alt="permit"/>&nbsp;Permit - Tesla has submitted
             a permit/plan/application for a specific address.
         </li>
-        <li><img src="images/construction-cone_20.png" alt="construction"/>&nbsp;Construction -
+        <li><img src="images/construction-cone_16.png" alt="construction"/>&nbsp;Construction -
             Construction progress is visible at the site.
         </li>
         <li><img src="images/red_dot_16.png" alt="open"/>&nbsp;Open - It is possible to

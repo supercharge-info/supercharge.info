@@ -113,11 +113,10 @@ module.exports = {
             inject: 'head',
             // https://github.com/kangax/html-minifier#options-quick-reference
             minify: {
-                removeComments: false,
-                collapseWhitespace: false,
+                removeComments: true,
+                collapseWhitespace: true,
                 conservativeCollapse: true,
-                preserveLineBreaks: true,
-                minifyJS: false
+                preserveLineBreaks: true
             }
         }),
         //

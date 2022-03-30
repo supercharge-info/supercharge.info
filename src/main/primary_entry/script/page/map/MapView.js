@@ -13,6 +13,7 @@ import mapLayers from './MapLayers'
 import RouteEvents from "./route/RouteEvents";
 import routeResultModel from './route/RouteResultModel'
 import polyline from '@mapbox/polyline'
+import rangeModel from "./RangeModel";
 
 export default class MapView {
 
@@ -20,7 +21,7 @@ export default class MapView {
         this.searchMarker = null;
 
         this.initMap(lat, lng, initialZoom);
-        this.oldZoom = initialZoom;
+        this.zoom = initialZoom;
         this.addCustomMarkers();
 
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
@@ -34,7 +35,9 @@ export default class MapView {
         EventBus.addListener("way-back-trigger-event", this.setupForWayBack, this);
         EventBus.addListener("places-changed-event", this.handlePlacesChange, this);
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
-
+        EventBus.addListener("viewport-changed-event", this.handleViewportChange, this);
+        EventBus.addListener("remove-all-markers-event", this.removeAllMarkers, this);
+        
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
         // draw map for first time.
         this.handleViewportChange();
@@ -119,24 +122,134 @@ export default class MapView {
         const newSouthWest = L.latLng(southWest.lat - 1, southWest.lng - 2);
         const expandedBounds = L.latLngBounds(newSouthWest, newNorthEast);
 
-        var newZoom = this.mapApi.getZoom();
-        if ((this.oldZoom <= 8 && newZoom > 8) || (this.oldZoom <= 11 && newZoom > 11) || (newZoom <= 8 && this.oldZoom > 8) || (newZoom <= 11 && this.oldZoom > 11)) {
-            new SiteIterator()
-                .withPredicate(SitePredicates.HAS_MARKER)
-                .iterate((supercharger) => {
-                    supercharger.marker.remove();
-                    supercharger.marker = null;
-                });
+        var markerSizeConfig = rangeModel.markerSizes || userConfig.markerSizes;
+        var oldZoom = this.zoom;
+        this.zoom = this.mapApi.getZoom();
+
+        if (markerSizeConfig === "D") {
+            this.createMarkersByDensity(expandedBounds, oldZoom);
+        } else if (markerSizeConfig === "C") {
+            this.createClusteredMarkers(expandedBounds, oldZoom);
+        } else if (markerSizeConfig === "Z") {
+            var oldMarkerSize = this.getMarkerSizeByZoom(oldZoom);
+            var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
+            if (oldMarkerSize !== newMarkerSize) this.removeAllMarkers();
+            this.createConstantSizeMarkers(expandedBounds, newMarkerSize);
+        } else { 
+            // markerSizeConfig represents a constant marker size (S, M, or L), but default to L if we see an unexpected value
+            if ("SML".indexOf(markerSizeConfig) < 0) markerSizeConfig = "L";
+            this.createConstantSizeMarkers(expandedBounds, markerSizeConfig);
+        }
+
+        EventBus.dispatch("map-viewport-change-event", latLngBounds);
+
+        const mapCenter = this.getCenter();
+        userConfig.setLatLngZoom(mapCenter.lat, mapCenter.lng, this.zoom);
+    };
+
+    removeAllMarkers() {
+        var t = performance.now(), removed = 0;
+        new SiteIterator()
+        .withPredicate(SitePredicates.HAS_MARKER)
+        .iterate((supercharger) => {
+            supercharger.marker.remove();
+            supercharger.marker = null;
+            removed++;
+        });
+        console.log("zoom=" + this.zoom + " removed=" + removed + " t=" + (performance.now() - t));
+    };
+
+    getMarkerSizeByZoom = (zoom) => zoom >= 11 ? "L" : (zoom >= 7 ? "M" : "S");
+
+    createClusteredMarkers(bounds, oldZoom) {
+        var t = performance.now(), newZoom = this.zoom, created = 0;
+        // Cluster aggressively through zoom level 8, then much less aggressively from 9 to 14
+        const overlapRadius = [
+            5, 3.2, 1.6, 0.8, 0.4,
+            0.18, 0.11, 0.08, 0.035, 0.012,
+            0.004, 0.002, 0.001, 0.0005, 0.0001,
+            0, 0, 0, 0, 0
+        ];
+        if (oldZoom !== newZoom) {
+            // clear old markers when zooming in/out
+            this.removeAllMarkers();
         }
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .withPredicate(SitePredicates.buildInViewPredicate(expandedBounds))
-            .iterate((supercharger) => this.markerFactory.createMarker(supercharger, newZoom));
-        EventBus.dispatch("map-viewport-change-event", latLngBounds);
-        this.oldZoom = newZoom;
+            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .iterate((s1) => {
+                if (s1.marker === null || s1.marker === undefined) { // gotta check again because one site might set another site's marker
+                    var overlapSites = [s1];
+                    const s1Lat = s1.location.lat, s1Lng = s1.location.lng, radius = overlapRadius[this.zoom] * 5;
+                    var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
+                    new SiteIterator()
+                        .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
+                        .iterate((s2) => {
+                            if (s1 !== s2 && s1.status === s2.status && ((s2.marker === null || s2.marker === undefined)) && overlapSites.length < 999) {
+                                var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
+                                if (dist > 0 && dist < radius) {
+                                    overlapSites.push(s2);
+                                }
+                            }
+                        });
+                    this.markerFactory.createMarkerCluster(overlapSites, this.zoom);
+                    created++;
+                }
+            });
+        console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
+    };
 
-        const mapCenter = this.getCenter();
-        userConfig.setLatLngZoom(mapCenter.lat, mapCenter.lng, this.mapApi.getZoom());
+    createMarkersByDensity(bounds, oldZoom) {
+        var t = performance.now(), newZoom = this.zoom, created = 0, overlaps = 0;
+        const overlapRadius = [
+            0, 0, 0, 0, 0,
+            0.18, 0.14, 0.125, 0.075, 0.035,
+            0.017, 0.008, 0.003, 0.0015, 0.0008,
+            0, 0, 0, 0, 0
+        ];
+        if (oldZoom !== newZoom && ((oldZoom > 4 && oldZoom < 14) || (newZoom > 4 && newZoom < 14))) {
+            // clear old markers when zooming in/out within all zoom levels 5-13
+            this.removeAllMarkers();
+        }
+        new SiteIterator()
+            .withPredicate(SitePredicates.HAS_NO_MARKER)
+            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .iterate((s1) => {
+                var markerSize = (newZoom >= 7 ? "L" : "M");
+                if (newZoom < 5) {
+                    markerSize = "S";
+                } else if (newZoom < 14) {
+                    const s1Lat = s1.location.lat, s1Lng = s1.location.lng, radius = overlapRadius[newZoom];
+                    var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
+                    new SiteIterator()
+                        .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
+                        .iterate((s2) => {
+                            // if markerSize is already the smallest, no need to keep looking for overlaps
+                            if (markerSize !== "S" && s1 !== s2) {
+                                var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
+                                if (dist > 0 && dist < radius) {
+                                    overlaps++;
+                                    markerSize = (newZoom >= 10 || markerSize === "L" ? "M" : "S");
+                                }
+                            }
+                        });
+                }
+                this.markerFactory.createMarker(s1, markerSize);
+                created++;
+            });
+        console.log("zoom=" + newZoom + " created=" + created + " overlaps=" + overlaps + " t=" + (performance.now() - t));
+    };
+
+    createConstantSizeMarkers(bounds, markerSize) {
+        var t = performance.now(), created = 0;
+        new SiteIterator()
+            .withPredicate(SitePredicates.HAS_NO_MARKER)
+            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .iterate((supercharger) => {
+                this.markerFactory.createMarker(supercharger, markerSize);
+                created++;
+            });
+        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerSize + " t=" + (performance.now() - t));
     };
 
     setupForWayBack() {
@@ -144,7 +257,7 @@ export default class MapView {
         const markerFactory = this.markerFactory;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .iterate((supercharger) => markerFactory.createMarker(supercharger, this.oldZoom));
+            .iterate((supercharger) => markerFactory.createMarker(supercharger, this.getMarkerSizeByZoom(this.Zoom)));
         EventBus.dispatch("way-back-start-event");
     };
 
@@ -165,7 +278,7 @@ export default class MapView {
             }).addTo(this.mapApi);
             this.mapApi.fitBounds(this.routeLine.getBounds());
         }
-    }
+    };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // InfoWindow Event handlers

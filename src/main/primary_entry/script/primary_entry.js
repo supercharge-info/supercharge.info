@@ -10,27 +10,28 @@ import "../css/main.css";
 // image file to something like [md5].png and have the below import statements return the actual path (with the md5),
 // this for perfect caching.  For now lets keep it simple, I have configured webpack not to change the image names.
 import "../images/avatar-placeholder.png";
-import "../images/construction-cone.png";
-import "../images/construction-cone_20.png";
 import "../images/feed-icon.png";
 import "../images/blue_dot_16.png";
+import "../images/blue_dot_8.png";
+import "../images/blue_dot_5.png";
 import "../images/black_dot_16.png";
+import "../images/black_dot_8.png";
+import "../images/black_dot_5.png";
 import "../images/gray_dot_16.png";
+import "../images/gray_dot_8.png";
+import "../images/gray_dot_5.png";
 import "../images/green_dot_16.png";
 import "../images/red_dot_16.png";
+import "../images/red_dot_8.png";
+import "../images/red_dot_5.png";
 import "../images/red_black_dot_16.png";
-import "../images/black_dot_10.png";
-import "../images/gray_dot_10.png";
-import "../images/blue_dot_10.png";
-import "../images/orange_cone_10.png";
-import "../images/red_dot_10.png";
-import "../images/red_black_dot_10.png";
-import "../images/black_dot_6.png";
-import "../images/gray_dot_6.png";
-import "../images/blue_dot_6.png";
-import "../images/orange_cone_6.png";
-import "../images/red_dot_6.png";
-import "../images/red_black_dot_6.png";
+import "../images/red_black_dot_8.png";
+import "../images/red_black_dot_5.png";
+import "../images/construction-cone.png";
+import "../images/construction-cone_20.png";
+import "../images/construction-cone_16.png";
+import "../images/construction-cone_10.png";
+import "../images/construction-cone_6.png";
 import "../images/become_a_patron_button@2x.png";
 
 

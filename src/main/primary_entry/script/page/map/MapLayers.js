@@ -36,6 +36,7 @@ const permitLayer = L.layerGroup([]);
 const constructionLayer = L.layerGroup([]);
 const openLayer = L.layerGroup([]);
 const tempClosedLayer = L.layerGroup([]);
+const permClosedLayer = L.layerGroup([]);
 const userLayer = L.layerGroup([]);
 
 const baseMaps = {
@@ -48,6 +49,7 @@ const overlayMaps = {
     'Construction': constructionLayer,
     'Open': openLayer,
     'Temporarily Closed' : tempClosedLayer,
+    'Permanently Closed' : permClosedLayer,
     'Custom': userLayer
 };
 
@@ -58,7 +60,8 @@ class MapLayers {
 
     }
 
-    // Not that Satellite layer is NOT here so that its tiles are not loaded until when/if user requests.
+    // Note that Satellite layer is NOT here so that its tiles are not loaded until when/if user requests.
+    // Also excluding Permanently Closed by default as those locations should be irrelevant in most cases.
     getInitialLayers() {
         return [streetsLayer, permitLayer, constructionLayer, openLayer, tempClosedLayer, userLayer];
     }
@@ -80,6 +83,8 @@ class MapLayers {
             marker.addTo(constructionLayer)
         } else if (siteStatus === Status.CLOSED_TEMP) {
             marker.addTo(tempClosedLayer);
+        } else if (siteStatus === Status.CLOSED_PERM) {
+            marker.addTo(permClosedLayer);
         } else if (siteStatus === Status.USER_ADDED) {
             marker.addTo(userLayer)
         }

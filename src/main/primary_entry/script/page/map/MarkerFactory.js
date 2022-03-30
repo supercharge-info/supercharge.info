@@ -2,7 +2,9 @@ import $ from "jquery";
 import InfoWindow from "./infowindow/InfoWindow";
 import SiteIterator from "../../site/SiteIterator";
 import SitePredicates from "../../site/SitePredicates";
-import mapLayers from './MapLayers'
+import EventBus from "../../util/EventBus";
+import MapEvents from "./MapEvents";
+import mapLayers from "./MapLayers";
 
 /**
  * Contains logic for creating the marker associated with a given site.
@@ -17,15 +19,48 @@ export default class MarkerFactory {
         this.mapApi = mapApi;
     };
 
-    createMarker(supercharger, zoom) {
+    createMarker(supercharger, markerSize) {
         const markerOptions = {
             title: supercharger.getMarkerTitle(),
-            icon: zoom > 11 ? supercharger.status.getIcon(supercharger) : (zoom > 8 ? supercharger.status.getIconM(supercharger) : supercharger.status.getIconS(supercharger))
+            icon: supercharger.status.getIcon(supercharger, markerSize)
         };
         const marker = L.marker(supercharger.location, markerOptions);
         supercharger.marker = marker;
         marker.on('click', $.proxy(this._handleMarkerClick, this, marker, supercharger));
         mapLayers.addToLayer(supercharger.status, marker);
+    };
+
+    createMarkerCluster(superchargers, zoom) {
+        if (superchargers.length === 1) return this.createMarker(superchargers[0], "L");
+        var lat = 0, lng = 0, numStalls = 0;
+        for (var s in superchargers) {
+            lat += superchargers[s].location.lat;
+            lng += superchargers[s].location.lng;
+            numStalls += superchargers[s].numStalls;
+        }
+        var markerTitle = (
+            superchargers.length === 2
+                ? superchargers[0].getMarkerTitle() + `\r\n` + superchargers[1].getMarkerTitle()
+                : `${superchargers.length} locations (${superchargers[0].status.displayName})\r\n${numStalls} total stalls`
+        ) + `\r\nClick to zoom for details`;
+        const markerOptions = {
+            title: markerTitle,
+            icon: L.divIcon({
+                iconSize: 16,
+                iconAnchor: [8, 8],
+                className: "cluster-marker " + superchargers[0].status.className,
+                html: '<div>' + superchargers.length + '</div>'
+            })
+        };
+        const markerLocation = L.latLng(lat / superchargers.length, lng / superchargers.length)
+        const marker = L.marker(markerLocation, markerOptions);
+        const zoomIncrement = superchargers.length <= 3 ? 2 : (superchargers.length >= 10 ? 4 : 3);
+        const newZoom = (zoom <= 19 - zoomIncrement ? zoom + zoomIncrement : 19);
+        marker.on('click', $.proxy((event) => EventBus.dispatch(MapEvents.pan_zoom, {latLng: markerLocation, zoom: newZoom})));
+        for (var s in superchargers) {
+            superchargers[s].marker = marker;
+        }
+        mapLayers.addToLayer(superchargers[0].status, marker);
     };
 
     _handleMarkerClick(marker, supercharger) {
