@@ -1,14 +1,16 @@
 import EventBus from "../../../util/EventBus";
+import MapEvents from "../MapEvents";
+import MarkerFactory from "../MarkerFactory";
 import rangeModel from "../RangeModel";
 import userConfig from "../../../common/UserConfig";
-import SiteIterator from "../../../site/SiteIterator";
-import SitePredicates from "../../../site/SitePredicates";
 
 export default class ChangeMarkerSizesAction {
 
     constructor(mapApi) {
         this.mapApi = mapApi;
+        this.markerFactory = new MarkerFactory(mapApi);
         EventBus.addListener("marker-sizes-changed-event", this.changeMarkerSizes, this);
+        EventBus.addListener("marker-split-event", this.splitMarker, this);
     }
 
     changeMarkerSizes() {
@@ -19,4 +21,11 @@ export default class ChangeMarkerSizesAction {
         }
     };
 
+    splitMarker(event, data) {
+        data.superchargers[0].marker.remove();
+        for (var s in data.superchargers) {
+            data.superchargers[s].clusterMaxZoom = data.zoom - 1;
+            this.markerFactory.createMarker(data.superchargers[s], "L");
+        }
+    }
 }

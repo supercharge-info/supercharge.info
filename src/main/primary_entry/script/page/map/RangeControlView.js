@@ -20,7 +20,6 @@ const RangeControlView = function () {
         "M": $("#marker-m-label"),
         "L": $("#marker-l-label"),
         "Z": $("#marker-z-label"),
-        "D": $("#marker-d-label"),
         "C": $("#marker-c-label")
     };
 

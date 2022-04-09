@@ -126,9 +126,7 @@ export default class MapView {
         var oldZoom = this.zoom;
         this.zoom = this.mapApi.getZoom();
 
-        if (markerSizeConfig === "D") {
-            this.createMarkersByDensity(expandedBounds, oldZoom);
-        } else if (markerSizeConfig === "C") {
+        if (markerSizeConfig === "C") {
             this.createClusteredMarkers(expandedBounds, oldZoom);
         } else if (markerSizeConfig === "Z") {
             var oldMarkerSize = this.getMarkerSizeByZoom(oldZoom);
@@ -174,70 +172,38 @@ export default class MapView {
             // clear old markers when zooming in/out
             this.removeAllMarkers();
         }
+        if (newZoom < oldZoom) {
+            // reset clustering ability of sites when zooming out (and zooming to 0 always resets)
+            new SiteIterator()
+                .withPredicate(SitePredicates.buildCanClusterPredicate(Math.max(newZoom, 1)))
+                .iterate((s) => { s.clusterMaxZoom = 19; });
+        }
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
             .iterate((s1) => {
                 if (s1.marker === null || s1.marker === undefined) { // gotta check again because one site might set another site's marker
                     var overlapSites = [s1];
-                    const s1Lat = s1.location.lat, s1Lng = s1.location.lng, radius = overlapRadius[this.zoom] * 5;
-                    var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
-                    new SiteIterator()
-                        .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
-                        .iterate((s2) => {
-                            if (s1 !== s2 && s1.status === s2.status && ((s2.marker === null || s2.marker === undefined)) && overlapSites.length < 999) {
-                                var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
-                                if (dist > 0 && dist < radius) {
-                                    overlapSites.push(s2);
+                    if (s1.clusterMaxZoom >= newZoom) {
+                        const s1Lat = s1.location.lat, s1Lng = s1.location.lng, radius = overlapRadius[this.zoom] * 5;
+                        var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
+                        new SiteIterator()
+                            .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
+                            .withPredicate(SitePredicates.buildCanClusterPredicate(newZoom))
+                            .iterate((s2) => {
+                                if (s1 !== s2 && s1.status === s2.status && ((s2.marker === null || s2.marker === undefined)) && overlapSites.length < 999) {
+                                    var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
+                                    if (dist > 0 && dist < radius) {
+                                        overlapSites.push(s2);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                    }
                     this.markerFactory.createMarkerCluster(overlapSites, this.zoom);
                     created++;
                 }
             });
         console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
-    };
-
-    createMarkersByDensity(bounds, oldZoom) {
-        var t = performance.now(), newZoom = this.zoom, created = 0, overlaps = 0;
-        const overlapRadius = [
-            0, 0, 0, 0, 0,
-            0.18, 0.14, 0.125, 0.075, 0.035,
-            0.017, 0.008, 0.003, 0.0015, 0.0008,
-            0, 0, 0, 0, 0
-        ];
-        if (oldZoom !== newZoom && ((oldZoom > 4 && oldZoom < 14) || (newZoom > 4 && newZoom < 14))) {
-            // clear old markers when zooming in/out within all zoom levels 5-13
-            this.removeAllMarkers();
-        }
-        new SiteIterator()
-            .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
-            .iterate((s1) => {
-                var markerSize = (newZoom >= 7 ? "L" : "M");
-                if (newZoom < 5) {
-                    markerSize = "S";
-                } else if (newZoom < 14) {
-                    const s1Lat = s1.location.lat, s1Lng = s1.location.lng, radius = overlapRadius[newZoom];
-                    var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
-                    new SiteIterator()
-                        .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
-                        .iterate((s2) => {
-                            // if markerSize is already the smallest, no need to keep looking for overlaps
-                            if (markerSize !== "S" && s1 !== s2) {
-                                var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
-                                if (dist > 0 && dist < radius) {
-                                    overlaps++;
-                                    markerSize = (newZoom >= 10 || markerSize === "L" ? "M" : "S");
-                                }
-                            }
-                        });
-                }
-                this.markerFactory.createMarker(s1, markerSize);
-                created++;
-            });
-        console.log("zoom=" + newZoom + " created=" + created + " overlaps=" + overlaps + " t=" + (performance.now() - t));
     };
 
     createConstantSizeMarkers(bounds, markerSize) {

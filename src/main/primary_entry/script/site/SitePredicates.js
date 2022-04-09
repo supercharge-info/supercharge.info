@@ -35,6 +35,11 @@ const SitePredicates = {
         return (site) => bounds.contains(site.location);
     },
 
+    // site can be part of a cluster if clusterMaxZoom >= given zoom level
+    buildCanClusterPredicate: function (zoom) {
+        return (site) => site.clusterMaxZoom >= zoom;
+    },
+
     buildRegionPredicate: (regionId) => {
         return (site) => regionId === null || site.address.regionId === regionId;
     },

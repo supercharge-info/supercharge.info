@@ -17,7 +17,7 @@ module.exports = {
         proxy: {
             "/service": {
                 // Remove "test." prefix from this hostname to test locally with prod API/data.
-                target: "https://test.supercharge.info:443",
+                target: "https://supercharge.info:443",
                 secure: true,
                 changeOrigin: true
             }

@@ -42,7 +42,7 @@ export default class MarkerFactory {
             superchargers.length === 2
                 ? superchargers[0].getMarkerTitle() + `\r\n` + superchargers[1].getMarkerTitle()
                 : `${superchargers.length} locations (${superchargers[0].status.displayName})\r\n${numStalls} total stalls`
-        ) + `\r\nClick to zoom for details`;
+        ) + `\r\nClick to split into individual markers`;
         const markerOptions = {
             title: markerTitle,
             icon: L.divIcon({
@@ -54,9 +54,7 @@ export default class MarkerFactory {
         };
         const markerLocation = L.latLng(lat / superchargers.length, lng / superchargers.length)
         const marker = L.marker(markerLocation, markerOptions);
-        const zoomIncrement = superchargers.length <= 3 ? 2 : (superchargers.length >= 10 ? 4 : 3);
-        const newZoom = (zoom <= 19 - zoomIncrement ? zoom + zoomIncrement : 19);
-        marker.on('click', $.proxy((event) => EventBus.dispatch(MapEvents.pan_zoom, {latLng: markerLocation, zoom: newZoom})));
+        marker.on('click', $.proxy((event) => EventBus.dispatch("marker-split-event", { superchargers: superchargers, zoom: zoom })));
         for (var s in superchargers) {
             superchargers[s].marker = marker;
         }
