@@ -38,11 +38,12 @@ export default class MarkerFactory {
             lng += superchargers[s].location.lng;
             numStalls += superchargers[s].numStalls;
         }
-        var markerTitle = (
-            superchargers.length === 2
-                ? superchargers[0].getMarkerTitle() + `\r\n` + superchargers[1].getMarkerTitle()
-                : `${superchargers.length} locations (${superchargers[0].status.displayName})\r\n${numStalls} total stalls`
-        ) + `\r\nClick to split into individual markers`;
+        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}) - ${numStalls} total stalls:\r\n` +
+            superchargers[0].getShortMarkerTitle() +
+            (superchargers.length === 2
+                ? `\r\n${superchargers[1].getShortMarkerTitle()}`
+                : ` + ...`
+            ) + `\r\n\r\nClick to split into individual markers`;
         const markerOptions = {
             title: markerTitle,
             icon: L.divIcon({

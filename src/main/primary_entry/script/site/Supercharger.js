@@ -94,8 +94,11 @@ export default class Supercharger {
             (Objects.isNullOrUndef(this.hours) ? "" : `\r\nLimited hours: ${this.hours}`) +
             (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : `\r\n${this.numStalls} stalls`) +
             (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : `\r\n${this.powerKilowatt} kW`);
-		
 	};
+
+    getShortMarkerTitle() {
+        return `${this.displayName} (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`
+    }
 };
 
 Supercharger.fromJSON = function (jsonObject) {
