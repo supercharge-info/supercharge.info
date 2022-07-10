@@ -2,12 +2,12 @@
 # Intellij
 #------------
 *.iml
-/.idea/
+.idea/
 
 #------------
 # build
 #------------
-/webcontent-built/
+build/
 
 #------------
 # nodejs
