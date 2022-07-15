@@ -37,6 +37,15 @@ export default class MapView {
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
         // draw map for first time.
         this.handleViewportChange();
+
+        // fixes leaflet and webpack not playing nice
+        // https://github.com/PaulLeCam/react-leaflet/issues/453#issuecomment-761806673
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+            iconUrl: require('leaflet/dist/images/marker-icon.png'),
+            shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+        });
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
