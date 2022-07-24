@@ -186,6 +186,9 @@ export default class MapView {
 
     removeCustomMarker(supercharger) {
         if (supercharger.marker) {
+            if (supercharger.marker.popup) {
+                supercharger.marker.popup.remove();
+            }
             supercharger.marker.remove();
         }
         if (supercharger.circle) {

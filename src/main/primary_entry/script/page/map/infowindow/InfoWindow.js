@@ -23,7 +23,6 @@ export default class InfoWindow {
         this.popup = null;
         this.showDetails = true;
         this.showHistory = false;
-        this.showNearby = false;
         this.pinned = false;
     }
 
@@ -73,18 +72,6 @@ export default class InfoWindow {
 
         if (this.showHistory) {
             Analytics.sendEvent("map", "view-marker-history");
-        }
-    };
-
-    toggleNearby(showNearby) {
-        if (!Objects.isNullOrUndef(showNearby)) {
-            this.showNearby = showNearby;
-        } else {
-            this.showNearby = !this.showNearby;
-        }
-
-        if (this.showNearby) {
-            Analytics.sendEvent("map", "view-marker-nearby");
         }
     };
 
@@ -154,7 +141,9 @@ export default class InfoWindow {
         //
         // Street Address
         //
-        popupContent += site.address.street + "<br/>";
+        if (!Objects.isNullOrUndef(site.address.street)) {
+            popupContent += site.address.street + "<br/>";
+        }
 
         //
         // Limited Hours
@@ -172,10 +161,6 @@ export default class InfoWindow {
             popupContent += _buildHistoryDiv(site);
         }
 
-        if (this.showNearby) {
-            popupContent += _buildNearbyDiv(site);
-        }
-
         popupContent += _buildLinksDiv(site, this);
 
         popupContent += "</div>";
@@ -191,30 +176,12 @@ export default class InfoWindow {
 function _buildHistoryDiv(supercharger) {
     let div = "";
     div += `<div class='info-window-details' id='nearby-details-${supercharger.id}'>`;
+    div += `<a style='position:absolute; right: 19px;' class='history-trigger' href='#${supercharger.id}'>(hide)</a>`;
     div += "<table style='width:100%;'>";
 
     div += "<tr style='font-weight:bold;'><td>Date</td><td>Status</td></tr>";
 
     div += supercharger.history.map(a => `<tr><td>${a.date}</td><td class='${a.siteStatus.toLowerCase().replace('_','-')}'>${a.siteStatus}</td></tr>`).join('');
-
-    div += "</table>";
-    div += "</div>";
-    return div;
-}
-
-/**
- * This is the content in the InfoWindow that shows up when the user clicks 'details'.
- */
-function _buildNearbyDiv(supercharger) {
-    let div = "";
-    div += `<div class='info-window-details' id='nearby-details-${supercharger.id}'>`;
-    div += "<table>";
-
-    div += "<tr><th>Restaurants</th><td><span class='nearby_restaurants'></span></td></tr>";
-
-    div += "<tr><th>Shopping</th><td><span class='nearby_stores'></span></td></tr>";
-
-    div += "<tr><th>Lodging</th><td><span class='nearby_lodgings'></span></td></tr>";
 
     div += "</table>";
     div += "</div>";
@@ -230,11 +197,10 @@ function _buildLinksDiv(supercharger, info) {
         buildLinkZoom(supercharger),
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
-        buildLinkDetails(supercharger, info),
-        buildLinkHistory(supercharger, info),
-        buildLinkNearby(supercharger),
 
         // links that are NOT always present.
+        buildLinkDetails(supercharger, info),
+        buildLinkHistory(supercharger, info),
         buildLinkURL(supercharger),
         buildLinkDiscussURL(supercharger),
         buildLinkRemoveMarker(supercharger),
@@ -292,6 +258,11 @@ function buildLinkDiscussURL(supercharger) {
     return null;
 }
 
+function buildLinkMapURL(supercharger) {
+    const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+    return `<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${query}'>gmap</a>`;
+}
+
 function buildLinkRemoveMarker(supercharger) {
     if (supercharger.isUserAdded()) {
         return `<a class='marker-toggle-trigger' title='remove this custom marker' href='${supercharger.id}'>remove</a>`;
@@ -307,18 +278,20 @@ function buildLinkRemoveAllMarkers(supercharger) {
 }
 
 function buildLinkDetails(supercharger, info) {
-    return `<a class='details-trigger' href='#${supercharger.id}'>${info.showDetails ? "hide" : "show"} details</a>`;
+    if (!info.showDetails) {
+        return `<a class='details-trigger' href='#${supercharger.id}'>details</a>`;
+    }
+    return null;
 }
 
 function buildLinkHistory(supercharger, info) {
-    return `<a class='history-trigger' href='#${supercharger.id}'>${info.showHistory ? "hide" : "show"} history</a>`;
+    if (info.showDetails && Objects.isNotNullOrUndef(supercharger.locationId)) {
+        return `<a class='history-trigger' href='#${supercharger.id}'>history</a>`;
+    }
+    return null;
 }
 
 function buildPinMarker(supercharger, isPinned) {
     let pinClass = isPinned ? 'unpin' : 'pin';
     return `<a class='pin-marker-trigger pull-right ${pinClass} glyphicon glyphicon-pushpin' title='pin this window' href='#${supercharger.id}'></a>`;
-}
-
-function buildLinkNearby(supercharger) {
-    return `<a class='nearby-trigger' href='#${supercharger.id}'>nearby</a>`;
 }
