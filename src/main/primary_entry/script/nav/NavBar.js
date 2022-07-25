@@ -65,7 +65,6 @@ export default class NavBar {
 
         const collapseFunction = $.proxy(this.autoCloseCollapsedNavBar, this);
         $("body").click(collapseFunction);
-        EventBus.addListener("places-changed-event", collapseFunction);
 
         window.addEventListener('popstate', $.proxy(this.handlePageChangeHistory, this));
     };
