@@ -60,6 +60,8 @@ export default class MapContextMenu {
      * Show context menu at some lat/lon.
      */
     show(event) {
+        event.latlng.lat = Math.round(event.latlng.lat * 1000000) / 1000000;
+        event.latlng.lng = Math.round(event.latlng.lng * 1000000) / 1000000;
         this.popup = L.popup()
             .setLatLng(event.latlng)
             .setContent(this.createMenu())

@@ -195,6 +195,9 @@ export default class MapView {
 
     removeCustomMarker(supercharger) {
         if (supercharger.marker) {
+            if (supercharger.marker.popup) {
+                supercharger.marker.popup.remove();
+            }
             supercharger.marker.remove();
         }
         if (supercharger.circle) {
@@ -203,39 +206,6 @@ export default class MapView {
         Sites.removeById(supercharger.id);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
-    };
-
-    handlePlacesChange(event, places) {
-
-        if (places.length === 0) {
-            return;
-        }
-
-        if (this.searchMarker) {
-            this.searchMarker.remove();
-        }
-
-        // For each place, get the icon, name and location.
-        const bounds = L.latLngBounds();
-        const mapView = this;
-        const map = this.mapApi;
-        places.forEach((place) => {
-            if (place.geometry) {
-                // Create a marker for each place.
-                mapView.searchMarker = new google.maps.Marker({
-                    map: map,
-                    position: place.geometry.location
-                });
-
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-            }
-        });
-        this.mapApi.fitBounds(bounds);
     };
 
 }
