@@ -12,7 +12,6 @@ html, body {
 }
 
 body {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
 }
