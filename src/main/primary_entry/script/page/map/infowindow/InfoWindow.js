@@ -165,6 +165,7 @@ function _buildLinksDiv(supercharger, showDetails) {
         buildLinkDetails(supercharger, showDetails),
 
         // links that are NOT always present.
+        buildLinkMapURL(supercharger),
         buildLinkURL(supercharger),
         buildLinkDiscussURL(supercharger),
         buildLinkRemoveMarker(supercharger),
@@ -218,6 +219,15 @@ function buildLinkURL(supercharger) {
 function buildLinkDiscussURL(supercharger) {
     if (supercharger.urlDiscuss) {
         return `<a target='_blank' href='${ServiceURL.DISCUSS}?siteId=${supercharger.id}'>discuss</a>`;
+    }
+    return null;
+}
+
+function buildLinkMapURL(supercharger) {
+    if (Objects.isNotNullOrUndef(supercharger.address.street)) {
+        const addr = supercharger.address;
+        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+        return `<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${query}'>gmap</a>`;
     }
     return null;
 }
