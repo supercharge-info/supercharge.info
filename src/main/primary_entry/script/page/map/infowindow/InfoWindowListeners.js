@@ -20,7 +20,6 @@ class InfoWindowListeners {
             const supercharger = toSupercharger(event);
             const infoWindow = supercharger.marker.infoWindow;
 
-            infoWindow.toggleNearby(false);
             infoWindow.toggleDetails();
             infoWindow.redraw();
 
@@ -56,15 +55,7 @@ class InfoWindowListeners {
             EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(supercharger.location, supercharger.displayName));
             Analytics.sendEvent("route", "add-marker-to-route", "pop up");
         });
-
-        // TODO: nearby $(document).on('click', '.nearby-trigger', $.proxy(this.handleNearbySearch, this));
-
     }
-
-
-
-
-
 
 }
 

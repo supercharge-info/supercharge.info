@@ -29,3 +29,8 @@ label.control {
     vertical-align: middle;
 }
 
+/* Show Leaflet disabled checkboxes' labels grayed out */
+.leaflet-control-layers input[type="checkbox"][disabled] + span,
+.leaflet-control-layers input[type="radio"][disabled] + span {
+    color: gray;
+}

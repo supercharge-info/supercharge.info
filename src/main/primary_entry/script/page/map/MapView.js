@@ -41,6 +41,15 @@ export default class MapView {
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
         // draw map for first time.
         this.handleViewportChange();
+
+        // fixes leaflet and webpack not playing nice
+        // https://github.com/PaulLeCam/react-leaflet/issues/453#issuecomment-761806673
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+            iconUrl: require('leaflet/dist/images/marker-icon.png'),
+            shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+        });
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -276,6 +285,9 @@ export default class MapView {
 
     removeCustomMarker(supercharger) {
         if (supercharger.marker) {
+            if (supercharger.marker.popup) {
+                supercharger.marker.popup.remove();
+            }
             supercharger.marker.remove();
         }
         if (supercharger.circle) {
@@ -284,39 +296,6 @@ export default class MapView {
         Sites.removeById(supercharger.id);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
-    };
-
-    handlePlacesChange(event, places) {
-
-        if (places.length === 0) {
-            return;
-        }
-
-        if (this.searchMarker) {
-            this.searchMarker.remove();
-        }
-
-        // For each place, get the icon, name and location.
-        const bounds = L.latLngBounds();
-        const mapView = this;
-        const map = this.mapApi;
-        places.forEach((place) => {
-            if (place.geometry) {
-                // Create a marker for each place.
-                mapView.searchMarker = new google.maps.Marker({
-                    map: map,
-                    position: place.geometry.location
-                });
-
-                if (place.geometry.viewport) {
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
-            }
-        });
-        this.mapApi.fitBounds(bounds);
     };
 
 }

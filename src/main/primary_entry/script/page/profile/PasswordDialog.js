@@ -48,7 +48,11 @@ export default class ChangePasswordDialog {
     handleSubmit(form) {
         const dialog = this;
         const newPassword = this.form.find("input[name='password']").val();
-        $.getJSON(ServiceURL.PASSWORD_CHANGE + '?password=' + newPassword)
+        $.post({
+                url: ServiceURL.PASSWORD_CHANGE,
+                data: { 'password': newPassword },
+                dataType: 'json'
+            })
             .done($.proxy(this.doneSubmit, this))
             .fail(function (jqXHR, textStatus, errorThrown) {
                 dialog.errorBox.html("");
