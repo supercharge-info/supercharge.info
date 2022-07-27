@@ -2,6 +2,12 @@
 @import "lib/spectrum.css";
 /* - - - - - - - - - - - - - - - - - - - - Third party override */
 @import "lib/bootstrap-override.css";
+/* - - - - - - - - - - - - - - - - - - - - CSS from node_modules */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~datatables.net-bs/css/dataTables.bootstrap.css";
+@import "~leaflet/dist/leaflet.css";
+@import "~leaflet-control-geocoder/dist/Control.Geocoder.css";
+@import "~leaflet-routing-machine/dist/leaflet-routing-machine.css";
 /* - - - - - - - - - - - - - - - - - - - - Global */
 @import "global/layout.css";
 @import "global/NavBar.css";
@@ -21,9 +27,3 @@
 @import "page/profile/Profile.css";
 
 
-/* - - - - - - - - - - - - - - - - - - - - CSS from node_modules */
-@import "~bootstrap/dist/css/bootstrap.css";
-@import "~datatables.net-bs/css/dataTables.bootstrap.css";
-@import "~leaflet/dist/leaflet.css";
-@import "~leaflet-control-geocoder/dist/Control.Geocoder.css";
-@import "~leaflet-routing-machine/dist/leaflet-routing-machine.css";

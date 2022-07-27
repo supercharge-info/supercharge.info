@@ -59,7 +59,7 @@ export default class AddCustomMarkerAction {
         const markerName = this.markerNameInput.val();
         const newCharger = Sites.addCustomSite(markerName, this.currentLatLng);
         this.mapView.markerFactory.createMarker(newCharger);
-        // TODO: show info window by default: new google.maps.event.trigger(newCharger.marker, 'click');
+        newCharger.marker.fire('click');
         Analytics.sendEvent("route", "add-custom-marker");
         userConfig.addCustomMarker({name: markerName, lat: this.currentLatLng.lat, lng: this.currentLatLng.lng})
     };

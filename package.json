@@ -53,7 +53,7 @@
     "jquery-validation": "1.19.3",
     "jquery.browser": "0.1.0",
     "leaflet": "1.6.0",
-    "leaflet-control-geocoder": "1.10.0",
+    "leaflet-control-geocoder": "1.13.0",
     "leaflet-routing-machine": "3.2.12",
     "lodash": "4.17.21",
     "sortablejs": "1.10.1",

@@ -34,13 +34,11 @@ export default class MapPage {
             MapPage.initStarted = true;
         }
         $("#navbar-map-dropdown").show();
-        $("#navbar-map-search").show();
         $("#total-count-table").show();
     };
 
     onPageHide() {
         $("#navbar-map-dropdown").hide();
-        $("#navbar-map-search").hide();
         $("#total-count-table").hide();
     };
 

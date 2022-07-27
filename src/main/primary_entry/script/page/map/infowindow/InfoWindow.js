@@ -22,7 +22,6 @@ export default class InfoWindow {
         // state fields
         this.popup = null;
         this.showDetails = true;
-        this.showNearby = false;
         this.pinned = false;
     }
 
@@ -60,18 +59,6 @@ export default class InfoWindow {
 
         if (this.showDetails) {
             Analytics.sendEvent("map", "view-marker-details");
-        }
-    };
-
-    toggleNearby(showNearby) {
-        if (!Objects.isNullOrUndef(showNearby)) {
-            this.showNearby = showNearby;
-        } else {
-            this.showNearby = !this.showNearby;
-        }
-
-        if (this.showNearby) {
-            Analytics.sendEvent("map", "view-marker-nearby");
         }
     };
 
@@ -141,7 +128,9 @@ export default class InfoWindow {
         //
         // Street Address
         //
-        popupContent += site.address.street + "<br/>";
+        if (!Objects.isNullOrUndef(site.address.street)) {
+            popupContent += site.address.street + "<br/>";
+        }
 
         //
         // Limited Hours
@@ -155,10 +144,6 @@ export default class InfoWindow {
             popupContent += buildDetailsDiv(site, rangeModel.getDisplayUnit());
         }
 
-        if (this.showNearby) {
-            popupContent += _buildNearbyDiv(site);
-        }
-
         popupContent += _buildLinksDiv(site, this.showDetails);
 
         popupContent += "</div>";
@@ -167,25 +152,6 @@ export default class InfoWindow {
 
 };
 
-
-/**
- * This is the content in the InfoWindow that shows up when the user clicks 'details'.
- */
-function _buildNearbyDiv(supercharger) {
-    let div = "";
-    div += `<div class='info-window-details' id='nearby-details-${supercharger.id}'>`;
-    div += "<table>";
-
-    div += "<tr><th>Restaurants</th><td><span class='nearby_restaurants'></span></td></tr>";
-
-    div += "<tr><th>Shopping</th><td><span class='nearby_stores'></span></td></tr>";
-
-    div += "<tr><th>Lodging</th><td><span class='nearby_lodgings'></span></td></tr>";
-
-    div += "</table>";
-    div += "</div>";
-    return div;
-}
 
 function _buildLinksDiv(supercharger, showDetails) {
     let content = "<div class='links-container'>";
@@ -197,9 +163,9 @@ function _buildLinksDiv(supercharger, showDetails) {
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
         buildLinkDetails(supercharger, showDetails),
-        buildLinkNearby(supercharger),
 
         // links that are NOT always present.
+        buildLinkMapURL(supercharger),
         buildLinkURL(supercharger),
         buildLinkDiscussURL(supercharger),
         buildLinkRemoveMarker(supercharger),
@@ -257,6 +223,15 @@ function buildLinkDiscussURL(supercharger) {
     return null;
 }
 
+function buildLinkMapURL(supercharger) {
+    if (Objects.isNotNullOrUndef(supercharger.address.street)) {
+        const addr = supercharger.address;
+        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+        return `<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${query}'>gmap</a>`;
+    }
+    return null;
+}
+
 function buildLinkRemoveMarker(supercharger) {
     if (supercharger.isUserAdded()) {
         return `<a class='marker-toggle-trigger' title='remove this custom marker' href='${supercharger.id}'>remove</a>`;
@@ -278,8 +253,4 @@ function buildLinkDetails(supercharger, showDetails) {
 function buildPinMarker(supercharger, isPinned) {
     let pinClass = isPinned ? 'unpin' : 'pin';
     return `<a class='pin-marker-trigger pull-right ${pinClass} glyphicon glyphicon-pushpin' title='pin this window' href='#${supercharger.id}'></a>`;
-}
-
-function buildLinkNearby(supercharger) {
-    return `<a class='nearby-trigger' href='#${supercharger.id}'>nearby</a>`;
 }
