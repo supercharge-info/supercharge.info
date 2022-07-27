@@ -178,6 +178,7 @@ export default class MapView {
                 .withPredicate(SitePredicates.buildCanClusterPredicate(Math.max(newZoom, 1)))
                 .iterate((s) => { s.clusterMaxZoom = 19; });
         }
+        const radius = overlapRadius[this.zoom] * rangeModel.getCurrentDensity();
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
@@ -185,7 +186,7 @@ export default class MapView {
                 if (s1.marker === null || s1.marker === undefined) { // gotta check again because one site might set another site's marker
                     var overlapSites = [s1];
                     if (s1.clusterMaxZoom >= newZoom) {
-                        const s1Lat = s1.location.lat, s1Lng = s1.location.lng, radius = overlapRadius[this.zoom] * 5;
+                        const s1Lat = s1.location.lat, s1Lng = s1.location.lng;
                         var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
                         new SiteIterator()
                             .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))

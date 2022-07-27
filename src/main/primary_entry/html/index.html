@@ -188,31 +188,39 @@ PAGE: map
             <label for="marker-selector" class="control">Marker Sizes</label>
 
             <div id="marker-selector" class="btn-group" data-toggle="buttons" style="vertical-align: top">
-                <label id="marker-c-label" class="btn btn-default btn-xs active">
-                    <input type="radio" name="markers" id="marker-c" checked><span alt="Markers close together combine and appear as a number">By Cluster</span>
+                <label id="marker-z-label" class="btn btn-default btn-xs active">
+                    <img src="/images/red_dot_5.png" alt="open"/>
+                    <img src="/images/red_dot_8.png" alt="open"/>
+                    <img src="/images/red_dot_16.png" alt="open"/>
+                    <input type="radio" name="markers" id="marker-z" checked><span title="Marker size varies by zoom level">By Zoom</span>
                 </label>
-                <label id="marker-z-label" class="btn btn-default btn-xs">
-                    <input type="radio" name="markers" id="marker-z" checked><span alt="Marker size varies by zoom level">By Zoom</span>
+                <label id="marker-c-label" class="btn btn-default btn-xs">
+                    <div class="cluster-marker open" style="display: inline-block">2</div>
+                    <input type="radio" name="markers" id="marker-c"><span title="Markers close together combine and appear as a number">By Cluster</span>
                 </label>
                 <label id="marker-l-label" class="btn btn-default btn-xs">
-                    <input type="radio" name="markers" id="marker-l" checked>
+                    <input type="radio" name="markers" id="marker-l">
                     <img src="/images/red_dot_16.png" alt="open"/>
                     <img src="images/construction-cone_16.png" alt="construction"/>
                     Large
                 </label>
                 <label id="marker-m-label" class="btn btn-default btn-xs">
-                    <input type="radio" name="markers" id="marker-m" checked>
+                    <input type="radio" name="markers" id="marker-m">
                     <img src="/images/red_dot_8.png" alt="open"/>
                     <img src="images/construction-cone_10.png" alt="construction"/>
                     Medium
                 </label>
                 <label id="marker-s-label" class="btn btn-default btn-xs">
-                    <input type="radio" name="markers" id="marker-s" checked>
+                    <input type="radio" name="markers" id="marker-s">
                     <img src="/images/red_dot_5.png" alt="open"/>
                     <img src="images/construction-cone_6.png" alt="construction"/>
                     Small
                 </label>
             </div>
+
+            <label for="density-slider" class="control">Cluster Density</label>
+            <input id="density-slider" type="range" min="1" max="9" step="1" value="5" class="slider-control"/>
+            <input id="density-number-text" class="slider-value-label" value="5"/>
 
         </div>
     </div>

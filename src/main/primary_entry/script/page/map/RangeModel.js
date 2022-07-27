@@ -20,6 +20,9 @@ const MILES_MIN = 0;
 const MILES_MAX = 350;
 const METERS_DEFAULT = milesToMeters(175);
 
+const DENSITY_MIN = 1;
+const DENSITY_MAX = 9;
+
 class RangeModel {
 
     /**
@@ -40,15 +43,16 @@ class RangeModel {
             this.displayUnit = Units.MI;
         }
 
-        this.markerSizes = "C";
+        this.markerSizes = "Z";
+        this.clusterDensity = 5;
     }
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    //
+    // range mi/km
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    getCurrent() {
+    getCurrentRange() {
         if (this.displayUnit.isMiles()) {
             return metersToMiles(this.rangeMeters);
         } else {
@@ -56,7 +60,7 @@ class RangeModel {
         }
     }
 
-    setCurrent(newRange) {
+    setCurrentRange(newRange) {
         if (this.displayUnit.isMiles()) {
             this.rangeMeters = milesToMeters(newRange);
         } else {
@@ -65,7 +69,7 @@ class RangeModel {
         RangeModel.fireRangeChangedEvent();
     }
 
-    getMin() {
+    getMinRange() {
         if (this.displayUnit.isMiles()) {
             return MILES_MIN;
         } else {
@@ -73,12 +77,33 @@ class RangeModel {
         }
     };
 
-    getMax() {
+    getMaxRange() {
         if (this.displayUnit.isMiles()) {
             return MILES_MAX;
         } else {
             return milesToKilometers(MILES_MAX);
         }
+    };
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // cluster density
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    getCurrentDensity() {
+        return this.clusterDensity;
+    }
+
+    setCurrentDensity(newDensity) {
+        this.clusterDensity = newDensity;
+        RangeModel.fireDensityChangedEvent();
+    }
+
+    getMinDensity() {
+        return DENSITY_MIN;
+    };
+
+    getMaxDensity() {
+        return DENSITY_MAX;
     };
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -123,6 +148,10 @@ class RangeModel {
 
     static fireMarkerSizesChangedEvent() {
         EventBus.dispatch("marker-sizes-changed-event");
+    };
+
+    static fireDensityChangedEvent() {
+        EventBus.dispatch("range-model-density-changed-event");
     };
 
 }

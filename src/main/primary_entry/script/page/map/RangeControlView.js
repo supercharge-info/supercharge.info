@@ -16,11 +16,11 @@ const RangeControlView = function () {
     this.miUnitLabel = $("#range-unit-mi-label");
     this.kmUnitLabel = $("#range-unit-km-label");
     this.markerLabels = {
+        "Z": $("#marker-z-label"),
+        "C": $("#marker-c-label"),
         "S": $("#marker-s-label"),
         "M": $("#marker-m-label"),
-        "L": $("#marker-l-label"),
-        "Z": $("#marker-z-label"),
-        "C": $("#marker-c-label")
+        "L": $("#marker-l-label")
     };
 
     this.initRangeSlider();
@@ -28,10 +28,12 @@ const RangeControlView = function () {
     this.initMarkerSizes();
     this.updateRangeUnit();
     this.handleVisibilityModelChange();
+    this.initDensitySlider();
 
     EventBus.addListener("range-model-range-changed-event", this.handleRangeChange, this);
     EventBus.addListener("range-model-unit-changed-event", this.handleRangeUnitChange, this);
     EventBus.addListener("marker-sizes-changed-event", this.handleMarkerSizesChange, this);
+    EventBus.addListener("range-model-density-changed-event", this.handleDensityChange, this);
     EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
 };
 
@@ -40,15 +42,28 @@ const RangeControlView = function () {
  */
 RangeControlView.prototype.initRangeSlider = function () {
     this.rangeSlider = new RangeInput("#range-slider", "#range-number-text",
-        rangeModel.getMin(),
-        rangeModel.getMax(),
+        rangeModel.getMinRange(),
+        rangeModel.getMaxRange(),
         5,
-        rangeModel.getCurrent());
+        rangeModel.getCurrentRange());
 
     this.rangeSlider.on("range-change-event", function (event, newRange) {
-        rangeModel.setCurrent(newRange);
+        rangeModel.setCurrentRange(newRange);
     });
 };
+
+RangeControlView.prototype.initDensitySlider = function () {
+    this.densitySlider = new RangeInput("#density-slider", "#density-number-text",
+        rangeModel.getMinDensity(),
+        rangeModel.getMaxDensity(),
+        1,
+        rangeModel.getCurrentDensity());
+
+    this.densitySlider.on("range-change-event", function (event, newDensity) {
+        rangeModel.setCurrentDensity(newDensity);
+    });
+};
+
 
 RangeControlView.prototype.initRangeUnit = function () {
     const control = this;
@@ -95,13 +110,13 @@ RangeControlView.prototype.updateMarkerSizes = function () {
 };
 
 RangeControlView.prototype.updateRangeSlider = function () {
-    this.rangeSlider.setMin(rangeModel.getMin());
-    this.rangeSlider.setMax(rangeModel.getMax());
-    this.rangeSlider.setValue(rangeModel.getCurrent());
+    this.rangeSlider.setMin(rangeModel.getMinRange());
+    this.rangeSlider.setMax(rangeModel.getMaxRange());
+    this.rangeSlider.setValue(rangeModel.getCurrentRange());
 };
 
 RangeControlView.prototype.handleRangeChange = function () {
-    this.rangeSlider.setValue(rangeModel.getCurrent());
+    this.rangeSlider.setValue(rangeModel.getCurrentRange());
 };
 
 RangeControlView.prototype.handleRangeUnitChange = function () {
@@ -111,6 +126,20 @@ RangeControlView.prototype.handleRangeUnitChange = function () {
 
 RangeControlView.prototype.handleMarkerSizesChange = function () {
     this.updateMarkerSizes();
+};
+
+RangeControlView.prototype.updateDensitySlider = function () {
+    console.log("updateDensitySlider to " + rangeModel.getCurrentDensity())
+    this.densitySlider.setMin(rangeModel.getMinDensity());
+    this.densitySlider.setMax(rangeModel.getMaxDensity());
+    this.densitySlider.setValue(rangeModel.getCurrentDensity());
+    EventBus.dispatch("remove-all-markers-event");
+    EventBus.dispatch("viewport-changed-event");
+};
+
+RangeControlView.prototype.handleDensityChange = function () {
+    console.log("set Density to " + rangeModel.getCurrentDensity())
+    this.updateDensitySlider();
 };
 
 RangeControlView.prototype.handleVisibilityModelChange = function () {

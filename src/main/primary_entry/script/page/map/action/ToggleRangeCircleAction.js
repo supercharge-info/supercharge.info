@@ -12,8 +12,8 @@ export default class ToggleRangeCirclesAction {
     }
 
     toggleCircle(event, supercharger) {
-        if (rangeModel.getCurrent() === 0) {
-            rangeModel.setCurrent(50);
+        if (rangeModel.getCurrentRange() === 0) {
+            rangeModel.setCurrentRange(50);
         }
         if (!supercharger.circle) {
             supercharger.circle = ToggleRangeCirclesAction.buildCircle(supercharger);
