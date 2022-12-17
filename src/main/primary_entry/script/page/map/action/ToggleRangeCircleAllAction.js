@@ -13,8 +13,8 @@ export default class ToggleRangeCircleAllAction {
     }
 
     circlesAllOn() {
-        if (rangeModel.getCurrent() === 0) {
-            rangeModel.setCurrent(50);
+        if (rangeModel.getCurrentRange() === 0) {
+            rangeModel.setCurrentRange(50);
         }
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_CIRCLE)

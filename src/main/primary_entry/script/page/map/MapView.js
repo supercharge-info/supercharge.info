@@ -177,7 +177,7 @@ export default class MapView {
         console.log("zoom=" + this.zoom + " removed=" + removed + " t=" + (performance.now() - t));
     };
 
-    getMarkerSizeByZoom = (zoom) => zoom >= 11 ? "L" : (zoom >= 7 ? "M" : "S");
+    getMarkerSizeByZoom = (zoom) => zoom < 6 ? 3 : zoom > 16 ? 8 : Math.floor(zoom / 2);
 
     createClusteredMarkers(bounds, oldZoom) {
         var t = performance.now(), newZoom = this.zoom, created = 0;

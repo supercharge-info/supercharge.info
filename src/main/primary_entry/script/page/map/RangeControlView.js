@@ -18,6 +18,7 @@ const RangeControlView = function () {
     this.markerLabels = {
         "Z": $("#marker-z-label"),
         "C": $("#marker-c-label"),
+        "F": $("#marker-f-label"),
         "S": $("#marker-s-label"),
         "M": $("#marker-m-label"),
         "L": $("#marker-l-label")
