@@ -19,10 +19,10 @@ export default class MarkerFactory {
         this.mapApi = mapApi;
     };
 
-    createMarker(supercharger, markerSize) {
+    createMarker(supercharger, markerType) {
         const markerOptions = {
             title: supercharger.getMarkerTitle(),
-            icon: supercharger.status.getIcon(supercharger, markerSize)
+            icon: supercharger.status.getIcon(supercharger, markerType)
         };
         const marker = L.marker(supercharger.location, markerOptions);
         supercharger.marker = marker;

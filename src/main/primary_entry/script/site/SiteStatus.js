@@ -104,40 +104,40 @@ const Status = {
         sort: 0,
         displayName: "Permanently Closed",
         className: "closed-perm",
-        getIcon: (supercharger, markerSize) => I_CLOSED_PERM[markerSize]
+        getIcon: (supercharger, markerType) => I_CLOSED_PERM[markerType]
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
         sort: 1,
         displayName: "Temporarily Closed",
         className: "closed-temp",
-        getIcon: (supercharger, markerSize) => I_CLOSED_TEMP[markerSize]
+        getIcon: (supercharger, markerType) => I_CLOSED_TEMP[markerType]
     },
     PERMIT: {
         value: 'PERMIT',
         sort: 2,
         displayName: "Permit",
         className: "permit",
-        getIcon: (supercharger, markerSize) => I_PERMIT[markerSize]
+        getIcon: (supercharger, markerType) => I_PERMIT[markerType]
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
         sort: 3,
         displayName: "Construction",
         className: "construction",
-        getIcon: (supercharger, markerSize) => I_CONSTRUCTION[markerSize]
+        getIcon: (supercharger, markerType) => I_CONSTRUCTION[markerType]
     },
     OPEN: {
         value: 'OPEN',
         sort: 4,
         displayName: "Open",
         className: "open",
-        getIcon: (supercharger, markerSize) => ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN)[markerSize]
+        getIcon: (supercharger, markerType) => ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN)[markerType]
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
-        getIcon: (supercharger, markerSize) => I_CUSTOM
+        getIcon: (supercharger, markerType) => I_CUSTOM
     }
 };
 

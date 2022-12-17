@@ -22,6 +22,7 @@ export default class MapView {
 
         this.initMap(lat, lng, initialZoom);
         this.zoom = initialZoom;
+        this.markerType = "Z";
         this.addCustomMarkers();
 
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
@@ -39,6 +40,7 @@ export default class MapView {
         EventBus.addListener("remove-all-markers-event", this.removeAllMarkers, this);
         
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
+
         // draw map for first time.
         this.handleViewportChange();
 
@@ -131,21 +133,27 @@ export default class MapView {
         const newSouthWest = L.latLng(southWest.lat - 1, southWest.lng - 2);
         const expandedBounds = L.latLngBounds(newSouthWest, newNorthEast);
 
-        var markerSizeConfig = rangeModel.markerSizes || userConfig.markerSizes;
+        var oldMarkerType = this.markerType;
+        this.markerType = rangeModel.markerType || userConfig.markerType;
         var oldZoom = this.zoom;
         this.zoom = this.mapApi.getZoom();
 
-        if (markerSizeConfig === "C") {
+        if (this.markerType !== oldMarkerType) {
+            this.removeAllMarkers();
+        }
+
+        if (this.markerType === "C") {
             this.createClusteredMarkers(expandedBounds, oldZoom);
-        } else if (markerSizeConfig === "Z") {
+        } else if (this.markerType === "Z") {
             var oldMarkerSize = this.getMarkerSizeByZoom(oldZoom);
             var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
             if (oldMarkerSize !== newMarkerSize) this.removeAllMarkers();
             this.createConstantSizeMarkers(expandedBounds, newMarkerSize);
-        } else { 
-            // markerSizeConfig represents a constant marker size (S, M, or L), but default to L if we see an unexpected value
-            if ("SML".indexOf(markerSizeConfig) < 0) markerSizeConfig = "L";
-            this.createConstantSizeMarkers(expandedBounds, markerSizeConfig);
+        } else {
+        	// TODO: consider marker size slider instead of just a fixed number of sizes 
+            // markerType represents a constant marker size (S, M, or L), but default to L if we see an unexpected value
+            if ("SML".indexOf(this.markerType) < 0) this.markerType = "L";
+            this.createConstantSizeMarkers(expandedBounds, this.markerType);
         }
 
         EventBus.dispatch("map-viewport-change-event", latLngBounds);
@@ -156,6 +164,9 @@ export default class MapView {
 
     removeAllMarkers() {
         var t = performance.now(), removed = 0;
+        // Remove markers from Leaflet
+        Object.values(mapLayers.getOverlayMaps()).forEach((layer) => layer.clearLayers());
+        // Remove markers from the supercharger objects themselves
         new SiteIterator()
         .withPredicate(SitePredicates.HAS_MARKER)
         .iterate((supercharger) => {
@@ -216,16 +227,16 @@ export default class MapView {
         console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
     };
 
-    createConstantSizeMarkers(bounds, markerSize) {
+    createConstantSizeMarkers(bounds, markerType) {
         var t = performance.now(), created = 0;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
             .iterate((supercharger) => {
-                this.markerFactory.createMarker(supercharger, markerSize);
+                this.markerFactory.createMarker(supercharger, markerType);
                 created++;
             });
-        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerSize + " t=" + (performance.now() - t));
+        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerType + " t=" + (performance.now() - t));
     };
 
     setupForWayBack() {

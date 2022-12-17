@@ -21,7 +21,7 @@ class UserConfig {
         this.latitude = null;
         this.longitude = null;
         this.zoom = null;
-        this.markerSizes = "Z";
+        this.markerType = "Z";
         this.customMarkers = [];
     }
 
@@ -41,8 +41,8 @@ class UserConfig {
         this.scheduleSave();
     };
 
-    setMarkerSizes(markerSizes) {
-        this.markerSizes = markerSizes;
+    setMarkerType(markerType) {
+        this.markerType = markerType;
         this.scheduleSave();
     }
 
@@ -110,7 +110,7 @@ class UserConfig {
                 config.latitude = userConfigJson.latitude;
                 config.longitude = userConfigJson.longitude;
                 config.zoom = userConfigJson.zoom;
-                config.markerSizes = userConfigJson.markerSizes || "Z";
+                config.markerType = userConfigJson.markerType || "Z";
 
                 config.changesPageRegionId = userConfigJson.changesPageRegionId;
                 config.changesPageCountryId = userConfigJson.changesPageCountryId;

@@ -43,7 +43,7 @@ class RangeModel {
             this.displayUnit = Units.MI;
         }
 
-        this.markerSizes = "Z";
+        this.markerType = "Z";
         this.clusterDensity = 5;
     }
 
@@ -124,14 +124,14 @@ class RangeModel {
         return this.displayUnit;
     };
 
-    getMarkerSizes() {
-        return this.markerSizes;
+    getMarkerType() {
+        return this.markerType;
     }
 
-    setMarkerSizes(newMarkerSizes) {
-        this.markerSizes = newMarkerSizes;
-        RangeModel.fireMarkerSizesChangedEvent();
-        userConfig.setMarkerSizes(newMarkerSizes);
+    setMarkerType(newMarkerType) {
+        this.markerType = newMarkerType;
+        RangeModel.fireMarkerTypeChangedEvent();
+        userConfig.setMarkerType(newMarkerType);
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -146,8 +146,8 @@ class RangeModel {
         EventBus.dispatch("range-model-unit-changed-event");
     };
 
-    static fireMarkerSizesChangedEvent() {
-        EventBus.dispatch("marker-sizes-changed-event");
+    static fireMarkerTypeChangedEvent() {
+        EventBus.dispatch("marker-type-changed-event");
     };
 
     static fireDensityChangedEvent() {
