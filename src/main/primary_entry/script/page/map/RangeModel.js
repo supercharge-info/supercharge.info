@@ -20,8 +20,10 @@ const MILES_MIN = 0;
 const MILES_MAX = 350;
 const METERS_DEFAULT = milesToMeters(175);
 
-const DENSITY_MIN = 1;
-const DENSITY_MAX = 9;
+const CLUSTERSIZE_MIN = 1;
+const CLUSTERSIZE_MAX = 9;
+const MARKERSIZE_MIN = 3;
+const MARKERSIZE_MAX = 8;
 
 class RangeModel {
 
@@ -44,7 +46,8 @@ class RangeModel {
         }
 
         this.markerType = "Z";
-        this.clusterDensity = 5;
+        this.markerSize = 8;
+        this.clusterSize = 5;
     }
 
 
@@ -86,24 +89,45 @@ class RangeModel {
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // cluster density
+    // cluster size
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    getCurrentDensity() {
-        return this.clusterDensity;
+    getCurrentClusterSize() {
+        return this.clusterSize;
     }
 
-    setCurrentDensity(newDensity) {
-        this.clusterDensity = newDensity;
-        RangeModel.fireDensityChangedEvent();
+    setCurrentClusterSize(newSize) {
+        this.clusterSize = newSize;
+        RangeModel.fireClusterSizeChangedEvent();
     }
 
-    getMinDensity() {
-        return DENSITY_MIN;
+    getMinClusterSize() {
+        return CLUSTERSIZE_MIN;
     };
 
-    getMaxDensity() {
-        return DENSITY_MAX;
+    getMaxClusterSize() {
+        return CLUSTERSIZE_MAX;
+    };
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // marker size
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    getCurrentMarkerSize() {
+        return this.markerSize;
+    }
+
+    setCurrentMarkerSize(newSize) {
+        this.markerSize = newSize;
+        RangeModel.fireMarkerSizeChangedEvent();
+    }
+
+    getMinMarkerSize() {
+        return MARKERSIZE_MIN;
+    };
+
+    getMaxMarkerSize() {
+        return MARKERSIZE_MAX;
     };
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -150,10 +174,13 @@ class RangeModel {
         EventBus.dispatch("marker-type-changed-event");
     };
 
-    static fireDensityChangedEvent() {
-        EventBus.dispatch("range-model-density-changed-event");
+    static fireClusterSizeChangedEvent() {
+        EventBus.dispatch("range-model-clustersize-changed-event");
     };
 
+    static fireMarkerSizeChangedEvent() {
+        EventBus.dispatch("range-model-markersize-changed-event");
+    };
 }
 
 export default new RangeModel();

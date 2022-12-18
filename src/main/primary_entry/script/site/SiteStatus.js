@@ -63,7 +63,6 @@ var StatusIcons = {
 
 var iconZoom = { "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "S": 3, "M": 5, "L": 8 };
 Object.entries(iconZoom).forEach(([zk, zv]) => {
-    console.log("zk=" + zk + " zv=" + zv);
     StatusIcons.I_CONSTRUCTION[zk] = L.icon({
         iconUrl: imagesDir + '/construction-cone_16.png',
         iconAnchor: [zv,zv],

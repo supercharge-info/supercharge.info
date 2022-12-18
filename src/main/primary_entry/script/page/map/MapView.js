@@ -152,8 +152,8 @@ export default class MapView {
         } else {
         	// TODO: consider marker size slider instead of just a fixed number of sizes 
             // markerType represents a constant marker size (S, M, or L), but default to L if we see an unexpected value
-            if ("SML".indexOf(this.markerType) < 0) this.markerType = "L";
-            this.createConstantSizeMarkers(expandedBounds, this.markerType);
+            var markerSize = "SML".indexOf(this.markerType) < 0 ? rangeModel.getCurrentMarkerSize() : this.markerType;
+            this.createConstantSizeMarkers(expandedBounds, markerSize);
         }
 
         EventBus.dispatch("map-viewport-change-event", latLngBounds);
@@ -177,7 +177,7 @@ export default class MapView {
         console.log("zoom=" + this.zoom + " removed=" + removed + " t=" + (performance.now() - t));
     };
 
-    getMarkerSizeByZoom = (zoom) => zoom < 6 ? 3 : zoom > 16 ? 8 : Math.floor(zoom / 2);
+    getMarkerSizeByZoom = (zoom) => zoom < 6 ? 3 : zoom > 16 ? 8 : Math.ceil(zoom / 2);
 
     createClusteredMarkers(bounds, oldZoom) {
         var t = performance.now(), newZoom = this.zoom, created = 0;
@@ -198,7 +198,7 @@ export default class MapView {
                 .withPredicate(SitePredicates.buildCanClusterPredicate(Math.max(newZoom, 1)))
                 .iterate((s) => { s.clusterMaxZoom = 19; });
         }
-        const radius = overlapRadius[this.zoom] * rangeModel.getCurrentDensity();
+        const radius = overlapRadius[this.zoom] * rangeModel.getCurrentClusterSize();
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
@@ -227,16 +227,16 @@ export default class MapView {
         console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
     };
 
-    createConstantSizeMarkers(bounds, markerType) {
+    createConstantSizeMarkers(bounds, markerSize) {
         var t = performance.now(), created = 0;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
             .iterate((supercharger) => {
-                this.markerFactory.createMarker(supercharger, markerType);
+                this.markerFactory.createMarker(supercharger, markerSize);
                 created++;
             });
-        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerType + " t=" + (performance.now() - t));
+        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerSize + " t=" + (performance.now() - t));
     };
 
     setupForWayBack() {

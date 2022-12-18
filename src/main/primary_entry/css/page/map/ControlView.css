@@ -11,6 +11,21 @@
     border:transparent;
 }
 
+.marker-slider {
+    display: none;
+}
+
+.marker-slider.active {
+    display: inline-block !important;
+}
+
+.small-slider-control {
+    display: inline-block !important;
+    width: 135px !important;
+    vertical-align: middle;
+    margin-bottom: 1px;
+}
+
 .slider-control {
     display: inline-block !important;
     width: 270px !important;
