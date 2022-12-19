@@ -11,6 +11,17 @@
     border:transparent;
 }
 
+#marker-selector img {
+    margin-bottom: 1px;
+    vertical-align: middle;
+}
+
+#marker-selector .cluster-marker {
+    display: inline-block;
+    margin-top: -1px;
+    margin-bottom: 1px;
+}
+
 .marker-slider {
     display: none;
 }
@@ -28,7 +39,7 @@
 
 .slider-control {
     display: inline-block !important;
-    width: 270px !important;
+    width: 210px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
@@ -48,4 +59,9 @@ label.control {
 .leaflet-control-layers input[type="checkbox"][disabled] + span,
 .leaflet-control-layers input[type="radio"][disabled] + span {
     color: gray;
+}
+
+#control-row-rendering {
+    margin-left: 130px;
+    margin-top: 5px;
 }

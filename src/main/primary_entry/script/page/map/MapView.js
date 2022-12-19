@@ -13,7 +13,8 @@ import mapLayers from './MapLayers'
 import RouteEvents from "./route/RouteEvents";
 import routeResultModel from './route/RouteResultModel'
 import polyline from '@mapbox/polyline'
-import rangeModel from "./RangeModel";
+import renderModel from "./RenderModel";
+import TotalCountPanel from "./TotalCountPanel";
 
 export default class MapView {
 
@@ -38,6 +39,7 @@ export default class MapView {
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
         EventBus.addListener("viewport-changed-event", this.handleViewportChange, this);
         EventBus.addListener("remove-all-markers-event", this.removeAllMarkers, this);
+        EventBus.addListener("marker-split-event", this.splitMarker, this);
         
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
 
@@ -52,6 +54,11 @@ export default class MapView {
             iconUrl: require('leaflet/dist/images/marker-icon.png'),
             shadowUrl: require('leaflet/dist/images/marker-shadow.png')
         });
+
+        // Uncomment for debugging region/country bounds
+        //Object.values(TotalCountPanel.ALL).forEach(bounds => {
+        //    L.rectangle(bounds, { color: "#ff7800", weight: 1}).addTo(this.mapApi);
+        //});
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -134,13 +141,11 @@ export default class MapView {
         const expandedBounds = L.latLngBounds(newSouthWest, newNorthEast);
 
         var oldMarkerType = this.markerType;
-        this.markerType = rangeModel.markerType || userConfig.markerType;
+        this.markerType = renderModel.markerType;
         var oldZoom = this.zoom;
         this.zoom = this.mapApi.getZoom();
 
-        if (this.markerType !== oldMarkerType) {
-            this.removeAllMarkers();
-        }
+        if (this.markerType !== oldMarkerType) this.removeAllMarkers();
 
         if (this.markerType === "C") {
             this.createClusteredMarkers(expandedBounds, oldZoom);
@@ -150,10 +155,8 @@ export default class MapView {
             if (oldMarkerSize !== newMarkerSize) this.removeAllMarkers();
             this.createConstantSizeMarkers(expandedBounds, newMarkerSize);
         } else {
-        	// TODO: consider marker size slider instead of just a fixed number of sizes 
-            // markerType represents a constant marker size (S, M, or L), but default to L if we see an unexpected value
-            var markerSize = "SML".indexOf(this.markerType) < 0 ? rangeModel.getCurrentMarkerSize() : this.markerType;
-            this.createConstantSizeMarkers(expandedBounds, markerSize);
+        	// markerType represents a constant marker size (3-8)
+            this.createConstantSizeMarkers(expandedBounds, renderModel.getCurrentMarkerSize());
         }
 
         EventBus.dispatch("map-viewport-change-event", latLngBounds);
@@ -198,7 +201,7 @@ export default class MapView {
                 .withPredicate(SitePredicates.buildCanClusterPredicate(Math.max(newZoom, 1)))
                 .iterate((s) => { s.clusterMaxZoom = 19; });
         }
-        const radius = overlapRadius[this.zoom] * rangeModel.getCurrentClusterSize();
+        const radius = overlapRadius[this.zoom] * renderModel.getCurrentClusterSize();
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
@@ -309,4 +312,11 @@ export default class MapView {
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
     };
 
+    splitMarker(event, data) {
+        data.superchargers[0].marker.remove();
+        for (var s in data.superchargers) {
+            data.superchargers[s].clusterMaxZoom = data.zoom - 1;
+            this.markerFactory.createMarker(data.superchargers[s], "L");
+        }
+    };
 }

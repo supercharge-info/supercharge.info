@@ -51,8 +51,9 @@ Cluster Marker
 .cluster-marker.open { background-color: rgba(255, 0, 0, 0.6); }
 .cluster-marker.construction { background-color: rgba(240, 160, 0, 0.6); }
 .cluster-marker.permit { background-color: rgba(0, 0, 255, 0.6); }
-.cluster-marker.closed-temp { background-color: gray; }
-.cluster-marker.closed-perm { background-color: black; }
+.cluster-marker.closed-temp { background-color: rgba(128, 128, 128, 0.6); }
+.cluster-marker.closed-perm { background-color: rgba(0, 0, 0, 0.6); }
+.cluster-marker.user { background-color: rgba(0, 192, 0, 0.6); }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Info Window

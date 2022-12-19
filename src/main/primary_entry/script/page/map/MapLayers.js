@@ -53,11 +53,9 @@ const overlayMaps = {
     'Custom': userLayer
 };
 
-
 class MapLayers {
 
     constructor() {
-
     }
 
     // Note that Satellite layer is NOT here so that its tiles are not loaded until when/if user requests.
@@ -89,7 +87,6 @@ class MapLayers {
             marker.addTo(userLayer)
         }
     }
-
 }
 
 export default new MapLayers();

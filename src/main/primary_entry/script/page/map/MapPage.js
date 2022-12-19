@@ -13,7 +13,6 @@ import PanZoomAction from "./action/PanZoomAction";
 import RoutingAction from "./route/RoutingAction";
 import CreateLinkAction from "./action/CreateLinkAction";
 import AddCustomMarkerAction from "./action/AddCustomMarkerAction";
-import ChangeMarkerTypeAction from "./action/ChangeMarkerTypeAction";
 import MapView from "./MapView";
 import RenderControlView from "./RenderControlView";
 import RoutingPanel from "./route/RoutingPanel";
@@ -131,7 +130,6 @@ export default class MapPage {
         new PanZoomAction(this.mapView.mapApi);
         new CreateLinkAction(this.mapView.mapApi);
         new AddCustomMarkerAction(this.mapView);
-        new ChangeMarkerTypeAction(this.mapApi);
 
         if (QueryStrings.getWayBack()) {
             EventBus.dispatch("way-back-trigger-event");

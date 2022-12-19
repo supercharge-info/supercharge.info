@@ -33,5 +33,4 @@ class ControlVisibleModel {
 
 }
 
-
 export default new ControlVisibleModel();

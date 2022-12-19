@@ -75,12 +75,12 @@ Navigation Bar
                             <li class="divider"></li>
                             <li class="dropdown-header">Map Controls</li>
                             <li>
-                                <a id="range-menu-item" href="#range-menu-item"><span
-                                        class="glyphicon glyphicon-check"></span>&nbsp;Range Adjuster</a>
+                                <a id="rendering-menu-item" href="#rendering-menu-item"><span
+                                        class="glyphicon glyphicon-check"></span>&nbsp;Rendering Options</a>
                             </li>
                             <li>
-                                <a id="rendering-menu-item" href="#rendering-menu-item"><span
-                                        class="glyphicon glyphicon-unchecked"></span>&nbsp;Rendering Options</a>
+                                <a id="range-menu-item" href="#range-menu-item"><span
+                                        class="glyphicon glyphicon-unchecked"></span>&nbsp;Range Adjuster</a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -167,62 +167,62 @@ PAGE: map
 <div class="page" id="page-map" style="display:none">
 
     <div id="page-control">
-        <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
-        <div id="control-row-range" class="col-md-12" style="text-align: center">
-            <label for="range-slider" class="control">Range</label>
-            <input id="range-slider" type="range" min="0" max="350" step="10" value="175"
-                   class="slider-control"/>
-
-
-            <input id="range-number-text" class="slider-value-label" value="175"/>
-
-            <div class="btn-group" data-toggle="buttons" style="vertical-align: top">
-                <label id="range-unit-mi-label" class="btn btn-default btn-xs active">
-                    <input type="radio" name="options" id="option1" checked>mi
-                </label>
-                <label id="range-unit-km-label" class="btn btn-default btn-xs">
-                    <input type="radio" name="options" id="option2">km
-                </label>
+        <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
+        <div id="control-row-rendering">
+            <div class="col-md-12">
+                <label for="marker-selector" class="control">Markers</label>
+                <div id="marker-selector" class="btn-group" data-toggle="buttons" style="vertical-align: top">
+                    <label id="marker-z-label" class="btn btn-default btn-xs active">
+                        <input type="radio" name="markers" id="marker-z" checked>
+                        <img src="/images/red_dot_16.png" alt="open" width="6" height="6"/>
+                        <img src="/images/red_dot_16.png" alt="open" width="16" height="16"/>
+                        <span title="Marker size varies by zoom level">Auto-Zoom</span>
+                    </label>
+                    <label id="marker-f-label" class="btn btn-default btn-xs">
+                        <input type="radio" name="markers" id="marker-f">
+                        <img src="/images/red_dot_16.png" alt="open" class="sample-marker"/>
+                        <img src="images/construction-cone_16.png" alt="construction" class="sample-marker"/>
+                        <span title="Choose a marker size">Fixed Size</span>
+                    </label>
+                    <label id="marker-c-label" class="btn btn-default btn-xs">
+                        <input type="radio" name="markers" id="marker-c">
+                        <div class="cluster-marker open">2</div>
+                        <span title="Markers close together combine and appear as a number">Clusters</span>
+                    </label>
+                </div>
+                <span id="marker-f-slider" class="marker-slider">
+                    <label for="markersize-slider" class="control">Marker Size</label>
+                    <input id="markersize-slider" type="range" min="3" max="8" step="1" value="8" class="small-slider-control"/>
+                    <div id="markersize-number-text" class="slider-value-label"></div>
+                </span>
+                <span id="marker-c-slider" class="marker-slider">
+                    <label for="clustersize-slider" class="control">Cluster Size</label>
+                    <input id="clustersize-slider" type="range" min="1" max="9" step="1" value="5" class="small-slider-control"/>
+                    <div id="clustersize-number-text" class="slider-value-label"></div>
+                </span>
             </div>
-
-            <label for="marker-selector" class="control">Markers</label>
-
-            <div id="marker-selector" class="btn-group" data-toggle="buttons" style="vertical-align: top">
-                <label id="marker-z-label" class="btn btn-default btn-xs active">
-                    <img src="/images/red_dot_16.png" alt="open" width="6" height="6"/>
-                    <img src="/images/red_dot_16.png" alt="open" width="16" height="16"/>
-                    <input type="radio" name="markers" id="marker-z" checked><span title="Marker size varies by zoom level">Auto-Zoom</span>
-                </label>
-                <label id="marker-f-label" class="btn btn-default btn-xs">
-                    <input type="radio" name="markers" id="marker-f">
-                    <img src="/images/red_dot_16.png" alt="open" class="sample-marker"/>
-                    <img src="images/construction-cone_16.png" alt="construction" class="sample-marker"/>
-                    Fixed Size
-                </label>
-                <label id="marker-c-label" class="btn btn-default btn-xs">
-                    <div class="cluster-marker open" style="display: inline-block">2</div>
-                    <input type="radio" name="markers" id="marker-c"><span title="Markers close together combine and appear as a number">Clusters</span>
-                </label>
-            </div>
-
-            <span id="marker-f-slider" class="marker-slider">
-                <label for="markersize-slider" class="control">Marker Size</label>
-                <input id="markersize-slider" type="range" min="3" max="8" step="1" value="8" class="small-slider-control"/>
-                <div id="markersize-number-text" class="slider-value-label"></div>
-            </span>
-            <span id="marker-c-slider" class="marker-slider">
-                <label for="clustersize-slider" class="control">Cluster Size</label>
-                <input id="clustersize-slider" type="range" min="1" max="9" step="1" value="5" class="small-slider-control"/>
-                <div id="clustersize-number-text" class="slider-value-label"></div>
-            </span>
         </div>
-    </div>
-    <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
-    <div id="control-row-rendering" style="display: none">
-        <div class="col-md-12">
-
-            <table id="rendering-controls-table" style="margin: auto">
+        <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
+        <div id="control-row-range" class="col-md-12" style="text-align: center" style="display: none">
+            <table id="range-controls-table" style="margin: auto">
                 <tr>
+                    <td rowspan="2">
+                        <label for="range-slider" class="control">Range</label>
+                        <input id="range-slider" type="range" min="0" max="350" step="10" value="175"
+                               class="slider-control"/>
+            
+            
+                        <input id="range-number-text" class="slider-value-label" value="175"/>
+            
+                        <div class="btn-group" data-toggle="buttons" style="vertical-align: top">
+                            <label id="range-unit-mi-label" class="btn btn-default btn-xs active">
+                                <input type="radio" name="options" id="option1" checked>mi
+                            </label>
+                            <label id="range-unit-km-label" class="btn btn-default btn-xs">
+                                <input type="radio" name="options" id="option2">km
+                            </label>
+                        </div>
+                    </td>
                     <th style="text-align: right">
                         <label class="control">Fill Color</label>
                     </th>
@@ -253,7 +253,6 @@ PAGE: map
                     </td>
                 </tr>
             </table>
-
         </div>
     </div>
 

@@ -3,7 +3,6 @@ import QueryStrings from "../../common/QueryStrings";
 import userConfig from "../../common/UserConfig";
 import Units from "../../util/Units";
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // conversion methods
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -19,11 +18,6 @@ const kilometersToMeters = (kilometers) => Math.round(kilometers * METERS_PER_KM
 const MILES_MIN = 0;
 const MILES_MAX = 350;
 const METERS_DEFAULT = milesToMeters(175);
-
-const CLUSTERSIZE_MIN = 1;
-const CLUSTERSIZE_MAX = 9;
-const MARKERSIZE_MIN = 3;
-const MARKERSIZE_MAX = 8;
 
 class RangeModel {
 
@@ -45,11 +39,12 @@ class RangeModel {
             this.displayUnit = Units.MI;
         }
 
-        this.markerType = "Z";
-        this.markerSize = 8;
-        this.clusterSize = 5;
-    }
+        this.fillOpacity = 0.15;
+        this.fillColor = "#86c4ec";
 
+        this.borderOpacity = 0.3;
+        this.borderColor = "#181fe7";
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // range mi/km
@@ -69,7 +64,7 @@ class RangeModel {
         } else {
             this.rangeMeters = kilometersToMeters(newRange);
         }
-        RangeModel.fireRangeChangedEvent();
+        this.fireRangeChangedEvent();
     }
 
     getMinRange() {
@@ -78,7 +73,7 @@ class RangeModel {
         } else {
             return milesToKilometers(MILES_MIN);
         }
-    };
+    }
 
     getMaxRange() {
         if (this.displayUnit.isMiles()) {
@@ -86,49 +81,7 @@ class RangeModel {
         } else {
             return milesToKilometers(MILES_MAX);
         }
-    };
-
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // cluster size
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    getCurrentClusterSize() {
-        return this.clusterSize;
     }
-
-    setCurrentClusterSize(newSize) {
-        this.clusterSize = newSize;
-        RangeModel.fireClusterSizeChangedEvent();
-    }
-
-    getMinClusterSize() {
-        return CLUSTERSIZE_MIN;
-    };
-
-    getMaxClusterSize() {
-        return CLUSTERSIZE_MAX;
-    };
-
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // marker size
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    getCurrentMarkerSize() {
-        return this.markerSize;
-    }
-
-    setCurrentMarkerSize(newSize) {
-        this.markerSize = newSize;
-        RangeModel.fireMarkerSizeChangedEvent();
-    }
-
-    getMinMarkerSize() {
-        return MARKERSIZE_MIN;
-    };
-
-    getMaxMarkerSize() {
-        return MARKERSIZE_MAX;
-    };
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // getters/setters
@@ -136,51 +89,29 @@ class RangeModel {
 
     getRangeMeters() {
         return this.rangeMeters;
-    };
+    }
 
     setDisplayUnit(newUnit) {
         this.displayUnit = newUnit;
-        RangeModel.fireUnitChangedEvent();
+        this.fireUnitChangedEvent();
         userConfig.setUnit(newUnit)
-    };
+    }
 
     getDisplayUnit() {
         return this.displayUnit;
-    };
-
-    getMarkerType() {
-        return this.markerType;
-    }
-
-    setMarkerType(newMarkerType) {
-        this.markerType = newMarkerType;
-        RangeModel.fireMarkerTypeChangedEvent();
-        userConfig.setMarkerType(newMarkerType);
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // events
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    static fireRangeChangedEvent() {
+    fireRangeChangedEvent() {
         EventBus.dispatch("range-model-range-changed-event");
-    };
+    }
 
-    static fireUnitChangedEvent() {
+    fireUnitChangedEvent() {
         EventBus.dispatch("range-model-unit-changed-event");
-    };
-
-    static fireMarkerTypeChangedEvent() {
-        EventBus.dispatch("marker-type-changed-event");
-    };
-
-    static fireClusterSizeChangedEvent() {
-        EventBus.dispatch("range-model-clustersize-changed-event");
-    };
-
-    static fireMarkerSizeChangedEvent() {
-        EventBus.dispatch("range-model-markersize-changed-event");
-    };
+    }
 }
 
 export default new RangeModel();

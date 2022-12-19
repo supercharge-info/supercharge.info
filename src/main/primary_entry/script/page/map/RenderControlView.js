@@ -1,78 +1,119 @@
 import EventBus from "../../util/EventBus";
+import Analytics from "../../util/Analytics";
 import RangeInput from "./RangeInput";
 import renderModel from "./RenderModel";
 import controlVisibleModel from "./ControlVisibleModel";
 import $ from "jquery";
-import "spectrum-colorpicker";
 
-export default class RenderView {
+export default class RenderControlView {
 
     constructor() {
-        this.initOpacitySliders();
-        this.initColorInputs();
+        this.markerLabels = {
+            "Z": $("#marker-z-label"),
+            "C": $("#marker-c-label"),
+            "F": $("#marker-f-label")
+        };
+        this.markerSliders = {
+            "C": $("#marker-c-slider"),
+            "F": $("#marker-f-slider")
+        };
+
+        this.initMarkerType();
+        this.initClusterSizeSlider();
+        this.initMarkerSizeSlider();
         this.handleVisibilityModelChange();
+        EventBus.addListener("render-model-markertype-changed-event", this.handleMarkerTypeChange, this);
+        EventBus.addListener("render-model-clustersize-changed-event", this.handleClusterSizeChange, this);
+        EventBus.addListener("render-model-markersize-changed-event", this.handleMarkerSizeChange, this);
         EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
     }
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Initialization
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    initMarkerType() {
+        const control = this;
+        for (var markerLabel in this.markerLabels) {
+            const ml = markerLabel;
+            this.markerLabels[ml].click(function () {
+                renderModel.setMarkerType(ml);
+                Analytics.sendEvent("map", "change-marker-type", ml);
+            });
+        }
+        this.updateMarkerType();
+    }
 
-    initOpacitySliders() {
+    initClusterSizeSlider() {
+        this.clusterSizeSlider = new RangeInput("#clustersize-slider", "#clustersize-number-text",
+            renderModel.getMinClusterSize(),
+            renderModel.getMaxClusterSize(),
+            1,
+            renderModel.getCurrentClusterSize());
 
-        this.fillOpacitySlider = new RangeInput("#fill-opacity-slider", "#fill-opacity-number-text",
-            0.0, 1.0, 0.1, renderModel.fillOpacity);
-
-        this.borderOpacitySlider = new RangeInput("#border-opacity-slider", "#border-opacity-number-text",
-            0.0, 1.0, 0.1, renderModel.borderOpacity);
-
-        this.fillOpacitySlider.on("range-change-event", function (event, newOpacity) {
-            renderModel.fillOpacity = newOpacity;
-            renderModel.fireRenderModelChangeEvent();
+        this.clusterSizeSlider.on("range-change-event", function (event, newSize) {
+            renderModel.setCurrentClusterSize(newSize);
         });
-        this.borderOpacitySlider.on("range-change-event", function (event, newOpacity) {
-            renderModel.borderOpacity = newOpacity;
-            renderModel.fireRenderModelChangeEvent();
+    }
+
+    initMarkerSizeSlider() {
+        this.markerSizeSlider = new RangeInput("#markersize-slider", "#markersize-number-text",
+            renderModel.getMinMarkerSize(),
+            renderModel.getMaxMarkerSize(),
+            1,
+            renderModel.getCurrentMarkerSize());
+
+        this.markerSizeSlider.on("range-change-event", function (event, newSize) {
+            renderModel.setCurrentMarkerSize(newSize);
         });
+    }
 
-    };
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Handlers for various UI component changes
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    initColorInputs() {
-        $("#fill-color-input").spectrum({
-            color: renderModel.fillColor,
-            change: $.proxy(this.handleFillColorChange, this)
-        });
+    updateMarkerType() {
+        var markerType = renderModel.getMarkerType();
 
-        $("#border-color-input").spectrum({
-            color: renderModel.borderColor,
-            change: $.proxy(this.handleBorderColorChange, this)
-        });
-    };
+        for (var markerLabel in this.markerLabels) {
+            this.markerLabels[markerLabel]?.removeClass("active");
+        }
+        this.markerLabels[markerType]?.addClass("active");
 
+        for (var markerSlider in this.markerSliders) {
+            this.markerSliders[markerSlider]?.removeClass("active");
+        }
+        this.markerSliders[markerType]?.addClass("active");
+        EventBus.dispatch("viewport-changed-event");
+    }
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Handlers for various UI component changes
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    handleMarkerTypeChange() {
+        this.updateMarkerType();
+    }
 
-    /**
-     * Handle fill color change.
-     */
-    handleFillColorChange(newColorEvent) {
-        renderModel.fillColor =  newColorEvent.toHexString();
-        renderModel.fireRenderModelChangeEvent();
-    };
+    updateClusterSizeSlider() {
+        this.clusterSizeSlider.setMin(renderModel.getMinClusterSize());
+        this.clusterSizeSlider.setMax(renderModel.getMaxClusterSize());
+        this.clusterSizeSlider.setValue(renderModel.getCurrentClusterSize());
+        EventBus.dispatch("remove-all-markers-event");
+        EventBus.dispatch("viewport-changed-event");
+    }
 
-    /**
-     * Handle border color change.
-     */
-    handleBorderColorChange(newColorEvent) {
-        renderModel.borderColor = newColorEvent.toHexString();
-        renderModel.fireRenderModelChangeEvent();
-    };
+    handleClusterSizeChange() {
+        //console.log("set ClusterSize to " + renderModel.getCurrentClusterSize())
+        this.updateClusterSizeSlider();
+    }
 
-//- - - - - - - - - - - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//- - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    updateMarkerSizeSlider() {
+        this.markerSizeSlider.setMin(renderModel.getMinMarkerSize());
+        this.markerSizeSlider.setMax(renderModel.getMaxMarkerSize());
+        this.markerSizeSlider.setValue(renderModel.getCurrentMarkerSize());
+        var z = renderModel.getCurrentMarkerSize() * 2;
+        document.getElementsByClassName("sample-marker").forEach(function (e) { e.width = z; e.height = z; })
+        EventBus.dispatch("remove-all-markers-event");
+        EventBus.dispatch("viewport-changed-event");
+    }
+
+    handleMarkerSizeChange() {
+        //console.log("set MarkerSize to " + renderModel.getCurrentMarkerSize())
+        this.updateMarkerSizeSlider();
+    }
 
     handleVisibilityModelChange() {
         $("#control-row-rendering").toggle(controlVisibleModel.renderControlVisible);
