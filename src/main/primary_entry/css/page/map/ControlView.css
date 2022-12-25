@@ -61,7 +61,23 @@ label.control {
     color: gray;
 }
 
-#control-row-rendering {
+.control-row {
     margin-left: 130px;
     margin-top: 5px;
+    text-align: left;
+}
+
+@media (max-width: 928px) {
+    .control-row {
+        margin: 0px;
+    }
+    .control-row .collapse {
+        display: none;
+    }
+    .slider-control {
+        width: 120px !important;
+    }
+    .small-slider-control {
+        width: 80px !important;
+    }
 }

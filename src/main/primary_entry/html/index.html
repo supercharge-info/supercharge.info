@@ -168,7 +168,7 @@ PAGE: map
 
     <div id="page-control">
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
-        <div id="control-row-rendering">
+        <div id="control-row-rendering" class="control-row">
             <div class="col-md-12">
                 <label for="marker-selector" class="control">Markers</label>
                 <div id="marker-selector" class="btn-group" data-toggle="buttons" style="vertical-align: top">
@@ -176,13 +176,13 @@ PAGE: map
                         <input type="radio" name="markers" id="marker-z" checked>
                         <img src="/images/red_dot_16.png" alt="open" width="6" height="6"/>
                         <img src="/images/red_dot_16.png" alt="open" width="16" height="16"/>
-                        <span title="Marker size varies by zoom level">Auto-Zoom</span>
+                        <span title="Marker size varies by zoom level">Auto<span class="collapse">-Zoom</span></span>
                     </label>
                     <label id="marker-f-label" class="btn btn-default btn-xs">
                         <input type="radio" name="markers" id="marker-f">
                         <img src="/images/red_dot_16.png" alt="open" class="sample-marker"/>
                         <img src="images/construction-cone_16.png" alt="construction" class="sample-marker"/>
-                        <span title="Choose a marker size">Fixed Size</span>
+                        <span title="Choose a marker size">Fixed<span class="collapse"> Size</span></span>
                     </label>
                     <label id="marker-c-label" class="btn btn-default btn-xs">
                         <input type="radio" name="markers" id="marker-c">
@@ -193,18 +193,18 @@ PAGE: map
                 <span id="marker-f-slider" class="marker-slider">
                     <label for="markersize-slider" class="control">Marker Size</label>
                     <input id="markersize-slider" type="range" min="3" max="8" step="1" value="8" class="small-slider-control"/>
-                    <div id="markersize-number-text" class="slider-value-label"></div>
+                    <span id="markersize-number-text"></span>
                 </span>
                 <span id="marker-c-slider" class="marker-slider">
                     <label for="clustersize-slider" class="control">Cluster Size</label>
                     <input id="clustersize-slider" type="range" min="1" max="9" step="1" value="5" class="small-slider-control"/>
-                    <div id="clustersize-number-text" class="slider-value-label"></div>
+                    <span id="clustersize-number-text"></span>
                 </span>
             </div>
         </div>
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
-        <div id="control-row-range" class="col-md-12" style="text-align: center" style="display: none">
-            <table id="range-controls-table" style="margin: auto">
+        <div id="control-row-range" class="col-md-12 control-row" style="display: none">
+            <table id="range-controls-table">
                 <tr>
                     <td rowspan="2">
                         <label for="range-slider" class="control">Range</label>
@@ -234,7 +234,7 @@ PAGE: map
                     </th>
                     <td>
                         <input id="fill-opacity-slider" type="range" class="small-slider-control"/>
-                        <div id="fill-opacity-number-text" class="slider-value-label"></div>
+                        <span id="fill-opacity-number-text"></span>
                     </td>
                 </tr>
                 <tr>
@@ -249,7 +249,7 @@ PAGE: map
                     </th>
                     <td>
                         <input id="border-opacity-slider" type="range" class="small-slider-control"/>
-                        <div id="border-opacity-number-text" class="slider-value-label"></div>
+                        <span id="border-opacity-number-text"></span>
                     </td>
                 </tr>
             </table>
