@@ -32,14 +32,14 @@
 
 .small-slider-control {
     display: inline-block !important;
-    width: 135px !important;
+    width: 100px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
 
 .slider-control {
     display: inline-block !important;
-    width: 210px !important;
+    width: 224px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
@@ -78,6 +78,6 @@ label.control {
         width: 120px !important;
     }
     .small-slider-control {
-        width: 80px !important;
+        width: 50px !important;
     }
 }
