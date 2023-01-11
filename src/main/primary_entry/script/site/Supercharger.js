@@ -16,15 +16,12 @@ import L from 'leaflet';
  * marker         -- [google.maps.Marker] a reference to the google-maps Marker object associated with this supercharger.
  * circleOn       -- Boolean              indicates if the circle has been enabled by the user. Visibility of the circle itself
  *                                        is not sufficient state because circles can be invisible for other reasons.
- * clusterMaxZoom -- int                  maximum zoom at which the site may be part of a cluster.
- *
  */
 export default class Supercharger {
 
     constructor() {
         // same default values for user-added and normal sites/markers.
         this.circleOn = false;
-        this.clusterMaxZoom = 19;
     }
 
     isPermit() {

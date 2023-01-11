@@ -14,7 +14,8 @@ import RouteEvents from "./route/RouteEvents";
 import routeResultModel from './route/RouteResultModel'
 import polyline from '@mapbox/polyline'
 import renderModel from "./RenderModel";
-import TotalCountPanel from "./TotalCountPanel";
+import MapEvents from "./MapEvents";
+//import TotalCountPanel from "./TotalCountPanel";
 
 export default class MapView {
 
@@ -39,7 +40,7 @@ export default class MapView {
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
         EventBus.addListener("viewport-changed-event", this.handleViewportChange, this);
         EventBus.addListener("remove-all-markers-event", this.removeAllMarkers, this);
-        EventBus.addListener("marker-split-event", this.splitMarker, this);
+        EventBus.addListener("zoom-to-site-event", this.handleZoomToSite, this);
         
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
 
@@ -195,12 +196,6 @@ export default class MapView {
             // clear old markers when zooming in/out
             this.removeAllMarkers();
         }
-        if (newZoom < oldZoom) {
-            // reset clustering ability of sites when zooming out (and zooming to 0 always resets)
-            new SiteIterator()
-                .withPredicate(SitePredicates.buildCanClusterPredicate(Math.max(newZoom, 1)))
-                .iterate((s) => { s.clusterMaxZoom = 19; });
-        }
         const radius = overlapRadius[this.zoom] * renderModel.getCurrentClusterSize();
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
@@ -208,21 +203,18 @@ export default class MapView {
             .iterate((s1) => {
                 if (s1.marker === null || s1.marker === undefined) { // gotta check again because one site might set another site's marker
                     var overlapSites = [s1];
-                    if (s1.clusterMaxZoom >= newZoom) {
-                        const s1Lat = s1.location.lat, s1Lng = s1.location.lng;
-                        var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
-                        new SiteIterator()
-                            .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
-                            .withPredicate(SitePredicates.buildCanClusterPredicate(newZoom))
-                            .iterate((s2) => {
-                                if (s1 !== s2 && s1.status === s2.status && ((s2.marker === null || s2.marker === undefined)) && overlapSites.length < 999) {
-                                    var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
-                                    if (dist > 0 && dist < radius) {
-                                        overlapSites.push(s2);
-                                    }
+                    const s1Lat = s1.location.lat, s1Lng = s1.location.lng;
+                    var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
+                    new SiteIterator()
+                        .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
+                        .iterate((s2) => {
+                            if (s1 !== s2 && s1.status === s2.status && ((s2.marker === null || s2.marker === undefined)) && overlapSites.length < 999) {
+                                var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
+                                if (dist > 0 && dist < radius) {
+                                    overlapSites.push(s2);
                                 }
-                            });
-                    }
+                            }
+                        });
                     this.markerFactory.createMarkerCluster(overlapSites, this.zoom);
                     created++;
                 }
@@ -274,6 +266,11 @@ export default class MapView {
     // InfoWindow Event handlers
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+    handleZoomToSite(event, data) {
+        const newZoom = (this.zoom > 14 && this.zoom < 19 ? 19 : 15);
+        EventBus.dispatch(MapEvents.pan_zoom, {latLng: data.supercharger.location, zoom: newZoom});
+    };
+
     handleMarkerRemove(event) {
         event.preventDefault();
         const id = parseInt($(event.target).attr('href'));
@@ -310,13 +307,5 @@ export default class MapView {
         Sites.removeById(supercharger.id);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
-    };
-
-    splitMarker(event, data) {
-        data.superchargers[0].marker.remove();
-        for (var s in data.superchargers) {
-            data.superchargers[s].clusterMaxZoom = data.zoom - 1;
-            this.markerFactory.createMarker(data.superchargers[s], "L");
-        }
     };
 }
