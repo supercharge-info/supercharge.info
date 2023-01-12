@@ -43,6 +43,10 @@ const SitePredicates = {
         return (site) => countryId === null || site.address.countryId === countryId;
     },
 
+    buildMarkerSizeMismatchPredicate: (markerSize) => {
+        return (site) => site.markerSize !== markerSize;
+    },
+
     not: function (predicate) {
         return (site) => {
             return !predicate(site);
@@ -56,6 +60,5 @@ const SitePredicates = {
     }
 
 };
-
 
 export default SitePredicates;

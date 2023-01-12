@@ -20,9 +20,10 @@ export default class MarkerFactory {
     };
 
     createMarker(supercharger, markerType) {
+        supercharger.markerSize = markerType;
         const markerOptions = {
             title: supercharger.getMarkerTitle(),
-            icon: supercharger.status.getIcon(supercharger, markerType)
+            icon: supercharger.status.getIcon(supercharger)
         };
         const marker = L.marker(supercharger.location, markerOptions);
         supercharger.marker = marker;
@@ -31,7 +32,7 @@ export default class MarkerFactory {
     };
 
     createMarkerCluster(superchargers, zoom) {
-        if (superchargers.length === 1) return this.createMarker(superchargers[0], "L");
+        if (superchargers.length === 1) return this.createMarker(superchargers[0], 8);
         var lat = 0, lng = 0, numStalls = 0, mag = 0, titleSupercharger = superchargers[0];
         for (var s in superchargers) {
             lat += superchargers[s].location.lat;
@@ -44,7 +45,7 @@ export default class MarkerFactory {
                 titleSupercharger = superchargers[s];
             }
         }
-        
+
         // Click to zoom in 2-4 steps based on how many locations the cluster marker represents
         // 2-9 => +2 || 10-49 => +3 || 50-999 => +4
         var zoomIncrement = superchargers.length < 10 ? 2 : superchargers.length < 50 ? 3 : 4
@@ -86,7 +87,7 @@ export default class MarkerFactory {
             return;
         }
 
-        MarkerFactory._closeAllOpenUnpinnedInfoWindows();
+        MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
 
         // show if necessary.
         if(!marker.infoWindow.isShown()) {
@@ -95,12 +96,12 @@ export default class MarkerFactory {
     };
 
     _handleClusterZoom(superchargers, newZoom) {
-        MarkerFactory._closeAllOpenUnpinnedInfoWindows();
+        //MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
         var marker = superchargers[0].marker;
         EventBus.dispatch(MapEvents.pan_zoom, {latLng: marker.getLatLng(), zoom: newZoom})
     };
 
-    static _closeAllOpenUnpinnedInfoWindows() {
+    static CloseAllOpenUnpinnedInfoWindows() {
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_SHOWN_UNPINNED_INFO_WINDOW)
             .iterate((s) => s.marker.infoWindow.closeWindow());

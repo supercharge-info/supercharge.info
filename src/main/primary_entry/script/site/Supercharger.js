@@ -22,6 +22,7 @@ export default class Supercharger {
     constructor() {
         // same default values for user-added and normal sites/markers.
         this.circleOn = false;
+        this.markerSize = 8;
     }
 
     isPermit() {

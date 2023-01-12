@@ -153,11 +153,12 @@ export default class MapView {
         } else if (this.markerType === "Z") {
             var oldMarkerSize = this.getMarkerSizeByZoom(oldZoom);
             var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
-            if (oldMarkerSize !== newMarkerSize) this.removeAllMarkers();
-            this.createConstantSizeMarkers(expandedBounds, newMarkerSize);
+            this.updateMarkerSizes(expandedBounds, newMarkerSize);
+            this.createIndividualMarkers(expandedBounds, newMarkerSize);
         } else {
-        	// markerType represents a constant marker size (3-8)
-            this.createConstantSizeMarkers(expandedBounds, renderModel.getCurrentMarkerSize());
+        	// markerType represents a fixed marker size (3-8)
+            this.updateMarkerSizes(expandedBounds, renderModel.getCurrentMarkerSize());
+            this.createIndividualMarkers(expandedBounds, renderModel.getCurrentMarkerSize());
         }
 
         EventBus.dispatch("map-viewport-change-event", latLngBounds);
@@ -168,6 +169,7 @@ export default class MapView {
 
     removeAllMarkers() {
         var t = performance.now(), removed = 0;
+        //MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
         // Remove markers from Leaflet
         Object.values(mapLayers.getOverlayMaps()).forEach((layer) => layer.clearLayers());
         // Remove markers from the supercharger objects themselves
@@ -181,7 +183,7 @@ export default class MapView {
         console.log("zoom=" + this.zoom + " removed=" + removed + " t=" + (performance.now() - t));
     };
 
-    getMarkerSizeByZoom = (zoom) => zoom < 6 ? 3 : zoom > 16 ? 8 : Math.ceil(zoom / 2);
+    getMarkerSizeByZoom = (zoom) => zoom < 4 ? 3 : zoom > 14 ? 8 : Math.ceil(zoom / 2) + 1;
 
     createClusteredMarkers(bounds, oldZoom) {
         var t = performance.now(), newZoom = this.zoom, created = 0;
@@ -192,8 +194,17 @@ export default class MapView {
             0.004, 0.002, 0.001, 0.0005, 0.0001,
             0, 0, 0, 0, 0
         ];
+        var infoWindows = [];
         if (oldZoom !== newZoom) {
-            // clear old markers when zooming in/out
+            // get all open unpinned InfoWindows
+            new SiteIterator()
+                .withPredicate(SitePredicates.HAS_SHOWN_UNPINNED_INFO_WINDOW)
+                .iterate((s) => {
+                    console.log("saving info for site " + s.id);
+                    infoWindows.push(s.marker.infoWindow);
+                });
+        
+            // clear old cluster markers when zooming in/out
             this.removeAllMarkers();
         }
         const radius = overlapRadius[this.zoom] * renderModel.getCurrentClusterSize();
@@ -219,10 +230,25 @@ export default class MapView {
                     created++;
                 }
             });
+        for (var i in infoWindows) {
+            var iw = infoWindows[i], s = iw.supercharger, m = iw.marker;
+            console.log("checking marker for site " + s.id);
+            if (s.marker === null) {
+                //console.log(s.id + " has no marker, removing its infoWindow");
+                iw.closeWindow();
+            } else if (s.marker !== m) {
+                //console.log(s.id + " has different marker, updating its infoWindow");
+                s.marker.infoWindow = iw
+                iw.showWindow();
+            } else {
+                //console.log(s.id + " marker is unchanged");
+                iw.showWindow();
+            }
+        }
         console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
     };
 
-    createConstantSizeMarkers(bounds, markerSize) {
+    createIndividualMarkers(bounds, markerSize) {
         var t = performance.now(), created = 0;
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
@@ -232,6 +258,21 @@ export default class MapView {
                 created++;
             });
         console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerSize + " t=" + (performance.now() - t));
+    };
+
+    updateMarkerSizes(bounds, markerSize) {
+        var t = performance.now(), updated = 0;
+        new SiteIterator()
+            .withPredicate(SitePredicates.HAS_MARKER)
+            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .withPredicate(SitePredicates.buildMarkerSizeMismatchPredicate(markerSize))
+            .iterate((supercharger) => {
+                supercharger.markerSize = markerSize;
+                // calling setIcon forces the marker to redraw, which is needed when size changes
+                supercharger.marker.setIcon(supercharger.status.getIcon(supercharger));
+                updated++;
+            });
+        console.log("updated=" + updated + " markers=" + markerSize + " t=" + (performance.now() - t));
     };
 
     setupForWayBack() {

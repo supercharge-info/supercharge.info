@@ -15,40 +15,40 @@ const Status = {
         sort: 0,
         displayName: "Permanently Closed",
         className: "closed-perm",
-        getIcon: (supercharger, markerType) => StatusIcons.I_CLOSED_PERM[markerType]
+        getIcon: (supercharger) => StatusIcons.I_CLOSED_PERM[supercharger.markerSize]
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
         sort: 1,
         displayName: "Temporarily Closed",
         className: "closed-temp",
-        getIcon: (supercharger, markerType) => StatusIcons.I_CLOSED_TEMP[markerType]
+        getIcon: (supercharger) => StatusIcons.I_CLOSED_TEMP[supercharger.markerSize]
     },
     PERMIT: {
         value: 'PERMIT',
         sort: 2,
         displayName: "Permit",
         className: "permit",
-        getIcon: (supercharger, markerType) => StatusIcons.I_PERMIT[markerType]
+        getIcon: (supercharger) => StatusIcons.I_PERMIT[supercharger.markerSize]
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
         sort: 3,
         displayName: "Construction",
         className: "construction",
-        getIcon: (supercharger, markerType) => StatusIcons.I_CONSTRUCTION[markerType]
+        getIcon: (supercharger) => StatusIcons.I_CONSTRUCTION[supercharger.markerSize]
     },
     OPEN: {
         value: 'OPEN',
         sort: 4,
         displayName: "Open",
         className: "open",
-        getIcon: (supercharger, markerType) => ((Strings.isNotEmpty(supercharger.hours)) ? StatusIcons.I_OPEN_HOURS : StatusIcons.I_OPEN)[markerType]
+        getIcon: (supercharger) => ((Strings.isNotEmpty(supercharger.hours)) ? StatusIcons.I_OPEN_HOURS : StatusIcons.I_OPEN)[supercharger.markerSize]
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
-        getIcon: (supercharger, markerType) => I_CUSTOM
+        getIcon: (supercharger) => I_CUSTOM
     }
 }
 
