@@ -19,7 +19,6 @@
 }
 
 #marker-selector .cluster-marker {
-    display: inline-block;
     margin-top: -1px;
     margin-bottom: 1px;
 }
@@ -34,14 +33,14 @@
 
 .small-slider-control {
     display: inline-block !important;
-    width: 100px !important;
+    width: 80px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
 
 .slider-control {
     display: inline-block !important;
-    width: 224px !important;
+    width: 180px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
@@ -67,12 +66,19 @@ label.control {
     margin-top: 5px;
     text-align: left;
 }
+.control-row .collapse { 
+    display: inline;
+}
 
-@media (max-width: 998px) {
+@media (max-width: 1023px) {
     .control-row {
-        margin: 0px;
+        margin-top: 2px;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
     }
-    .control-row .collapse, .control-row img, #marker-selector .cluster-marker {
+    .control-row .collapse, #marker-selector .cluster-marker {
         display: none;
     }
     .slider-control {

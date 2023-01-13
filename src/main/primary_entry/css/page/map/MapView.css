@@ -39,9 +39,11 @@ Markers
     width: 16px;
     height: 16px;
     padding: 0px;
+    margin: 0px;
 }
 
 .cluster-marker {
+    display: inline-block;
     color: white;
     border-radius: 7px;
     border: 1px solid black;

@@ -9,6 +9,42 @@ const I_CUSTOM = L.icon({
     iconSize: [16, 16],
     className: 'marker-icon'
 });
+const I_CONSTRUCTION = L.icon({
+    iconUrl: imagesDir + '/construction-cone_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_PERMIT = L.icon({
+    iconUrl: imagesDir + '/blue_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_CLOSED_PERM = L.icon({
+    iconUrl: imagesDir + '/black_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_CLOSED_TEMP = L.icon({
+    iconUrl: imagesDir + '/gray_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_OPEN = L.icon({
+    iconUrl: imagesDir + '/red_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_OPEN_HOURS = L.icon({
+    iconUrl: imagesDir + '/red_black_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
 
 const Status = {
     CLOSED_PERM: {
@@ -16,35 +52,35 @@ const Status = {
         sort: 0,
         displayName: "Permanently Closed",
         className: "closed-perm",
-        getIcon: (supercharger) => StatusIcons.I_CLOSED_PERM[8] //supercharger.markerSize]
+        getIcon: (supercharger) => I_CLOSED_PERM
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
         sort: 1,
         displayName: "Temporarily Closed",
         className: "closed-temp",
-        getIcon: (supercharger) => StatusIcons.I_CLOSED_TEMP[8] //supercharger.markerSize]
+        getIcon: (supercharger) => I_CLOSED_TEMP
     },
     PERMIT: {
         value: 'PERMIT',
         sort: 2,
         displayName: "Permit",
         className: "permit",
-        getIcon: (supercharger) => StatusIcons.I_PERMIT[8] //supercharger.markerSize]
+        getIcon: (supercharger) => I_PERMIT
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
         sort: 3,
         displayName: "Construction",
         className: "construction",
-        getIcon: (supercharger) => StatusIcons.I_CONSTRUCTION[8] //supercharger.markerSize]
+        getIcon: (supercharger) => I_CONSTRUCTION
     },
     OPEN: {
         value: 'OPEN',
         sort: 4,
         displayName: "Open",
         className: "open",
-        getIcon: (supercharger) => ((Strings.isNotEmpty(supercharger.hours)) ? StatusIcons.I_OPEN_HOURS : StatusIcons.I_OPEN)[8] //supercharger.markerSize]
+        getIcon: (supercharger) => (Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN
     },
     USER_ADDED: {
         value: 'USER_ADDED',
@@ -52,55 +88,6 @@ const Status = {
         getIcon: (supercharger) => I_CUSTOM
     }
 }
-
-var StatusIcons = {
-    I_CONSTRUCTION: {},
-    I_PERMIT: {},
-    I_CLOSED_PERM: {},
-    I_CLOSED_TEMP: {},
-    I_OPEN: {},
-    I_OPEN_HOURS: {}
-}
-
-var iconZoom = { "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "S": 3, "M": 5, "L": 8 };
-Object.entries(iconZoom).forEach(([zk, zv]) => {
-    StatusIcons.I_CONSTRUCTION[zk] = L.icon({
-        iconUrl: imagesDir + '/construction-cone_16.png',
-        iconAnchor: [zv,zv],
-        iconSize: [zv*2,zv*2],
-        className: 'marker-icon'
-    });
-    StatusIcons.I_PERMIT[zk] = L.icon({
-        iconUrl: imagesDir + '/blue_dot_16.png',
-        iconAnchor: [zv,zv],
-        iconSize: [zv*2,zv*2],
-        className: 'marker-icon'
-    });
-    StatusIcons.I_CLOSED_PERM[zk] = L.icon({
-        iconUrl: imagesDir + '/black_dot_16.png',
-        iconAnchor: [zv,zv],
-        iconSize: [zv*2,zv*2],
-        className: 'marker-icon'
-    });
-    StatusIcons.I_CLOSED_TEMP[zk] = L.icon({
-        iconUrl: imagesDir + '/gray_dot_16.png',
-        iconAnchor: [zv,zv],
-        iconSize: [zv*2,zv*2],
-        className: 'marker-icon'
-    });
-    StatusIcons.I_OPEN[zk] = L.icon({
-        iconUrl: imagesDir + '/red_dot_16.png',
-        iconAnchor: [zv,zv],
-        iconSize: [zv*2,zv*2],
-        className: 'marker-icon'
-    });
-    StatusIcons.I_OPEN_HOURS[zk] = L.icon({
-        iconUrl: imagesDir + '/red_black_dot_16.png',
-        iconAnchor: [zv,zv],
-        iconSize: [zv*2,zv*2],
-        className: 'marker-icon'
-    });
-});
 
 Status.fromString = function (string) {
     const s = string.trim();

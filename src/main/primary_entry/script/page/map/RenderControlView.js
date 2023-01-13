@@ -108,7 +108,6 @@ export default class RenderControlView {
     }
 
     handleMarkerSizeChange() {
-        //console.log("set MarkerSize to " + renderModel.getCurrentMarkerSize())
         this.updateMarkerSizeSlider();
     }
 

@@ -25,6 +25,7 @@ export default class MapView {
         this.initMap(lat, lng, initialZoom);
         this.zoom = initialZoom;
         this.markerType = "Z";
+        this.markerIconRule = null;
         this.addCustomMarkers();
 
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
@@ -153,7 +154,6 @@ export default class MapView {
             this.updateMarkerSize(8);
             this.createClusteredMarkers(expandedBounds, oldZoom);
         } else if (this.markerType === "Z") {
-            var oldMarkerSize = this.getMarkerSizeByZoom(oldZoom);
             var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
             this.updateMarkerSize(newMarkerSize);
             this.createIndividualMarkers(expandedBounds, newMarkerSize);
@@ -263,16 +263,22 @@ export default class MapView {
     };
 
     updateMarkerSize(markerSize) {
+        if (this.markerIconRule != null) {
+            if (isNaN(markerSize)) markerSize = 8;
+            this.markerIconRule.style.setProperty('width', (markerSize * 2) + 'px');
+            this.markerIconRule.style.setProperty('height', (markerSize * 2) + 'px');
+            this.markerIconRule.style.setProperty('padding', (8 - markerSize) + 'px');
+            this.markerIconRule.style.setProperty('margin', (8 - markerSize) + 'px');
+            return;
+        }
+        // find and cache the appropriate CSSRule
         for (var ss in document.styleSheets) {
-            var rules = document.styleSheets[ss].cssRules
+            var rules = document.styleSheets[ss].cssRules;
             for (var r in rules) {
                 if (rules[r].selectorText === '.marker-icon') {
-                    var sr = rules[r];
-                    //console.log("ss=" + ss + " r=" + r);
-                    sr.style.setProperty('width', (markerSize * 2) + 'px');
-                    sr.style.setProperty('height', (markerSize * 2) + 'px');
-                    sr.style.setProperty('padding', (8 - markerSize) + 'px');
-                    sr.style.setProperty('margin', (8 - markerSize) + 'px');
+                    console.log("ss=" + ss + "/" + document.styleSheets.length + " r=" + r + "/" + rules.length);
+                    this.markerIconRule = rules[r];
+                    this.updateMarkerSize(markerSize);
                 }
             }
         }
