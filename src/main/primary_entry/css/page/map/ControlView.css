@@ -11,9 +11,11 @@
     border:transparent;
 }
 
-#marker-selector img {
+#marker-selector .marker-icon {
     margin-bottom: 1px;
     vertical-align: middle;
+    padding: 0px;
+    margin-top: 0px;
 }
 
 #marker-selector .cluster-marker {
@@ -62,16 +64,15 @@ label.control {
 }
 
 .control-row {
-    margin-left: 130px;
     margin-top: 5px;
     text-align: left;
 }
 
-@media (max-width: 928px) {
+@media (max-width: 998px) {
     .control-row {
         margin: 0px;
     }
-    .control-row .collapse {
+    .control-row .collapse, .control-row img, #marker-selector .cluster-marker {
         display: none;
     }
     .slider-control {

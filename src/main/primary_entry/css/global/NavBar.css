@@ -14,7 +14,7 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Collapse navbar earlier than bootstrap's default 768px
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-@media (max-width: 928px) {
+@media (max-width: 998px) {
     .navbar-collapse.collapse {
         display: none !important;
     }

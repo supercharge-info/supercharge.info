@@ -39,6 +39,7 @@ export default class MapView {
         EventBus.addListener("places-changed-event", this.handlePlacesChange, this);
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
         EventBus.addListener("viewport-changed-event", this.handleViewportChange, this);
+        EventBus.addListener("markersize-changed-event", this.updateMarkerSize, this);
         EventBus.addListener("remove-all-markers-event", this.removeAllMarkers, this);
         EventBus.addListener("zoom-to-site-event", this.handleZoomToSite, this);
         
@@ -149,15 +150,16 @@ export default class MapView {
         if (this.markerType !== oldMarkerType) this.removeAllMarkers();
 
         if (this.markerType === "C") {
+            this.updateMarkerSize(8);
             this.createClusteredMarkers(expandedBounds, oldZoom);
         } else if (this.markerType === "Z") {
             var oldMarkerSize = this.getMarkerSizeByZoom(oldZoom);
             var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
-            this.updateMarkerSizes(expandedBounds, newMarkerSize);
+            this.updateMarkerSize(newMarkerSize);
             this.createIndividualMarkers(expandedBounds, newMarkerSize);
         } else {
         	// markerType represents a fixed marker size (3-8)
-            this.updateMarkerSizes(expandedBounds, renderModel.getCurrentMarkerSize());
+            this.updateMarkerSize(renderModel.getCurrentMarkerSize());
             this.createIndividualMarkers(expandedBounds, renderModel.getCurrentMarkerSize());
         }
 
@@ -260,19 +262,20 @@ export default class MapView {
         console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerSize + " t=" + (performance.now() - t));
     };
 
-    updateMarkerSizes(bounds, markerSize) {
-        var t = performance.now(), updated = 0;
-        new SiteIterator()
-            .withPredicate(SitePredicates.HAS_MARKER)
-            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
-            .withPredicate(SitePredicates.buildMarkerSizeMismatchPredicate(markerSize))
-            .iterate((supercharger) => {
-                supercharger.markerSize = markerSize;
-                // calling setIcon forces the marker to redraw, which is needed when size changes
-                supercharger.marker.setIcon(supercharger.status.getIcon(supercharger));
-                updated++;
-            });
-        console.log("updated=" + updated + " markers=" + markerSize + " t=" + (performance.now() - t));
+    updateMarkerSize(markerSize) {
+        for (var ss in document.styleSheets) {
+            var rules = document.styleSheets[ss].cssRules
+            for (var r in rules) {
+                if (rules[r].selectorText === '.marker-icon') {
+                    var sr = rules[r];
+                    //console.log("ss=" + ss + " r=" + r);
+                    sr.style.setProperty('width', (markerSize * 2) + 'px');
+                    sr.style.setProperty('height', (markerSize * 2) + 'px');
+                    sr.style.setProperty('padding', (8 - markerSize) + 'px');
+                    sr.style.setProperty('margin', (8 - markerSize) + 'px');
+                }
+            }
+        }
     };
 
     setupForWayBack() {

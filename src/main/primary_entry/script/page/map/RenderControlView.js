@@ -104,8 +104,6 @@ export default class RenderControlView {
         this.markerSizeSlider.setMin(renderModel.getMinMarkerSize());
         this.markerSizeSlider.setMax(renderModel.getMaxMarkerSize());
         this.markerSizeSlider.setValue(renderModel.getCurrentMarkerSize());
-        var z = renderModel.getCurrentMarkerSize() * 2;
-        document.getElementsByClassName("sample-marker").forEach(function (e) { e.width = z; e.height = z; })
         EventBus.dispatch("viewport-changed-event");
     }
 

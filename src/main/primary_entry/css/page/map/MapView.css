@@ -33,8 +33,14 @@ Canvas
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Cluster Marker
+Markers
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.marker-icon {
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+}
+
 .cluster-marker {
     color: white;
     border-radius: 7px;
