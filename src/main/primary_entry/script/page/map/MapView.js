@@ -148,7 +148,11 @@ export default class MapView {
         var oldZoom = this.zoom;
         this.zoom = this.mapApi.getZoom();
 
-        if (this.markerType !== oldMarkerType) this.removeAllMarkers();
+        // clean up InfoWindows when switching between clustered and non-clustered
+        if ((this.markerType === "C") !== (oldMarkerType === "C")) {
+            MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
+            this.removeAllMarkers();
+        }
 
         if (this.markerType === "C") {
             this.updateMarkerSize(8);
@@ -171,7 +175,6 @@ export default class MapView {
 
     removeAllMarkers() {
         var t = performance.now(), removed = 0;
-        //MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
         // Remove markers from Leaflet
         Object.values(mapLayers.getOverlayMaps()).forEach((layer) => layer.clearLayers());
         // Remove markers from the supercharger objects themselves
