@@ -205,7 +205,7 @@ export default class MapView {
             new SiteIterator()
                 .withPredicate(SitePredicates.HAS_SHOWN_UNPINNED_INFO_WINDOW)
                 .iterate((s) => {
-                    console.log("saving info for site " + s.id);
+                    //console.log("saving info for site " + s.id);
                     infoWindows.push(s.marker.infoWindow);
                 });
         
@@ -237,7 +237,7 @@ export default class MapView {
             });
         for (var i in infoWindows) {
             var iw = infoWindows[i], s = iw.supercharger, m = iw.marker;
-            console.log("checking marker for site " + s.id);
+            //console.log("checking marker for site " + s.id);
             if (s.marker === null) {
                 //console.log(s.id + " has no marker, removing its infoWindow");
                 iw.closeWindow();
