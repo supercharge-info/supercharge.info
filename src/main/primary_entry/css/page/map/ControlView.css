@@ -63,14 +63,16 @@ label.control {
 }
 
 .control-row {
+    display: inline-flex;
+    flex-wrap: wrap;
     margin-top: 5px;
     text-align: left;
 }
 .control-row .collapse { 
-    display: inline;
+    display: revert;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 968px) {
     .control-row {
         margin-top: 2px;
         margin-left: 0px;

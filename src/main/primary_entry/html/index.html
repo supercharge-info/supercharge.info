@@ -169,13 +169,10 @@ PAGE: map
     <div id="page-control">
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
         <div id="control-row-rendering" class="control-row">
-            <div class="col-md-12">
+            <div>
                 <label for="range-slider" class="control">Range</label>
-                <input id="range-slider" type="range" min="0" max="350" step="10" value="175"
-                       class="slider-control"/>
-    
+                <input id="range-slider" type="range" min="0" max="350" step="10" value="175" class="slider-control"/>
                 <input id="range-number-text" class="slider-value-label" value="175"/>
-    
                 <div class="btn-group" data-toggle="buttons" style="vertical-align: top">
                     <label id="range-unit-mi-label" class="btn btn-default btn-xs active">
                         <input type="radio" name="options" id="option1" checked>mi
@@ -184,7 +181,8 @@ PAGE: map
                         <input type="radio" name="options" id="option2">km
                     </label>
                 </div>
-
+            </div>
+            <div>
                 <label for="marker-selector" class="control">Markers</label>
                 <div id="marker-selector" class="btn-group" data-toggle="buttons" style="vertical-align: top">
                     <label id="marker-z-label" class="btn btn-default btn-xs active">
@@ -218,38 +216,22 @@ PAGE: map
             </div>
         </div>
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
-        <div id="control-row-range" class="col-md-12 control-row" style="display: none">
-            <table id="range-controls-table">
-                <tr>
-                    <th style="text-align: right">
-                        <label class="control">Fill Color</label>
-                    </th>
-                    <td style="text-align: left">
-                        <input type='text' id="fill-color-input"/>
-                    </td>
-                    <th>
-                        <label class="control">Opacity</label>
-                    </th>
-                    <td>
-                        <input id="fill-opacity-slider" type="range" class="small-slider-control"/>
-                        <span id="fill-opacity-number-text"></span>
-                    </td>
-                    <td style="width: 50px;"></td>
-                    <th style="text-align: right">
-                        <label class="control">Border Color</label>
-                    </th>
-                    <td style="text-align: left">
-                        <input type='text' id="border-color-input"/>
-                    </td>
-                    <th>
-                        <label class="control">Opacity</label>
-                    </th>
-                    <td>
-                        <input id="border-opacity-slider" type="range" class="small-slider-control"/>
-                        <span id="border-opacity-number-text"></span>
-                    </td>
-                </tr>
-            </table>
+        <div id="control-row-range" class="control-row" style="display: none">
+            <div>
+                <label for="fill-color-input" class="control">Fill Color</label>
+                <input type="text" id="fill-color-input"/>
+                <label for="fill-opacity-slider" class="control">Opacity</label>
+                <input id="fill-opacity-slider" type="range" class="small-slider-control"/>
+                <span id="fill-opacity-number-text"></span>
+            </div>
+            <div class="collapse" style="width: 39px;"></div>
+            <div>
+                <label for="border-color-input" class="control">Border Color</label>
+                <input type="text" id="border-color-input"/>
+                <label for="border-opacity-slider" class="control">Opacity</label>
+                <input id="border-opacity-slider" type="range" class="small-slider-control"/>
+                <span id="border-opacity-number-text"></span>
+            </div>
         </div>
     </div>
 

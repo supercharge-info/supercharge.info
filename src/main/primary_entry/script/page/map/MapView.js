@@ -279,7 +279,7 @@ export default class MapView {
             var rules = document.styleSheets[ss].cssRules;
             for (var r in rules) {
                 if (rules[r].selectorText === '.marker-icon') {
-                    console.log("ss=" + ss + "/" + document.styleSheets.length + " r=" + r + "/" + rules.length);
+                    //console.log("ss=" + ss + "/" + document.styleSheets.length + " r=" + r + "/" + rules.length);
                     this.markerIconRule = rules[r];
                     this.updateMarkerSize(markerSize);
                 }
