@@ -1,7 +1,6 @@
 import EventBus from "../../../util/EventBus";
 import rangeModel from "../RangeModel";
 import MapEvents from '../MapEvents'
-import renderModel from "../RenderModel";
 import mapLayers from '../MapLayers'
 
 export default class ToggleRangeCirclesAction {
@@ -12,8 +11,8 @@ export default class ToggleRangeCirclesAction {
     }
 
     toggleCircle(event, supercharger) {
-        if (rangeModel.getCurrent() === 0) {
-            rangeModel.setCurrent(50);
+        if (rangeModel.getCurrentRange() === 0) {
+            rangeModel.setCurrentRange(50);
         }
         if (!supercharger.circle) {
             supercharger.circle = ToggleRangeCirclesAction.buildCircle(supercharger);
@@ -27,11 +26,11 @@ export default class ToggleRangeCirclesAction {
 
     static buildCircle(supercharger) {
         return L.circle(supercharger.location, {
-            color: renderModel.borderColor,
-            opacity: renderModel.borderOpacity,
+            color: rangeModel.borderColor,
+            opacity: rangeModel.borderOpacity,
             weight: 1,
-            fillColor: renderModel.fillColor,
-            fillOpacity: renderModel.fillOpacity,
+            fillColor: rangeModel.fillColor,
+            fillOpacity: rangeModel.fillOpacity,
             radius: rangeModel.getRangeMeters(),
             clickable: false
         })

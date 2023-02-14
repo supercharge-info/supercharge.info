@@ -44,6 +44,7 @@ Address.COUNTRY_WORLD = "World";
 Address.REGION_EUROPE = "Europe";
 Address.REGION_NORTH_AMERICA = "North America";
 Address.REGION_ASIA_PACIFIC = "Asia Pacific";
+Address.REGION_MEA = "Middle East + Africa";
 
 
 export default Address;

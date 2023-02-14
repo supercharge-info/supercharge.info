@@ -23,10 +23,10 @@ Action.prototype.createLink = function (event) {
     linkStr += '?Center=' + latLng.lat + ',' + latLng.lng + '&Zoom=' + zoom;
     if (rangeModel.getRangeMeters() !== 0) {
         if (rangeModel.displayUnit.isKilometers()) {
-            linkStr += '&RangeKm=' + rangeModel.getCurrent();
+            linkStr += '&RangeKm=' + rangeModel.getCurrentRange();
         }
         else if (rangeModel.displayUnit.isMiles()) {
-            linkStr += '&RangeMi=' + rangeModel.getCurrent();
+            linkStr += '&RangeMi=' + rangeModel.getCurrentRange();
         }
     }
     $('#create-link-input').val(linkStr);

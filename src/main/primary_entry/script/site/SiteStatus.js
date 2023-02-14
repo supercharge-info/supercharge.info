@@ -3,39 +3,47 @@ import L from 'leaflet';
 
 const imagesDir = '/images';
 
-const I_CONSTRUCTION = L.icon({
-    iconUrl: imagesDir + '/construction-cone.png',
-    iconAnchor: [11, 15]
-});
-
-const I_PERMIT = L.icon({
-    iconUrl: imagesDir + '/blue_dot_16.png',
-    iconAnchor: [8, 8]
-});
-
-const I_CLOSED_PERM = L.icon({
-    iconUrl: imagesDir + '/black_dot_16.png',
-    iconAnchor: [8, 8]
-});
-
-const I_CLOSED_TEMP = L.icon({
-    iconUrl: imagesDir + '/gray_dot_16.png',
-    iconAnchor: [8, 8]
-});
-
-const I_OPEN = L.icon({
-    iconUrl: imagesDir + '/red_dot_16.png',
-    iconAnchor: [8, 8]
-});
-
-const I_OPEN_HOURS = L.icon({
-    iconUrl: imagesDir + '/red_black_dot_16.png',
-    iconAnchor: [8, 8]
-});
-
 const I_CUSTOM = L.icon({
     iconUrl: imagesDir + '/green_dot_16.png',
-    iconAnchor: [8, 8]
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_CONSTRUCTION = L.icon({
+    iconUrl: imagesDir + '/construction-cone_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_PERMIT = L.icon({
+    iconUrl: imagesDir + '/blue_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_CLOSED_PERM = L.icon({
+    iconUrl: imagesDir + '/black_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_CLOSED_TEMP = L.icon({
+    iconUrl: imagesDir + '/gray_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_OPEN = L.icon({
+    iconUrl: imagesDir + '/red_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
+});
+const I_OPEN_HOURS = L.icon({
+    iconUrl: imagesDir + '/red_black_dot_16.png',
+    iconAnchor: [8, 8],
+    iconSize: [16, 16],
+    className: 'marker-icon'
 });
 
 const Status = {
@@ -43,38 +51,43 @@ const Status = {
         value: 'CLOSED_PERM',
         sort: 0,
         displayName: "Permanently Closed",
+        className: "closed-perm",
         getIcon: (supercharger) => I_CLOSED_PERM
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
         sort: 1,
         displayName: "Temporarily Closed",
+        className: "closed-temp",
         getIcon: (supercharger) => I_CLOSED_TEMP
     },
     PERMIT: {
         value: 'PERMIT',
         sort: 2,
         displayName: "Permit",
+        className: "permit",
         getIcon: (supercharger) => I_PERMIT
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
         sort: 3,
         displayName: "Construction",
+        className: "construction",
         getIcon: (supercharger) => I_CONSTRUCTION
     },
     OPEN: {
         value: 'OPEN',
         sort: 4,
         displayName: "Open",
-        getIcon: (supercharger) => ((Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN)
+        className: "open",
+        getIcon: (supercharger) => (Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
         getIcon: (supercharger) => I_CUSTOM
     }
-};
+}
 
 Status.fromString = function (string) {
     const s = string.trim();

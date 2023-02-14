@@ -12,17 +12,17 @@ import L from 'leaflet';
  *
  * Other properties that are later added to the supercharger data structure:
  *
- * circle       -- [google.maps.Circle] a reference to the google-maps Circle object indicating range for this supercharger.
- * marker       -- [google.maps.Marker] a reference to the google-maps Marker object associated with this supercharger.
- * circleOn     -- Boolean              indicates if the circle has been enabled by the user. Visibility of the circle itself
- *                                      is not sufficient state because circles can be invisible for other reasons.
- *
+ * circle         -- [google.maps.Circle] a reference to the google-maps Circle object indicating range for this supercharger.
+ * marker         -- [google.maps.Marker] a reference to the google-maps Marker object associated with this supercharger.
+ * circleOn       -- Boolean              indicates if the circle has been enabled by the user. Visibility of the circle itself
+ *                                        is not sufficient state because circles can be invisible for other reasons.
  */
 export default class Supercharger {
 
     constructor() {
         // same default values for user-added and normal sites/markers.
         this.circleOn = false;
+        this.markerSize = 8;
     }
 
     isPermit() {
@@ -92,8 +92,11 @@ export default class Supercharger {
             (Objects.isNullOrUndef(this.hours) ? "" : `\r\nLimited hours: ${this.hours}`) +
             (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : `\r\n${this.numStalls} stalls`) +
             (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : `\r\n${this.powerKilowatt} kW`);
-		
 	};
+
+    getShortMarkerTitle() {
+        return `${this.displayName} (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`
+    }
 };
 
 Supercharger.fromJSON = function (jsonObject) {

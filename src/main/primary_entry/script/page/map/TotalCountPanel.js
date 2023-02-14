@@ -17,16 +17,29 @@ class TotalCountPanel {
         this.updateView(0, this.countMapCountry[Address.COUNTRY_WORLD]);
         EventBus.addListener("map-viewport-change-event", this.mapViewPortChanged, this);
 
-        // These (private constants) must be in the constructor because they use
-        // a reference to google.* which may not be defined when code outside the
-        // class methods is initialized.
         TotalCountPanel.USA = L.latLngBounds(L.latLng(24.44715, -125.15625), L.latLng(49.0, -65.961914));
-        TotalCountPanel.CANADA = L.latLngBounds(L.latLng(49.0, -140.976562), L.latLng(70.318738, -57.744141));
-        TotalCountPanel.EUROPE = L.latLngBounds(L.latLng(35.38905, -14.501953), L.latLng(70.902268, 37.265625));
-        TotalCountPanel.ASIA = L.latLngBounds(L.latLng(-43.580391, 50.097656), L.latLng(70.728979, 175.429688));
-        TotalCountPanel.AUSTRALIA = L.latLngBounds(L.latLng(-40.111689, 109.951172), L.latLng(-11.092166, 156.796875));
-        TotalCountPanel.CHINA = L.latLngBounds(L.latLng(21.616579, 100.371094), L.latLng(42.130821, 124.233398));
-        TotalCountPanel.JAPAN = L.latLngBounds(L.latLng(30.600094, 129.089355), L.latLng(42.130821, 147.436523));
+        TotalCountPanel.USAPACIFIC = L.latLngBounds(L.latLng(18.7, -179.999999), L.latLng(71.6, -140.976562));
+        TotalCountPanel.CANADA = L.latLngBounds(L.latLng(43.2, -140.976562), L.latLng(83.2, -52.5));
+        TotalCountPanel.SOUTHAMERICA = L.latLngBounds(L.latLng(-59.7, -92.2), L.latLng(12.8, -26.0));
+        TotalCountPanel.EUROPE = L.latLngBounds(L.latLng(35.38905, -25.0), L.latLng(81.0, 37.265625));
+        TotalCountPanel.MEA = L.latLngBounds(L.latLng(-35.0, -17.75), L.latLng(39.783, 63.3333));
+        TotalCountPanel.ASIA = L.latLngBounds(L.latLng(-56.0, 46.48), L.latLng(82.0, 179.999999));
+        TotalCountPanel.AUSTRALIA = L.latLngBounds(L.latLng(-44.06, 109.951172), L.latLng(-10.68, 156.796875));
+        TotalCountPanel.CHINA = L.latLngBounds(L.latLng(18.18, 79.88), L.latLng(53.56, 127.62));
+        TotalCountPanel.JAPAN = L.latLngBounds(L.latLng(26.0, 127.62), L.latLng(45.72, 147.436523));
+
+        TotalCountPanel.ALL = {
+            "USA": TotalCountPanel.USA,
+            "USP": TotalCountPanel.USAPACIFIC, 
+            "CAN": TotalCountPanel.CANADA, 
+            "SAM": TotalCountPanel.SOUTHAMERICA, 
+            "EUR": TotalCountPanel.EUROPE, 
+            "MEA": TotalCountPanel.MEA, 
+            "ASI": TotalCountPanel.ASIA, 
+            "AUS": TotalCountPanel.AUSTRALIA, 
+            "CHN": TotalCountPanel.CHINA, 
+            "JPN": TotalCountPanel.JAPAN
+        };
     }
 
     mapViewPortChanged(event, latLngBounds) {
@@ -39,13 +52,13 @@ class TotalCountPanel {
         } else if (TotalCountPanel.EUROPE.contains(center)) {
             this.updateView(1, this.countMapRegion[Address.REGION_EUROPE]);
         }
-        /* China is inside of Asia */
-        else if (TotalCountPanel.CHINA.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_CHINA]);
-        }
         /* Japan is inside of Asia */
         else if (TotalCountPanel.JAPAN.contains(center)) {
             this.updateView(1, this.countMapCountry[Address.COUNTRY_JAPAN]);
+        }
+        /* China is inside of Asia */
+        else if (TotalCountPanel.CHINA.contains(center)) {
+            this.updateView(1, this.countMapCountry[Address.COUNTRY_CHINA]);
         }
         /* Australia is inside of Asia */
         else if (TotalCountPanel.AUSTRALIA.contains(center)) {
@@ -53,6 +66,9 @@ class TotalCountPanel {
         }
         else if (TotalCountPanel.ASIA.contains(center)) {
             this.updateView(1, this.countMapRegion[Address.REGION_ASIA_PACIFIC]);
+        }
+        else {
+            this.updateView(1, this.countMapRegion[Address.REGION_NORTH_AMERICA]);
         }
 
     };
