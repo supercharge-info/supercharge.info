@@ -25,7 +25,7 @@ const QueryStrings = {
     DEFAULT_ZOOM: 5,
     DEFAULT_ZOOM_MOBILE: 7,
     DEFAULT_PAGE: "changes",
-    DEFAULT_CONTROLS: "range,status",
+    DEFAULT_CONTROLS: "render,status",
     PAGE_OPTIONS : ['map', 'data', 'charts', 'changes', 'about', 'profile'],
 
     /**

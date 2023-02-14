@@ -3,8 +3,8 @@
   "version": "3.0.15",
   "description": "map",
   "scripts": {
-    "build": "NODE_ENV=production webpack --mode=production",
-    "start": "NODE_ENV=development webpack serve",
+    "build": "cross-env NODE_ENV=production webpack --mode=production",
+    "start": "cross-env NODE_ENV=development webpack serve",
     "clean": "rm -rf build",
     "release": "npm version --message 'RELEASE: %s' patch && git push origin master && git push origin --tags"
   },
@@ -30,14 +30,15 @@
     "@babel/preset-env": "7.14.5",
     "babel-loader": "8.2.2",
     "copy-webpack-plugin": "5.1.2",
+    "cross-env": "^7.0.3",
     "css-loader": "5.2.6",
     "html-minifier": "4.0.0",
     "html-webpack-plugin": "5.3.1",
     "mini-css-extract-plugin": "1.6.0",
     "style-loader": "2.0.0",
     "url-loader": "4.1.1",
-    "webpack": "5.39.0",
-    "webpack-cli": "4.7.2",
+    "webpack": "^5.39.0",
+    "webpack-cli": "4.10.0",
     "webpack-dev-server": "3.11.2"
   },
   "dependencies": {

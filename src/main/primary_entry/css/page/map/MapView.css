@@ -33,6 +33,37 @@ Canvas
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Markers
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.marker-icon {
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.cluster-marker {
+    display: inline-block;
+    color: white;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 0;
+    font-size: smaller;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    min-height: 15px;
+    min-width: 22px;
+}
+
+.cluster-marker.open { background-color: rgba(255, 0, 0, 0.6); }
+.cluster-marker.construction { background-color: rgba(240, 160, 0, 0.6); }
+.cluster-marker.permit { background-color: rgba(0, 0, 255, 0.6); }
+.cluster-marker.closed-temp { background-color: rgba(128, 128, 128, 0.6); }
+.cluster-marker.closed-perm { background-color: rgba(0, 0, 0, 0.6); }
+.cluster-marker.user { background-color: rgba(0, 192, 0, 0.6); }
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Info Window
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .info-window-content {
@@ -47,6 +78,12 @@ Info Window
 .info-window-content .title {
     font-weight: bold !important;
     font-size: 1.5em !important;
+}
+
+.info-window-content .open {
+    color: red;
+    font-size: smaller;
+    font-weight: bold
 }
 
 .info-window-content .construction {

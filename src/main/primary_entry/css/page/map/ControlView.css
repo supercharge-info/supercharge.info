@@ -11,9 +11,36 @@
     border:transparent;
 }
 
+#marker-selector .marker-icon {
+    margin-bottom: 1px;
+    vertical-align: middle;
+    padding: 0px;
+    margin-top: 0px;
+}
+
+#marker-selector .cluster-marker {
+    margin-top: -1px;
+    margin-bottom: 1px;
+}
+
+.marker-slider {
+    display: none;
+}
+
+.marker-slider.active {
+    display: inline-block !important;
+}
+
+.small-slider-control {
+    display: inline-block !important;
+    width: 80px !important;
+    vertical-align: middle;
+    margin-bottom: 1px;
+}
+
 .slider-control {
     display: inline-block !important;
-    width: 270px !important;
+    width: 180px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
@@ -33,4 +60,33 @@ label.control {
 .leaflet-control-layers input[type="checkbox"][disabled] + span,
 .leaflet-control-layers input[type="radio"][disabled] + span {
     color: gray;
+}
+
+.control-row {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    text-align: left;
+}
+.control-row .collapse { 
+    display: revert;
+}
+
+@media (max-width: 968px) {
+    .control-row {
+        margin-top: 2px;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .control-row .collapse, #marker-selector .cluster-marker {
+        display: none;
+    }
+    .slider-control {
+        width: 120px !important;
+    }
+    .small-slider-control {
+        width: 50px !important;
+    }
 }

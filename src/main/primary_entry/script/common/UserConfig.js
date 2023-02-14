@@ -86,7 +86,7 @@ class UserConfig {
 
     getUnit() {
         return Units.fromString(this.unit);
-    }
+    };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // load/save

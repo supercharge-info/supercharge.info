@@ -33,7 +33,7 @@ class InfoWindowListeners {
 
         $(document).on('click', '.zoom-to-site-trigger', (event) => {
             const supercharger = toSupercharger(event);
-            EventBus.dispatch(MapEvents.pan_zoom, {latLng: supercharger.location, zoom: 15})
+            EventBus.dispatch("zoom-to-site-event", {supercharger: supercharger})
         });
 
         $(document).on('click', '.circle-toggle-trigger', (event) => {

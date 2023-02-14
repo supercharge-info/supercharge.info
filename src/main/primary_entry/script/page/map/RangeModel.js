@@ -3,7 +3,6 @@ import QueryStrings from "../../common/QueryStrings";
 import userConfig from "../../common/UserConfig";
 import Units from "../../util/Units";
 
-
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // conversion methods
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,14 +38,19 @@ class RangeModel {
             this.rangeMeters = METERS_DEFAULT;
             this.displayUnit = Units.MI;
         }
+
+        this.fillOpacity = 0.15;
+        this.fillColor = "#86c4ec";
+
+        this.borderOpacity = 0.3;
+        this.borderColor = "#181fe7";
     }
 
-
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    //
+    // range mi/km
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    getCurrent() {
+    getCurrentRange() {
         if (this.displayUnit.isMiles()) {
             return metersToMiles(this.rangeMeters);
         } else {
@@ -54,30 +58,30 @@ class RangeModel {
         }
     }
 
-    setCurrent(newRange) {
+    setCurrentRange(newRange) {
         if (this.displayUnit.isMiles()) {
             this.rangeMeters = milesToMeters(newRange);
         } else {
             this.rangeMeters = kilometersToMeters(newRange);
         }
-        RangeModel.fireRangeChangedEvent();
+        this.fireRangeChangedEvent();
     }
 
-    getMin() {
+    getMinRange() {
         if (this.displayUnit.isMiles()) {
             return MILES_MIN;
         } else {
             return milesToKilometers(MILES_MIN);
         }
-    };
+    }
 
-    getMax() {
+    getMaxRange() {
         if (this.displayUnit.isMiles()) {
             return MILES_MAX;
         } else {
             return milesToKilometers(MILES_MAX);
         }
-    };
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // getters/setters
@@ -85,32 +89,29 @@ class RangeModel {
 
     getRangeMeters() {
         return this.rangeMeters;
-    };
+    }
 
     setDisplayUnit(newUnit) {
         this.displayUnit = newUnit;
-        RangeModel.fireUnitChangedEvent();
+        this.fireUnitChangedEvent();
         userConfig.setUnit(newUnit)
-    };
+    }
 
     getDisplayUnit() {
         return this.displayUnit;
-    };
-
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // events
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    static fireRangeChangedEvent() {
+    fireRangeChangedEvent() {
         EventBus.dispatch("range-model-range-changed-event");
-    };
+    }
 
-    static fireUnitChangedEvent() {
+    fireUnitChangedEvent() {
         EventBus.dispatch("range-model-unit-changed-event");
-    };
-
-
+    }
 }
 
 export default new RangeModel();

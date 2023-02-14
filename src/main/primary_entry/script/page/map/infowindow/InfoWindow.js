@@ -186,7 +186,7 @@ function _buildLinksDiv(supercharger, showDetails) {
 }
 
 function buildLinkZoom(supercharger) {
-    return `<a class='zoom-to-site-trigger' href='${supercharger.id}'>zoom in</a>`;
+    return `<a class='zoom-to-site-trigger' href='${supercharger.id}'>zoom</a>`;
 }
 
 function buildLinkCircleToggle(supercharger) {
