@@ -6,7 +6,7 @@ import CountryPieChart from "./CountryPieChart";
 import StateBarChart from "./StateBarChart";
 import StatusDaysBarChart from "./StatusDaysBarChart";
 import StallCountChart from "./StallCountChart";
-
+import $ from "jquery";
 
 export default class ChartsPage {
 
@@ -22,6 +22,9 @@ export default class ChartsPage {
             new StatusDaysBarChart().draw();
             this.initialized = true;
         }
+
+        // highcharts 7.0+ tries to be too clever about responsive size and ends up shrinking every chart's height by default
+        $('#page-charts div').css("overflow", "visible");
     };
 
     onPageHide() {

@@ -12,7 +12,6 @@ module.exports = {
     devServer: {
         port: 9090,
         host: "localhost",
-        noInfo: false,
         https: false,
         proxy: {
             "/service": {
@@ -130,10 +129,12 @@ module.exports = {
         // Simply copy these files to the build directory.
         // https://webpack.js.org/plugins/copy-webpack-plugin/
         //
-        new CopyWebpackPlugin([
-            {from: 'src/main/common_entry/.htaccess'},
-            {from: 'src/main/common_entry/favicon.ico'},
-            {from: 'src/main/common_entry/sitemap.xml'}
-        ])
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: 'src/main/common_entry/.htaccess'},
+                {from: 'src/main/common_entry/favicon.ico'},
+                {from: 'src/main/common_entry/sitemap.xml'}
+            ]
+        })
     ]
 };
