@@ -83,6 +83,28 @@ module.exports = {
         path: path.resolve(__dirname, 'build'),
         clean: true
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                chart: {
+                    test: /[\\/]node_modules[\\/]highcharts/,
+                    chunks: "all"
+                },
+                datatables: {
+                    test: /[\\/]node_modules[\\/]datatables.*/,
+                    chunks: "all"
+                },
+                jquery: {
+                    test: /[\\/]node_modules[\\/]jquery.*/,
+                    chunks: "all"
+                },
+                map: {
+                    test: /[\\/]node_modules[\\/](leaflet|map-obj|@mapbox).*/,
+                    chunks: "all"
+                }
+            }
+        }
+    },
     //
     // https://webpack.js.org/configuration/performance
     //

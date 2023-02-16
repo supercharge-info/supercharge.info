@@ -37,6 +37,9 @@ export default class TotalOpenWorldLineChart {
                 zoomType: 'x',
                 type: 'spline'
             },
+            accessibility: {
+                enabled: false
+            },
             credits: {
                 enabled: false
             },

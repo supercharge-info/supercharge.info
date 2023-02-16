@@ -40,6 +40,9 @@ export default class StatusDaysBarChart {
                 type: 'bar',
                 height: 2500
             },
+            accessibility: {
+                enabled: false
+            },
             credits: {
                 enabled: false
             },

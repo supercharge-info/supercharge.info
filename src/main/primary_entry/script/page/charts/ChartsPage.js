@@ -12,6 +12,7 @@ export default class ChartsPage {
 
     onPageShow() {
         if (!this.initialized) {
+            // TODO: enable accessibility on all charts
             new TotalOpenWorldLineChart().draw();
             new TotalOpenRegionLineChart().draw();
             new StallCountChart().draw();
@@ -24,7 +25,9 @@ export default class ChartsPage {
         }
 
         // highcharts 7.0+ tries to be too clever about responsive size and ends up shrinking every chart's height by default
-        $('#page-charts div').css("overflow", "visible");
+        setTimeout(() => {
+            $('#page-charts div').css("overflow", "visible");
+        }, 100);
     };
 
     onPageHide() {
