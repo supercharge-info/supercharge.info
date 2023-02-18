@@ -56,7 +56,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
+                use: ['style-loader', 'css-loader']
             },
             //
             // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
