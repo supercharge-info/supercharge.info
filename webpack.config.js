@@ -1,7 +1,6 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -114,13 +113,6 @@ module.exports = {
         maxAssetSize: 2*1000*1000
     },
     plugins: [
-        //
-        // https://webpack.js.org/plugins/mini-css-extract-plugin/
-        //
-        new MiniCssExtractPlugin({
-            filename: "[name].[chunkhash].css",
-            chunkFilename: "[id].[chunkhash].css"
-        }),
         //
         // https://github.com/jantimon/html-webpack-plugin
         //
