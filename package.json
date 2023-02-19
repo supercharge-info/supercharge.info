@@ -1,12 +1,12 @@
 {
   "name": "supercharge.info",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "map",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --mode=production",
     "start": "cross-env NODE_ENV=development webpack serve",
     "clean": "rm -rf build",
-    "release": "npm version --message 'RELEASE: %s' patch && git push origin master && git push origin --tags"
+    "release": "npm version --message 'RELEASE: %s' patch"
   },
   "repository": {
     "type": "git",
