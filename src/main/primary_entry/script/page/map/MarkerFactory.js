@@ -23,7 +23,8 @@ export default class MarkerFactory {
         supercharger.markerSize = markerType;
         const markerOptions = {
             title: supercharger.getMarkerTitle(),
-            icon: supercharger.status.getIcon(supercharger)
+            icon: supercharger.status.getIcon(supercharger),
+            riseOnHover: true
         };
         const marker = L.marker(supercharger.location, markerOptions);
         supercharger.marker = marker;
@@ -33,17 +34,12 @@ export default class MarkerFactory {
 
     createMarkerCluster(superchargers, zoom) {
         if (superchargers.length === 1) return this.createMarker(superchargers[0], 8);
-        var lat = 0, lng = 0, numStalls = 0, mag = 0, titleSupercharger = superchargers[0];
-        for (var s in superchargers) {
+        var lat = 0, lng = 0, numStalls = 0;
+        var sc = superchargers.sort((a,b) => ((b.numStalls || 1) * (b.powerKilowatt || 72)) - ((a.numStalls || 1) * (a.powerKilowatt || 72) ));
+        for (var s in sc) {
             lat += superchargers[s].location.lat;
             lng += superchargers[s].location.lng;
             numStalls += superchargers[s].numStalls;
-            // Set tooltip text to the highest-"magnitude" location, where mag is numStalls * powerKilowatts
-            var s_mag = (superchargers[s].numStalls || 1) * (superchargers[s].powerKilowatt || 72);
-            if (s_mag > mag) {
-                mag = s_mag;
-                titleSupercharger = superchargers[s];
-            }
         }
 
         // Click to zoom in 2-4 steps based on how many locations the cluster marker represents
@@ -52,11 +48,12 @@ export default class MarkerFactory {
         // Alternate formula: 2-6 => +1 || 7-19 => +2 || 20-53 => +3 || 54-999 --> +4
         //var zoomIncrement = Math.min(Math.floor(Math.log(superchargers.length + 1)), 4);
 
-        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}) - ${numStalls} total stalls:\r\n` +
-            (superchargers.length === 2
-                ? `${superchargers[0].getShortMarkerTitle()}\r\n${superchargers[1].getShortMarkerTitle()}`
-                : `${titleSupercharger.getShortMarkerTitle()} + ...`
-            ) + `\r\n\r\nClick to zoom +${zoomIncrement}`;
+        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}) - ${numStalls} total stalls:\r\n`;
+        for (var i = 0; i < 3 && i < sc.length; i++) {
+            markerTitle += sc[i].getShortMarkerTitle() + "\r\n";
+        }
+        markerTitle += (sc.length == 4 ? sc[3].getShortMarkerTitle() : sc.length > 4 ? "• ..." : "") + `\r\nClick to zoom +${zoomIncrement}`;
+
         const markerOptions = {
             title: markerTitle,
             icon: L.divIcon({
@@ -64,7 +61,8 @@ export default class MarkerFactory {
                 iconAnchor: [8, 8],
                 className: "cluster-marker " + superchargers[0].status.className,
                 html: '<div>' + superchargers.length + '</div>'
-            })
+            }),
+            riseOnHover: true
         };
         const markerLocation = L.latLng(lat / superchargers.length, lng / superchargers.length)
         const marker = L.marker(markerLocation, markerOptions);

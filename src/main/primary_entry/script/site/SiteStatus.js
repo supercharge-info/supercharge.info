@@ -87,7 +87,9 @@ const Status = {
         displayName: "Custom",
         getIcon: (supercharger) => I_CUSTOM
     }
-}
+};
+
+Status.ALL = [Status.OPEN, Status.CONSTRUCTION, Status.PERMIT, Status.CLOSED_TEMP, Status.CLOSED_PERM];
 
 Status.fromString = function (string) {
     const s = string.trim();

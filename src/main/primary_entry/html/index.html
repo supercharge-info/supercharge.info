@@ -98,15 +98,15 @@ Navigation Bar
                 <!--
                 Counts Table
                 -->
-                <table id="total-count-table" class="nav navbar-nav" style="display: none;">
+                <table id="total-count-table" class="nav navbar-nav">
                     <tr>
-                        <td title="open">&nbsp;</td>
+                        <td title="open" class="open">&nbsp;</td>
                         <td title="under construction" class="construction">&nbsp;</td>
                         <td title="permit" class="permit">&nbsp;</td>
                         <td class="lab"></td>
                     </tr>
                     <tr>
-                        <td title="open">&nbsp;</td>
+                        <td title="open" class="open">&nbsp;</td>
                         <td title="under construction" class="construction">&nbsp;</td>
                         <td title="permit" class="permit">&nbsp;</td>
                         <td class="lab"></td>
@@ -285,6 +285,18 @@ PAGE: data
             &nbsp;
             <select class="form-control country-select">
             </select>
+            &nbsp;
+            <select class="form-control state-select">
+            </select>
+            &nbsp;
+            <select class="form-control status-select">
+            </select>
+            &nbsp;
+            <select class="form-control stalls-select">
+            </select>
+            &nbsp;
+            <select class="form-control power-select">
+            </select>
         </form>
     </div>
 
@@ -352,24 +364,42 @@ PAGE: changes
 
     <div id="changes-filter-div">
         <form class="form-inline" role="form">
+            <select class="form-control changetype-select">
+            </select>
+            &nbsp;
             <select class="form-control region-select">
             </select>
             &nbsp;
             <select class="form-control country-select">
             </select>
-
+            &nbsp;
+            <!--
+            <select class="form-control state-select">
+            </select>
+            &nbsp;
+            -->
+            <select class="form-control status-select">
+            </select>
+            <!--
+            &nbsp;
+            <select class="form-control stalls-select">
+            </select>
+            &nbsp;
+            <select class="form-control power-select">
+            </select>
+            -->
         </form>
     </div>
 
-    <table id='changes-table' class='table table-condensed table-hover'>
+    <table id='changes-table' class='table table-condensed table-hover' style="width: 99%">
         <thead>
         <tr>
-            <th style='width: 15%'>Date</th>
-            <th style='width: 10%'>Change</th>
-            <th style='width: auto'>Site</th>
-            <th style='width: 15%'>Status</th>
-            <th style='width: 15%'>Links</th>
-            <th style='width: 15%' title='Details are current (as of today), NOT historical (as of the date of the change)'>Details</th>
+            <th>Date</th>
+            <th>Change</th>
+            <th>Site</th>
+            <th>Status</th>
+            <th>Details</th>
+            <th>Links</th>
         </tr>
         </thead>
         <tbody>

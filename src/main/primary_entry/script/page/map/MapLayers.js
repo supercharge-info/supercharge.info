@@ -5,6 +5,15 @@ import MapBox from './MapBox'
 const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const osmAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
+// Wikimedia maps provide single-language names regardless of location, but aren't allowed to be used by third-party projects unless they directly support Wikimedia.
+// https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use
+//const wmUrl = 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png?lang=en';
+//const wmAtribution = '?'
+
+// OpenTopoMap is free to use but not particularly helpful for supercharging
+//const otmUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+//const otmAtribution = 'Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | Map display &copy; <a href="http://opentopomap.org/">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)';
+
 //
 // Mapbox maps are nicer, but usage was exceeding free tier.
 //
@@ -45,12 +54,12 @@ const baseMaps = {
 };
 
 const overlayMaps = {
-    'Permit': permitLayer,
-    'Construction': constructionLayer,
-    'Open': openLayer,
-    'Temporarily Closed' : tempClosedLayer,
-    'Permanently Closed' : permClosedLayer,
-    'Custom': userLayer
+    '<img src="/images/blue_dot_16.png"/> Permit': permitLayer,
+    '<img src="/images/construction-cone_16.png"/> Construction': constructionLayer,
+    '<img src="/images/red_dot_16.png"/> Open': openLayer,
+    '<img src="/images/gray_dot_16.png"/> Temporarily Closed' : tempClosedLayer,
+    '<img src="/images/black_dot_16.png"/> Permanently Closed' : permClosedLayer,
+    '<img src="/images/green_dot_16.png"/> Custom': userLayer
 };
 
 class MapLayers {

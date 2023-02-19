@@ -4,6 +4,7 @@ import FeatureCheck from "./common/FeatureCheck";
 import Sites from "./site/Sites";
 import userConfig from "./common/UserConfig";
 import LoginCheckAction from "./common/login/LoginCheckAction"
+import TotalCountPanel from "./nav/TotalCountPanel";
 // Tell webpack to build a css bundle starting with this file.
 import "../css/main.css";
 // Tell webpack to include these images in our package. Ultimately it is is possible to have webpack rename the
@@ -43,6 +44,7 @@ window.supercharge.start = function () {
         new NavBar();
         new LoginCheckAction().loginCheck();
         new FeatureCheck().doCheck();
+        new TotalCountPanel();
     });
 
 };

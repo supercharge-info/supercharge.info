@@ -3,7 +3,7 @@
     border-collapse: collapse;
 
     margin: 0;
-    padding: 0;
+    padding: 0.2em 0 0 0;
 
     font-size: 1.1em;
     font-weight: bold;
@@ -21,6 +21,10 @@
     margin: 0;
     text-align: right;
     vertical-align: bottom;
+}
+
+#total-count-table td.open {
+    color: red;
 }
 
 #total-count-table td.construction {

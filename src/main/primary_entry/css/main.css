@@ -11,11 +11,11 @@
 /* - - - - - - - - - - - - - - - - - - - - Global */
 @import "global/layout.css";
 @import "global/NavBar.css";
+@import "global/TotalCountPanel.css";
 /* - - - - - - - - - - - - - - - - - - - - PAGE: Map */
 @import "page/map/ControlView.css";
 @import "page/map/MapView.css";
 @import "page/map/Routing.css";
-@import "page/map/TotalCountPanel.css";
 @import "page/map/WayBack.css";
 /* - - - - - - - - - - - - - - - - - - - - PAGE: Data */
 @import "page/data/Data.css";

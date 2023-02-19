@@ -2,7 +2,7 @@ import EventBus from "../../util/EventBus";
 import Analytics from "../../util/Analytics";
 import QueryStrings from "../../common/QueryStrings";
 import userConfig from "../../common/UserConfig";
-import TotalCountPanel from "./TotalCountPanel";
+//import TotalCountPanel from "./TotalCountPanel";
 import RangeControlView from "./RangeControlView";
 import WayBackAction from "./action/WayBackAction";
 import ToggleRangeCircleAllAction from "./action/ToggleRangeCircleAllAction";
@@ -33,12 +33,10 @@ export default class MapPage {
             MapPage.initStarted = true;
         }
         $("#navbar-map-dropdown").show();
-        $("#total-count-table").show();
     };
 
     onPageHide() {
         $("#navbar-map-dropdown").hide();
-        $("#total-count-table").hide();
     };
 
     initialize() {
@@ -46,7 +44,7 @@ export default class MapPage {
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();
-        new TotalCountPanel();
+        //new TotalCountPanel();
 
         /* CASE 1: User has explicitly specified initial map center via 'Center' URL param. */
         if (QueryStrings.isCenterSet()) {

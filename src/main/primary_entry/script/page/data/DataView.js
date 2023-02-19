@@ -4,7 +4,7 @@ import 'datatables.net-bs';
 import EventBus from "../../util/EventBus";
 import Analytics from "../../util/Analytics";
 import userConfig from "../../common/UserConfig";
-import CountryRegionControl from "../../common/CountryRegionControl";
+import SiteFilterControl from "../../common/SiteFilterControl";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
@@ -15,26 +15,23 @@ export default class DataView {
 
         this.table = $("#supercharger-data-table");
 
-        this.regionControl = new CountryRegionControl(
+        this.filterControl = new SiteFilterControl(
             $("#data-filter-div"),
-            $.proxy(this.regionControlCallback, this)
+            $.proxy(this.filterControlCallback, this)
         );
 
         this.table.find("tbody").click(DataView.handleDataClick);
 
         this.tableAPI = this.table.DataTable(this.initDataTableOptions());
 
-        const dataView = this;
-        this.regionControl.init(userConfig.dataPageRegionId, userConfig.dataPageCountryId)
-            .done(() => {
-                dataView.tableAPI.draw();
-            });
+        this.filterControl.init(userConfig.dataPageRegionId, userConfig.dataPageCountryId);
+        this.tableAPI.draw();
     }
 
-    regionControlCallback(whichSelect, newValue) {
+    filterControlCallback(whichSelect, newValue) {
         this.tableAPI.draw();
-        userConfig.setRegionCountryId("data", "region", this.regionControl.getRegionId());
-        userConfig.setRegionCountryId("data", "country", this.regionControl.getCountryId());
+        userConfig.setRegionCountryId("data", "region", this.filterControl.getRegionId());
+        userConfig.setRegionCountryId("data", "country", this.filterControl.getCountryId());
         Analytics.sendEvent("data", "select-" + whichSelect, newValue);
     };
 
@@ -98,8 +95,12 @@ export default class DataView {
                     return JSON.stringify(json)
                 },
                 "data": function (d) {
-                    d.regionId = dataView.regionControl.getRegionId();
-                    d.countryId = dataView.regionControl.getCountryId();
+                    d.regionId = dataView.filterControl.getRegionId();
+                    d.countryId = dataView.filterControl.getCountryId();
+                    d.state = dataView.filterControl.getState();
+                    d.status = dataView.filterControl.getStatus();
+                    d.stalls = dataView.filterControl.getStalls();
+                    d.power = dataView.filterControl.getPower();
                 }
             },
             "rowId": "id",
