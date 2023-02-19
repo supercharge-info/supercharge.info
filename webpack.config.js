@@ -114,13 +114,6 @@ module.exports = {
     },
     plugins: [
         //
-        // https://webpack.js.org/plugins/mini-css-extract-plugin/
-        //
-        new MiniCssExtractPlugin({
-            filename: "[name].[chunkhash].css",
-            chunkFilename: "[id].[chunkhash].css"
-        }),
-        //
         // https://github.com/jantimon/html-webpack-plugin
         //
         // Copies our HTML to the build directory and also minifies it, AND insert into
