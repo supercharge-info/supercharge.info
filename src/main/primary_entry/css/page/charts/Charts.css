@@ -1,0 +1,7 @@
+.highcharts-container {
+    min-height: 400px;
+}
+
+#status-days-bar-chart .highcharts-container {
+    min-height: 2500px;
+}

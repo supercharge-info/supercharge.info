@@ -57,6 +57,9 @@ export default class TotalOpenRegionChart {
                 zoomType: 'x',
                 type: 'spline'
             },
+            accessibility: {
+                enabled: false
+            },
             credits: {
                 enabled: false
             },

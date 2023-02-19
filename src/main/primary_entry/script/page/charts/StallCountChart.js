@@ -25,6 +25,9 @@ export default class StallCountChart {
                 zoomType: 'x',
                 type: 'spline'
             },
+            accessibility: {
+                enabled: false
+            },
             credits: {
                 enabled: false
             },

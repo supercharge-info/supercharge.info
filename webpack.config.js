@@ -1,7 +1,6 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -12,7 +11,6 @@ module.exports = {
     devServer: {
         port: 9090,
         host: "localhost",
-        noInfo: false,
         https: false,
         proxy: {
             "/service": {
@@ -57,7 +55,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
+                use: ['style-loader', 'css-loader']
             },
             //
             // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
@@ -84,6 +82,28 @@ module.exports = {
         path: path.resolve(__dirname, 'build'),
         clean: true
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                chart: {
+                    test: /[\\/]node_modules[\\/]highcharts/,
+                    chunks: "all"
+                },
+                datatables: {
+                    test: /[\\/]node_modules[\\/]datatables.*/,
+                    chunks: "all"
+                },
+                jquery: {
+                    test: /[\\/]node_modules[\\/]jquery.*/,
+                    chunks: "all"
+                },
+                map: {
+                    test: /[\\/]node_modules[\\/](leaflet|map-obj|@mapbox).*/,
+                    chunks: "all"
+                }
+            }
+        }
+    },
     //
     // https://webpack.js.org/configuration/performance
     //
@@ -93,13 +113,6 @@ module.exports = {
         maxAssetSize: 2*1000*1000
     },
     plugins: [
-        //
-        // https://webpack.js.org/plugins/mini-css-extract-plugin/
-        //
-        new MiniCssExtractPlugin({
-            filename: "[name].[chunkhash].css",
-            chunkFilename: "[id].[chunkhash].css"
-        }),
         //
         // https://github.com/jantimon/html-webpack-plugin
         //
@@ -130,10 +143,12 @@ module.exports = {
         // Simply copy these files to the build directory.
         // https://webpack.js.org/plugins/copy-webpack-plugin/
         //
-        new CopyWebpackPlugin([
-            {from: 'src/main/common_entry/.htaccess'},
-            {from: 'src/main/common_entry/favicon.ico'},
-            {from: 'src/main/common_entry/sitemap.xml'}
-        ])
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: 'src/main/common_entry/.htaccess'},
+                {from: 'src/main/common_entry/favicon.ico'},
+                {from: 'src/main/common_entry/sitemap.xml'}
+            ]
+        })
     ]
 };

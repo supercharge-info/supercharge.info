@@ -28,6 +28,9 @@ export default class CountryBarChart {
             chart: {
                 type: 'column'
             },
+            accessibility: {
+                enabled: false
+            },
             credits: {
                 enabled: false
             },

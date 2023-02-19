@@ -47,6 +47,9 @@ export default class CountryPieChart {
                 plotBorderWidth: null,
                 plotShadow: false
             },
+            accessibility: {
+                enabled: false
+            },
             title: {
                 text: 'Open Superchargers per Country <span style="color:#aaaaaa">(top five)</span>'
             },
