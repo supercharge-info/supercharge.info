@@ -186,7 +186,11 @@ export default class ChangesView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return row.changeType.toLowerCase();
+                        if (Math.random() > 0.8) {
+                            row.statusText = "Editor's note goes here";
+                        }
+                        var chg = row.changeType.toLowerCase();
+                        return row.statusText ? `<span title="${row.statusText}">${chg}*</span>` : chg;
                     },
                     "width": "5%"
                 },
