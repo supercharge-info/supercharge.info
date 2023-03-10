@@ -1,91 +1,47 @@
 import Strings from "../util/Strings";
 import L from 'leaflet';
 
-const imagesDir = '/images';
-
-const I_CUSTOM = L.icon({
-    iconUrl: imagesDir + '/green_dot_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-const I_CONSTRUCTION = L.icon({
-    iconUrl: imagesDir + '/construction-cone_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-const I_PERMIT = L.icon({
-    iconUrl: imagesDir + '/blue_dot_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-const I_CLOSED_PERM = L.icon({
-    iconUrl: imagesDir + '/black_dot_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-const I_CLOSED_TEMP = L.icon({
-    iconUrl: imagesDir + '/gray_dot_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-const I_OPEN = L.icon({
-    iconUrl: imagesDir + '/red_dot_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-const I_OPEN_HOURS = L.icon({
-    iconUrl: imagesDir + '/red_black_dot_16.png',
-    iconAnchor: [8, 8],
-    iconSize: [16, 16],
-    className: 'marker-icon'
-});
-
 const Status = {
     CLOSED_PERM: {
         value: 'CLOSED_PERM',
         sort: 0,
         displayName: "Permanently Closed",
         className: "closed-perm",
-        getIcon: (supercharger) => I_CLOSED_PERM
+        getFill: (supercharger) => "url(#black_dot_x)"
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
         sort: 1,
         displayName: "Temporarily Closed",
         className: "closed-temp",
-        getIcon: (supercharger) => I_CLOSED_TEMP
+        getFill: (supercharger) => "url(#gray_dot_x)"
     },
     PERMIT: {
         value: 'PERMIT',
         sort: 2,
         displayName: "Permit",
         className: "permit",
-        getIcon: (supercharger) => I_PERMIT
+        getFill: (supercharger) => "url(#blue_triangle)"
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
         sort: 3,
         displayName: "Construction",
         className: "construction",
-        getIcon: (supercharger) => I_CONSTRUCTION
+        getFill: (supercharger) => "url(#orange_triangle)"
     },
     OPEN: {
         value: 'OPEN',
         sort: 4,
         displayName: "Open",
         className: "open",
-        getIcon: (supercharger) => (Strings.isNotEmpty(supercharger.hours)) ? I_OPEN_HOURS : I_OPEN
+        getFill: (supercharger) => (Strings.isNotEmpty(supercharger.hours)) ? "url(#red_dot_limited)" : "url(#red_dot)"
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
-        getIcon: (supercharger) => I_CUSTOM
+        className: "user",
+        getFill: (supercharger) => "url(#green_dot)"
     }
 };
 

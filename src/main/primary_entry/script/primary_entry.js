@@ -12,13 +12,13 @@ import "../css/main.css";
 // this for perfect caching.  For now lets keep it simple, I have configured webpack not to change the image names.
 import "../images/avatar-placeholder.png";
 import "../images/feed-icon.png";
-import "../images/blue_dot_16.png";
-import "../images/black_dot_16.png";
-import "../images/gray_dot_16.png";
-import "../images/green_dot_16.png";
-import "../images/red_dot_16.png";
-import "../images/red_black_dot_16.png";
-import "../images/construction-cone_16.png";
+import "../images/blue_triangle.svg";
+import "../images/black_dot_x.svg";
+import "../images/gray_dot_x.svg";
+import "../images/green_dot.svg";
+import "../images/red_dot.svg";
+import "../images/red_dot_limited.svg";
+import "../images/orange_triangle.svg";
 import "../images/become_a_patron_button@2x.png";
 
 

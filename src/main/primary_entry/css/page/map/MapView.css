@@ -30,16 +30,25 @@ Canvas
     flex: 1;
     order: 2;
     min-height: 450px; /* for IE10, otherwise has zero height */
+    font-size: 1.15rem; /* for consistency with leaflet prior to 1.8 */
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Markers
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .marker-icon {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     padding: 0px;
     margin: 0px;
+}
+
+.sample-markers {
+    width: 45px;
+    display: inline-block;
+}
+.sample-markers .marker-icon {
+    margin: auto;
 }
 
 .cluster-marker {
@@ -55,13 +64,30 @@ Markers
     min-height: 15px;
     min-width: 22px;
 }
+.cluster-marker.open { background-color: rgba(240, 0, 0, 0.7); }
+.cluster-marker.construction { background-color: rgba(240, 144, 0, 0.7); }
+.cluster-marker.permit { background-color: rgba(0, 64, 255, 0.7); }
+.cluster-marker.closed-temp { background-color: rgba(160, 160, 160, 0.7); }
+.cluster-marker.closed-perm { background-color: rgba(0, 0, 0, 0.7); }
+.cluster-marker.user { background-color: rgba(0, 192, 0, 0.7); }
 
-.cluster-marker.open { background-color: rgba(255, 0, 0, 0.6); }
-.cluster-marker.construction { background-color: rgba(240, 160, 0, 0.6); }
-.cluster-marker.permit { background-color: rgba(0, 0, 255, 0.6); }
-.cluster-marker.closed-temp { background-color: rgba(128, 128, 128, 0.6); }
-.cluster-marker.closed-perm { background-color: rgba(0, 0, 0, 0.6); }
-.cluster-marker.user { background-color: rgba(0, 192, 0, 0.6); }
+.tooltip {
+    color: white;
+    font-weight: bold;
+}
+.tooltip .limited {
+    background-color: rgba(128, 0, 0, 0.9);
+    color: yellow; 
+    padding: 1px 5px;
+    margin: 0 -5px;
+}
+.tooltip.open { background-color: rgba(240, 0, 0, 1); }
+.tooltip.construction { background-color: rgba(240, 144, 0, 1); }
+.tooltip.permit { background-color: rgba(0, 64, 255, 1); }
+.tooltip.closed-temp { background-color: rgba(160, 160, 160, 0.9); }
+.tooltip.closed-perm { background-color: rgba(0, 0, 0, 0.8); }
+.tooltip.user { background-color: rgba(0, 192, 0, 1); }
+
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Info Window
@@ -160,6 +186,11 @@ a.unpin {
 
 #route-panel-close-trigger {
     display: none; /* this close button is only used on small screens */
+}
+
+.leaflet-control-layers-overlays img {
+    width: 16px;
+    height: 16px;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -

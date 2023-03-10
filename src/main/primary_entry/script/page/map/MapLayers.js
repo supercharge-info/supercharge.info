@@ -1,6 +1,6 @@
 import L from "leaflet";
 import Status from "../../site/SiteStatus";
-import MapBox from './MapBox'
+import MapBox from './MapBox';
 
 const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const osmAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
@@ -54,12 +54,12 @@ const baseMaps = {
 };
 
 const overlayMaps = {
-    '<img src="/images/blue_dot_16.png"/> Permit': permitLayer,
-    '<img src="/images/construction-cone_16.png"/> Construction': constructionLayer,
-    '<img src="/images/red_dot_16.png"/> Open': openLayer,
-    '<img src="/images/gray_dot_16.png"/> Temporarily Closed' : tempClosedLayer,
-    '<img src="/images/black_dot_16.png"/> Permanently Closed' : permClosedLayer,
-    '<img src="/images/green_dot_16.png"/> Custom': userLayer
+    '<img src="/images/blue_triangle.svg"/> Permit': permitLayer,
+    '<img src="/images/orange_triangle.svg"/> Construction': constructionLayer,
+    '<img src="/images/red_dot.svg"/> <img src="/images/red_dot_limited.svg"/> Open': openLayer,
+    '<img src="/images/gray_dot_x.svg"/> Temporarily Closed' : tempClosedLayer,
+    '<img src="/images/black_dot_x.svg"/> Permanently Closed' : permClosedLayer,
+    '<img src="/images/green_dot.svg"/> Custom': userLayer
 };
 
 class MapLayers {
@@ -82,19 +82,19 @@ class MapLayers {
     }
 
     addToLayer(siteStatus, marker) {
-        if (siteStatus === Status.OPEN) {
-            marker.addTo(openLayer)
-        } else if (siteStatus === Status.PERMIT) {
-            marker.addTo(permitLayer)
+        var layer = openLayer;
+        if (siteStatus === Status.PERMIT) {
+            layer = permitLayer;
         } else if (siteStatus === Status.CONSTRUCTION) {
-            marker.addTo(constructionLayer)
+            layer = constructionLayer;
         } else if (siteStatus === Status.CLOSED_TEMP) {
-            marker.addTo(tempClosedLayer);
+            layer = tempClosedLayer;
         } else if (siteStatus === Status.CLOSED_PERM) {
-            marker.addTo(permClosedLayer);
+            layer = permClosedLayer;
         } else if (siteStatus === Status.USER_ADDED) {
-            marker.addTo(userLayer)
+            layer = userLayer;
         }
+        marker.addTo(layer);
     }
 }
 

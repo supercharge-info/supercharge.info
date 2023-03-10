@@ -2,8 +2,8 @@ import EventBus from "../../util/EventBus";
 
 const CLUSTERSIZE_MIN = 1;
 const CLUSTERSIZE_MAX = 9;
-const MARKERSIZE_MIN = 3;
-const MARKERSIZE_MAX = 8;
+const MARKERSIZE_MIN = 4;
+const MARKERSIZE_MAX = 10;
 
 class RenderModel {
 

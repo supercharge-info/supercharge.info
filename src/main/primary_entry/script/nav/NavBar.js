@@ -104,7 +104,9 @@ export default class NavBar {
      */
     changePage(newPageName) {
         const pages = this.pages;
-        if (this.currentPage !== newPageName) {
+        if (newPageName === null) {
+            newPageName = this.currentPage;
+        } else if (this.currentPage !== newPageName) {
             Analytics.sendEvent("navigation", "change-tab", newPageName);
         }
 

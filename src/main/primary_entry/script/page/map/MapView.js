@@ -25,6 +25,7 @@ export default class MapView {
         this.initMap(lat, lng, initialZoom);
         this.zoom = initialZoom;
         this.markerType = "Z";
+        this.markerSize = 10;
         this.markerIconRule = null;
         this.addCustomMarkers();
 
@@ -96,7 +97,8 @@ export default class MapView {
         this.mapApi = L.map('map-canvas', {
             center: [initialLat, initialLng],
             zoom: initialZoom,
-            layers: mapLayers.getInitialLayers()
+            layers: mapLayers.getInitialLayers(),
+            preferCanvas: false
         });
 
         // layers control
@@ -151,19 +153,16 @@ export default class MapView {
         // clean up InfoWindows when switching between clustered and non-clustered
         if ((this.markerType === "C") !== (oldMarkerType === "C")) {
             MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
-            this.removeAllMarkers();
+            this.removeAllMarkers(false);
         }
 
         if (this.markerType === "C") {
-            this.updateMarkerSize(8);
             this.createClusteredMarkers(expandedBounds, oldZoom);
         } else if (this.markerType === "Z") {
             var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
-            this.updateMarkerSize(newMarkerSize);
             this.createIndividualMarkers(expandedBounds, newMarkerSize);
         } else {
-        	// markerType represents a fixed marker size (3-8)
-            this.updateMarkerSize(renderModel.getCurrentMarkerSize());
+        	// markerType represents a fixed marker size (4-10)
             this.createIndividualMarkers(expandedBounds, renderModel.getCurrentMarkerSize());
         }
 
@@ -173,10 +172,19 @@ export default class MapView {
         userConfig.setLatLngZoom(mapCenter.lat, mapCenter.lng, this.zoom);
     };
 
-    removeAllMarkers() {
-        var t = performance.now(), removed = 0;
+    removeAllMarkers(saveInfoWindows) {
+        var t = performance.now(), removed = 0, infoWindows = [];
+        if (saveInfoWindows) {
+            // get all open unpinned InfoWindows
+            new SiteIterator()
+                .withPredicate(SitePredicates.HAS_SHOWN_UNPINNED_INFO_WINDOW)
+                .iterate((s) => {
+                    //console.log("saving info for site " + s.id);
+                    infoWindows.push(s.marker.infoWindow);
+                });
+        }
         // Remove markers from Leaflet
-        Object.values(mapLayers.getOverlayMaps()).forEach((layer) => layer.clearLayers());
+        $(".leaflet-marker-icon").remove();
         // Remove markers from the supercharger objects themselves
         new SiteIterator()
         .withPredicate(SitePredicates.HAS_MARKER)
@@ -186,12 +194,27 @@ export default class MapView {
             removed++;
         });
         console.log("zoom=" + this.zoom + " removed=" + removed + " t=" + (performance.now() - t));
+        return infoWindows;
     };
 
-    getMarkerSizeByZoom = (zoom) => zoom < 4 ? 3 : zoom > 14 ? 8 : Math.ceil(zoom / 2) + 1;
+    restoreInfoWindows(infoWindows) {
+        for (var i in infoWindows) {
+            var iw = infoWindows[i], s = iw.supercharger, m = iw.marker;
+            if (s.marker === null) {
+                iw.closeWindow();
+            } else if (s.marker !== m) {
+                s.marker.infoWindow = iw;
+                iw.showWindow();
+            } else {
+                iw.showWindow();
+            }
+        }
+    };
+
+    getMarkerSizeByZoom = (zoom) => zoom < 4 ? 4 : zoom > 16 ? 10 : Math.ceil(zoom / 2) + 2;
 
     createClusteredMarkers(bounds, oldZoom) {
-        var t = performance.now(), newZoom = this.zoom, created = 0;
+        var t = performance.now(), newZoom = this.zoom, created = 0, infoWindows = [];
         // Cluster aggressively through zoom level 8, then much less aggressively from 9 to 14
         const overlapRadius = [
             5, 3.2, 1.6, 0.8, 0.4,
@@ -199,18 +222,10 @@ export default class MapView {
             0.004, 0.002, 0.001, 0.0005, 0.0001,
             0, 0, 0, 0, 0
         ];
-        var infoWindows = [];
+        this.markerSize = 10;
         if (oldZoom !== newZoom) {
-            // get all open unpinned InfoWindows
-            new SiteIterator()
-                .withPredicate(SitePredicates.HAS_SHOWN_UNPINNED_INFO_WINDOW)
-                .iterate((s) => {
-                    //console.log("saving info for site " + s.id);
-                    infoWindows.push(s.marker.infoWindow);
-                });
-        
             // clear old cluster markers when zooming in/out
-            this.removeAllMarkers();
+            infoWindows = this.removeAllMarkers(true);
         }
         const radius = overlapRadius[this.zoom] * renderModel.getCurrentClusterSize();
         new SiteIterator()
@@ -235,56 +250,33 @@ export default class MapView {
                     created++;
                 }
             });
-        for (var i in infoWindows) {
-            var iw = infoWindows[i], s = iw.supercharger, m = iw.marker;
-            //console.log("checking marker for site " + s.id);
-            if (s.marker === null) {
-                //console.log(s.id + " has no marker, removing its infoWindow");
-                iw.closeWindow();
-            } else if (s.marker !== m) {
-                //console.log(s.id + " has different marker, updating its infoWindow");
-                s.marker.infoWindow = iw
-                iw.showWindow();
-            } else {
-                //console.log(s.id + " marker is unchanged");
-                iw.showWindow();
-            }
-        }
+        this.restoreInfoWindows(infoWindows);
         console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
     };
 
-    createIndividualMarkers(bounds, markerSize) {
-        var t = performance.now(), created = 0;
+    createIndividualMarkers(bounds, newMarkerSize) {
+        var t = performance.now(), created = 0, infoWindows = [];
+        if (this.markerSize !== newMarkerSize) {
+            this.updateMarkerSize(newMarkerSize);
+        }
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
             .iterate((supercharger) => {
-                this.markerFactory.createMarker(supercharger, markerSize);
+                this.markerFactory.createMarker(supercharger, newMarkerSize);
                 created++;
             });
-        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + markerSize + " t=" + (performance.now() - t));
+        this.restoreInfoWindows(infoWindows);
+        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + newMarkerSize + " t=" + (performance.now() - t));
     };
 
     updateMarkerSize(markerSize) {
-        if (this.markerIconRule != null) {
-            if (isNaN(markerSize)) markerSize = 8;
-            this.markerIconRule.style.setProperty('width', (markerSize * 2) + 'px');
-            this.markerIconRule.style.setProperty('height', (markerSize * 2) + 'px');
-            this.markerIconRule.style.setProperty('padding', (8 - markerSize) + 'px');
-            this.markerIconRule.style.setProperty('margin', (8 - markerSize) + 'px');
-            return;
-        }
-        // find and cache the appropriate CSSRule
-        for (var ss in document.styleSheets) {
-            var rules = document.styleSheets[ss].cssRules;
-            for (var r in rules) {
-                if (rules[r].selectorText === '.marker-icon') {
-                    //console.log("ss=" + ss + "/" + document.styleSheets.length + " r=" + r + "/" + rules.length);
-                    this.markerIconRule = rules[r];
-                    this.updateMarkerSize(markerSize);
-                }
-            }
-        }
+        this.markerSize = markerSize;
+        new SiteIterator()
+            .withPredicate(SitePredicates.HAS_MARKER)
+            .iterate((supercharger) => {
+                if (supercharger.marker.setRadius) supercharger.marker.setRadius(markerSize);
+            });
     };
 
     setupForWayBack() {

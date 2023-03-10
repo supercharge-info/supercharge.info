@@ -58,7 +58,7 @@ export default class AddCustomMarkerAction {
         this.markerDialog.modal('hide');
         const markerName = this.markerNameInput.val();
         const newCharger = Sites.addCustomSite(markerName, this.currentLatLng);
-        this.mapView.markerFactory.createMarker(newCharger);
+        this.mapView.markerFactory.createMarker(newCharger, this.mapView.markerSize);
         newCharger.marker.fire('click');
         Analytics.sendEvent("route", "add-custom-marker");
         userConfig.addCustomMarker({name: markerName, lat: this.currentLatLng.lat, lng: this.currentLatLng.lng})

@@ -1,7 +1,6 @@
 import EventBus from "../util/EventBus";
 import SiteCount from "../site/SiteCount";
 import Address from "../site/Address";
-import userConfig from "../common/UserConfig";
 import $ from "jquery";
 import L from 'leaflet';
 
@@ -41,9 +40,6 @@ class TotalCountPanel {
             "CHN": TotalCountPanel.CHINA, 
             "JPN": TotalCountPanel.JAPAN
         };
-
-        var userCenter = L.latLng(userConfig.latitude, userConfig.longitude);
-        this.mapViewPortChanged(null, userConfig.isLocationSet() ? L.latLngBounds(userCenter, userCenter) : TotalCountPanel.USA);
     }
 
     mapViewPortChanged(event, latLngBounds) {
@@ -90,3 +86,4 @@ class TotalCountPanel {
 
 
 export default TotalCountPanel;
+

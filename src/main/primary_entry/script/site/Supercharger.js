@@ -88,10 +88,10 @@ export default class Supercharger {
     };
 
     getMarkerTitle() {
-        return `${this.displayName} (${this.status.displayName})` +
-            (Objects.isNullOrUndef(this.hours) ? "" : `\r\nLimited hours: ${this.hours}`) +
-            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : `\r\n${this.numStalls} stalls`) +
-            (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : `\r\n${this.powerKilowatt} kW`);
+        return `<div>${this.displayName} (${this.status?.displayName})</div>` +
+            (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
+            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${this.numStalls} stalls`) +
+            (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : ` • ${this.powerKilowatt} kW`);
 	};
 
     getShortMarkerTitle() {

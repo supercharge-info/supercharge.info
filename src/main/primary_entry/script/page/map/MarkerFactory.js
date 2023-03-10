@@ -19,16 +19,18 @@ export default class MarkerFactory {
         this.mapApi = mapApi;
     };
 
-    createMarker(supercharger, markerType) {
-        supercharger.markerSize = markerType;
+    createMarker(supercharger, markerSize) {
+        supercharger.markerSize = markerSize;
         const markerOptions = {
-            title: supercharger.getMarkerTitle(),
-            icon: supercharger.status.getIcon(supercharger),
-            riseOnHover: true
+            radius: markerSize,
+            stroke: false,
+            fillColor: supercharger.status.getFill(supercharger),
+            fillOpacity: 1
         };
-        const marker = L.marker(supercharger.location, markerOptions);
+        const marker = L.circleMarker(supercharger.location, markerOptions);
         supercharger.marker = marker;
         marker.on('click', $.proxy(this._handleMarkerClick, this, marker, supercharger));
+        marker.bindTooltip(supercharger.getMarkerTitle(), { className: "tooltip " + supercharger.status.className, opacity: 0.92 });
         mapLayers.addToLayer(supercharger.status, marker);
     };
 
@@ -48,14 +50,13 @@ export default class MarkerFactory {
         // Alternate formula: 2-6 => +1 || 7-19 => +2 || 20-53 => +3 || 54-999 --> +4
         //var zoomIncrement = Math.min(Math.floor(Math.log(superchargers.length + 1)), 4);
 
-        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}) - ${numStalls} total stalls:\r\n`;
+        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}</span>) - ${numStalls} total stalls:<br/>`;
         for (var i = 0; i < 3 && i < sc.length; i++) {
-            markerTitle += sc[i].getShortMarkerTitle() + "\r\n";
+            markerTitle += sc[i].getShortMarkerTitle() + "<br/>";
         }
-        markerTitle += (sc.length == 4 ? sc[3].getShortMarkerTitle() : sc.length > 4 ? "• ..." : "") + `\r\nClick to zoom +${zoomIncrement}`;
+        markerTitle += (sc.length == 4 ? sc[3].getShortMarkerTitle() : sc.length > 4 ? "• ..." : "") + `<br/>Click to zoom +${zoomIncrement}`;
 
         const markerOptions = {
-            title: markerTitle,
             icon: L.divIcon({
                 iconSize: 16,
                 iconAnchor: [8, 8],
@@ -67,6 +68,7 @@ export default class MarkerFactory {
         const markerLocation = L.latLng(lat / superchargers.length, lng / superchargers.length)
         const marker = L.marker(markerLocation, markerOptions);
         marker.on('click', $.proxy(this._handleClusterZoom, this, superchargers, zoom + zoomIncrement));
+        marker.bindTooltip(markerTitle, { className: "tooltip " + superchargers[0].status.className, opacity: 0.92 });
         for (var s in superchargers) {
             superchargers[s].marker = marker;
         }
