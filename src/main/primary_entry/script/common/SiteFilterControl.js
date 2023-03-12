@@ -14,8 +14,9 @@ export default class SiteFilterControl {
      * @param controlParentDiv
      * @param changeCallback
      */
-    constructor(controlParentDiv, changeCallback) {
+    constructor(controlParentDiv, changeCallback, includeCustomStatus) {
         this.changeCallback = changeCallback;
+        this.includeCustomStatus = includeCustomStatus || false;
 
         this.changeTypeSelect = controlParentDiv.find(".changetype-select");
         this.regionSelect = controlParentDiv.find(".region-select");
@@ -82,8 +83,8 @@ export default class SiteFilterControl {
      *  (3) Invoke handleChangeFunction.
      */
     handleRegionChange() {
-        this.countrySelect.val("");
-        this.stateSelect.val("");
+        this.countrySelect.selectpicker("val", "");
+        this.stateSelect.selectpicker("val", "");
         this.populateCountryOptions();
         this.populateStateOptions();
         this.changeCallback("region", this.getRegionId());
@@ -96,7 +97,7 @@ export default class SiteFilterControl {
      *  (1) Invoke handleChangeFunction.
      */
     handleCountryChange() {
-        this.stateSelect.val("");
+        this.stateSelect.selectpicker("val", "");
         this.populateStateOptions();
         this.changeCallback("country", this.getCountryId());
     };
@@ -170,23 +171,17 @@ export default class SiteFilterControl {
     };
 
     populateStatusOptions() {
-        //this.statusSelect.html("<option value=''>-- Any Status --</option>");
+        this.statusSelect.html("");
         Status.ALL.forEach(s => {
             var imgHtml = `<img src='${s.getIcon()}'/>`;
             this.statusSelect.append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`)
         });
-        var imgHtml = `<img src='${Status.USER_ADDED.getIcon()}'/>`;
-        this.statusSelect.append(`<option data-content="${imgHtml}<span>${Status.USER_ADDED.displayName}</span>" value='${Status.USER_ADDED.value}'></option>`);
+        if (this.includeCustomStatus) {
+            var imgHtml = `<img src='${Status.USER_ADDED.getIcon()}'/>`;
+            this.statusSelect.append(`<option data-content="${imgHtml}<span>${Status.USER_ADDED.displayName}</span>" value='${Status.USER_ADDED.value}'></option>`);
+        }
         this.statusSelect.selectpicker("refresh");
     };
-
-    /*
-    formatStatus(s) {
-        if (!s.id) return s.text;
-        var status = Status.fromString(s.id);
-        return $(`<span><img src="${status.getIcon()}" class="status-icon"/> ${s.text}</span>`);
-    }
-    */
 
     populateStallCountOptions() {
         this.stallsSelect.html("<option value=''>-- No Min. Stalls --</option>");
@@ -246,31 +241,31 @@ export default class SiteFilterControl {
     };
 
     setChangeType(changeType) {
-        this.changeTypeSelect.val(changeType);
+        this.changeTypeSelect.selectpicker("val", changeType);
     };
 
     setCountryId(countryId) {
-        this.countrySelect.val(countryId);
+        this.countrySelect.selectpicker("val", countryId);
     };
 
     setRegionId(regionId) {
-        this.regionSelect.val(regionId);
+        this.regionSelect.selectpicker("val", regionId);
     };
 
     setState(state) {
-        this.stateSelect.val(state);
+        this.stateSelect.selectpicker("val", state);
     };
 
     setStatus(status) {
-        this.statusSelect.val(status);
+        this.statusSelect.selectpicker("val", status);
     };
 
     setStalls(stalls) {
-        this.stallsSelect.val(stalls);
+        this.stallsSelect.selectpicker("val", stalls);
     };
 
     setPower(power) {
-        this.powerSelect.val(power);
+        this.powerSelect.selectpicker("val", power);
     };
 
 }

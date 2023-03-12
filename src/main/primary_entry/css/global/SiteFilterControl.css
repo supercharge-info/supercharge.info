@@ -2,11 +2,11 @@
     max-width: 300px;
     margin: auto;
     min-width: 100px;
-    padding: 3px 3px 3px 6px;
+    padding: 3px 6px;
 }
 
-span.bs-caret {
-    margin-left: 6px;
+.bootstrap-select .dropdown-toggle .caret {
+    position: inherit;
 }
 
 .status-select .filter-option-inner-inner span {

@@ -5,6 +5,7 @@ import EventBus from "../../util/EventBus";
 import Analytics from "../../util/Analytics";
 import userConfig from "../../common/UserConfig";
 import SiteFilterControl from "../../common/SiteFilterControl";
+import Status from "../../site/SiteStatus";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
@@ -133,7 +134,8 @@ export default class DataView {
                     "data": (row, type, val, meta) => {
                         return `${row.gps.latitude}, ${row.gps.longitude}`
                     },
-                    "className": "gps"
+                    "className": "gps",
+                    "orderable": false
                 },
                 {
                     "data": "elevationMeters",
@@ -141,7 +143,8 @@ export default class DataView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return `<span class='${row.status}'>${row.status}</span>`
+                        var s = Status.fromString(row.status);
+                        return `<span class='${row.status} status-select' title='${s.displayName}'><img src='${s.getIcon()}'/></span>`
                     }
                 },
                 {

@@ -6,7 +6,7 @@ import Analytics from "../../util/Analytics";
 import ServiceURL from "../../common/ServiceURL";
 import userConfig from "../../common/UserConfig";
 import SiteFilterControl from "../../common/SiteFilterControl";
-import SiteStatus from "../../site/SiteStatus";
+import Status from "../../site/SiteStatus";
 import Sites from "../../site/Sites";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
@@ -119,7 +119,7 @@ export default class ChangesView {
         var entries = "";
         changeRow.stalls.forEach(s => {
             entries += `
-            <li class="${s.status}">${s.count} @ ${s.power} kW → ${SiteStatus.fromString(s.status).displayName}
+            <li class="${s.status}">${s.count} @ ${s.power} kW → ${Status.fromString(s.status).displayName}
                 <li class="${s.status} connectors">${s.type} | ${s.connectors?.join(", ")}</li>
             </li>`;
         });
@@ -204,19 +204,20 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
                     },
-                    "width": "40%"
+                    "width": "42%"
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return `<span class='${row.siteStatus}'>${SiteStatus.fromString(row.siteStatus).displayName}</span>`;
+                        var s = Status.fromString(row.siteStatus);
+                        return `<span class='${row.siteStatus} status-select' title='${s.displayName}'><img src='${s.getIcon()}'/></span>`
                     },
-                    "width": "10%"
+                    "width": "5%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildDetails(row);
                     },
-                    "width": "20%"
+                    "width": "23%"
                 },
                 {
                     "data": (row, type, val, meta) => {
