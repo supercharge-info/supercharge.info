@@ -1,5 +1,4 @@
 import Strings from "../util/Strings";
-import L from 'leaflet';
 
 const Status = {
     CLOSED_PERM: {
@@ -7,6 +6,7 @@ const Status = {
         sort: 0,
         displayName: "Permanently Closed",
         className: "closed-perm",
+        getIcon: (supercharger) => "/images/black_dot_x.svg",
         getFill: (supercharger) => "url(#black_dot_x)"
     },
     CLOSED_TEMP: {
@@ -14,6 +14,7 @@ const Status = {
         sort: 1,
         displayName: "Temporarily Closed",
         className: "closed-temp",
+        getIcon: (supercharger) => "/images/gray_dot_x.svg",
         getFill: (supercharger) => "url(#gray_dot_x)"
     },
     PERMIT: {
@@ -21,6 +22,7 @@ const Status = {
         sort: 2,
         displayName: "Permit",
         className: "permit",
+        getIcon: (supercharger) => "/images/blue_triangle.svg",
         getFill: (supercharger) => "url(#blue_triangle)"
     },
     CONSTRUCTION: {
@@ -28,6 +30,7 @@ const Status = {
         sort: 3,
         displayName: "Construction",
         className: "construction",
+        getIcon: (supercharger) => "/images/orange_triangle.svg",
         getFill: (supercharger) => "url(#orange_triangle)"
     },
     OPEN: {
@@ -35,12 +38,14 @@ const Status = {
         sort: 4,
         displayName: "Open",
         className: "open",
-        getFill: (supercharger) => (Strings.isNotEmpty(supercharger.hours)) ? "url(#red_dot_limited)" : "url(#red_dot)"
+        getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "red_dot_limited.svg" : "red_dot.svg"),
+        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)")
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
         className: "user",
+        getIcon: (supercharger) => "/images/green_dot.svg",
         getFill: (supercharger) => "url(#green_dot)"
     }
 };

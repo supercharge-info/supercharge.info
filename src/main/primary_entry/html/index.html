@@ -405,25 +405,19 @@ PAGE: data
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
 <div class="page" id="page-data" style="display:none">
 
-    <div id="data-filter-div">
+    <div id="data-filter">
         <form class="form-inline" role="form">
-            <select class="form-control region-select">
-            </select>
-            &nbsp;
-            <select class="form-control country-select">
-            </select>
-            &nbsp;
-            <select class="form-control state-select">
-            </select>
-            &nbsp;
-            <select class="form-control status-select">
-            </select>
-            &nbsp;
-            <select class="form-control stalls-select">
-            </select>
-            &nbsp;
-            <select class="form-control power-select">
-            </select>
+            <select class="form-control changetype-select"></select>
+            <select class="form-control region-select"></select>
+            <select class="form-control country-select"
+                    data-live-search="true"></select>
+            <select class="form-control state-select"
+                    data-live-search="true"></select>
+            <select class="form-control status-select"
+                    multiple data-actions-box="true"
+                    title="-- Any Status --"></select>
+            <select class="form-control stalls-select"></select>
+            <select class="form-control power-select"></select>
         </form>
     </div>
 
@@ -489,31 +483,22 @@ PAGE: changes
 <div class="page" id="page-changes" style="display:none">
 
 
-    <div id="changes-filter-div">
+    <div id="changes-filter">
         <form class="form-inline" role="form">
-            <select class="form-control changetype-select">
-            </select>
-            &nbsp;
-            <select class="form-control region-select">
-            </select>
-            &nbsp;
-            <select class="form-control country-select">
-            </select>
-            &nbsp;
+            <select class="form-control changetype-select"></select>
+            <select class="form-control region-select"></select>
+            <select class="form-control country-select"
+                    data-live-search="true"></select>
             <!--
-            <select class="form-control state-select">
-            </select>
-            &nbsp;
+            <select class="form-control state-select"
+                    data-live-search="true"></select>
             -->
-            <select class="form-control status-select">
-            </select>
+            <select class="form-control status-select"
+                    multiple data-actions-box="true"
+                    title="-- Any Status --"></select>
             <!--
-            &nbsp;
-            <select class="form-control stalls-select">
-            </select>
-            &nbsp;
-            <select class="form-control power-select">
-            </select>
+            <select class="form-control stalls-select"></select>
+            <select class="form-control power-select"></select>
             -->
         </form>
     </div>

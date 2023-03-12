@@ -12,11 +12,10 @@ import ServiceURL from "../../common/ServiceURL";
 export default class DataView {
 
     constructor() {
-
         this.table = $("#supercharger-data-table");
 
         this.filterControl = new SiteFilterControl(
-            $("#data-filter-div"),
+            $("#data-filter"),
             $.proxy(this.filterControlCallback, this)
         );
 
@@ -24,14 +23,22 @@ export default class DataView {
 
         this.tableAPI = this.table.DataTable(this.initDataTableOptions());
 
-        this.filterControl.init(userConfig.dataPageRegionId, userConfig.dataPageCountryId);
+        this.syncFilters();
+    }
+
+    syncFilters() {
+        this.filterControl.init(userConfig);
         this.tableAPI.draw();
     }
 
     filterControlCallback(whichSelect, newValue) {
         this.tableAPI.draw();
-        userConfig.setRegionCountryId("data", "region", this.filterControl.getRegionId());
-        userConfig.setRegionCountryId("data", "country", this.filterControl.getCountryId());
+        userConfig.setRegionCountryId("region", this.filterControl.getRegionId());
+        userConfig.setRegionCountryId("country", this.filterControl.getCountryId());
+        userConfig.setState(this.filterControl.getState());
+        userConfig.setStatus(this.filterControl.getStatus());
+        userConfig.setStalls(this.filterControl.getStalls());
+        userConfig.setPower(this.filterControl.getPower());
         Analytics.sendEvent("data", "select-" + whichSelect, newValue);
     };
 
@@ -98,7 +105,7 @@ export default class DataView {
                     d.regionId = dataView.filterControl.getRegionId();
                     d.countryId = dataView.filterControl.getCountryId();
                     d.state = dataView.filterControl.getState();
-                    d.status = dataView.filterControl.getStatus();
+                    d.status = dataView.filterControl.getStatus().join(",");
                     d.stalls = dataView.filterControl.getStalls();
                     d.power = dataView.filterControl.getPower();
                 }
@@ -117,7 +124,6 @@ export default class DataView {
                 },
                 {
                     "data": "powerKilowatt",
-                    "sorting": false,
                     "render": (data, type, row, meta) => {
                         return data || ''
                     },

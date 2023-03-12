@@ -22,6 +22,7 @@ export default class MarkerFactory {
     createMarker(supercharger, markerSize) {
         supercharger.markerSize = markerSize;
         const markerOptions = {
+            pane: 'markers',
             radius: markerSize,
             stroke: false,
             fillColor: supercharger.status.getFill(supercharger),
@@ -29,8 +30,10 @@ export default class MarkerFactory {
         };
         const marker = L.circleMarker(supercharger.location, markerOptions);
         supercharger.marker = marker;
-        marker.on('click', $.proxy(this._handleMarkerClick, this, marker, supercharger));
-        marker.bindTooltip(supercharger.getMarkerTitle(), { className: "tooltip " + supercharger.status.className, opacity: 0.92 });
+        marker.tooltipText = supercharger.getMarkerTitle();
+        marker.tooltipClass = "tooltip " + supercharger.status.className;
+        marker.on('click', this._handleMarkerClick.bind(this, marker, supercharger));
+        marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
         mapLayers.addToLayer(supercharger.status, marker);
     };
 
@@ -93,7 +96,11 @@ export default class MarkerFactory {
         if(!marker.infoWindow.isShown()) {
             marker.infoWindow.showWindow();
         }
-    };
+
+        // unbind and rebind the tooltip so it doesn't stay open when opening the InfoWindow
+        marker.unbindTooltip();
+        marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
+	};
 
     _handleClusterZoom(superchargers, newZoom) {
         //MarkerFactory.CloseAllOpenUnpinnedInfoWindows();

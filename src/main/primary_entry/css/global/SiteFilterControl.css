@@ -1,0 +1,20 @@
+.form-control select, .form-control button {
+    max-width: 300px;
+    margin: auto;
+    min-width: 100px;
+    padding: 3px 3px 3px 6px;
+}
+
+span.bs-caret {
+    margin-left: 6px;
+}
+
+.status-select .filter-option-inner-inner span {
+    font-size: 0px;
+}
+
+.status-select img {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}

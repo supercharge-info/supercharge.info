@@ -1,3 +1,8 @@
+#changes-filter {
+    text-align: center;
+    margin: 1em 0 1em 0;
+}
+
 #changes-table_wrapper .row {
     margin-left: 0;
     margin-right: 0;
@@ -25,17 +30,6 @@
 }
 #changes-table .dropdown .OPEN {
     color: red;
-}
-
-#changes-filter-div {
-    text-align: center;
-    margin: 1em 0 1em 0;
-}
-
-#changes-filter-div select {
-    max-width: 300px;
-    margin: auto;
-    min-width: 100px;
 }
 
 #changes-table .dropdown a, #changes-table .dropdown b {

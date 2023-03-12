@@ -1,5 +1,8 @@
 import $ from 'jquery';
-//import countryClient from './CountryClient';
+import 'bootstrap-select';
+//import 'pretty-dropdowns';
+//import 'select2';
+//import SlimSelect from 'slim-select';
 import Sites from '../site/Sites';
 import Status from '../site/SiteStatus';
 
@@ -22,13 +25,13 @@ export default class SiteFilterControl {
         this.stallsSelect = controlParentDiv.find(".stalls-select");
         this.powerSelect = controlParentDiv.find(".power-select");
 
-        this.changeTypeSelect.change($.proxy(this.handleChangeTypeChange, this));
-        this.regionSelect.change($.proxy(this.handleRegionChange, this));
-        this.countrySelect.change($.proxy(this.handleCountryChange, this));
-        this.stateSelect.change($.proxy(this.handleStateChange, this));
-        this.statusSelect.change($.proxy(this.handleStatusChange, this));
-        this.stallsSelect.change($.proxy(this.handleStallsChange, this));
-        this.powerSelect.change($.proxy(this.handlePowerChange, this));
+        this.changeTypeSelect.change(this.handleChangeTypeChange.bind(this));
+        this.regionSelect.change(this.handleRegionChange.bind(this));
+        this.countrySelect.change(this.handleCountryChange.bind(this));
+        this.stateSelect.change(this.handleStateChange.bind(this));
+        this.statusSelect.change(this.handleStatusChange.bind(this));
+        this.stallsSelect.change(this.handleStallsChange.bind(this));
+        this.powerSelect.change(this.handlePowerChange.bind(this));
     }
 
 
@@ -45,16 +48,27 @@ export default class SiteFilterControl {
      * so it return a promise.  Constructor cannot return promise, thus this must exist outside
      * of the constructor.
      */
-    init(initialRegionId, initialCountryId) {
+    init(userConfig) {
         this.populateChangeTypeOptions();
+        this.setChangeType(userConfig.filter.changeType);
+
         this.populateRegionOptions();
-        this.setRegionId(initialRegionId);
+        this.setRegionId(userConfig.filter.regionId);
+
         this.populateCountryOptions();
-        this.setCountryId(initialCountryId);
+        this.setCountryId(userConfig.filter.countryId);
+
         this.populateStateOptions();
+        this.setState(userConfig.filter.state);
+
         this.populateStatusOptions();
+        this.setStatus(userConfig.filter.status);
+
         this.populateStallCountOptions();
+        this.setStalls(userConfig.filter.stalls);
+
         this.populatePowerOptions();
+        this.setPower(userConfig.filter.power);
     };
 
     handleChangeTypeChange() {
@@ -108,17 +122,19 @@ export default class SiteFilterControl {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     populateChangeTypeOptions() {
-        this.changeTypeSelect.append("<option value=''>-- Any Change --</option>");
+        this.changeTypeSelect.html("<option value=''>-- Any Change --</option>");
         this.changeTypeSelect.append("<option value='ADD'>Add</option>");
         this.changeTypeSelect.append("<option value='UPDATE'>Update</option>");
+        this.changeTypeSelect.selectpicker("refresh");
     }
 
     populateRegionOptions() {
-        this.regionSelect.append("<option value=''>-- Any Region --</option>");
+        this.regionSelect.html("<option value=''>-- Any Region --</option>");
         var regions = [...Sites.getRegions()].sort((a,b) => a[0].localeCompare(b[0]));
         regions.forEach(r => {
             this.regionSelect.append(`<option value='${r[1]}'>${r[0]}</option>`);
         });
+        this.regionSelect.selectpicker("refresh");
     };
 
     populateCountryOptions() {
@@ -130,11 +146,11 @@ export default class SiteFilterControl {
             countries = [...Sites.getCountries()];
         }
 
-        this.countrySelect.html("");
-        this.countrySelect.append("<option value=''>-- Any Country --</option>");
+        this.countrySelect.html("<option value=''>-- Any Country --</option>");
         countries.sort((a,b) => a[0].localeCompare(b[0])).forEach(c => {
             this.countrySelect.append(`<option value='${c[1]}'>${c[0]}</option>`);
         });
+        this.countrySelect.selectpicker("refresh");
     };
 
     populateStateOptions() {
@@ -146,35 +162,48 @@ export default class SiteFilterControl {
             states = [...Sites.getStates()];
         }
         states = states.filter(s => s !== null).sort();
-        this.stateSelect.html("");
-        this.stateSelect.append(`<option value=''>${states.length === 0 ? "n/a" : "-- Any State --"}</option>`);
+        this.stateSelect.html(`<option value=''>${states.length === 0 ? "n/a" : "-- Any State --"}</option>`);
         states.forEach(s => {
             this.stateSelect.append(`<option value='${s}'>${s}</option>`);
         });
+        this.stateSelect.selectpicker("refresh");
     };
 
     populateStatusOptions() {
-        this.statusSelect.append("<option value=''>-- Any Status --</option>");
+        //this.statusSelect.html("<option value=''>-- Any Status --</option>");
         Status.ALL.forEach(s => {
-            this.statusSelect.append(`<option value='${s.value}'>${s.displayName}</option>`);
+            var imgHtml = `<img src='${s.getIcon()}'/>`;
+            this.statusSelect.append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`)
         });
+        var imgHtml = `<img src='${Status.USER_ADDED.getIcon()}'/>`;
+        this.statusSelect.append(`<option data-content="${imgHtml}<span>${Status.USER_ADDED.displayName}</span>" value='${Status.USER_ADDED.value}'></option>`);
+        this.statusSelect.selectpicker("refresh");
     };
 
+    /*
+    formatStatus(s) {
+        if (!s.id) return s.text;
+        var status = Status.fromString(s.id);
+        return $(`<span><img src="${status.getIcon()}" class="status-icon"/> ${s.text}</span>`);
+    }
+    */
+
     populateStallCountOptions() {
-        this.stallsSelect.append("<option value=''>-- No Min. Stalls --</option>");
+        this.stallsSelect.html("<option value=''>-- No Min. Stalls --</option>");
         var stallCounts = new Int16Array([...Sites.getStallCounts()]).sort();
         stallCounts.forEach(s => {
             this.stallsSelect.append(`<option value='${s}'>&ge; ${s} stalls</option>`);
         });
+        this.stallsSelect.selectpicker("refresh");
     };
 
     populatePowerOptions() {
-        this.powerSelect.append("<option value=''>-- No Min. Power --</option>");
+        this.powerSelect.html("<option value=''>-- No Min. Power --</option>");
         var power = new Int16Array([...Sites.getPowers()]).sort();
         $.each(power, (index, p) => {
             this.powerSelect.append(`<option value='${p}'>&ge; ${p} kW</option>`);
         });
-
+        this.powerSelect.selectpicker("refresh");
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

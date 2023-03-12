@@ -21,11 +21,15 @@ export default class ChangesView {
         this.tableAPI = table.DataTable(this.initDataTableOptions());
 
         this.filterControl = new SiteFilterControl(
-            $("#changes-filter-div"),
-            $.proxy(this.filterControlCallback, this)
+            $("#changes-filter"),
+            this.filterControlCallback.bind(this)
         );
 
-        this.filterControl.init(userConfig.changesPageRegionId, userConfig.changesPageCountryId);
+        this.syncFilters();
+    }
+
+    syncFilters() {
+        this.filterControl.init(userConfig);
         this.tableAPI.draw();
     }
 
@@ -36,8 +40,10 @@ export default class ChangesView {
     filterControlCallback(whichSelect, newValue) {
         this.loadChanges();
         Analytics.sendEvent("changes", "select-" + whichSelect, newValue);
-        userConfig.setRegionCountryId("changes", "region", this.filterControl.getRegionId());
-        userConfig.setRegionCountryId("changes", "country", this.filterControl.getCountryId());
+        userConfig.setChangeType(this.filterControl.getChangeType());
+        userConfig.setRegionCountryId("region", this.filterControl.getRegionId());
+        userConfig.setRegionCountryId("country", this.filterControl.getCountryId());
+        userConfig.setStatus(this.filterControl.getStatus());
     };
 
     loadChanges() {
@@ -164,18 +170,18 @@ export default class ChangesView {
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
-                    const json = jQuery.parseJSON(data);
+                    const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
-                    return JSON.stringify(json)
+                    return JSON.stringify(json);
                 },
                 "data": function (d) {
                     d.changeType = changesView.filterControl.getChangeType();
                     d.regionId = changesView.filterControl.getRegionId();
                     d.countryId = changesView.filterControl.getCountryId();
-                    d.status = changesView.filterControl.getStatus();
+                    d.status = changesView.filterControl.getStatus().join(",");
                 }
             },
             "rowId": "id",

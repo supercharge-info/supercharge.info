@@ -100,6 +100,13 @@ export default class MapView {
             layers: mapLayers.getInitialLayers(),
             preferCanvas: false
         });
+        const markerPane = this.mapApi.createPane('markers');
+        this.mapApi.on('zoomstart', function (e) {
+            markerPane.style.opacity = 0.2;
+        });
+        this.mapApi.on('zoomend', function (e) {
+            markerPane.style.opacity = 1;
+        });
 
         // layers control
         //

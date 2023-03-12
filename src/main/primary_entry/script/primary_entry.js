@@ -41,8 +41,8 @@ window.supercharge.start = function () {
         Sites.load(),
         docReadyDeferred
     ).done(() => {
-        new NavBar();
         new LoginCheckAction().loginCheck();
+        new NavBar();
         new FeatureCheck().doCheck();
         new TotalCountPanel();
     });

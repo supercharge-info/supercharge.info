@@ -3,12 +3,15 @@ import ChangesView from "./ChangesView";
 export default class ChangesPage {
     constructor() {
         this.initialized = false;
+        this.changesView = null;
     }
 
     onPageShow() {
         if (!this.initialized) {
-            new ChangesView();
+            this.changesView = new ChangesView();
             this.initialized = true;
+        } else {
+            this.changesView.syncFilters();
         }
     }
 

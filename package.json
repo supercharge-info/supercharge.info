@@ -44,6 +44,7 @@
     "@mapbox/mapbox-sdk": "^0.15.0",
     "@mapbox/polyline": "^1.1.0",
     "bootstrap": "3.4.1",
+    "bootstrap-select": "1.13.18",
     "core-js": "^3.23.3",
     "datatables.net": "^1.11.3",
     "datatables.net-bs": "^1.10.20",
