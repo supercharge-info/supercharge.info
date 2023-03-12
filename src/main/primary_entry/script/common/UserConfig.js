@@ -56,12 +56,13 @@ class UserConfig {
         this.scheduleSave();
     };
 
-    setRegionCountryId(whichSelect, newValue) {
-        if (whichSelect === "region") {
-            this.filter.regionId = newValue;
-        } else if (whichSelect === "country") {
-            this.filter.countryId = newValue;
-        }
+    setRegionId(newRegionId) {
+        this.filter.regionId = newRegionId;
+        this.scheduleSave();
+    };
+
+    setCountryId(newCountryId) {
+        this.filter.countryId = newCountryId;
         this.scheduleSave();
     };
 

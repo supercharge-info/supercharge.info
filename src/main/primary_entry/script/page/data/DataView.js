@@ -2,7 +2,6 @@ import $ from "jquery";
 import 'datatables.net';
 import 'datatables.net-bs';
 import EventBus from "../../util/EventBus";
-import Analytics from "../../util/Analytics";
 import userConfig from "../../common/UserConfig";
 import SiteFilterControl from "../../common/SiteFilterControl";
 import Status from "../../site/SiteStatus";
@@ -32,15 +31,14 @@ export default class DataView {
         this.tableAPI.draw();
     }
 
-    filterControlCallback(whichSelect, newValue) {
+    filterControlCallback() {
         this.tableAPI.draw();
-        userConfig.setRegionCountryId("region", this.filterControl.getRegionId());
-        userConfig.setRegionCountryId("country", this.filterControl.getCountryId());
+        userConfig.setRegionId(this.filterControl.getRegionId());
+        userConfig.setCountryId(this.filterControl.getCountryId());
         userConfig.setState(this.filterControl.getState());
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
-        Analytics.sendEvent("data", "select-" + whichSelect, newValue);
     };
 
     static handleDataClick(event) {

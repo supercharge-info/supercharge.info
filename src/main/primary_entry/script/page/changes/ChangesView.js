@@ -2,7 +2,6 @@ import $ from "jquery";
 import 'datatables.net';
 import 'datatables.net-bs';
 import EventBus from "../../util/EventBus";
-import Analytics from "../../util/Analytics";
 import ServiceURL from "../../common/ServiceURL";
 import userConfig from "../../common/UserConfig";
 import SiteFilterControl from "../../common/SiteFilterControl";
@@ -37,17 +36,12 @@ export default class ChangesView {
     // Initialization
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    filterControlCallback(whichSelect, newValue) {
-        this.loadChanges();
-        Analytics.sendEvent("changes", "select-" + whichSelect, newValue);
-        userConfig.setChangeType(this.filterControl.getChangeType());
-        userConfig.setRegionCountryId("region", this.filterControl.getRegionId());
-        userConfig.setRegionCountryId("country", this.filterControl.getCountryId());
-        userConfig.setStatus(this.filterControl.getStatus());
-    };
-
-    loadChanges() {
+    filterControlCallback() {
         this.tableAPI.draw();
+        userConfig.setChangeType(this.filterControl.getChangeType());
+        userConfig.setRegionId(this.filterControl.getRegionId());
+        userConfig.setCountryId(this.filterControl.getCountryId());
+        userConfig.setStatus(this.filterControl.getStatus());
     };
 
     static handleChangeClick(event) {

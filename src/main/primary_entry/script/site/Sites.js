@@ -7,6 +7,7 @@ const LIST = [];
 const Regions = new Map();
 const Countries = new Map();
 const CountriesByRegion = new Map();
+const StatesByRegion = new Map();
 const StatesByCountry = new Map();
 const States = new Set();
 const Powers = new Set();
@@ -57,6 +58,9 @@ export default class Sites {
     static getCountriesByRegion(regionId) {
         return CountriesByRegion.get(regionId);
     }
+    static getStatesByRegion(regionId) {
+        return StatesByRegion.get(regionId);
+    };
     static getStatesByCountry(countryId) {
         return StatesByCountry.get(countryId);
     };
@@ -74,7 +78,8 @@ export default class Sites {
 Regions: Map(name, id)
 Countries: Map(name, id)
 States: Set
-C-by-R: Map(rid, Set(cname))
+C-by-R: Map(rid, Map(cname, cid))
+S-br-R: Map(rid, Set(sname))
 S-by-C: Map(cid, Set(sname))
 */
 
@@ -90,12 +95,14 @@ S-by-C: Map(cid, Set(sname))
                     if (!Regions.has(s.address.region)) {
                         Regions.set(s.address.region, s.address.regionId);
                         CountriesByRegion.set(s.address.regionId, new Map());
+                        StatesByRegion.set(s.address.regionId, new Set());
                     }
                     if (!Countries.has(s.address.country)) {
                         Countries.set(s.address.country, s.address.countryId);
                         StatesByCountry.set(s.address.countryId, new Set());
                     }
                     CountriesByRegion.get(s.address.regionId).set(s.address.country, s.address.countryId);
+                    StatesByRegion.get(s.address.regionId).add(s.address.state);
                     StatesByCountry.get(s.address.countryId).add(s.address.state);
                     States.add(s.address.state);
                     Powers.add(s.powerKilowatt);
@@ -105,4 +112,84 @@ S-by-C: Map(cid, Set(sname))
         );
     };
 
+    static StateAbbreviations = {
+        "AB": "Alberta",
+        "ACT": "Australian Capital Territory",
+        "AK": "Alaska",
+        "AL": "Alabama",
+        "AR": "Arkansas",
+        "AS": "American Samoa",
+        "AZ": "Arizona",
+        "BC": "British Columbia",
+        "CA": "California",
+        "CO": "Colorado",
+        "CT": "Connecticut",
+        "DC": "District Of Columbia",
+        "DE": "Delaware",
+        "FL": "Florida",
+        "FM": "Federated States Of Micronesia",
+        "GA": "Georgia",
+        "GU": "Guam",
+        "HI": "Hawaii",
+        "IA": "Iowa",
+        "ID": "Idaho",
+        "IL": "Illinois",
+        "IN": "Indiana",
+        "JBT": "Jervis Bay Territory",
+        "KS": "Kansas",
+        "KY": "Kentucky",
+        "LA": "Louisiana",
+        "MA": "Massachusetts",
+        "MB": "Manitoba",
+        "MD": "Maryland",
+        "ME": "Maine",
+        "MH": "Marshall Islands",
+        "MI": "Michigan",
+        "MN": "Minnesota",
+        "MO": "Missouri",
+        "MP": "Northern Mariana Islands",
+        "MS": "Mississippi",
+        "MT": "Montana",
+        "NB": "New Brunswick",
+        "NC": "North Carolina",
+        "ND": "North Dakota",
+        "NE": "Nebraska",
+        "NH": "New Hampshire",
+        "NJ": "New Jersey",
+        "NL": "Newfoundland and Labrador",
+        "NM": "New Mexico",
+        "NS": "Nova Scotia",
+        "NSW": "New South Wales",
+        "NT": "Northern Territory | Northwest Territories",
+        "NU": "Nunavut",
+        "NV": "Nevada",
+        "NY": "New York",
+        "OH": "Ohio",
+        "OK": "Oklahoma",
+        "ON": "Ontario",
+        "OR": "Oregon",
+        "PA": "Pennsylvania",
+        "PR": "Puerto Rico",
+        "PW": "Palau",
+        "QC": "Quebec",
+        "QLD": "Queensland",
+        "RI": "Rhode Island",
+        "SA": "South Australia",
+        "SC": "South Carolina",
+        "SD": "South Dakota",
+        "SK": "Saskatchewan",
+        "TAS": "Tasmania",
+        "TN": "Tennessee",
+        "TX": "Texas",
+        "UT": "Utah",
+        "VA": "Virginia",
+        "VI": "Virgin Islands",
+        "VIC": "Victoria",
+        "VT": "Vermont",
+        "WA": "Washington | Western Australia",
+        "WI": "Wisconsin",
+        "WV": "West Virginia",
+        "WY": "Wyoming",
+        "YT": "Yukon"
+    };
 }

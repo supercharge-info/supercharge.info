@@ -1,8 +1,5 @@
 import $ from 'jquery';
 import 'bootstrap-select';
-//import 'pretty-dropdowns';
-//import 'select2';
-//import SlimSelect from 'slim-select';
 import Sites from '../site/Sites';
 import Status from '../site/SiteStatus';
 
@@ -25,14 +22,16 @@ export default class SiteFilterControl {
         this.statusSelect = controlParentDiv.find(".status-select");
         this.stallsSelect = controlParentDiv.find(".stalls-select");
         this.powerSelect = controlParentDiv.find(".power-select");
+        this.resetButton = controlParentDiv.find(".reset");
 
-        this.changeTypeSelect.change(this.handleChangeTypeChange.bind(this));
+        this.changeTypeSelect.change(this.changeCallback.bind(this));
         this.regionSelect.change(this.handleRegionChange.bind(this));
         this.countrySelect.change(this.handleCountryChange.bind(this));
-        this.stateSelect.change(this.handleStateChange.bind(this));
-        this.statusSelect.change(this.handleStatusChange.bind(this));
-        this.stallsSelect.change(this.handleStallsChange.bind(this));
-        this.powerSelect.change(this.handlePowerChange.bind(this));
+        this.stateSelect.change(this.changeCallback.bind(this));
+        this.statusSelect.change(this.changeCallback.bind(this));
+        this.stallsSelect.change(this.changeCallback.bind(this));
+        this.powerSelect.change(this.changeCallback.bind(this));
+        this.resetButton.on("click", this.handleFilterReset.bind(this));
     }
 
 
@@ -51,29 +50,25 @@ export default class SiteFilterControl {
      */
     init(userConfig) {
         this.populateChangeTypeOptions();
-        this.setChangeType(userConfig.filter.changeType);
+        this.setChangeType(userConfig?.filter.changeType);
 
         this.populateRegionOptions();
-        this.setRegionId(userConfig.filter.regionId);
+        this.setRegionId(userConfig?.filter.regionId);
 
         this.populateCountryOptions();
-        this.setCountryId(userConfig.filter.countryId);
+        this.setCountryId(userConfig?.filter.countryId);
 
         this.populateStateOptions();
-        this.setState(userConfig.filter.state);
+        this.setState(userConfig?.filter.state);
 
         this.populateStatusOptions();
-        this.setStatus(userConfig.filter.status);
+        this.setStatus(userConfig?.filter.status || []);
 
         this.populateStallCountOptions();
-        this.setStalls(userConfig.filter.stalls);
+        this.setStalls(userConfig?.filter.stalls);
 
         this.populatePowerOptions();
-        this.setPower(userConfig.filter.power);
-    };
-
-    handleChangeTypeChange() {
-        this.changeCallback("changeType", this.getChangeType());
+        this.setPower(userConfig?.filter.power);
     };
 
     /**
@@ -87,7 +82,7 @@ export default class SiteFilterControl {
         this.stateSelect.selectpicker("val", "");
         this.populateCountryOptions();
         this.populateStateOptions();
-        this.changeCallback("region", this.getRegionId());
+        this.changeCallback();
     };
 
     /**
@@ -99,24 +94,13 @@ export default class SiteFilterControl {
     handleCountryChange() {
         this.stateSelect.selectpicker("val", "");
         this.populateStateOptions();
-        this.changeCallback("country", this.getCountryId());
+        this.changeCallback();
     };
 
-    handleStateChange() {
-        this.changeCallback("state", this.getState());
-    };
-
-    handleStatusChange() {
-        this.changeCallback("status", this.getStatus());
-    };
-
-    handleStallsChange() {
-        this.changeCallback("stalls", this.getStalls());
-    };
-
-    handlePowerChange() {
-        this.changeCallback("power", this.getPower());
-    };
+    handleFilterReset() {
+        this.init(null);
+        this.changeCallback();
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // UI update methods
@@ -156,16 +140,20 @@ export default class SiteFilterControl {
 
     populateStateOptions() {
         var newCountryId = this.getCountryId();
+        var newRegionId = this.getRegionId();
         var states = null;
         if (newCountryId !== null) {
             states = [...Sites.getStatesByCountry(newCountryId)];
+        } else if (newRegionId !== null) {
+            states = [...Sites.getStatesByRegion(newRegionId)];
         } else {
             states = [...Sites.getStates()];
         }
         states = states.filter(s => s !== null).sort();
-        this.stateSelect.html(`<option value=''>${states.length === 0 ? "n/a" : "-- Any State --"}</option>`);
+        this.stateSelect.html(`<option value=''>${states.length === 0 ? "(state n/a)" : "-- Any State --"}</option>`);
         states.forEach(s => {
-            this.stateSelect.append(`<option value='${s}'>${s}</option>`);
+            var sName = Sites.StateAbbreviations[s] || "";
+            this.stateSelect.append(`<option data-tokens='${sName}' value='${s}' data-subtext="${sName}">${s}</option>`);
         });
         this.stateSelect.selectpicker("refresh");
     };

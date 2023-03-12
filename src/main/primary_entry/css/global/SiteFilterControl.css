@@ -18,3 +18,23 @@
     height: 16px;
     margin-right: 4px;
 }
+
+.text-muted {
+    font-size: 80%;
+    color: lightsteelblue;
+}
+
+button.reset {
+    background-color: #eeeeee;
+    padding: 0px 12px;
+    height: 28px;
+}
+
+button.reset:hover {
+    background-color: lightgray;
+}
+
+/* work around some bootstrap weirdness where an original select box was invisibly covering the reset button */
+.bootstrap-select select {
+    left: 0px;
+}
