@@ -7,6 +7,7 @@ class ControlVisibleModel {
         const controlsParameter = QueryStrings.getControls();
         this.rangeControlVisible = controlsParameter.indexOf("range") >= 0;
         this.renderControlVisible = controlsParameter.indexOf("render") >= 0;
+        this.filterControlVisible = controlsParameter.indexOf("filter") >= 0;
     }
 
     fireChangeEvent() {
@@ -21,6 +22,10 @@ class ControlVisibleModel {
         this.setRenderControlVisible(!this.renderControlVisible);
     };
 
+    toggleFilterControlVisible() {
+        this.setFilterControlVisible(!this.filterControlVisible);
+    };
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     setRangeControlVisible(visible) {
@@ -29,6 +34,10 @@ class ControlVisibleModel {
 
     setRenderControlVisible(visible) {
         this.renderControlVisible = visible;
+    };
+
+    setFilterControlVisible(visible) {
+        this.filterControlVisible = visible;
     };
 
 }

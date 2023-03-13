@@ -1,7 +1,7 @@
 import $ from "jquery";
 import EventBus from "../util/EventBus";
 import Events from "../util/Events";
-import NavBarDropdown from "./NavBarDropdown";
+import NavBarOptions from "./NavBarOptions";
 import NavBarUserDropdown from "./NavBarUserDropdown";
 import MapPage from "../page/map/MapPage";
 import DataPage from "../page/data/DataPage";
@@ -19,7 +19,7 @@ export default class NavBar {
 
     constructor() {
 
-        this.navBarDropdown = new NavBarDropdown();
+        this.navBarOptions = new NavBarOptions();
 
         this.loginDialog = new LoginDialog();
 
@@ -60,7 +60,7 @@ export default class NavBar {
 
     initListeners() {
         $("#navbar-menu-item-list").find("a.page").click($.proxy(this.handlePageChangeClick, this));
-        $("#navbar-dropdown-menu-item-list").find("a").click($.proxy(this.navBarDropdown.handleAction, this.navBarDropdown));
+        $("#navbar-dropdown-menu-item-list").find("a").click($.proxy(this.navBarOptions.handleAction, this.navBarOptions));
         EventBus.addListener('nav-change-page-event', this.handlePageChangeEvent, this);
 
         const collapseFunction = $.proxy(this.autoCloseCollapsedNavBar, this);

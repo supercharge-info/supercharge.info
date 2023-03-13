@@ -1,5 +1,4 @@
 import L from "leaflet";
-import Status from "../../site/SiteStatus";
 import MapBox from './MapBox';
 
 const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -41,12 +40,7 @@ const satelliteLayer = L.tileLayer(MapBox.url, {
     accessToken: MapBox.accessToken
 });
 
-const permitLayer = L.layerGroup([]);
-const constructionLayer = L.layerGroup([]);
-const openLayer = L.layerGroup([]);
-const tempClosedLayer = L.layerGroup([]);
-const permClosedLayer = L.layerGroup([]);
-const userLayer = L.layerGroup([]);
+const markerLayer = L.layerGroup([]);
 
 const baseMaps = {
     "Satellite": satelliteLayer,
@@ -54,12 +48,7 @@ const baseMaps = {
 };
 
 const overlayMaps = {
-    '<img src="/images/blue_triangle.svg"/> Permit': permitLayer,
-    '<img src="/images/orange_triangle.svg"/> Construction': constructionLayer,
-    '<img src="/images/red_dot.svg"/> <img src="/images/red_dot_limited.svg"/> Open': openLayer,
-    '<img src="/images/gray_dot_x.svg"/> Temporarily Closed' : tempClosedLayer,
-    '<img src="/images/black_dot_x.svg"/> Permanently Closed' : permClosedLayer,
-    '<img src="/images/green_dot.svg"/> Custom': userLayer
+    'Markers': markerLayer
 };
 
 class MapLayers {
@@ -70,7 +59,7 @@ class MapLayers {
     // Note that Satellite layer is NOT here so that its tiles are not loaded until when/if user requests.
     // Also excluding Permanently Closed by default as those locations should be irrelevant in most cases.
     getInitialLayers() {
-        return [streetsLayer, permitLayer, constructionLayer, openLayer, tempClosedLayer, userLayer];
+        return [streetsLayer, markerLayer];
     }
 
     getBaseMaps() {
@@ -81,20 +70,8 @@ class MapLayers {
         return overlayMaps;
     }
 
-    addToLayer(siteStatus, marker) {
-        var layer = openLayer;
-        if (siteStatus === Status.PERMIT) {
-            layer = permitLayer;
-        } else if (siteStatus === Status.CONSTRUCTION) {
-            layer = constructionLayer;
-        } else if (siteStatus === Status.CLOSED_TEMP) {
-            layer = tempClosedLayer;
-        } else if (siteStatus === Status.CLOSED_PERM) {
-            layer = permClosedLayer;
-        } else if (siteStatus === Status.USER_ADDED) {
-            layer = userLayer;
-        }
-        marker.addTo(layer);
+    addToOverlay(marker) {
+        marker.addTo(markerLayer);
     }
 }
 

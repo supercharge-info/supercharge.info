@@ -2,7 +2,6 @@ import EventBus from "../../util/EventBus";
 import Analytics from "../../util/Analytics";
 import QueryStrings from "../../common/QueryStrings";
 import userConfig from "../../common/UserConfig";
-import RangeControlView from "./RangeControlView";
 import WayBackAction from "./action/WayBackAction";
 import ToggleRangeCircleAllAction from "./action/ToggleRangeCircleAllAction";
 import ToggleRangeCircleAction from "./action/ToggleRangeCircleAction";
@@ -13,6 +12,8 @@ import RoutingAction from "./route/RoutingAction";
 import CreateLinkAction from "./action/CreateLinkAction";
 import AddCustomMarkerAction from "./action/AddCustomMarkerAction";
 import MapView from "./MapView";
+import FilterControlView from "./FilterControlView";
+import RangeControlView from "./RangeControlView";
 import RenderControlView from "./RenderControlView";
 import RoutingPanel from "./route/RoutingPanel";
 import rangeModel from "./RangeModel";
@@ -39,7 +40,7 @@ export default class MapPage {
     };
 
     initialize() {
-
+        new FilterControlView();
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();
@@ -110,7 +111,6 @@ export default class MapPage {
         if (!QueryStrings.isZoomSet() && userConfig.isZoomSet()) {
             initialZoom = userConfig.zoom;
         }
-
         this.mapView = new MapView(lat, lng, initialZoom);
 
         if (!QueryStrings.isRangeUnitSet()) {

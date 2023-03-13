@@ -11,9 +11,31 @@
     margin-bottom: 0;
 }
 
+.logo {
+    padding: 5px 10px 5px 0;
+    font-size: 2em;
+    float: left;
+}
+.logo img {
+    width: 40px;
+    height: 40px;
+    vertical-align: top;
+}
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Collapse navbar earlier than bootstrap's default 768px
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (max-width: 1200px) {
+    .logo span {
+        display: none;
+    }
+    .nav > li > a {
+        padding: 15px 10px;
+    }
+    .container-fluid {
+        padding-right: 5px;
+    }
+}
 @media (max-width: 928px) {
     .navbar-collapse.collapse {
         display: none !important;
@@ -35,8 +57,8 @@ Collapse navbar earlier than bootstrap's default 768px
         margin-left: -15px;
     }
     .navbar-fixed-top .navbar-collapse, .navbar-static-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse {
-        padding-right: 15px;
-        padding-left: 15px;
+        padding-right: 10px;
+        padding-left: 10px;
     }
     .navbar-collapse {
         overflow-x: visible;

@@ -76,7 +76,7 @@ export default class MapView {
      * in [-180,180].
      *
      * Note that this.mapApi.getBounds().getCenter() returns a lng that is always in [-180,180] but for some
-     * reason the latitude returned by the function does no exactly equal the current center latitude.  If
+     * reason the latitude returned by the function does not exactly equal the current center latitude.  If
      * we use a latitude value that is slightly off each time the map moves up each time the user visits.
      */
     getCenter() {
@@ -200,7 +200,7 @@ export default class MapView {
             supercharger.marker = null;
             removed++;
         });
-        console.log("zoom=" + this.zoom + " removed=" + removed + " t=" + (performance.now() - t));
+        console.log(`zoom=${this.zoom} removed=${removed} t=${(performance.now() - t)}`);
         return infoWindows;
     };
 
@@ -238,6 +238,7 @@ export default class MapView {
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
             .iterate((s1) => {
                 if (s1.marker === null || s1.marker === undefined) { // gotta check again because one site might set another site's marker
                     var overlapSites = [s1];
@@ -245,6 +246,7 @@ export default class MapView {
                     var s1Bounds = L.latLngBounds(L.latLng(s1Lat - radius, s1Lng - radius), L.latLng(s1Lat + radius, s1Lng + radius));
                     new SiteIterator()
                         .withPredicate(SitePredicates.buildInViewPredicate(s1Bounds))
+                        .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
                         .iterate((s2) => {
                             if (s1 !== s2 && s1.status === s2.status && ((s2.marker === null || s2.marker === undefined)) && overlapSites.length < 999) {
                                 var x = s1Lat - s2.location.lat, y = s1Lng - s2.location.lng, dist = Math.sqrt(x*x + y*y);
@@ -258,7 +260,7 @@ export default class MapView {
                 }
             });
         this.restoreInfoWindows(infoWindows);
-        console.log("zoom=" + newZoom + " created=" + created + " t=" + (performance.now() - t));
+        console.log(`zoom=${newZoom} created=${created} clusters=${renderModel.getCurrentClusterSize()} t=${(performance.now() - t)}`);
     };
 
     createIndividualMarkers(bounds, newMarkerSize) {
@@ -269,12 +271,13 @@ export default class MapView {
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
             .iterate((supercharger) => {
                 this.markerFactory.createMarker(supercharger, newMarkerSize);
                 created++;
             });
         this.restoreInfoWindows(infoWindows);
-        console.log("zoom=" + this.zoom + " created=" + created + " markers=" + newMarkerSize + " t=" + (performance.now() - t));
+        console.log(`zoom=${this.zoom} created=${created} markers=${newMarkerSize} t=${(performance.now() - t)}`);
     };
 
     updateMarkerSize(markerSize) {
@@ -284,6 +287,9 @@ export default class MapView {
             .iterate((supercharger) => {
                 if (supercharger.marker.setRadius) supercharger.marker.setRadius(markerSize);
             });
+        var samples = $(".sample-markers img");
+        samples.width(markerSize * 2);
+        samples.height(markerSize * 2);
     };
 
     setupForWayBack() {
@@ -320,7 +326,7 @@ export default class MapView {
 
     handleZoomToSite(event, data) {
         const newZoom = (this.zoom > 14 && this.zoom < 19 ? 19 : 15);
-        EventBus.dispatch(MapEvents.pan_zoom, {latLng: data.supercharger.location, zoom: newZoom});
+        EventBus.dispatch(MapEvents.pan_zoom, { latLng: data.supercharger.location, zoom: newZoom });
     };
 
     handleMarkerRemove(event) {

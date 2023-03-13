@@ -16,7 +16,7 @@ export default class DataView {
 
         this.filterControl = new SiteFilterControl(
             $("#data-filter"),
-            $.proxy(this.filterControlCallback, this)
+            this.filterControlCallback.bind(this)
         );
 
         this.table.find("tbody").click(DataView.handleDataClick);
@@ -103,7 +103,7 @@ export default class DataView {
                 "data": function (d) {
                     d.regionId = dataView.filterControl.getRegionId();
                     d.countryId = dataView.filterControl.getCountryId();
-                    d.state = dataView.filterControl.getState();
+                    d.state = dataView.filterControl.getState().join(",");
                     d.status = dataView.filterControl.getStatus().join(",");
                     d.stalls = dataView.filterControl.getStalls();
                     d.power = dataView.filterControl.getPower();

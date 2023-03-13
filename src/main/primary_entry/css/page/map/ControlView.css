@@ -1,3 +1,27 @@
+li.control-view-buttons {
+    padding: 8px;
+    display: flex;
+}
+li.control-view-buttons button {
+    padding: 6px;
+    margin: 0 2px;
+}
+.control-view-buttons button:hover {
+    background-color: #ccc;
+}
+.control-view-buttons .checked {
+    background-color: #ddd;
+}
+.control-view-buttons img {
+    width: 20px;
+    height: 20px;
+}
+img.control-row-icon {
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+}
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  Slider styling
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -74,9 +98,11 @@ label.control {
 }
 
 .control-row {
+    flex: 0 30px;
+    padding: 0 2px;
     display: inline-flex;
     flex-wrap: wrap;
-    margin-top: 5px;
+    margin-top: 4px;
     text-align: left;
 }
 .control-row .collapse { 

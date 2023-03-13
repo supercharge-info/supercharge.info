@@ -41,6 +41,11 @@ Navigation Bar
 
         <div class="container-fluid">
 
+            <div class="logo">
+                <img src="/images/red_dot_t.svg" width="40" height="40" title="supercharge.info"/>
+                <span>supercharge.info</span>
+            </div>
+            
             <!-- This is what gets shown for the navbar when it collapses for small screens. -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -54,47 +59,6 @@ Navigation Bar
             <!-- When the collapse is triggered each child of navbar-collapse is displayed on a separate line
                  of the new collapsing/expanding menu. -->
             <div class="navbar-collapse collapse">
-
-                <!--
-                Drop Down
-                -->
-                <ul class="nav navbar-nav" id="navbar-map-dropdown" style="display: none;">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown">Map Options&nbsp;
-                            <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
-                        <ul class="dropdown-menu" id="navbar-dropdown-menu-item-list">
-                            <li>
-                                <a href="#range-circles-all-on"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;All
-                                    Range Circles On</a>
-                            </li>
-                            <li>
-                                <a href="#range-circles-all-off">
-                                    <span class="glyphicon glyphicon-minus-sign"></span>&nbsp;All
-                                    Range Circles Off</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Map Controls</li>
-                            <li>
-                                <a id="rendering-menu-item" href="#rendering-menu-item"><span
-                                        class="glyphicon glyphicon-check"></span>&nbsp;Rendering Options</a>
-                            </li>
-                            <li>
-                                <a id="range-menu-item" href="#range-menu-item"><span
-                                        class="glyphicon glyphicon-unchecked"></span>&nbsp;Range Circle Options</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a id="create-link-menu-item" href="#create-link-menu-item"><span
-                                        class="glyphicon glyphicon-link"></span>&nbsp;Link To This View...</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#way-back-menu-item">Way Back</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
                 <!--
                 Counts Table
                 -->
@@ -137,6 +101,19 @@ Navigation Bar
                     </li>
                 </ul>
 
+                <!--
+                NavBar Options
+                -->
+                <ul class="nav navbar-nav navbar-right" id="navbar-map-dropdown" style="display: none;">
+                    <li class="control-view-buttons">
+                        <button type="button" class="form-control checked" id="filter-menu-item" title="show/hide filter options"><img src="/images/mono-filter.svg"/></button>
+                        <button type="button" class="form-control checked" id="rendering-menu-item" title="show/hide rendering options"><img src="/images/sliders-icon.svg"/></button>
+                        <button type="button" class="form-control" id="range-menu-item" title="show/hide range circle options"><img src="/images/circle-center-icon.svg"/></button>
+                        <button type="button" class="form-control" id="create-link-menu-item" title="Link to this view"><img src="/images/link-symbol.svg"/></button>
+                        <button type="button" class="form-control" id="way-back-menu-item" title="Way Back"><img src="/images/history-icon.svg"/></button>
+                    </li>
+                </ul>
+
             </div>
         </div>
     </div>
@@ -167,8 +144,29 @@ PAGE: map
 <div class="page" id="page-map" style="display:none">
 
     <div id="page-control">
+        <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Filter-->
+        <div id="control-row-filter" class="control-row">
+            <img src="/images/mono-filter.svg" class="collapse control-row-icon" title="Filter options"/>
+            <form class="form-inline" role="form">
+                <select class="form-control region-select"></select>
+                <select class="form-control country-select"
+                        data-live-search="true"></select>
+                <select class="form-control state-select"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
+                        title="-- Any State --"
+                        data-live-search="true"></select>
+                <select class="form-control status-select"
+                        multiple data-actions-box="true"
+                        title="-- Any Status --"></select>
+                <select class="form-control stalls-select"></select>
+                <select class="form-control power-select"></select>
+                <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            </form>
+        </div>
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
         <div id="control-row-rendering" class="control-row">
+            <img src="/images/sliders-icon.svg" class="collapse control-row-icon" title="Rendering options"/>
             <div>
                 <label for="range-slider" class="control">Range</label>
                 <input id="range-slider" type="range" min="0" max="350" step="10" value="175" class="slider-control"/>
@@ -219,6 +217,13 @@ PAGE: map
         </div>
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
         <div id="control-row-range" class="control-row" style="display: none">
+            <img src="/images/circle-center-icon.svg" class="collapse control-row-icon" title="Range circle options"/>
+            <span class="control-view-buttons">
+                <label class="control collapse">Circles</label>
+                <button type="button" class="btn btn-default btn-xs" id="range-circles-all-on" title="All Range Circles On"><img src="/images/plus-circle.svg"/></button>
+                <button type="button" class="btn btn-default btn-xs" id="range-circles-all-off" title="All Range Circles Off"><img src="/images/minus-circle.svg"/></button>
+            </span>
+            <div class="collapse" style="width: 24px;"></div>
             <div>
                 <label for="fill-color-input" class="control">Fill Color</label>
                 <input type="text" id="fill-color-input"/>
@@ -226,7 +231,7 @@ PAGE: map
                 <input id="fill-opacity-slider" type="range" class="small-slider-control"/>
                 <span id="fill-opacity-number-text"></span>
             </div>
-            <div class="collapse" style="width: 39px;"></div>
+            <div class="collapse" style="width: 24px;"></div>
             <div>
                 <label for="border-color-input" class="control">Border Color</label>
                 <input type="text" id="border-color-input"/>
@@ -236,7 +241,6 @@ PAGE: map
             </div>
         </div>
     </div>
-
     <div id="map-main-content">
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Route Details -->
         <div id="routing-panel" class="panel panel-default">
@@ -304,19 +308,19 @@ PAGE: map
                     </g>
                 </pattern>
                 <radialGradient id="red_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#ffc0c0" />
+                    <stop offset="0%" stop-color="#ff6060" />
                     <stop offset="50%" stop-color="#d02020" />
-                    <stop offset="75%" stop-color="#800000" />
-                    <stop offset="100%" stop-color="#400000" />
+                    <stop offset="75%" stop-color="#b00000" />
+                    <stop offset="100%" stop-color="#800000" />
                 </radialGradient>
-                <radialGradient id="red_dot_alt" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#ff0000" />
-                    <stop offset="50%" stop-color="#e00000" />
+                <radialGradient id="red_dot_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                    <stop offset="0%" stop-color="#e00000" />
+                    <stop offset="50%" stop-color="#c00000" />
                     <stop offset="75%" stop-color="#a00000" />
-                    <stop offset="100%" stop-color="#400000" />
+                    <stop offset="100%" stop-color="#800000" />
                 </radialGradient>
                 <pattern id="red_dot_limited" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="500" cx="500" cy="500" fill="url(#red_dot_alt)" />
+                    <circle r="500" cx="500" cy="500" fill="url(#red_dot_ltd)" />
                     <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
                         <g>
                             <g transform="matrix(12 0 0 12 0 -125)">
@@ -411,6 +415,9 @@ PAGE: data
             <select class="form-control country-select"
                     data-live-search="true"></select>
             <select class="form-control state-select"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="-- Any State --"
                     data-live-search="true"></select>
             <select class="form-control status-select"
                     multiple data-actions-box="true"
@@ -489,17 +496,16 @@ PAGE: changes
             <select class="form-control region-select"></select>
             <select class="form-control country-select"
                     data-live-search="true"></select>
-            <!--
             <select class="form-control state-select"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="-- Any State --"
                     data-live-search="true"></select>
-            -->
             <select class="form-control status-select"
                     multiple data-actions-box="true"
                     title="-- Any Status --"></select>
-            <!--
             <select class="form-control stalls-select"></select>
             <select class="form-control power-select"></select>
-            -->
             <button class="form-control reset" title="Reset filters" type="button">Reset</button>
         </form>
     </div>

@@ -100,7 +100,7 @@ export default class SiteFilterControl {
     handleFilterReset() {
         this.init(null);
         this.changeCallback();
-    }
+    };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // UI update methods
@@ -150,7 +150,7 @@ export default class SiteFilterControl {
             states = [...Sites.getStates()];
         }
         states = states.filter(s => s !== null).sort();
-        this.stateSelect.html(`<option value=''>${states.length === 0 ? "(state n/a)" : "-- Any State --"}</option>`);
+        this.stateSelect.html("");
         states.forEach(s => {
             var sName = Sites.StateAbbreviations[s] || "";
             this.stateSelect.append(`<option data-tokens='${sName}' value='${s}' data-subtext="${sName}">${s}</option>`);
@@ -162,12 +162,15 @@ export default class SiteFilterControl {
         this.statusSelect.html("");
         Status.ALL.forEach(s => {
             var imgHtml = `<img src='${s.getIcon()}'/>`;
-            this.statusSelect.append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`)
+            if (s === Status.OPEN) { imgHtml += `<img src='/images/red_dot_limited.svg'/>`; }
+            this.statusSelect.append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`);
         });
+        /*
         if (this.includeCustomStatus) {
             var imgHtml = `<img src='${Status.USER_ADDED.getIcon()}'/>`;
             this.statusSelect.append(`<option data-content="${imgHtml}<span>${Status.USER_ADDED.displayName}</span>" value='${Status.USER_ADDED.value}'></option>`);
         }
+        */
         this.statusSelect.selectpicker("refresh");
     };
 

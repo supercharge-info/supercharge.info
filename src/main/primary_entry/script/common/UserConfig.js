@@ -181,7 +181,6 @@ class UserConfig {
             type: 'POST'
         }).done(() => {
             console.log("UserConfig.save(): " + lastSaved);
-            console.log(this);
         })
     };
 

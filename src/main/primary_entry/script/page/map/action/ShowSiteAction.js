@@ -32,7 +32,7 @@ export default class ShowSiteAction {
         $.doTimeout(250, () => {
             if (MapPage.initComplete) {
 
-                EventBus.dispatch(MapEvents.pan_zoom, {latLng: supercharger.location, zoom: 10});
+                EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, zoom: 10 });
 
                 /* Now the map is initialized, but the selected marker may not be because we initialize markers
                  * in response to viewport changes on the map. */

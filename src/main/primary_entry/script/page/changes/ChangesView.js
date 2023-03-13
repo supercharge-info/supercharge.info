@@ -41,7 +41,10 @@ export default class ChangesView {
         userConfig.setChangeType(this.filterControl.getChangeType());
         userConfig.setRegionId(this.filterControl.getRegionId());
         userConfig.setCountryId(this.filterControl.getCountryId());
+        userConfig.setState(this.filterControl.getState());
         userConfig.setStatus(this.filterControl.getStatus());
+        userConfig.setStalls(this.filterControl.getStalls());
+        userConfig.setPower(this.filterControl.getPower());
     };
 
     static handleChangeClick(event) {
@@ -61,6 +64,12 @@ export default class ChangesView {
         const site = Sites.getById(changeRow.siteId);
         return `<span title="${site.address.street}">${changeRow.siteName}</span>`
     }
+
+    static buildStatus(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        var s = Status.fromString(changeRow.siteStatus);
+        return `<span class='${s.value} status-select' title='${s.displayName}'><img src='${s.getIcon(site)}'/></span>`
+    }
     
     static buildDetails(changeRow) {
         const site = Sites.getById(changeRow.siteId);
@@ -70,6 +79,7 @@ export default class ChangesView {
             '';
 
         // mock stall details for now
+        /*
         if (Math.random() > 0.8) {
             changeRow.stalls = [
                 {
@@ -103,7 +113,7 @@ export default class ChangesView {
                 }
             ];
         }
-        
+        */
         if (!changeRow.stalls) {
             return stalls + kw;
         } else if (changeRow.stalls.length === 1) {
@@ -175,7 +185,10 @@ export default class ChangesView {
                     d.changeType = changesView.filterControl.getChangeType();
                     d.regionId = changesView.filterControl.getRegionId();
                     d.countryId = changesView.filterControl.getCountryId();
+                    d.state = changesView.filterControl.getState().join(",");
                     d.status = changesView.filterControl.getStatus().join(",");
+                    d.stalls = changesView.filterControl.getStalls();
+                    d.power = changesView.filterControl.getPower();
                 }
             },
             "rowId": "id",
@@ -186,9 +199,11 @@ export default class ChangesView {
                 },
                 {
                     "data": (row, type, val, meta) => {
+                        /*
                         if (Math.random() > 0.8) {
                             row.statusText = "Editor's note goes here";
                         }
+                        */
                         var chg = row.changeType.toLowerCase();
                         return row.statusText ? `<span title="${row.statusText}">${chg}*</span>` : chg;
                     },
@@ -202,8 +217,7 @@ export default class ChangesView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        var s = Status.fromString(row.siteStatus);
-                        return `<span class='${row.siteStatus} status-select' title='${s.displayName}'><img src='${s.getIcon()}'/></span>`
+                        return ChangesView.buildStatus(row);
                     },
                     "width": "5%"
                 },

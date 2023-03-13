@@ -34,7 +34,7 @@ export default class MarkerFactory {
         marker.tooltipClass = "tooltip " + supercharger.status.className;
         marker.on('click', this._handleMarkerClick.bind(this, marker, supercharger));
         marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
-        mapLayers.addToLayer(supercharger.status, marker);
+        mapLayers.addToOverlay(marker);
     };
 
     createMarkerCluster(superchargers, zoom) {
@@ -61,7 +61,8 @@ export default class MarkerFactory {
 
         const markerOptions = {
             icon: L.divIcon({
-                iconSize: 16,
+                pane: 'markers',
+                iconSize: [16, 16],
                 iconAnchor: [8, 8],
                 className: "cluster-marker " + superchargers[0].status.className,
                 html: '<div>' + superchargers.length + '</div>'
@@ -70,12 +71,12 @@ export default class MarkerFactory {
         };
         const markerLocation = L.latLng(lat / superchargers.length, lng / superchargers.length)
         const marker = L.marker(markerLocation, markerOptions);
-        marker.on('click', $.proxy(this._handleClusterZoom, this, superchargers, zoom + zoomIncrement));
+        marker.on('click', this._handleClusterZoom.bind(this, markerLocation, zoom + zoomIncrement));
         marker.bindTooltip(markerTitle, { className: "tooltip " + superchargers[0].status.className, opacity: 0.92 });
         for (var s in superchargers) {
             superchargers[s].marker = marker;
         }
-        mapLayers.addToLayer(superchargers[0].status, marker);
+        mapLayers.addToOverlay(marker);
     };
 
     _handleMarkerClick(marker, supercharger) {
@@ -102,10 +103,8 @@ export default class MarkerFactory {
         marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
 	};
 
-    _handleClusterZoom(superchargers, newZoom) {
-        //MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
-        var marker = superchargers[0].marker;
-        EventBus.dispatch(MapEvents.pan_zoom, {latLng: marker.getLatLng(), zoom: newZoom})
+    _handleClusterZoom(markerLocation, newZoom) {
+        EventBus.dispatch(MapEvents.pan_zoom, { latLng: markerLocation, zoom: newZoom });
     };
 
     static CloseAllOpenUnpinnedInfoWindows() {
