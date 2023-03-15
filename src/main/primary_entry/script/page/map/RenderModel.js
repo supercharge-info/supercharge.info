@@ -1,4 +1,5 @@
 import EventBus from "../../util/EventBus";
+import userConfig from "../../common/UserConfig";
 
 const CLUSTERSIZE_MIN = 1;
 const CLUSTERSIZE_MAX = 9;
@@ -8,9 +9,9 @@ const MARKERSIZE_MAX = 10;
 class RenderModel {
 
     constructor() {
-        this.markerType = window.localStorage.getItem("markerType") || "Z";
-        this.markerSize = window.localStorage.getItem("markerSize") || 8;
-        this.clusterSize = window.localStorage.getItem("clusterSize") || 5;
+        this.markerType = userConfig.markerType || "Z";
+        this.markerSize = userConfig.markerSize || 8;
+        this.clusterSize = userConfig.clusterSize || 5;
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -25,7 +26,7 @@ class RenderModel {
         //console.log("SMT " + this.markerType + " -> " + newMarkerType);
         if (newMarkerType != this.markerType) {
             this.markerType = newMarkerType;
-            window.localStorage.setItem("markerType", newMarkerType);
+            userConfig.markerType = newMarkerType;
             this.fireMarkerTypeChangedEvent();
         }
     }
@@ -41,7 +42,7 @@ class RenderModel {
     setCurrentMarkerSize(newSize) {
         if (newSize != this.markerSize) {
             this.markerSize = newSize;
-            window.localStorage.setItem("markerSize", newSize);
+            userConfig.markerSize = newSize;
             this.fireMarkerSizeChangedEvent();
         }
     }
@@ -65,7 +66,7 @@ class RenderModel {
     setCurrentClusterSize(newSize) {
         if (newSize != this.clusterSize) {
             this.clusterSize = newSize;
-            window.localStorage.setItem("clusterSize", newSize);
+            userConfig.clusterSize = newSize;
             this.fireClusterSizeChangedEvent();
         }
     }
