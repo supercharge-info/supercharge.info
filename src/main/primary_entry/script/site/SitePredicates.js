@@ -37,12 +37,13 @@ const SitePredicates = {
 
     buildUserFilterPredicate: function (filter) {
         return (site) => {
+            if (site.isUserAdded()) return true; // short circuit for now to always show user-added markers
             if (filter.regionId !== null && site.address.regionId !== filter.regionId) return false;
             if (filter.countryId !== null && site.address.countryId !== filter.countryId) return false;
             if (filter.state !== null && filter.state.length > 0 && filter.state.indexOf(site.address.state) < 0) return false;
             if (filter.stalls !== null && site.numStalls < filter.stalls) return false;
             if (filter.power !== null && site.powerKilowatt < filter.power) return false;
-            if (filter.status !== null && filter.status.length > 0 && filter.status.indexOf(site.status.value) < 0) return site.isUserAdded();
+            if (filter.status !== null && filter.status.length > 0 && filter.status.indexOf(site.status.value) < 0) return false;
             return true;
         };
     },
