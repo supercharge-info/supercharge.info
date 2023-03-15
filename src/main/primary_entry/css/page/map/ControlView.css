@@ -16,11 +16,6 @@ li.control-view-buttons button {
     width: 20px;
     height: 20px;
 }
-img.control-row-icon {
-    width: 20px;
-    height: 20px;
-    margin: 2px;
-}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  Slider styling
@@ -102,11 +97,25 @@ label.control {
     padding: 0 2px;
     display: inline-flex;
     flex-wrap: wrap;
-    margin-top: 4px;
+    margin: 2px 0;
     text-align: left;
 }
 .control-row .collapse { 
     display: revert;
+}
+img.control-row-icon {
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+}
+
+#control-row-filter .form-inline {
+    margin-left: 18px;
+}
+
+#control-row-rendering div {
+    margin-top: 1px;
+    margin-bottom: -1px;
 }
 
 @media (max-width: 968px) {

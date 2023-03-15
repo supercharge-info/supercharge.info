@@ -182,9 +182,20 @@ a.unpin {
     display: none; /* this close button is only used on small screens */
 }
 
-.leaflet-control-layers-overlays img {
-    width: 16px;
-    height: 16px;
+.leaflet-left .leaflet-control {
+    margin-left: 5px;
+    opacity: 0.8;
+}
+.leaflet-right .leaflet-control {
+    margin-right: 5px;
+    opacity: 0.8;
+}
+.leaflet-top .leaflet-control {
+    margin-top: 5px;
+    opacity: 0.8;
+}
+.leaflet-control:hover {
+    opacity: 0.9;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
