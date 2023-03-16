@@ -20,6 +20,8 @@ export default class FilterControlView {
     
     syncFilters() {
         this.filterControl.init(userConfig);
+        EventBus.dispatch("remove-all-markers-event");
+        EventBus.dispatch("viewport-changed-event");
     }
 
     filterControlCallback() {

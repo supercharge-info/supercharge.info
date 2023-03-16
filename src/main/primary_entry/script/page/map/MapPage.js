@@ -31,6 +31,8 @@ export default class MapPage {
         if (!MapPage.initStarted) {
             this.initialize();
             MapPage.initStarted = true;
+        } else {
+            MapPage.filterControlView.syncFilters();
         }
         $("#navbar-map-dropdown").show();
     };
@@ -40,7 +42,7 @@ export default class MapPage {
     };
 
     initialize() {
-        new FilterControlView();
+        MapPage.filterControlView = new FilterControlView();
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();
