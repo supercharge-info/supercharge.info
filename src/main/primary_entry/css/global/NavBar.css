@@ -11,6 +11,10 @@
     margin-bottom: 0;
 }
 
+#navbar-menu-item-list li:hover {
+    background-color: #ddd;
+}
+
 .logo {
     padding: 5px 10px 5px 0;
     font-size: 2em;

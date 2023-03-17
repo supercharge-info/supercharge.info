@@ -55,9 +55,9 @@ export default class NavBarOptions {
 
     static checkboxUpdate(menuItem, checked) {
         if (checked) {
-            menuItem.addClass("checked");
+            menuItem.addClass("active");
         } else {
-            menuItem.removeClass("checked");
+            menuItem.removeClass("active");
         }
     }
 

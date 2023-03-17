@@ -52,6 +52,12 @@ export default class DataView {
         }
     };
 
+    static buildStatus(supercharger) {
+        const site = supercharger;
+        var s = Status.fromString(supercharger.status);
+        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/></span>`
+    }
+
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
         return `<a href='${href}' ${titleAttr} target='_blank'>${content}</a>`;
@@ -141,8 +147,7 @@ export default class DataView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        var s = Status.fromString(row.status);
-                        return `<span class='${row.status} status-select' title='${s.displayName}'><img src='${s.getIcon()}'/></span>`
+                        return DataView.buildStatus(row);
                     }
                 },
                 {

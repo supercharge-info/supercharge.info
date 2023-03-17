@@ -131,7 +131,7 @@ export default class NavBar {
     };
 
     /**
-     * If the navbar is collapsed then hide/close it each time the user click a menu item (or the body).
+     * If the navbar is collapsed then hide/close it each time the user clicks a menu item (or the body).
      */
     autoCloseCollapsedNavBar(event) {
         if (this.navbarToggle.is(":visible") && this.navbarCollapse.is(":visible")) {

@@ -7,10 +7,15 @@ li.control-view-buttons button {
     margin: 0 2px;
 }
 .control-view-buttons button:hover {
-    background-color: #ccc;
+    background-color: #e6e6e6;
+    border-color: #adadad;
 }
-.control-view-buttons .checked {
-    background-color: #ddd;
+.control-view-buttons .active {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.control-view-buttons .active:hover {
+    background-color: #d4d4d4;
 }
 .control-view-buttons img {
     width: 20px;

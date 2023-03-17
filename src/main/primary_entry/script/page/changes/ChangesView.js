@@ -68,7 +68,7 @@ export default class ChangesView {
     static buildStatus(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         var s = Status.fromString(changeRow.siteStatus);
-        return `<span class='${s.value} status-select' title='${s.displayName}'><img src='${s.getIcon(site)}'/></span>`
+        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/></span>`
     }
     
     static buildDetails(changeRow) {

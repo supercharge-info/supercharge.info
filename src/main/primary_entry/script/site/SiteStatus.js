@@ -7,7 +7,8 @@ const Status = {
         displayName: "Permanently Closed",
         className: "closed-perm",
         getIcon: (supercharger) => "/images/black_dot_x.svg",
-        getFill: (supercharger) => "url(#black_dot_x)"
+        getFill: (supercharger) => "url(#black_dot_x)",
+        getTitle: (supercharger) => "Permanently Closed"
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
@@ -15,7 +16,8 @@ const Status = {
         displayName: "Temporarily Closed",
         className: "closed-temp",
         getIcon: (supercharger) => "/images/gray_dot_x.svg",
-        getFill: (supercharger) => "url(#gray_dot_x)"
+        getFill: (supercharger) => "url(#gray_dot_x)",
+        getTitle: (supercharger) => "Temporarily Closed"
     },
     PERMIT: {
         value: 'PERMIT',
@@ -23,7 +25,8 @@ const Status = {
         displayName: "Permit",
         className: "permit",
         getIcon: (supercharger) => "/images/blue_triangle.svg",
-        getFill: (supercharger) => "url(#blue_triangle)"
+        getFill: (supercharger) => "url(#blue_triangle)",
+        getTitle: (supercharger) => "Permit"
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
@@ -31,7 +34,8 @@ const Status = {
         displayName: "Construction",
         className: "construction",
         getIcon: (supercharger) => "/images/orange_triangle.svg",
-        getFill: (supercharger) => "url(#orange_triangle)"
+        getFill: (supercharger) => "url(#orange_triangle)",
+        getTitle: (supercharger) => "Construction"
     },
     OPEN: {
         value: 'OPEN',
@@ -39,14 +43,16 @@ const Status = {
         displayName: "Open",
         className: "open",
         getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "red_dot_limited.svg" : "red_dot.svg"),
-        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)")
+        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)"),
+        getTitle: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "Open - limited hours" : "Open")
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
         className: "user",
         getIcon: (supercharger) => "/images/green_dot.svg",
-        getFill: (supercharger) => "url(#green_dot)"
+        getFill: (supercharger) => "url(#green_dot)",
+        getTitle: (supercharger) => "Custom"
     }
 };
 

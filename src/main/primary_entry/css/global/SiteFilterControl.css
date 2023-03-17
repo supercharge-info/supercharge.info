@@ -8,6 +8,18 @@
 .bootstrap-select .dropdown-toggle .caret {
     position: inherit;
 }
+.bootstrap-select button.dropdown-toggle {
+    background-color: #def;
+}
+.bootstrap-select button.dropdown-toggle.bs-placeholder {
+    color: #bbb;
+    border-color: #ddd;
+    background-color: #fff;
+}
+.bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
 
 .status-select .filter-option-inner-inner span {
     font-size: 0px;
@@ -33,10 +45,6 @@
 button.reset {
     padding: 0px 12px;
     height: 28px;
-}
-
-button.reset:hover {
-    background-color: lightgray;
 }
 
 /* work around some bootstrap weirdness where an original select box was invisibly covering the reset button */
