@@ -23,7 +23,7 @@ export default class MarkerFactory {
         supercharger.markerSize = markerSize;
         const markerOptions = {
             pane: 'markers',
-            radius: markerSize,
+            radius: markerSize * supercharger.getMarkerMultiplier(),
             stroke: false,
             fillColor: supercharger.status.getFill(supercharger),
             fillOpacity: 1

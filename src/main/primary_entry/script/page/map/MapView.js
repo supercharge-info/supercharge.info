@@ -285,11 +285,15 @@ export default class MapView {
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_MARKER)
             .iterate((supercharger) => {
-                if (supercharger.marker.setRadius) supercharger.marker.setRadius(markerSize);
+                if (supercharger.marker.setRadius) supercharger.marker.setRadius(markerSize * supercharger.getMarkerMultiplier());
             });
-        var samples = $(".sample-markers img");
+        var samples = $(".sample-markers img.open");
         samples.width(markerSize * 2);
         samples.height(markerSize * 2);
+        samples = $(".sample-markers img.construction");
+        samples.width(markerSize * 2.4);
+        samples.height(markerSize * 2.4);
+        samples.css("marginBottom", markerSize * -0.4);
     };
 
     setupForWayBack() {

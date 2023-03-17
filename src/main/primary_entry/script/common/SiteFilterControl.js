@@ -161,8 +161,8 @@ export default class SiteFilterControl {
     populateStatusOptions() {
         this.statusSelect.html("");
         Status.ALL.forEach(s => {
-            var imgHtml = `<img src='${s.getIcon()}'/>`;
-            if (s === Status.OPEN) { imgHtml += `<img src='/images/red_dot_limited.svg'/>`; }
+            var imgHtml = `<img src='${s.getIcon()}' class='${s.value}'/>`;
+            if (s === Status.OPEN) { imgHtml += `<img src='/images/red_dot_limited.svg' class='OPEN'/>`; }
             this.statusSelect.append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`);
         });
         /*

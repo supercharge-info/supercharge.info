@@ -97,6 +97,12 @@ export default class Supercharger {
     getShortMarkerTitle() {
         return `• ${this.displayName} (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`
     }
+
+    getMarkerMultiplier() {
+        return (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) ? 1.2 : 1.0;
+    }
+
+
 };
 
 Supercharger.fromJSON = function (jsonObject) {
