@@ -3,6 +3,7 @@
     margin: auto;
     min-width: 100px;
     padding: 3px 6px;
+    white-space: nowrap;
 }
 
 .bootstrap-select .dropdown-toggle .caret {
@@ -50,4 +51,29 @@ button.reset {
 /* work around some bootstrap weirdness where an original select box was invisibly covering the reset button */
 .bootstrap-select select {
     left: 0px;
+}
+
+.site-results, .zero-sites {
+    margin: auto;
+    padding: 3px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+.site-results {
+    background-color: #def;
+    border: 1px solid #69f;
+}
+.zero-sites {
+    background-color: #fcc;
+    border: 1px solid #f66;
+    animation: glow 1s 4 alternate;
+}
+@keyframes glow {
+    from {
+        box-shadow: none;
+    }
+    to {
+        box-shadow: 0 0 8px 2px #fcc;
+    }
 }

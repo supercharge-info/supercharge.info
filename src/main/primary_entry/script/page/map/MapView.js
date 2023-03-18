@@ -177,6 +177,16 @@ export default class MapView {
 
         const mapCenter = this.getCenter();
         userConfig.setLatLngZoom(mapCenter.lat, mapCenter.lng, this.zoom);
+
+        var resultCount = new SiteIterator()
+                .withPredicate(SitePredicates.buildInViewPredicate(L.latLngBounds(southWest, northEast)))
+                .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
+                .count();
+
+        var resultSpan = $("#map-result-count");
+        resultSpan.html(`<span class="shrink">Showing </span>${resultCount} site${resultCount === 1 ? "" : "s"}`);
+        resultSpan.attr("class", resultCount === 0 ? "zero-sites" : "site-results");
+        resultSpan.attr("title", resultCount === 0 ? "No sites displayed. Adjust or reset filters, zoom out, or move the map to see more." : "");
     };
 
     removeAllMarkers(saveInfoWindows) {

@@ -162,6 +162,7 @@ PAGE: map
                 <select class="form-control stalls-select"></select>
                 <select class="form-control power-select"></select>
                 <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+                <span id="map-result-count"></span>
             </form>
         </div>
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
@@ -187,7 +188,7 @@ PAGE: map
                         <input type="radio" name="markers" id="marker-z" checked>
                         <img src="/images/red_dot.svg" alt="open" width="8" height="8" class="collapse"/>
                         <img src="/images/red_dot.svg" alt="open" width="20" height="20" class="collapse"/>
-                        <span title="Marker size varies by zoom level">Auto<span class="collapse">-Zoom</span></span>
+                        <span title="Marker size varies by zoom level">Auto<span class="shrink">-Zoom</span></span>
                     </label>
                     <label id="marker-f-label" class="btn btn-default btn-xs">
                         <input type="radio" name="markers" id="marker-f">
@@ -195,7 +196,7 @@ PAGE: map
                             <img src="/images/red_dot.svg" alt="open" class="marker-icon collapse open"/>
                             <img src="images/orange_triangle.svg" alt="construction" class="marker-icon collapse construction"/>
                         </span>
-                        <span title="Choose a marker size">Fixed<span class="collapse">&nbsp;Size</span></span>
+                        <span title="Choose a marker size">Fixed<span class="shrink">&nbsp;Size</span></span>
                     </label>
                     <label id="marker-c-label" class="btn btn-default btn-xs">
                         <input type="radio" name="markers" id="marker-c">
@@ -223,7 +224,7 @@ PAGE: map
                 <button type="button" class="btn btn-default btn-xs" id="range-circles-all-on" title="All Range Circles On"><img src="/images/plus-circle.svg"/></button>
                 <button type="button" class="btn btn-default btn-xs" id="range-circles-all-off" title="All Range Circles Off"><img src="/images/minus-circle.svg"/></button>
             </span>
-            <div class="collapse" style="width: 24px;"></div>
+            <div class="shrink" style="width: 24px;"></div>
             <div>
                 <label for="fill-color-input" class="control">Fill Color</label>
                 <input type="text" id="fill-color-input"/>
@@ -231,7 +232,7 @@ PAGE: map
                 <input id="fill-opacity-slider" type="range" class="small-slider-control"/>
                 <span id="fill-opacity-number-text"></span>
             </div>
-            <div class="collapse" style="width: 24px;"></div>
+            <div class="shrink" style="width: 24px;"></div>
             <div>
                 <label for="border-color-input" class="control">Border Color</label>
                 <input type="text" id="border-color-input"/>
@@ -425,6 +426,7 @@ PAGE: data
             <select class="form-control stalls-select"></select>
             <select class="form-control power-select"></select>
             <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            <span id="data-result-count"></span>
         </form>
     </div>
 
@@ -507,6 +509,7 @@ PAGE: changes
             <select class="form-control stalls-select"></select>
             <select class="form-control power-select"></select>
             <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            <span id="changes-result-count"></span>
         </form>
     </div>
 

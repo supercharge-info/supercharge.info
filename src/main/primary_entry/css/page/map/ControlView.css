@@ -87,7 +87,7 @@ li.control-view-buttons button {
 
 label.control {
     font-size: larger;
-    margin: 0 .5em .2em 1em;
+    margin: 0 .5em .2em;
     vertical-align: middle;
 }
 
@@ -111,11 +111,11 @@ label.control {
 img.control-row-icon {
     width: 20px;
     height: 20px;
-    margin: 2px;
+    margin: 2px 0.2em 2px 0.8em;
 }
 
 #control-row-filter .form-inline {
-    margin-left: 18px;
+    margin-left: 0.5em;
 }
 
 #control-row-rendering div {
@@ -131,7 +131,7 @@ img.control-row-icon {
         padding-left: 0px;
         padding-right: 0px;
     }
-    .control-row .collapse, #marker-selector .collapse, #marker-selector .cluster-marker {
+    .shrink, .control-row .collapse, #marker-selector .collapse, #marker-selector .cluster-marker {
         display: none;
         width: 0px;
     }

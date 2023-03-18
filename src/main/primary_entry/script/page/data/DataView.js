@@ -104,6 +104,10 @@ export default class DataView {
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
+                    var resultSpan = $("#data-result-count");
+                    resultSpan.html(`<span class="shrink">Showing </span>${json.recordsFiltered} site${json.recordsFiltered === 1 ? "" : "s"}`);
+                    resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
+                    resultSpan.attr("title", json.recordsFiltered === 0 ? "No sites displayed. Adjust or reset filters to see more." : "");
                     return JSON.stringify(json)
                 },
                 "data": function (d) {

@@ -179,6 +179,10 @@ export default class ChangesView {
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
+                    var resultSpan = $("#changes-result-count");
+                    resultSpan.html(`<span class="shrink">Showing </span>${json.recordsFiltered} result${json.recordsFiltered === 1 ? "" : "s"}`);
+                    resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
+                    resultSpan.attr("title", json.recordsFiltered === 0 ? "No results displayed. Adjust or reset filters to see more." : "");
                     return JSON.stringify(json);
                 },
                 "data": function (d) {
