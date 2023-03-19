@@ -1,7 +1,8 @@
 .form-control select, .form-control button {
-    max-width: 300px;
+    max-width: 250px;
+    min-width: 50px;
+    width: auto;
     margin: auto;
-    min-width: 100px;
     padding: 3px 6px;
     white-space: nowrap;
 }
@@ -20,6 +21,9 @@
 .bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button:hover {
     background-color: #e6e6e6;
     border-color: #adadad;
+}
+.bs-actionsbox {
+    min-width: 180px;
 }
 
 .status-select .filter-option-inner-inner span {
