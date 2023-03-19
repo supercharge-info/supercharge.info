@@ -19,7 +19,7 @@ export default class MarkerFactory {
         this.mapApi = mapApi;
     };
 
-    createMarker(supercharger, markerSize) {
+    createMarker(supercharger, markerSize, batch) {
         supercharger.markerSize = markerSize;
         const markerOptions = {
             pane: 'markers',
@@ -34,11 +34,12 @@ export default class MarkerFactory {
         marker.tooltipClass = "tooltip " + supercharger.status.className;
         marker.on('click', this._handleMarkerClick.bind(this, marker, supercharger));
         marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
+        if (batch) return marker;
         mapLayers.addToOverlay(marker);
     };
 
-    createMarkerCluster(superchargers, zoom) {
-        if (superchargers.length === 1) return this.createMarker(superchargers[0], 8);
+    createMarkerCluster(superchargers, zoom, batch) {
+        if (superchargers.length === 1) return this.createMarker(superchargers[0], 8, batch);
         var lat = 0, lng = 0, numStalls = 0;
         var sc = superchargers.sort((a,b) => ((b.numStalls || 1) * (b.powerKilowatt || 72)) - ((a.numStalls || 1) * (a.powerKilowatt || 72) ));
         for (var s in sc) {
@@ -76,6 +77,7 @@ export default class MarkerFactory {
         for (var s in superchargers) {
             superchargers[s].marker = marker;
         }
+        if (batch) return marker;
         mapLayers.addToOverlay(marker);
     };
 

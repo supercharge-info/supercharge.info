@@ -73,6 +73,10 @@ class MapLayers {
     addToOverlay(marker) {
         marker.addTo(markerLayer);
     }
+
+    addGroupToOverlay(group) {
+        L.featureGroup(group).addTo(markerLayer);
+    }
 }
 
 export default new MapLayers();

@@ -44,8 +44,11 @@
 }
 
 button.reset {
+    display: inline-block;
     padding: 0px 12px;
     height: 28px;
+    width: auto;
+    vertical-align: middle;
 }
 
 /* work around some bootstrap weirdness where an original select box was invisibly covering the reset button */

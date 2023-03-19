@@ -131,7 +131,7 @@ img.control-row-icon {
         padding-left: 0px;
         padding-right: 0px;
     }
-    .shrink, .control-row .collapse, #marker-selector .collapse, #marker-selector .cluster-marker {
+    .shrink, .control-row .shrink, .control-row .collapse, #marker-selector .collapse, #marker-selector .cluster-marker {
         display: none;
         width: 0px;
     }

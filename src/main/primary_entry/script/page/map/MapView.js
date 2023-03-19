@@ -245,6 +245,7 @@ export default class MapView {
             infoWindows = this.removeAllMarkers(true);
         }
         const radius = overlapRadius[this.zoom] * renderModel.getCurrentClusterSize();
+        const markers = [];
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
@@ -265,10 +266,12 @@ export default class MapView {
                                 }
                             }
                         });
-                    this.markerFactory.createMarkerCluster(overlapSites, this.zoom);
+                    markers.push(this.markerFactory.createMarkerCluster(overlapSites, this.zoom, true));
                     created++;
                 }
             });
+        
+        mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${newZoom} created=${created} clusters=${renderModel.getCurrentClusterSize()} t=${(performance.now() - t)}`);
     };
@@ -278,14 +281,16 @@ export default class MapView {
         if (this.markerSize !== newMarkerSize) {
             this.updateMarkerSize(newMarkerSize);
         }
+        const markers = [];
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
             .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
             .iterate((supercharger) => {
-                this.markerFactory.createMarker(supercharger, newMarkerSize);
+                markers.push(this.markerFactory.createMarker(supercharger, newMarkerSize, true));
                 created++;
             });
+        mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${this.zoom} created=${created} markers=${newMarkerSize} t=${(performance.now() - t)}`);
     };
