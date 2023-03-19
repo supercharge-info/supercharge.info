@@ -86,6 +86,21 @@ class UserConfig {
         this.scheduleSave();
     };
 
+    setMarkerType(newMarkerType) {
+        this.markerType = newMarkerType;
+        this.scheduleSave();
+    };
+    
+    setMarkerSize(newMarkerSize) {
+        this.markerSize = newMarkerSize;
+        this.scheduleSave();
+    };
+
+    setClusterSize(newClusterSize) {
+        this.clusterSize = newClusterSize;
+        this.scheduleSave();
+    };
+
     addCustomMarker(marker) {
         this.customMarkers.push(marker);
         this.scheduleSave();

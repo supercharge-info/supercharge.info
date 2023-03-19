@@ -8,7 +8,7 @@ const MARKERSIZE_MAX = 10;
 
 class RenderModel {
 
-    constructor() {
+    init() {
         this.markerType = userConfig.markerType || "Z";
         this.markerSize = userConfig.markerSize || 8;
         this.clusterSize = userConfig.clusterSize || 5;
@@ -26,7 +26,7 @@ class RenderModel {
         //console.log("SMT " + this.markerType + " -> " + newMarkerType);
         if (newMarkerType != this.markerType) {
             this.markerType = newMarkerType;
-            userConfig.markerType = newMarkerType;
+            userConfig.setMarkerType(newMarkerType);
             this.fireMarkerTypeChangedEvent();
         }
     }
@@ -42,7 +42,7 @@ class RenderModel {
     setCurrentMarkerSize(newSize) {
         if (newSize != this.markerSize) {
             this.markerSize = newSize;
-            userConfig.markerSize = newSize;
+            userConfig.setMarkerSize(newSize);
             this.fireMarkerSizeChangedEvent();
         }
     }
@@ -66,7 +66,7 @@ class RenderModel {
     setCurrentClusterSize(newSize) {
         if (newSize != this.clusterSize) {
             this.clusterSize = newSize;
-            userConfig.clusterSize = newSize;
+            userConfig.setClusterSize(newSize);
             this.fireClusterSizeChangedEvent();
         }
     }
