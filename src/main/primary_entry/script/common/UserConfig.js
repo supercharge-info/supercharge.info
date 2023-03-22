@@ -149,15 +149,17 @@ class UserConfig {
             window.localStorage.removeItem("userConfig");
         }
         const config = this;
-        return $.getJSON(ServiceURL.USER_CONFIG).done(
-            function (userConfigJson) {
+        return $.getJSON(ServiceURL.USER_CONFIG)
+            .done((userConfigJson) => {
                 if (Objects.isNotNullOrUndef(userConfigJson.zoom) || !config.isZoomSet()) {
                     config.fromJSON(userConfigJson);
                     lastSaved = toCompString(config);
                     console.log("UserConfig.load(user): " + lastSaved);
                 }
-            }
-        );
+            })
+            .fail(() =>
+                console.log("failed to load userConfig from API, falling back to localStorage")
+            );
     };
 
     fromJSON(json) {

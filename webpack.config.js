@@ -82,7 +82,11 @@ module.exports = {
         path: path.resolve(__dirname, 'build'),
         clean: true
     },
+    //
+    // https://webpack.js.org/configuration/optimization/
     optimization: {
+        // Uncomment the following line for JS debugging:
+        //minimize: false,
         splitChunks: {
             cacheGroups: {
                 chart: {

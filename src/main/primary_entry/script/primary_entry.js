@@ -46,21 +46,20 @@ window.supercharge.start = function () {
     });
 
     //
-    // Wait for these three things to complete before starting the main app.
+    // Wait before starting the main app.
+    // userConfig.load() needs to be deferred separately, because if it fails, it somehow breaks Sites.load().
     //
     $.when(
-        userConfig.load(),
-        Sites.load(),
-        docReadyDeferred
-    ).done(() => {
-        new LoginCheckAction().loginCheck();
-        new NavBar();
-        new FeatureCheck().doCheck();
-        new TotalCountPanel();
+        userConfig.load()
+    ).always(() => {
+        $.when(
+            Sites.load(),
+            docReadyDeferred
+        ).done(() => {
+            new LoginCheckAction().loginCheck();
+            new NavBar();
+            new FeatureCheck().doCheck();
+            new TotalCountPanel();
+        });
     });
-
 };
-
-
-
-    
