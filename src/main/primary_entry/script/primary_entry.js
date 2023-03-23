@@ -41,25 +41,23 @@ window.supercharge.start = function () {
 
     // This will allow us to wait for the document to be ready below.
     const docReadyDeferred = $.Deferred();
-    $(document).ready(function () {
-        docReadyDeferred.resolve();
-    });
+    $(document).ready(() => docReadyDeferred.resolve())
+    // Allow us to wait for the user config to load without succeeding
+    const userConfigDeferred = $.Deferred();
+    $.when(userConfig.load()).always(() => userConfigDeferred.resolve());
 
     //
     // Wait before starting the main app.
     // userConfig.load() needs to be deferred separately, because if it fails, it somehow breaks Sites.load().
     //
     $.when(
-        userConfig.load()
-    ).always(() => {
-        $.when(
-            Sites.load(),
-            docReadyDeferred
-        ).done(() => {
-            new LoginCheckAction().loginCheck();
-            new NavBar();
-            new FeatureCheck().doCheck();
-            new TotalCountPanel();
-        });
+        Sites.load(),
+        docReadyDeferred,
+        userConfigDeferred
+    ).done(() => {
+        new LoginCheckAction().loginCheck();
+        new NavBar();
+        new FeatureCheck().doCheck();
+        new TotalCountPanel();
     });
 };
