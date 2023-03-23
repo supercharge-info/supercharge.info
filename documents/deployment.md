@@ -6,7 +6,7 @@ Ensure you have a version of nodejs installed and in your path. The exact versio
 
 After merging any feature branches and pulling down the current head, prep the repository for a release, download dependencies, and create a release branch:
 
-    $ npm clean
+    $ npm run clean
     $ npm install
     $ git checkout -b release
 
