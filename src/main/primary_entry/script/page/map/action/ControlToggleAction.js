@@ -10,6 +10,7 @@ export default class ControlToggleAction {
     constructor() {
         EventBus.addListener("toggle-range-control-event", this.rangeToggle, this);
         EventBus.addListener("toggle-render-control-event", this.renderToggle, this);
+        EventBus.addListener("toggle-filter-control-event", this.filterToggle, this);
         EventBus.addListener("hide-all-control-event", this.hideAll, this);
     }
 
@@ -23,9 +24,15 @@ export default class ControlToggleAction {
         controlVisibilityModel.fireChangeEvent();
     };
 
+    filterToggle() {
+        controlVisibilityModel.toggleFilterControlVisible();
+        controlVisibilityModel.fireChangeEvent();
+    };
+
     hideAll() {
         controlVisibilityModel.setRangeControlVisible(false);
         controlVisibilityModel.setRenderControlVisible(false);
+        controlVisibilityModel.setFilterControlVisible(false);
         controlVisibilityModel.fireChangeEvent();
     };
 

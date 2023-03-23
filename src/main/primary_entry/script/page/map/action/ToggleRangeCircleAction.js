@@ -16,7 +16,7 @@ export default class ToggleRangeCirclesAction {
         }
         if (!supercharger.circle) {
             supercharger.circle = ToggleRangeCirclesAction.buildCircle(supercharger);
-            mapLayers.addToLayer(supercharger.status, supercharger.circle)
+            mapLayers.addToOverlay(supercharger.circle)
         }
         else {
             supercharger.circle.remove();

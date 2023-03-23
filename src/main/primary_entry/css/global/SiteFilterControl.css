@@ -1,0 +1,86 @@
+.form-control select, .form-control button {
+    max-width: 250px;
+    min-width: 50px;
+    width: auto;
+    margin: auto;
+    padding: 3px 6px;
+    white-space: nowrap;
+}
+
+.bootstrap-select .dropdown-toggle .caret {
+    position: inherit;
+}
+.bootstrap-select button.dropdown-toggle {
+    background-color: #def;
+}
+.bootstrap-select button.dropdown-toggle.bs-placeholder {
+    color: #bbb;
+    border-color: #ddd;
+    background-color: #fff;
+}
+.bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.bs-actionsbox {
+    min-width: 180px;
+}
+
+.status-select .filter-option-inner-inner span {
+    font-size: 0px;
+}
+
+.status-select img {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+.status-select img.CONSTRUCTION, .status-select img.PERMIT {
+    width: 19px;
+    height: 19px;
+    margin-bottom: -3px;
+}
+
+.text-muted {
+    font-size: 80%;
+    color: lightsteelblue;
+}
+
+button.reset {
+    display: inline-block;
+    padding: 0px 12px;
+    height: 28px;
+    width: auto;
+    vertical-align: middle;
+}
+
+/* work around some bootstrap weirdness where an original select box was invisibly covering the reset button */
+.bootstrap-select select {
+    left: 0px;
+}
+
+.site-results, .zero-sites {
+    margin: auto;
+    padding: 3px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+.site-results {
+    background-color: #def;
+    border: 1px solid #69f;
+}
+.zero-sites {
+    background-color: #fcc;
+    border: 1px solid #f66;
+    animation: glow 1s 4 alternate;
+}
+@keyframes glow {
+    from {
+        box-shadow: none;
+    }
+    to {
+        box-shadow: 0 0 8px 2px #fcc;
+    }
+}

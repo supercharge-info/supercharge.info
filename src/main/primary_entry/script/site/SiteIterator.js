@@ -19,6 +19,18 @@ export default class SiteIterator {
         return this;
     };
 
+    count() {
+        const sitesList = Sites.getAll();
+        const LENGTH = sitesList.length;
+        let i = 0, result = 0;
+        for (; i < LENGTH; i++) {
+            const site = sitesList[i];
+            if (this.predicates.length === 0 || this.predicatesApply(site)) {
+                result++;
+            }
+        }
+        return result;
+    };
 
     iterate(applyFunction) {
         const sitesList = Sites.getAll();

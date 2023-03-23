@@ -1,6 +1,6 @@
-import EventBus from "../../util/EventBus";
-import SiteCount from "../../site/SiteCount";
-import Address from "../../site/Address";
+import EventBus from "../util/EventBus";
+import SiteCount from "../site/SiteCount";
+import Address from "../site/Address";
 import $ from "jquery";
 import L from 'leaflet';
 

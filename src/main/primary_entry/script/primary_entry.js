@@ -4,21 +4,34 @@ import FeatureCheck from "./common/FeatureCheck";
 import Sites from "./site/Sites";
 import userConfig from "./common/UserConfig";
 import LoginCheckAction from "./common/login/LoginCheckAction"
+import TotalCountPanel from "./nav/TotalCountPanel";
 // Tell webpack to build a css bundle starting with this file.
 import "../css/main.css";
+
 // Tell webpack to include these images in our package. Ultimately it is is possible to have webpack rename the
 // image file to something like [md5].png and have the below import statements return the actual path (with the md5),
-// this for perfect caching.  For now lets keep it simple, I have configured webpack not to change the image names.
+// this for perfect caching.  For now let's keep it simple, webpack is configured not to change the image names.
 import "../images/avatar-placeholder.png";
 import "../images/feed-icon.png";
-import "../images/blue_dot_16.png";
-import "../images/black_dot_16.png";
-import "../images/gray_dot_16.png";
-import "../images/green_dot_16.png";
-import "../images/red_dot_16.png";
-import "../images/red_black_dot_16.png";
-import "../images/construction-cone_16.png";
 import "../images/become_a_patron_button@2x.png";
+
+import "../images/mono-filter.svg";
+import "../images/sliders-icon.svg";
+import "../images/circle-center-icon.svg";
+import "../images/link-symbol.svg";
+import "../images/history-icon.svg";
+import "../images/plus-circle.svg";
+import "../images/minus-circle.svg";
+
+import "../images/blue_triangle.svg";
+import "../images/black_dot_x.svg";
+import "../images/gray_dot_x.svg";
+import "../images/green_dot.svg";
+import "../images/red_dot.svg";
+import "../images/red_dot_t.svg";
+import "../images/red_dot_limited.svg";
+import "../images/orange_triangle.svg";
+
 
 
 /**
@@ -28,25 +41,23 @@ window.supercharge.start = function () {
 
     // This will allow us to wait for the document to be ready below.
     const docReadyDeferred = $.Deferred();
-    $(document).ready(function () {
-        docReadyDeferred.resolve();
-    });
+    $(document).ready(() => docReadyDeferred.resolve())
+    // Allow us to wait for the user config to load without succeeding
+    const userConfigDeferred = $.Deferred();
+    $.when(userConfig.load()).always(() => userConfigDeferred.resolve());
 
     //
-    // Wait for these three things to complete before starting the main app.
+    // Wait before starting the main app.
+    // userConfig.load() needs to be deferred separately, because if it fails, it somehow breaks Sites.load().
     //
     $.when(
-        userConfig.load(),
         Sites.load(),
-        docReadyDeferred
+        docReadyDeferred,
+        userConfigDeferred
     ).done(() => {
-        new NavBar();
         new LoginCheckAction().loginCheck();
+        new NavBar();
         new FeatureCheck().doCheck();
+        new TotalCountPanel();
     });
-
 };
-
-
-
-    

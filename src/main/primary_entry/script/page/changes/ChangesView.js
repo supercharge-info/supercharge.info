@@ -2,11 +2,10 @@ import $ from "jquery";
 import 'datatables.net';
 import 'datatables.net-bs';
 import EventBus from "../../util/EventBus";
-import Analytics from "../../util/Analytics";
 import ServiceURL from "../../common/ServiceURL";
 import userConfig from "../../common/UserConfig";
-import CountryRegionControl from "../../common/CountryRegionControl";
-import SiteStatus from "../../site/SiteStatus";
+import SiteFilterControl from "../../common/SiteFilterControl";
+import Status from "../../site/SiteStatus";
 import Sites from "../../site/Sites";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
@@ -20,40 +19,43 @@ export default class ChangesView {
 
         this.tableAPI = table.DataTable(this.initDataTableOptions());
 
-        this.regionControl = new CountryRegionControl(
-            $("#changes-filter-div"),
-            $.proxy(this.regionControlCallback, this)
+        this.filterControl = new SiteFilterControl(
+            $("#changes-filter"),
+            this.filterControlCallback.bind(this)
         );
 
-        const changesView = this;
-        this.regionControl.init(userConfig.changesPageRegionId, userConfig.changesPageCountryId)
-            .done($.proxy(this.loadChanges, this))
-            .done(() => {
-                changesView.tableAPI.draw()
-            });
+        this.syncFilters();
+    }
+
+    syncFilters() {
+        this.filterControl.init(userConfig);
+        this.tableAPI.draw();
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Initialization
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    regionControlCallback(whichSelect, newValue) {
-        this.loadChanges();
-        Analytics.sendEvent("changes", "select-" + whichSelect, newValue);
-        userConfig.setRegionCountryId("changes", "region", this.regionControl.getRegionId());
-        userConfig.setRegionCountryId("changes", "country", this.regionControl.getCountryId());
-    };
-
-    loadChanges() {
+    filterControlCallback() {
         this.tableAPI.draw();
+        userConfig.setChangeType(this.filterControl.getChangeType());
+        userConfig.setRegionId(this.filterControl.getRegionId());
+        userConfig.setCountryId(this.filterControl.getCountryId());
+        userConfig.setState(this.filterControl.getState());
+        userConfig.setStatus(this.filterControl.getStatus());
+        userConfig.setStalls(this.filterControl.getStalls());
+        userConfig.setPower(this.filterControl.getPower());
     };
 
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
-            if (!target.is("a")) {
-                const clickedSiteId = parseInt(target.closest('tr').data('siteid'));
-                EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+            if (!target.is('a, b, ul, li')) {
+                // TODO: decide whether this should be closest('table') or closest('tr')
+                if (target.closest('table').find('div.open').length === 0) {
+                    const clickedSiteId = parseInt(target.closest('tr').data('siteid'));
+                    EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+                }
             }
         }
     };
@@ -62,7 +64,80 @@ export default class ChangesView {
         const site = Sites.getById(changeRow.siteId);
         return `<span title="${site.address.street}">${changeRow.siteName}</span>`
     }
+
+    static buildStatus(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        var s = Status.fromString(changeRow.siteStatus);
+        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/></span>`
+    }
     
+    static buildDetails(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        const stalls = `${site.numStalls} stalls`
+        const kw = site.powerKilowatt > 0 ?
+            ` | ${site.powerKilowatt} kW` :
+            '';
+
+        // mock stall details for now
+        /*
+        if (Math.random() > 0.8) {
+            changeRow.stalls = [
+                {
+                    "count": site.numStalls,
+                    "power": site.powerKilowatt,
+                    "type": "n/a",
+                    "status": changeRow.siteStatus
+                },
+                {
+                    "count": 4,
+                    "power": 120,
+                    "type": "V2 - Tesla",
+                    "status": "CLOSED_TEMP",
+                    "connectors": ["NACS"]
+                },
+                {
+                    "count": 8,
+                    "power": 250,
+                    "type": "V3 - Tesla",
+                    "status": "CONSTRUCTION",
+                    "connectors": ["NACS", "CCS"]
+                }
+            ];
+        } else if (Math.random() > 0.5) {
+            changeRow.stalls = [
+                {
+                    "count": site.numStalls,
+                    "power": site.powerKilowatt,
+                    "type": "Vn - Tesla",
+                    "connectors": ["NACS"]
+                }
+            ];
+        }
+        */
+        if (!changeRow.stalls) {
+            return stalls + kw;
+        } else if (changeRow.stalls.length === 1) {
+            return `${stalls}${kw} | ${changeRow.stalls[0].type} | ${changeRow.stalls[0].connectors?.join(", ")}`;
+        }
+
+        var entries = "";
+        changeRow.stalls.forEach(s => {
+            entries += `
+            <li class="${s.status}">${s.count} @ ${s.power} kW → ${Status.fromString(s.status).displayName}
+                <li class="${s.status} connectors">${s.type} | ${s.connectors?.join(", ")}</li>
+            </li>`;
+        });
+
+        return `
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${stalls}${kw}
+                    <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                <ul class="dropdown-menu">
+                    ${entries}
+                </ul>
+            </div>`;
+    }
+
     static buildLinks(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         const addr = site.address;
@@ -77,15 +152,6 @@ export default class ChangesView {
         return `${gmapLink} | ${discussLink}${teslaLink}`;
     }
 
-    static buildDetails(changeRow) {
-        const site = Sites.getById(changeRow.siteId);
-        const stalls = `${site.numStalls} stalls`
-        const kw = site.powerKilowatt > 0 ?
-            ` | ${site.powerKilowatt} kW` :
-            '';
-        return stalls + kw;
-    }
-
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
         return `<a href='${href}' ${titleAttr} target='_blank'>${content}</a>`;
@@ -94,6 +160,7 @@ export default class ChangesView {
     initDataTableOptions() {
         const changesView = this;
         return {
+            "responsive": true,
             "paging": true,
             "ordering": false,
             "searching": false,
@@ -107,47 +174,68 @@ export default class ChangesView {
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
-                    const json = jQuery.parseJSON(data);
+                    const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
-                    return JSON.stringify(json)
+                    var resultSpan = $("#changes-result-count");
+                    resultSpan.html(`<span class="shrink">Showing </span>${json.recordsFiltered} result${json.recordsFiltered === 1 ? "" : "s"}`);
+                    resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
+                    resultSpan.attr("title", json.recordsFiltered === 0 ? "No results displayed. Adjust or reset filters to see more." : "");
+                    return JSON.stringify(json);
                 },
                 "data": function (d) {
-                    d.regionId = changesView.regionControl.getRegionId();
-                    d.countryId = changesView.regionControl.getCountryId();
+                    d.changeType = changesView.filterControl.getChangeType();
+                    d.regionId = changesView.filterControl.getRegionId();
+                    d.countryId = changesView.filterControl.getCountryId();
+                    d.state = changesView.filterControl.getState().join(",");
+                    d.status = changesView.filterControl.getStatus().join(",");
+                    d.stalls = changesView.filterControl.getStalls();
+                    d.power = changesView.filterControl.getPower();
                 }
             },
             "rowId": "id",
             "columns": [
                 {
-                    "data": "dateFormatted"
+                    "data": "dateFormatted",
+                    "width": "12%"
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return row.changeType.toLowerCase();
-                    }
+                        /*
+                        if (Math.random() > 0.8) {
+                            row.statusText = "Editor's note goes here";
+                        }
+                        */
+                        var chg = row.changeType.toLowerCase();
+                        return row.statusText ? `<span title="${row.statusText}">${chg}*</span>` : chg;
+                    },
+                    "width": "5%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
-                    }
+                    },
+                    "width": "42%"
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return `<span class='${row.siteStatus}'>${SiteStatus.fromString(row.siteStatus).displayName}</span>`;
-                    }
-                },
-                {
-                    "data": (row, type, val, meta) => {
-                        return ChangesView.buildLinks(row);
-                    }
+                        return ChangesView.buildStatus(row);
+                    },
+                    "width": "5%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildDetails(row);
-                    }
+                    },
+                    "width": "23%"
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return ChangesView.buildLinks(row);
+                    },
+                    "width": "12%"
                 }
             ],
             "createdRow": (row, data, index) => {
