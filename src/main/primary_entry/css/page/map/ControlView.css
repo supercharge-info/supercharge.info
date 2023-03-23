@@ -1,3 +1,27 @@
+li.control-view-buttons {
+    padding: 8px;
+    display: flex;
+}
+li.control-view-buttons button {
+    padding: 6px;
+    margin: 0 2px;
+}
+.control-view-buttons button:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.control-view-buttons .active {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+.control-view-buttons .active:hover {
+    background-color: #d4d4d4;
+}
+.control-view-buttons img {
+    width: 20px;
+    height: 20px;
+}
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  Slider styling
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -11,16 +35,27 @@
     border:transparent;
 }
 
+#marker-selector label {
+    margin-bottom: 4px;
+    min-height: 24px;
+}
+
 #marker-selector .marker-icon {
-    margin-bottom: 1px;
+    margin-bottom: 0px;
     vertical-align: middle;
     padding: 0px;
     margin-top: 0px;
 }
 
 #marker-selector .cluster-marker {
-    margin-top: -1px;
+    margin-top: 2px;
     margin-bottom: 1px;
+}
+
+#marker-selector span {
+    vertical-align: middle;
+    display: inline-flex;
+    line-height: 20px;
 }
 
 .marker-slider {
@@ -52,7 +87,7 @@
 
 label.control {
     font-size: larger;
-    margin: 0 .5em .2em 1em;
+    margin: 0 .5em .2em;
     vertical-align: middle;
 }
 
@@ -63,13 +98,29 @@ label.control {
 }
 
 .control-row {
+    flex: 0 30px;
+    padding: 0 2px;
     display: inline-flex;
     flex-wrap: wrap;
-    margin-top: 5px;
+    margin: 2px 0;
     text-align: left;
 }
 .control-row .collapse { 
     display: revert;
+}
+img.control-row-icon {
+    width: 20px;
+    height: 20px;
+    margin: 2px 0.2em 2px 0.8em;
+}
+
+#control-row-filter .form-inline {
+    margin-left: 0.5em;
+}
+
+#control-row-rendering div {
+    margin-top: 1px;
+    margin-bottom: -1px;
 }
 
 @media (max-width: 968px) {
@@ -80,8 +131,9 @@ label.control {
         padding-left: 0px;
         padding-right: 0px;
     }
-    .control-row .collapse, #marker-selector .cluster-marker {
+    .shrink, .control-row .shrink, .control-row .collapse, #marker-selector .collapse, #marker-selector .cluster-marker {
         display: none;
+        width: 0px;
     }
     .slider-control {
         width: 120px !important;

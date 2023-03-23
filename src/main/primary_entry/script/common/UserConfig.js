@@ -2,6 +2,8 @@ import ServiceURL from "./ServiceURL";
 import Objects from "../util/Objects";
 import $ from 'jquery';
 import Units from "../util/Units";
+import { utils } from "sortablejs";
+import Asserts from "../util/Asserts";
 
 
 /* Save an indication of the last config we persisted so we don't make extra service calls. */
@@ -13,15 +15,24 @@ class UserConfig {
         /* All fields are primitives currently for easy serialization. */
         this.unit = null;
 
-        this.changesPageRegionId = null;
-        this.changesPageCountryId = null;
-        this.dataPageRegionId = null;
-        this.dataPageCountryId = null;
+        this.filter = {
+            changeType: null,
+            regionId: null,
+            countryId: null,
+            state: null,
+            status: [],
+            stalls: null,
+            power: null
+        };
 
         this.latitude = null;
         this.longitude = null;
         this.zoom = null;
         this.customMarkers = [];
+
+        this.markerType = "Z";
+        this.markerSize = 8;
+        this.clusterSize = 5;
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -40,20 +51,53 @@ class UserConfig {
         this.scheduleSave();
     };
 
-    setRegionCountryId(page, whichSelect, newValue) {
-        if (page === "changes") {
-            if (whichSelect === "region") {
-                this.changesPageRegionId = newValue;
-            } else if (whichSelect === "country") {
-                this.changesPageCountryId = newValue;
-            }
-        } else if (page === "data") {
-            if (whichSelect === "region") {
-                this.dataPageRegionId = newValue;
-            } else if (whichSelect === "country") {
-                this.dataPageCountryId = newValue;
-            }
-        }
+    setChangeType(newChangeType) {
+        this.filter.changeType = newChangeType;
+        this.scheduleSave();
+    };
+
+    setRegionId(newRegionId) {
+        this.filter.regionId = newRegionId;
+        this.scheduleSave();
+    };
+
+    setCountryId(newCountryId) {
+        this.filter.countryId = newCountryId;
+        this.scheduleSave();
+    };
+
+    setState(newState) {
+        this.filter.state = newState;
+        this.scheduleSave();
+    };
+
+    setStatus(newStatus) {
+        this.filter.status = newStatus;
+        this.scheduleSave();
+    };
+
+    setStalls(newStalls) {
+        this.filter.stalls = newStalls;
+        this.scheduleSave();
+    };
+
+    setPower(newPower) {
+        this.filter.power = newPower;
+        this.scheduleSave();
+    };
+
+    setMarkerType(newMarkerType) {
+        this.markerType = newMarkerType;
+        this.scheduleSave();
+    };
+    
+    setMarkerSize(newMarkerSize) {
+        this.markerSize = newMarkerSize;
+        this.scheduleSave();
+    };
+
+    setClusterSize(newClusterSize) {
+        this.clusterSize = newClusterSize;
         this.scheduleSave();
     };
 
@@ -93,29 +137,50 @@ class UserConfig {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /**
-     * Load all sites data.  This method must be called before any other in this class.
+     * Load all config data. This method must be called before any other in this class.
      */
     load() {
+        try {
+            this.fromJSON(JSON.parse(window.localStorage.getItem("userConfig")));
+            lastSaved = toCompString(this);
+            console.log("UserConfig.load(local): " + lastSaved);
+        } catch {
+            console.log("no valid userConfig in localStorage, using defaults");
+            window.localStorage.removeItem("userConfig");
+        }
         const config = this;
-        return $.getJSON(ServiceURL.USER_CONFIG).done(
-            function (userConfigJson) {
+        return $.getJSON(ServiceURL.USER_CONFIG)
+            .done((userConfigJson) => {
+                if (Objects.isNotNullOrUndef(userConfigJson.zoom) || !config.isZoomSet()) {
+                    config.fromJSON(userConfigJson);
+                    lastSaved = toCompString(config);
+                    console.log("UserConfig.load(user): " + lastSaved);
+                }
+            })
+            .fail(() =>
+                console.log("failed to load userConfig from API, falling back to localStorage")
+            );
+    };
 
-                config.unit = userConfigJson.unit;
-                config.latitude = userConfigJson.latitude;
-                config.longitude = userConfigJson.longitude;
-                config.zoom = userConfigJson.zoom;
+    fromJSON(json) {
+        this.unit = json.unit || this.unit;
+        this.latitude = json.latitude || this.latitude;
+        this.longitude = json.longitude || this.longitude;
+        this.zoom = json.zoom || this.zoom;
 
-                config.changesPageRegionId = userConfigJson.changesPageRegionId;
-                config.changesPageCountryId = userConfigJson.changesPageCountryId;
-                config.dataPageRegionId = userConfigJson.dataPageRegionId;
-                config.dataPageCountryId = userConfigJson.dataPageCountryId;
+        this.filter.changeType = json.filter?.changeType || this.filter?.changeType;
+        this.filter.regionId = json.filter?.regionId || json.dataPageRegionId || json.changesPageRegionId || this.filter?.regionId;
+        this.filter.countryId = json.filter?.countryId || json.dataPageCountryId || json.changesPageCountryId || this.filter?.countryId;
+        this.filter.state = json.filter?.state || this.filter?.state;
+        this.filter.status = json.filter?.status || this.filter?.status;
+        this.filter.stalls = json.filter?.stalls || this.filter?.stalls;
+        this.filter.power = json.filter?.power || this.filter?.power;
 
-                config.customMarkers = userConfigJson.customMarkers;
+        this.customMarkers = json.customMarkers || this.customMarkers;
 
-                lastSaved = toCompString(config);
-                console.log("UserConfig.load(): " + lastSaved);
-            }
-        );
+        this.markerType = json.markerType || this.markerType;
+        this.markerSize = json.markerSize || this.markerSize;
+        this.clusterSize = json.clusterSize || this.clusterSize;
     };
 
     save() {
@@ -124,9 +189,11 @@ class UserConfig {
             return;
         }
         lastSaved = toCompString(this);
+        var jsonConfig = JSON.stringify(this);
+        window.localStorage.setItem("userConfig", jsonConfig);
         $.ajax({
             url: ServiceURL.USER_CONFIG,
-            data: JSON.stringify(this),
+            data: jsonConfig,
             contentType: 'application/json',
             type: 'POST'
         }).done(() => {
@@ -135,7 +202,7 @@ class UserConfig {
     };
 
     /**
-     * Don't save in response to every user action. Instead save at most every N seconds.
+     * Don't save in response to every user action. Instead save at most every 2 seconds.
      */
     scheduleSave() {
         const userConfig = this;
@@ -160,16 +227,15 @@ function toCompString(object) {
         const value = object[key];
         let valueString = "";
         if (Array.isArray(value)) {
-            valueString = valueString + "[";
-            for (let j = 0; j < value.length; j++) {
-                valueString = valueString + toCompString(value[j]);
-                if (j !== value.length - 1) {
-                    valueString = valueString + ",";
-                }
+            const vals = value.sort();
+            for (let j = 0; j < vals.length; j++) {
+                valueString += "," + (typeof vals[j] === "object" ? toCompString(vals[j]) : Objects.nullSafeToString(vals[j]));
             }
-            valueString = valueString + "]";
-        } else {
+            valueString = "[" + valueString.substring(1) + "]";
+        } else if (Objects.isNullOrUndef(value) || typeof value !== "object") {
             valueString = Objects.nullSafeToString(value);
+        } else {
+            valueString = toCompString(value);
         }
         result = result + key + ":" + valueString;
         if (i !== props.length - 1) {

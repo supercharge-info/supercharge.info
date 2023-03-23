@@ -2,9 +2,9 @@ import $ from "jquery";
 import 'datatables.net';
 import 'datatables.net-bs';
 import EventBus from "../../util/EventBus";
-import Analytics from "../../util/Analytics";
 import userConfig from "../../common/UserConfig";
-import CountryRegionControl from "../../common/CountryRegionControl";
+import SiteFilterControl from "../../common/SiteFilterControl";
+import Status from "../../site/SiteStatus";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
@@ -12,30 +12,33 @@ import ServiceURL from "../../common/ServiceURL";
 export default class DataView {
 
     constructor() {
-
         this.table = $("#supercharger-data-table");
 
-        this.regionControl = new CountryRegionControl(
-            $("#data-filter-div"),
-            $.proxy(this.regionControlCallback, this)
+        this.filterControl = new SiteFilterControl(
+            $("#data-filter"),
+            this.filterControlCallback.bind(this)
         );
 
         this.table.find("tbody").click(DataView.handleDataClick);
 
         this.tableAPI = this.table.DataTable(this.initDataTableOptions());
 
-        const dataView = this;
-        this.regionControl.init(userConfig.dataPageRegionId, userConfig.dataPageCountryId)
-            .done(() => {
-                dataView.tableAPI.draw();
-            });
+        this.syncFilters();
     }
 
-    regionControlCallback(whichSelect, newValue) {
+    syncFilters() {
+        this.filterControl.init(userConfig);
         this.tableAPI.draw();
-        userConfig.setRegionCountryId("data", "region", this.regionControl.getRegionId());
-        userConfig.setRegionCountryId("data", "country", this.regionControl.getCountryId());
-        Analytics.sendEvent("data", "select-" + whichSelect, newValue);
+    }
+
+    filterControlCallback() {
+        this.tableAPI.draw();
+        userConfig.setRegionId(this.filterControl.getRegionId());
+        userConfig.setCountryId(this.filterControl.getCountryId());
+        userConfig.setState(this.filterControl.getState());
+        userConfig.setStatus(this.filterControl.getStatus());
+        userConfig.setStalls(this.filterControl.getStalls());
+        userConfig.setPower(this.filterControl.getPower());
     };
 
     static handleDataClick(event) {
@@ -48,6 +51,12 @@ export default class DataView {
             }
         }
     };
+
+    static buildStatus(supercharger) {
+        const site = supercharger;
+        var s = Status.fromString(supercharger.status);
+        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/></span>`
+    }
 
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
@@ -95,11 +104,19 @@ export default class DataView {
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
+                    var resultSpan = $("#data-result-count");
+                    resultSpan.html(`<span class="shrink">Showing </span>${json.recordsFiltered} site${json.recordsFiltered === 1 ? "" : "s"}`);
+                    resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
+                    resultSpan.attr("title", json.recordsFiltered === 0 ? "No sites displayed. Adjust or reset filters to see more." : "");
                     return JSON.stringify(json)
                 },
                 "data": function (d) {
-                    d.regionId = dataView.regionControl.getRegionId();
-                    d.countryId = dataView.regionControl.getCountryId();
+                    d.regionId = dataView.filterControl.getRegionId();
+                    d.countryId = dataView.filterControl.getCountryId();
+                    d.state = dataView.filterControl.getState().join(",");
+                    d.status = dataView.filterControl.getStatus().join(",");
+                    d.stalls = dataView.filterControl.getStalls();
+                    d.power = dataView.filterControl.getPower();
                 }
             },
             "rowId": "id",
@@ -116,7 +133,6 @@ export default class DataView {
                 },
                 {
                     "data": "powerKilowatt",
-                    "sorting": false,
                     "render": (data, type, row, meta) => {
                         return data || ''
                     },
@@ -126,7 +142,8 @@ export default class DataView {
                     "data": (row, type, val, meta) => {
                         return `${row.gps.latitude}, ${row.gps.longitude}`
                     },
-                    "className": "gps"
+                    "className": "gps",
+                    "orderable": false
                 },
                 {
                     "data": "elevationMeters",
@@ -134,7 +151,7 @@ export default class DataView {
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return `<span class='${row.status}'>${row.status}</span>`
+                        return DataView.buildStatus(row);
                     }
                 },
                 {

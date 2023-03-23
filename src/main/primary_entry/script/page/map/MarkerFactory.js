@@ -19,31 +19,33 @@ export default class MarkerFactory {
         this.mapApi = mapApi;
     };
 
-    createMarker(supercharger, markerType) {
-        supercharger.markerSize = markerType;
+    createMarker(supercharger, markerSize, batch) {
+        supercharger.markerSize = markerSize;
         const markerOptions = {
-            title: supercharger.getMarkerTitle(),
-            icon: supercharger.status.getIcon(supercharger)
+            pane: 'markers',
+            radius: markerSize * supercharger.getMarkerMultiplier(),
+            stroke: false,
+            fillColor: supercharger.status.getFill(supercharger),
+            fillOpacity: 1
         };
-        const marker = L.marker(supercharger.location, markerOptions);
+        const marker = L.circleMarker(supercharger.location, markerOptions);
         supercharger.marker = marker;
-        marker.on('click', $.proxy(this._handleMarkerClick, this, marker, supercharger));
-        mapLayers.addToLayer(supercharger.status, marker);
+        marker.tooltipText = supercharger.getMarkerTitle();
+        marker.tooltipClass = "tooltip " + supercharger.status.className;
+        marker.on('click', this._handleMarkerClick.bind(this, marker, supercharger));
+        marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
+        if (batch) return marker;
+        mapLayers.addToOverlay(marker);
     };
 
-    createMarkerCluster(superchargers, zoom) {
-        if (superchargers.length === 1) return this.createMarker(superchargers[0], 8);
-        var lat = 0, lng = 0, numStalls = 0, mag = 0, titleSupercharger = superchargers[0];
-        for (var s in superchargers) {
+    createMarkerCluster(superchargers, zoom, batch) {
+        if (superchargers.length === 1) return this.createMarker(superchargers[0], 8, batch);
+        var lat = 0, lng = 0, numStalls = 0;
+        var sc = superchargers.sort((a,b) => ((b.numStalls || 1) * (b.powerKilowatt || 72)) - ((a.numStalls || 1) * (a.powerKilowatt || 72) ));
+        for (var s in sc) {
             lat += superchargers[s].location.lat;
             lng += superchargers[s].location.lng;
             numStalls += superchargers[s].numStalls;
-            // Set tooltip text to the highest-"magnitude" location, where mag is numStalls * powerKilowatts
-            var s_mag = (superchargers[s].numStalls || 1) * (superchargers[s].powerKilowatt || 72);
-            if (s_mag > mag) {
-                mag = s_mag;
-                titleSupercharger = superchargers[s];
-            }
         }
 
         // Click to zoom in 2-4 steps based on how many locations the cluster marker represents
@@ -52,27 +54,31 @@ export default class MarkerFactory {
         // Alternate formula: 2-6 => +1 || 7-19 => +2 || 20-53 => +3 || 54-999 --> +4
         //var zoomIncrement = Math.min(Math.floor(Math.log(superchargers.length + 1)), 4);
 
-        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}) - ${numStalls} total stalls:\r\n` +
-            (superchargers.length === 2
-                ? `${superchargers[0].getShortMarkerTitle()}\r\n${superchargers[1].getShortMarkerTitle()}`
-                : `${titleSupercharger.getShortMarkerTitle()} + ...`
-            ) + `\r\n\r\nClick to zoom +${zoomIncrement}`;
+        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}</span>) - ${numStalls} total stalls:<br/>`;
+        for (var i = 0; i < 3 && i < sc.length; i++) {
+            markerTitle += sc[i].getShortMarkerTitle() + "<br/>";
+        }
+        markerTitle += (sc.length == 4 ? sc[3].getShortMarkerTitle() : sc.length > 4 ? "• ..." : "") + `<br/>Click to zoom +${zoomIncrement}`;
+
         const markerOptions = {
-            title: markerTitle,
             icon: L.divIcon({
-                iconSize: 16,
+                pane: 'markers',
+                iconSize: [16, 16],
                 iconAnchor: [8, 8],
                 className: "cluster-marker " + superchargers[0].status.className,
                 html: '<div>' + superchargers.length + '</div>'
-            })
+            }),
+            riseOnHover: true
         };
         const markerLocation = L.latLng(lat / superchargers.length, lng / superchargers.length)
         const marker = L.marker(markerLocation, markerOptions);
-        marker.on('click', $.proxy(this._handleClusterZoom, this, superchargers, zoom + zoomIncrement));
+        marker.on('click', this._handleClusterZoom.bind(this, markerLocation, zoom + zoomIncrement));
+        marker.bindTooltip(markerTitle, { className: "tooltip " + superchargers[0].status.className, opacity: 0.92 });
         for (var s in superchargers) {
             superchargers[s].marker = marker;
         }
-        mapLayers.addToLayer(superchargers[0].status, marker);
+        if (batch) return marker;
+        mapLayers.addToOverlay(marker);
     };
 
     _handleMarkerClick(marker, supercharger) {
@@ -93,12 +99,14 @@ export default class MarkerFactory {
         if(!marker.infoWindow.isShown()) {
             marker.infoWindow.showWindow();
         }
-    };
 
-    _handleClusterZoom(superchargers, newZoom) {
-        //MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
-        var marker = superchargers[0].marker;
-        EventBus.dispatch(MapEvents.pan_zoom, {latLng: marker.getLatLng(), zoom: newZoom})
+        // unbind and rebind the tooltip so it doesn't stay open when opening the InfoWindow
+        marker.unbindTooltip();
+        marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
+	};
+
+    _handleClusterZoom(markerLocation, newZoom) {
+        EventBus.dispatch(MapEvents.pan_zoom, { latLng: markerLocation, zoom: newZoom });
     };
 
     static CloseAllOpenUnpinnedInfoWindows() {

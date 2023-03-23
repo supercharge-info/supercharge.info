@@ -18,6 +18,7 @@ export default class RenderControlView {
             "F": $("#marker-f-slider")
         };
 
+        renderModel.init();
         this.initMarkerType();
         this.initClusterSizeSlider();
         this.initMarkerSizeSlider();

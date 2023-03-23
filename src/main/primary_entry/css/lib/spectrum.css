@@ -363,7 +363,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 /* Replacer (the little preview div that shows up instead of the <input>) */
 .sp-replacer {
-    margin:0;
+    margin: 0 0 1px 0;
     overflow:hidden;
     cursor:pointer;
     padding: 4px;
@@ -392,9 +392,9 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     font-size:10px;
 }
 .sp-preview {
-    position:relative;
-    width:25px;
-    height: 20px;
+    position: relative;
+    width: 25px;
+    height: 16px;
     border: solid 1px #222;
     margin-right: 5px;
     float:left;

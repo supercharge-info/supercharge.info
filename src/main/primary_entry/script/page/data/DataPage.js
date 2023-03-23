@@ -4,12 +4,15 @@ export default class DataPage {
 
     constructor() {
         this.initialized = false;
+        this.dataView = null;
     }
 
     onPageShow() {
         if (!this.initialized) {
-            new DataView();
+            this.dataView = new DataView();
             this.initialized = true;
+        } else {
+            this.dataView.syncFilters();
         }
     };
 

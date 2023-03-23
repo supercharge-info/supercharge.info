@@ -2,8 +2,6 @@ import EventBus from "../../util/EventBus";
 import Analytics from "../../util/Analytics";
 import QueryStrings from "../../common/QueryStrings";
 import userConfig from "../../common/UserConfig";
-import TotalCountPanel from "./TotalCountPanel";
-import RangeControlView from "./RangeControlView";
 import WayBackAction from "./action/WayBackAction";
 import ToggleRangeCircleAllAction from "./action/ToggleRangeCircleAllAction";
 import ToggleRangeCircleAction from "./action/ToggleRangeCircleAction";
@@ -14,6 +12,8 @@ import RoutingAction from "./route/RoutingAction";
 import CreateLinkAction from "./action/CreateLinkAction";
 import AddCustomMarkerAction from "./action/AddCustomMarkerAction";
 import MapView from "./MapView";
+import FilterControlView from "./FilterControlView";
+import RangeControlView from "./RangeControlView";
 import RenderControlView from "./RenderControlView";
 import RoutingPanel from "./route/RoutingPanel";
 import rangeModel from "./RangeModel";
@@ -31,22 +31,21 @@ export default class MapPage {
         if (!MapPage.initStarted) {
             this.initialize();
             MapPage.initStarted = true;
+        } else {
+            MapPage.filterControlView.syncFilters();
         }
         $("#navbar-map-dropdown").show();
-        $("#total-count-table").show();
     };
 
     onPageHide() {
         $("#navbar-map-dropdown").hide();
-        $("#total-count-table").hide();
     };
 
     initialize() {
-
+        MapPage.filterControlView = new FilterControlView();
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();
-        new TotalCountPanel();
 
         /* CASE 1: User has explicitly specified initial map center via 'Center' URL param. */
         if (QueryStrings.isCenterSet()) {
@@ -114,7 +113,6 @@ export default class MapPage {
         if (!QueryStrings.isZoomSet() && userConfig.isZoomSet()) {
             initialZoom = userConfig.zoom;
         }
-
         this.mapView = new MapView(lat, lng, initialZoom);
 
         if (!QueryStrings.isRangeUnitSet()) {
