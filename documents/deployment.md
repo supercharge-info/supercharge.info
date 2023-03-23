@@ -17,6 +17,7 @@ Increment the version number:
 Push the release branch and new tag to your fork:
 
     $ git push <your fork> release --tags
+    $ git push upstream --tags
 
 Create a pull request to upstream master for the above branch to include the new version number and tag.
 
