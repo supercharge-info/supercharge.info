@@ -10,8 +10,6 @@ const CountriesByRegion = new Map();
 const StatesByRegion = new Map();
 const StatesByCountry = new Map();
 const States = new Set();
-const Powers = new Set();
-const StallCounts = new Set();
 
 export default class Sites {
 
@@ -67,12 +65,6 @@ export default class Sites {
     static getStates() {
         return States;
     }
-    static getPowers() {
-        return Powers;
-    };
-    static getStallCounts() {
-        return StallCounts;
-    };
 
 /*
 Regions: Map(name, id)
@@ -105,8 +97,6 @@ S-by-C: Map(cid, Set(sname))
                     StatesByRegion.get(s.address.regionId).add(s.address.state);
                     StatesByCountry.get(s.address.countryId).add(s.address.state);
                     States.add(s.address.state);
-                    Powers.add(s.powerKilowatt);
-                    StallCounts.add(s.numStalls);
                 });
             }
         );

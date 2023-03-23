@@ -176,7 +176,7 @@ export default class SiteFilterControl {
 
     populateStallCountOptions() {
         this.stallsSelect.html("<option value=''>-- No Min. Stalls --</option>");
-        var stallCounts = new Int16Array([...Sites.getStallCounts()]).sort();
+        var stallCounts = new Int16Array([4, 8, 12, 16, 20, 30, 40, 50]);
         stallCounts.forEach(s => {
             this.stallsSelect.append(`<option value='${s}'>&ge; ${s} stalls</option>`);
         });
@@ -185,7 +185,7 @@ export default class SiteFilterControl {
 
     populatePowerOptions() {
         this.powerSelect.html("<option value=''>-- No Min. Power --</option>");
-        var power = new Int16Array([...Sites.getPowers()]).sort();
+        var power = new Int16Array([72, 120, 150, 250]);
         $.each(power, (index, p) => {
             this.powerSelect.append(`<option value='${p}'>&ge; ${p} kW</option>`);
         });
