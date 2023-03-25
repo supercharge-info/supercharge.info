@@ -20,7 +20,18 @@ class InfoWindowListeners {
             const supercharger = toSupercharger(event);
             const infoWindow = supercharger.marker.infoWindow;
 
+            infoWindow.toggleHistory(false);
             infoWindow.toggleDetails();
+            infoWindow.redraw();
+
+        });
+
+        $(document).on('click', '.history-trigger', (event) => {
+            const supercharger = toSupercharger(event);
+            const infoWindow = supercharger.marker.infoWindow;
+
+            infoWindow.toggleDetails(false);
+            infoWindow.toggleHistory();
             infoWindow.redraw();
 
         });

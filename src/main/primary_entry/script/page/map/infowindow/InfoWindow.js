@@ -4,8 +4,8 @@ import rangeModel from "../RangeModel";
 import $ from "jquery";
 import ServiceURL from "../../../common/ServiceURL";
 import EventBus from "../../../util/EventBus";
-import buildDetailsDiv from './DetailsTableRenderer'
-import './InfoWindowListeners'
+import buildDetailsDiv from "./DetailsTableRenderer";
+import "./InfoWindowListeners";
 
 /**
  * One of these is created each time a marker is clicked.
@@ -22,7 +22,26 @@ export default class InfoWindow {
         // state fields
         this.popup = null;
         this.showDetails = true;
+        this.showHistory = false;
         this.pinned = false;
+
+        // Download history
+        if (supercharger.historyLoaded !== true) {
+            $.getJSON(ServiceURL.SITE_HISTORY, { siteId: supercharger.id })
+                .done((h) => {
+                    if (!h || !h.length) {
+                        return;
+                    } else if (Objects.isNullOrUndef(supercharger.history) || supercharger.history.length < 1) {
+                        ;
+                    } else if (supercharger.history[0].siteStatus != h[0].siteStatus && new Date(supercharger.history[0].date) < new Date(h[0].date)) {
+                        h.unshift(supercharger.history[0]);
+                    } else if (supercharger.history[0].siteStatus != h[h.length - 1].siteStatus && new Date(supercharger.history[0].date) > new Date(h[h.length - 1].date)) {
+                        h.push(supercharger.history[0]);
+                    }
+                    supercharger.history = h;
+                    supercharger.historyLoaded = true;
+                });
+        }
     }
 
     isPinned() {
@@ -51,7 +70,7 @@ export default class InfoWindow {
     }
 
     toggleDetails(showDetails) {
-        if (!Objects.isNullOrUndef(showDetails)) {
+        if (Objects.isNotNullOrUndef(showDetails)) {
             this.showDetails = showDetails;
         } else {
             this.showDetails = !this.showDetails;
@@ -59,6 +78,18 @@ export default class InfoWindow {
 
         if (this.showDetails) {
             Analytics.sendEvent("map", "view-marker-details");
+        }
+    };
+
+    toggleHistory(showHistory) {
+        if (Objects.isNotNullOrUndef(showHistory)) {
+            this.showHistory = showHistory;
+        } else {
+            this.showHistory = !this.showHistory;
+        }
+
+        if (this.showHistory) {
+            Analytics.sendEvent("map", "view-marker-history");
         }
     };
 
@@ -128,20 +159,24 @@ export default class InfoWindow {
         //
         // Street Address
         //
-        if (!Objects.isNullOrUndef(site.address.street)) {
+        if (Objects.isNotNullOrUndef(site.address.street)) {
             popupContent += site.address.street + "<br/>";
         }
 
         //
         // Limited Hours
         //
-        if (!Objects.isNullOrUndef(site.hours)) {
+        if (Objects.isNotNullOrUndef(site.hours)) {
             popupContent += "<div class='construction' >LIMITED HOURS</div>";
         }
 
 
         if (this.showDetails) {
             popupContent += buildDetailsDiv(site, rangeModel.getDisplayUnit());
+        }
+
+        if (this.showHistory) {
+            popupContent += _buildHistoryDiv(site);
         }
 
         popupContent += _buildLinksDiv(site, this.showDetails);
@@ -153,6 +188,28 @@ export default class InfoWindow {
 };
 
 
+/**
+ * This is the content in the InfoWindow that shows up when the user clicks 'details'.
+ */
+function _buildHistoryDiv(supercharger) {
+    let div = "";
+    div += `<div class='info-window-details' id='nearby-details-${supercharger.id}'>`;
+    div += `<a style='position:absolute; right: 19px;' class='history-trigger' href='#${supercharger.id}'>(hide)</a>`;
+    div += "<table style='width:100%;'>";
+
+    div += "<tr style='font-weight:bold;'><td>Date</td><td>Status</td></tr>";
+
+    if (!supercharger.history.length) {
+        div += `<tr><td>Unknown</td><td class='${supercharger.status.value.toLowerCase().replace('_','-')}'>${supercharger.status.value}</td></tr>`;
+    } else {
+        div += supercharger.history.map(a => `<tr><td>${a.date}</td><td class='${a.siteStatus.toLowerCase().replace('_','-')}'>${a.siteStatus}</td></tr>`).join('');
+    }
+
+    div += "</table>";
+    div += "</div>";
+    return div;
+}
+
 function _buildLinksDiv(supercharger, showDetails) {
     let content = "<div class='links-container'>";
 
@@ -162,12 +219,12 @@ function _buildLinksDiv(supercharger, showDetails) {
         buildLinkZoom(supercharger),
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
-        buildLinkDetails(supercharger, showDetails),
 
         // links that are NOT always present.
+        buildLinkDetailsOrHistory(supercharger, showDetails),
         buildLinkMapURL(supercharger),
-        buildLinkURL(supercharger),
         buildLinkDiscussURL(supercharger),
+        buildLinkURL(supercharger),
         buildLinkRemoveMarker(supercharger),
         buildLinkRemoveAllMarkers(supercharger)
     ];
@@ -176,7 +233,7 @@ function _buildLinksDiv(supercharger, showDetails) {
     $.each(linkList, function (index, value) {
         if (value !== null) {
             content += value + "";
-            if (((count++) % 3 === 0) && (index !== linkList.length - 1)) {
+            if (count++ == 3) {
                 content += "<br/>";
             }
         }
@@ -211,14 +268,14 @@ function buildLinkAddToRoute(supercharger) {
 
 function buildLinkURL(supercharger) {
     if (Objects.isNotNullOrUndef(supercharger.locationId)) {
-        return `<a target='_blank' href='${ServiceURL.TESLA_WEB_PAGE + supercharger.locationId}'>web page</a>`;
+        return `<a target='_blank' href='${ServiceURL.TESLA_WEB_PAGE + supercharger.locationId}'>tesla.com</a>`;
     }
     return null;
 }
 
 function buildLinkDiscussURL(supercharger) {
     if (supercharger.urlDiscuss) {
-        return `<a target='_blank' href='${ServiceURL.DISCUSS}?siteId=${supercharger.id}'>discuss</a>`;
+        return `<a target='_blank' href='${ServiceURL.DISCUSS}?siteId=${supercharger.id}'>forum</a>`;
     }
     return null;
 }
@@ -246,8 +303,13 @@ function buildLinkRemoveAllMarkers(supercharger) {
     return null;
 }
 
-function buildLinkDetails(supercharger, showDetails) {
-    return `<a class='details-trigger' href='#${supercharger.id}'>${showDetails ? "hide" : "show"} details</a>`;
+function buildLinkDetailsOrHistory(supercharger, showDetails) {
+    if (!showDetails) {
+        return `<a class='details-trigger' href='#${supercharger.id}'>details</a>`;
+    } else if (Objects.isNotNullOrUndef(supercharger.history)) {
+        return `<a class='history-trigger' href='#${supercharger.id}'>history</a>`;
+    }
+    return null;
 }
 
 function buildPinMarker(supercharger, isPinned) {

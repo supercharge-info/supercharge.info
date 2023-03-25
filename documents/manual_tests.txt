@@ -140,13 +140,12 @@ Map Page
         () When info windows overlap, the one that is opened later should always be on top
         () When info windows overlap, clicking on the one behind should bring it forward
         () User provided name shows up.
-        () Correct links show up: 'zoom in', 'circle off', 'add to route', 'details', 'remove',
-        () Links
+        () Correct links show up:
             () zoom in
             () circle on
             () add to route
-            () details
-                () should show 'GPS' field only.
+            () details/hide
+                () should toggle 'GPS' field only.
             () remove
                 () should remove from map and from user config
             () remove all
@@ -159,10 +158,12 @@ Map Page
         () Status is shown orange for under construction markers, blue for permit.
         () Street address is shown.
         () Actions
-            () Zoom In
-            () Toggle Circle
-            () Add To Route
-            () Details
+            () zoom in
+            () circle on
+            () add to route
+            () details
+                () (hide)
+                () Date Opened
                 () Elevation (in ft or m)
                 () GPS
                 () Hours
@@ -170,8 +171,13 @@ Map Page
                 () Power
                 () Solar Canopy
                 () Battery Storage
-            () URL
-            () URL Discuss
+            () history
+                () (hide)
+                () Date
+                () Status
+            () gmap
+            () forum
+            () tesla.com
     () Clicking another marker closes any open unpinned info windows.
     () Pinned windows stay open when other info windows are opened/closed.
     () Clicking the close 'x' on an info windows will unpin it.

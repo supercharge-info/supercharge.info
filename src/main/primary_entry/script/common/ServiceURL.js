@@ -9,6 +9,7 @@ export default {
     SITES: base + '/allSites',
     SITE_STALL_COUNT: base + '/site/stallCount',
     SITES_PAGE: base + '/sites',
+    SITE_HISTORY: base + '/siteHistory',
 
     USER_CONFIG: base + "/userConfig",
 

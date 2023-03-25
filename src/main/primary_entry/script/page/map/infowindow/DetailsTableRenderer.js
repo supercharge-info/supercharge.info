@@ -8,6 +8,9 @@ import Units from "../../../util/Units";
 export default function buildDetailsDiv(supercharger, displayUnit) {
     let div = "";
     div += "<div class='info-window-details'>";
+    if (!supercharger.isUserAdded()) {
+        div += `<a style='position:absolute; right: 19px;' class='details-trigger' href='#${supercharger.id}'>(hide)</a>`;
+    }
     div += "<table>";
 
     // Date Opened
