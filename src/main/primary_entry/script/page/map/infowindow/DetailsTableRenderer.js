@@ -38,20 +38,6 @@ export default function buildDetailsDiv(supercharger, displayUnit) {
     }
 
     //
-    // Number of charging stalls
-    //
-    if (!Objects.isNullOrUndef(supercharger.numStalls)) {
-        div += "<tr><th>Stalls</th><td>" + supercharger.formatStalls() + "</td></tr>";
-    }
-
-    //
-    // Power
-    //
-    if (!Objects.isNullOrUndef(supercharger.powerKilowatt) && supercharger.powerKilowatt > 0) {
-        div += `<tr><th>Power</th><td>${supercharger.powerKilowatt} kW</td></tr>`;
-    }
-
-    //
     // Solar
     //
     if (supercharger.solarCanopy) {

@@ -21,7 +21,7 @@ export default class InfoWindow {
 
         // state fields
         this.popup = null;
-        this.showDetails = true;
+        this.showDetails = supercharger.isUserAdded();
         this.showHistory = false;
         this.pinned = false;
 
@@ -142,34 +142,46 @@ export default class InfoWindow {
         //
         popupContent += `<div class='title'>${site.displayName} ${buildPinMarker(site, this.pinned)}</div>`;
 
-        //
-        // Status: Construction/Permit/Closed
-        //
-        if (site.isConstruction()) {
-            popupContent += `<div class='construction'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
-        } else if (site.isPermit()) {
-            popupContent += `<div class='permit'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
-        } else if (site.isClosedTemp()) {
-            popupContent += `<div class='closed-temp'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
-        } else if (site.isClosedPerm()) {
-            popupContent += `<div class='closed-perm'>Status: ${site.status.displayName} - ${site.statusDays} days</div>`;
-        }
-
 
         //
         // Street Address
         //
         if (Objects.isNotNullOrUndef(site.address.street)) {
-            popupContent += site.address.street + "<br/>";
+            popupContent += site.address.street;
         }
 
-        //
-        // Limited Hours
-        //
-        if (Objects.isNotNullOrUndef(site.hours)) {
-            popupContent += "<div class='construction' >LIMITED HOURS</div>";
+        if (!site.isUserAdded()) {
+            popupContent += "<div class='statusLine'>";
+
+            //
+            // Number of charging stalls
+            //
+            if (Objects.isNotNullOrUndef(site.numStalls)) {
+                popupContent += `${site.numStalls} stalls`;
+            }
+
+            //
+            // Power
+            //
+            if (Objects.isNotNullOrUndef(site.powerKilowatt) && site.powerKilowatt > 0) {
+                if (Objects.isNotNullOrUndef(site.numStalls)) {
+                    popupContent += " • "
+                }
+                popupContent += `${site.powerKilowatt} kW`;
+            }
+
+            //
+            // Construction/Permit/Closed/Limited Hours
+            //
+            if (site.isConstruction() || site.isPermit() || site.isClosedTemp() || site.isClosedPerm()) {
+                popupContent += ` • <span class='${site.status.className}'><img src='${site.status.getIcon()}' title='${site.status.displayName}'/> ${site.statusDays} days</span>`;
+            } else if (Objects.isNotNullOrUndef(site.hours)) {
+                popupContent += " • <span class='construction'>LIMITED HOURS</span>";
+            }
+            popupContent += "</div>";
         }
 
+        popupContent += "<hr/>";
 
         if (this.showDetails) {
             popupContent += buildDetailsDiv(site, rangeModel.getDisplayUnit());

@@ -100,6 +100,10 @@ Info Window
     font-size: 1.5em !important;
 }
 
+.info-window-content .statusLine {
+    margin: 5px 0;
+}
+
 .info-window-content .open {
     color: red;
     font-size: smaller;
@@ -130,6 +134,10 @@ Info Window
     font-weight: bold
 }
 
+.info-window-content img {
+    width: 10px;
+}
+
 .info-window-content .links-container {
     border: 0 solid black;
 }
@@ -144,12 +152,9 @@ Info Window
     text-align: right;
 }
 
-.info-window-details {
-    margin-top: 4px;
-    padding-top: 4px;
-    margin-bottom: 4px;
-    padding-bottom: 4px;
-    border-top: 1px solid #e0e0e0;
+.info-window-content hr {
+    margin: 5px 0;
+    border-color: #e0e0e0;
 }
 
 a.pin {
