@@ -104,6 +104,10 @@ Info Window
     margin: 5px 0;
 }
 
+.statusLine > * {
+    vertical-align: text-top;
+}
+
 .info-window-content .open {
     color: red;
     font-size: smaller;
