@@ -8,6 +8,9 @@ import Units from "../../../util/Units";
 export default function buildDetailsDiv(supercharger, displayUnit) {
     let div = "";
     div += "<div class='info-window-details'>";
+    if (!supercharger.isUserAdded()) {
+        div += `<a style='position:absolute; right: 19px;' class='details-trigger' href='#${supercharger.id}'>(hide)</a>`;
+    }
     div += "<table>";
 
     // Date Opened
@@ -32,20 +35,6 @@ export default function buildDetailsDiv(supercharger, displayUnit) {
     if (!supercharger.isUserAdded()) {
         const hoursClass = Objects.isNullOrUndef(supercharger.hours) ? '' : 'construction';
         div += "<tr><th>Hours</th><td class='" + hoursClass + "'>" + supercharger.formatHours() + "</td></tr>";
-    }
-
-    //
-    // Number of charging stalls
-    //
-    if (!Objects.isNullOrUndef(supercharger.numStalls)) {
-        div += "<tr><th>Stalls</th><td>" + supercharger.formatStalls() + "</td></tr>";
-    }
-
-    //
-    // Power
-    //
-    if (!Objects.isNullOrUndef(supercharger.powerKilowatt) && supercharger.powerKilowatt > 0) {
-        div += `<tr><th>Power</th><td>${supercharger.powerKilowatt} kW</td></tr>`;
     }
 
     //
