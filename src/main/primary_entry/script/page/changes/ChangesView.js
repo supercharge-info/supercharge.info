@@ -147,7 +147,7 @@ export default class ChangesView {
             ChangesView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
             ChangesView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');
         const teslaLink = site.locationId ?
-            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, 'tesla') :
+            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, 'tesla.com') :
             '';
         return `${gmapLink} | ${discussLink}${teslaLink}`;
     }

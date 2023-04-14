@@ -47,9 +47,7 @@ Global -- Other
     () Collapsed Menu (for small screens)
         () Menu should auto close after select any menu item (main menu or dropdown menu).
         () Menu should auto close after clicking anywhere in the body.
-        () Menu should auto close after clicking anywhere in the body, including in form-controls (region/country).
-        () Menu should NOT close when clicking in 'Zoom to Location' input box in menu.
-        () Menu should close after pressing enter in 'Zoom to Location' input box.
+        () Menu should auto close after clicking anywhere in the body, including in page controls (ie. filters).
 
 () Change Password
     () Minimum password length is enforced.
@@ -58,9 +56,7 @@ Global -- Other
     () Password is actually changed to new value.
 
 () History API.
-    () Default path updates location URL to /map:
-        () http://localhost:9090/        TO: http://localhost:9090/map
-        () http://localhost:9090?zoom=10 TO: http://localhost:9090/map?zoom=10
+    () Default path updates location URL to /changes:
     () Changing tabs updates to path in browser location URL.
     () Clicking back forward actually moves you between tabs and updates browser location URL correctly.
     () If landing page has parameters http://localhost:9090/map?center=41.615648,-87.304997&zoom=9 those URL params are
@@ -91,25 +87,54 @@ Map Page
         () All custom markers should be displayed.
 
 () Map Options Menu
-    () All range circles on
-        () should set default range to 50 miles if range is currently zero.
-        () should turn on just one range circle, if just one already off.
-        () should work when only displaying various combinations of OPEN, CONSTRUCTION, PERMIT, USER_ADDED
-        () should turn on circles that are outside of the current viewport
-        () should turn on circles on user added markers
-        () should update the circle on/off link on any open info windows
-    () All range circles off.
-        () toggle all circles on, then all off, then toggle status (opened for example). All circles should remain off.
-        () should turn off circles that are outside of the current viewport
-        () should turn off circles on user added markers
-        () should update the circle on/off link on any open info windows
-    () Range Adjuster
-        () Should be able to click on range text and type it in.
-            () Does not allow more than min/max value.
-            () Slider adjusts to typed value.
-            () Text continues to update when slider is changed.
-    () Status Selection
+    () Filter Options
+        () Region
+            () Selection should affect country/state options
+        () Country
+            () Selection should affect state options
+        () States
+            () Multiple states should be selectable
+            () Each change should update the dropdown header text
+            () Selecting more than fits the dropdown header should show a count instead
+            () Searching a state should reduce the dropdown list results
+            () Pressing up, down, or tab should move the highlighted option, enter should select it, and escape should close it
+            () Select All/Deselect All should change the currently shown options to be selected/deselected
+            () The dropdown list should appear over add to route buttons
+        () Status Selection
+            () Multiple statuses should be selectable
+            () Each change should show the selected icons in the dropdown header
+            () Pressing up, down, or tab should move the selected option, enter should select it, and escape should close it
+            () Select All/Deselect All should all options to be selected/deselected
+        () Min Stalls
+        () Min Power
+        () Reset
+            () Should update the counter and all dropdowns
+        () Counter
+            () Should show the number of visible results or total filtered results
     () Rendering Options
+        () Range
+            () Should be able to click on range text and type it in.
+                () Does not allow more than min/max value.
+                () Slider adjusts to typed value.
+                () Text continues to update when slider is changed.
+        () Markers
+            () Auto-Zoom
+            () Fixed Size
+            () Clusters
+            () Slider should show for fixed size or clusters
+    () Range Circle Options
+        () All range circles on
+            () Should set default range to 50 miles if range is currently zero.
+            () Should turn on just one range circle, if just one already off.
+            () Should work when only displaying various combinations of OPEN, CONSTRUCTION, PERMIT, USER_ADDED
+            () Should turn on circles that are outside of the current viewport
+            () Should turn on circles on user added markers
+            () Should update the circle on/off link on any open info windows
+        () All range circles off.
+            () Toggle all circles on, then all off, then toggle status (opened for example). All circles should remain off.
+            () Should turn off circles that are outside of the current viewport
+            () Should turn off circles on user added markers
+            () Should update the circle on/off link on any open info windows
         () Fill color
         () Border color
         () Fill opacity
@@ -140,13 +165,10 @@ Map Page
         () When info windows overlap, the one that is opened later should always be on top
         () When info windows overlap, clicking on the one behind should bring it forward
         () User provided name shows up.
-        () Correct links show up: 'zoom in', 'circle off', 'add to route', 'details', 'remove',
-        () Links
-            () zoom in
+        () Correct links show up:
+            () zoom
             () circle on
             () add to route
-            () details
-                () should show 'GPS' field only.
             () remove
                 () should remove from map and from user config
             () remove all
@@ -159,10 +181,12 @@ Map Page
         () Status is shown orange for under construction markers, blue for permit.
         () Street address is shown.
         () Actions
-            () Zoom In
-            () Toggle Circle
-            () Add To Route
-            () Details
+            () zoom
+            () circle on
+            () add to route
+            () details
+                () (hide)
+                () Date Opened
                 () Elevation (in ft or m)
                 () GPS
                 () Hours
@@ -170,8 +194,13 @@ Map Page
                 () Power
                 () Solar Canopy
                 () Battery Storage
-            () URL
-            () URL Discuss
+            () history
+                () (hide)
+                () Date
+                () Status
+            () gmap
+            () forum
+            () tesla.com
     () Clicking another marker closes any open unpinned info windows.
     () Pinned windows stay open when other info windows are opened/closed.
     () Clicking the close 'x' on an info windows will unpin it.
@@ -182,16 +211,8 @@ Map Page
     () Verify count font color matches status color.
     () Verify that country changes when map is centered over: USA, Canada, Europe, Asia, Australia, Japan
     () Verify that country display correctly when Center parameter is used:
-        () China: http://supercharge.info/?Center=32.428601,113.547982&Zoom=6&RangeKm=177
-        () Europe: http://supercharge.info/?Center=51.093993,10.107583&Zoom=9&RangeKm=177
-
-() Control: Zoom to location
-    () Should be able to use GPS coordinates: "41.615648,-87.304997"
-    () Should be able to use place names: "miami"
-
-() Control: Status checkboxes
-    () Mouse pointer should be type 'pointer' when hovering over checkbox, icon, or label.
-    () Should be able to toggle values by clicking on checkbox, icon, or label
+        () China: http://localhost:9090/map?Center=32.428601,113.547982&Zoom=6&RangeKm=177
+        () Europe: http://localhost:9090/map?Center=51.093993,10.107583&Zoom=9&RangeKm=177
 
 () Routing
     () Should be able to add sites with any status.
@@ -291,18 +312,18 @@ URL parameters
         () http://localhost:9090/?page=charTs
         () http://localhost:9090?page=about
     () Zoom
-        () http://localhost:9090/?page=map&zoom=20
+        () http://localhost:9090/map?zoom=20
     () Center
-        () Good: http://localhost:9090/?Center=41.615648,-87.304997&zoom=9
+        () Good: http://localhost:9090/map?Center=41.615648,-87.304997&zoom=9
         () Use default center if values (either lat or long) cannot be parsed.
-            () http://localhost:9090/?Center=41.615648,bad&zoom=9
-            () http://localhost:9090/?Center=bad,-87.304997&zoom=9
+            () http://localhost:9090/map?Center=41.615648,bad&zoom=9
+            () http://localhost:9090/map?Center=bad,-87.304997&zoom=9
         () Should work even if lat/lon coordinates have spaces (%20) on either side.
-            () http://localhost:9090/?Center=41.615648%20,%20-87.304997&zoom=9
+            () http://localhost:9090/map?Center=41.615648%20,%20-87.304997&zoom=9
         () Should work even if user has previously allowed geolocation API.
     () RangeMi/RangeKm
-        () http://localhost:9090/?Center=41.615648%20,%20-87.304997&zoom=9&RangeMi=20
-        () http://localhost:9090/?Center=41.615648%20,%20-87.304997&zoom=9&RangeKm=20
+        () http://localhost:9090/map?Center=41.615648%20,%20-87.304997&zoom=9&RangeMi=20
+        () http://localhost:9090/map?Center=41.615648%20,%20-87.304997&zoom=9&RangeKm=20
         () Range control slider should be positioned correctly and its text label should show the correct range.
         () Range unit selection (mi/km) should reflect the unit of the requested parameter, mi or km, for RangMi, RangeKm respectively.
     () Controls
