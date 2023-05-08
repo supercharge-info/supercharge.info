@@ -22,7 +22,8 @@ class UserConfig {
             state: null,
             status: [],
             stalls: null,
-            power: null
+            power: null,
+            otherEVs: null
         };
 
         this.latitude = null;
@@ -83,6 +84,11 @@ class UserConfig {
 
     setPower(newPower) {
         this.filter.power = newPower;
+        this.scheduleSave();
+    };
+
+    setOtherEVs(newOtherEVs) {
+        this.filter.otherEVs = newOtherEVs;
         this.scheduleSave();
     };
 
@@ -175,6 +181,8 @@ class UserConfig {
         this.filter.status = json.filter?.status || this.filter?.status;
         this.filter.stalls = json.filter?.stalls || this.filter?.stalls;
         this.filter.power = json.filter?.power || this.filter?.power;
+        this.filter.otherEVs = typeof json.filter?.otherEVs == 'boolean'
+            ? String(json.filter?.otherEVs) : json.filter?.otherEVs || this.filter?.otherEVs;
 
         this.customMarkers = json.customMarkers || this.customMarkers;
 

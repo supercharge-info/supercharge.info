@@ -9,14 +9,18 @@ module.exports = {
     // Dev server config options here: https://webpack.js.org/configuration/dev-server/
     // https://github.com/webpack/webpack-dev-server
     devServer: {
-        port: 9090,
-        host: "localhost",
+        port: 9091,
+        host: "0.0.0.0",
+        allowedHosts: ["pluto.www.dev.supercharge.info"],
         https: false,
+        client: {
+            overlay: false
+        },
         proxy: {
             "/service": {
                 // Remove "test." prefix from this hostname to test locally with prod API/data.
-                target: "https://test.supercharge.info:443",
-                secure: true,
+                target: "http://dev.supercharge.info:8080",
+                //secure: true,
                 changeOrigin: true
             }
         },

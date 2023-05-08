@@ -45,6 +45,7 @@ export default class ChangesView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
+        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
     };
 
     static handleChangeClick(event) {
@@ -193,6 +194,7 @@ export default class ChangesView {
                     d.status = changesView.filterControl.getStatus().join(",");
                     d.stalls = changesView.filterControl.getStalls();
                     d.power = changesView.filterControl.getPower();
+                    d.otherEVs = changesView.filterControl.getOtherEVs();
                 }
             },
             "rowId": "id",
