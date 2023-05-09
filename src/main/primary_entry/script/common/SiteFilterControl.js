@@ -200,7 +200,7 @@ export default class SiteFilterControl {
     populateOtherEVsOptions() {
         this.otherEVsSelect.html("<option value=''>No Vehicle Filter</option>");
         this.otherEVsSelect.append(`<option data-content="Teslas Only" value='false'></option>`);
-        this.otherEVsSelect.append(`<option data-content="Other EVs" value='true'></option>`);
+        this.otherEVsSelect.append(`<option data-content="Teslas + Other EVs" value='true'></option>`);
         this.otherEVsSelect.selectpicker("refresh");
     };
 
