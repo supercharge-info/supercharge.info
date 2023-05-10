@@ -44,7 +44,6 @@ const SitePredicates = {
             if (filter.stalls !== null && site.numStalls < filter.stalls) return false;
             if (filter.power !== null && site.powerKilowatt < filter.power) return false;
             if (filter.status !== null && filter.status.length > 0 && filter.status.indexOf(site.status.value) < 0) return false;
-            if (filter.status !== null && filter.status.length > 0 && filter.status.indexOf(site.status.value) < 0) return false;
             if (filter.otherEVs !== null && String(site.otherEVs) !== filter.otherEVs) return false;
             return true;
         };
