@@ -22,6 +22,7 @@ export default class SiteFilterControl {
         this.statusSelect = controlParentDiv.find(".status-select");
         this.stallsSelect = controlParentDiv.find(".stalls-select");
         this.powerSelect = controlParentDiv.find(".power-select");
+        this.otherEVsSelect = controlParentDiv.find(".other-evs-select");
         this.resetButton = controlParentDiv.find(".reset");
 
         this.changeTypeSelect.change(this.changeCallback.bind(this));
@@ -31,6 +32,7 @@ export default class SiteFilterControl {
         this.statusSelect.change(this.changeCallback.bind(this));
         this.stallsSelect.change(this.changeCallback.bind(this));
         this.powerSelect.change(this.changeCallback.bind(this));
+        this.otherEVsSelect.change(this.changeCallback.bind(this));
         this.resetButton.on("click", this.handleFilterReset.bind(this));
     }
 
@@ -69,6 +71,9 @@ export default class SiteFilterControl {
 
         this.populatePowerOptions();
         this.setPower(userConfig?.filter.power);
+
+        this.populateOtherEVsOptions();
+        this.setOtherEVs(userConfig?.filter.otherEVs);
     };
 
     /**
@@ -107,14 +112,14 @@ export default class SiteFilterControl {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     populateChangeTypeOptions() {
-        this.changeTypeSelect.html("<option value=''>-- Any Change --</option>");
+        this.changeTypeSelect.html("<option value=''>Any Change</option>");
         this.changeTypeSelect.append("<option value='ADD'>Add</option>");
         this.changeTypeSelect.append("<option value='UPDATE'>Update</option>");
         this.changeTypeSelect.selectpicker("refresh");
     }
 
     populateRegionOptions() {
-        this.regionSelect.html("<option value=''>-- Any Region --</option>");
+        this.regionSelect.html("<option value=''>Any Region</option>");
         var regions = [...Sites.getRegions()].sort((a,b) => a[0].localeCompare(b[0]));
         regions.forEach(r => {
             this.regionSelect.append(`<option value='${r[1]}'>${r[0]}</option>`);
@@ -131,7 +136,7 @@ export default class SiteFilterControl {
             countries = [...Sites.getCountries()];
         }
 
-        this.countrySelect.html("<option value=''>-- Any Country --</option>");
+        this.countrySelect.html("<option value=''>Any Country</option>");
         countries.sort((a,b) => a[0].localeCompare(b[0])).forEach(c => {
             this.countrySelect.append(`<option value='${c[1]}'>${c[0]}</option>`);
         });
@@ -175,7 +180,7 @@ export default class SiteFilterControl {
     };
 
     populateStallCountOptions() {
-        this.stallsSelect.html("<option value=''>-- No Min. Stalls --</option>");
+        this.stallsSelect.html("<option value=''>No Min. Stalls</option>");
         var stallCounts = new Int16Array([4, 8, 12, 16, 20, 30, 40, 50]);
         stallCounts.forEach(s => {
             this.stallsSelect.append(`<option value='${s}'>&ge; ${s} stalls</option>`);
@@ -184,12 +189,19 @@ export default class SiteFilterControl {
     };
 
     populatePowerOptions() {
-        this.powerSelect.html("<option value=''>-- No Min. Power --</option>");
+        this.powerSelect.html("<option value=''>No Min. Power</option>");
         var power = new Int16Array([72, 120, 150, 250]);
         $.each(power, (index, p) => {
             this.powerSelect.append(`<option value='${p}'>&ge; ${p} kW</option>`);
         });
         this.powerSelect.selectpicker("refresh");
+    };
+
+    populateOtherEVsOptions() {
+        this.otherEVsSelect.html("<option value=''>No Vehicle Filter</option>");
+        this.otherEVsSelect.append(`<option data-content="Teslas Only" value='false'></option>`);
+        this.otherEVsSelect.append(`<option data-content="Teslas + Other EVs" value='true'></option>`);
+        this.otherEVsSelect.selectpicker("refresh");
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -231,6 +243,11 @@ export default class SiteFilterControl {
         return isNaN(power) ? null : power;
     };
 
+    getOtherEVs() {
+        const otherEVs = this.otherEVsSelect.val();
+        return otherEVs === "" ? null : otherEVs;
+    };
+
     setChangeType(changeType) {
         this.changeTypeSelect.selectpicker("val", changeType);
     };
@@ -257,6 +274,10 @@ export default class SiteFilterControl {
 
     setPower(power) {
         this.powerSelect.selectpicker("val", power);
+    };
+
+    setOtherEVs(otherEVs) {
+        this.otherEVsSelect.selectpicker("val", otherEVs);
     };
 
 }

@@ -39,6 +39,7 @@ export default class DataView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
+        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
     };
 
     static handleDataClick(event) {
@@ -117,6 +118,7 @@ export default class DataView {
                     d.status = dataView.filterControl.getStatus().join(",");
                     d.stalls = dataView.filterControl.getStalls();
                     d.power = dataView.filterControl.getPower();
+                    d.otherEVs = dataView.filterControl.getOtherEVs();
                 }
             },
             "rowId": "id",
