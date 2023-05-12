@@ -126,6 +126,7 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.powerKilowatt = jsonObject.powerKilowatt;
     supercharger.solarCanopy = jsonObject.solarCanopy;
     supercharger.battery = jsonObject.battery;
+    supercharger.otherEVs = jsonObject.otherEVs;
     supercharger.history =
         jsonObject.status == 'OPEN' ?
             [{ siteStatus: jsonObject.status, date: jsonObject.dateOpened }]

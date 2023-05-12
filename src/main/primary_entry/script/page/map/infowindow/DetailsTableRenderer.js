@@ -51,6 +51,13 @@ export default function buildDetailsDiv(supercharger, displayUnit) {
         div += "<tr><th>Battery Storage</th><td>Yes</td></tr>";
     }
 
+    //
+    // Magic Dock
+    //
+    if (supercharger.otherEVs) {
+        div += "<tr><th>Other EVs</th><td>Yes</td></tr>";
+    }
+
 
     div += "</table>";
     div += "</div>";

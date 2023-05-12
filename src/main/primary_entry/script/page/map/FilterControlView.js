@@ -31,6 +31,7 @@ export default class FilterControlView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
+        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
         EventBus.dispatch("remove-all-markers-event");
         EventBus.dispatch("viewport-changed-event");
     }
