@@ -94,7 +94,7 @@ function internalHandleSliderMoved() {
  * Update the range slider value;
  */
 function labelValueChanged() {
-    let newValue = this.label.val();
+    let newValue = parseInt(this.label.val());
     if (newValue < this.getMin()) {
         newValue = this.getMin();
         this.setLabelText(newValue);

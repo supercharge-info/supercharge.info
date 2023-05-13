@@ -75,7 +75,7 @@ li.control-view-buttons button {
 
 .slider-control {
     display: inline-block !important;
-    width: 180px !important;
+    width: 162px !important;
     vertical-align: middle;
     margin-bottom: 1px;
 }
@@ -136,7 +136,7 @@ img.control-row-icon {
         width: 0px;
     }
     .slider-control {
-        width: 120px !important;
+        width: 121px !important;
     }
     .small-slider-control {
         width: 50px !important;
