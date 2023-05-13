@@ -34,6 +34,9 @@ export default class TotalOpenWorldLineChart {
 
         Highcharts.chart("total-open-world-line-chart", {
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 zoomType: 'x',
                 type: 'spline'
             },
@@ -78,12 +81,7 @@ export default class TotalOpenWorldLineChart {
                 {
                     data: livePerDate,
                     color: '#B22222',
-                    lineWidth: 1,
-                    marker: {
-                        enabled: true,
-                        radius: 3,
-                        fillColor: '#B22222'
-                    }
+                    lineWidth: 1
                 }
 
             ]

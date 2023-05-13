@@ -32,6 +32,9 @@ export default class CountryBarChart {
 
         Highcharts.chart("open-per-state-chart-" + this.country, {
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 type: 'column'
             },
             accessibility: {
