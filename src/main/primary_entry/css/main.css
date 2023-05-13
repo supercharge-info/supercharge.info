@@ -33,4 +33,11 @@
 /* - - - - - - - - - - - - - - - - - - - - PAGE: Profile */
 @import "page/profile/Profile.css";
 
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,200;8..144,400;8..144,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans:wght@200;400;700&display=swap');
 
+/* default font override */
+body, .leaflet-container, .tooltip {
+    font-family: 'Roboto Flex', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}

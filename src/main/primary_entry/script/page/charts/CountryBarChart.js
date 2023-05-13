@@ -26,6 +26,9 @@ export default class CountryBarChart {
 
         Highcharts.chart("chart-country-bar", {
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 type: 'column'
             },
             accessibility: {
