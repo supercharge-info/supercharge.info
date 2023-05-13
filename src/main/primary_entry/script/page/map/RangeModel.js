@@ -16,7 +16,7 @@ const metersToKilometers = (meters) => Math.round(meters / METERS_PER_KM);
 const kilometersToMeters = (kilometers) => Math.round(kilometers * METERS_PER_KM);
 
 const MILES_MIN = 0;
-const MILES_MAX = 350;
+const MILES_MAX = 405;
 const METERS_DEFAULT = milesToMeters(175);
 
 class RangeModel {
