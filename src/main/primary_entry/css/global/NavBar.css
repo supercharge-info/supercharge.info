@@ -48,7 +48,7 @@ Collapse navbar earlier than bootstrap's default 768px
         display: block !important;
     }
     .navbar-header .collapse, .navbar-toggle {
-        display:block !important;
+        display: block !important;
     }
     .navbar-header {
         float:none;
