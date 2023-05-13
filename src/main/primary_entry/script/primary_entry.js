@@ -32,7 +32,8 @@ import "../images/red_dot_t.svg";
 import "../images/red_dot_limited.svg";
 import "../images/orange_triangle.svg";
 
-
+import "../images/red_dot_expansion_permit.svg";
+import "../images/red_dot_expansion_construction.svg";
 
 /**
  * This is the main entry point into the application.  It is called AFTER google maps loads.

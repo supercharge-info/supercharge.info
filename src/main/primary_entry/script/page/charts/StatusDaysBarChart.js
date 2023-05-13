@@ -37,6 +37,9 @@ export default class StatusDaysBarChart {
     static _options(siteNameList, constructionDaysList, permitDaysList) {
         return {
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 type: 'bar',
                 height: 2500
             },

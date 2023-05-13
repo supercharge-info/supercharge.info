@@ -14,9 +14,9 @@ export default class CountryPieChart {
                 base = '#FF6666';
             let i;
 
-            for (i = 0; i < 10; i += 1) {
+            for (i = 0; i <= 10; i++) {
                 // Start out with a darkened base color (negative brighten), and end up with a much brighter color
-                colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
+                colors.push(Highcharts.Color(base).brighten((i - 6) / 11).get());
             }
             return colors;
         }());
@@ -29,7 +29,7 @@ export default class CountryPieChart {
         $.each(stateSiteCountList, function (index, value) {
             if (value.key !== Address.COUNTRY_WORLD) {
                 count++;
-                if (count <= 5) {
+                if (count <= 10) {
                     countryOpenCountList.push([value.key, value.open]);
                 } else {
                     otherSum = otherSum + value.open;
@@ -43,6 +43,9 @@ export default class CountryPieChart {
                 enabled: false
             },
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false
@@ -51,10 +54,10 @@ export default class CountryPieChart {
                 enabled: false
             },
             title: {
-                text: 'Open Superchargers per Country <span style="color:#aaaaaa">(top five)</span>'
+                text: 'Open Superchargers per Country <span style="color:#aaaaaa">(top ten)</span>'
             },
             tooltip: {
-                pointFormat: '{series.name}: {point.y}, <b>{point.percentage:.0f}%</b>'
+                pointFormat: '{series.name}: {point.y}, <b>{point.percentage:.1f}%</b>'
             },
             subtitle: {
                 text: null

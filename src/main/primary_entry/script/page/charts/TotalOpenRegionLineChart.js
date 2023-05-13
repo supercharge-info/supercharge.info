@@ -54,6 +54,9 @@ export default class TotalOpenRegionChart {
 
         Highcharts.chart("total-open-region-line-chart", {
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 zoomType: 'x',
                 type: 'spline'
             },
@@ -99,26 +102,17 @@ export default class TotalOpenRegionChart {
                 {
                     name: Address.REGION_NORTH_AMERICA,
                     data: livePerDateNorthAmerica,
-                    lineWidth: 1,
-                    marker: {
-                        radius: 3
-                    }
+                    lineWidth: 1
                 },
                 {
                     name: Address.REGION_EUROPE,
                     data: livePerDateEurope,
-                    lineWidth: 1,
-                    marker: {
-                        radius: 3
-                    }
+                    lineWidth: 1
                 },
                 {
                     name: Address.REGION_ASIA_PACIFIC,
                     data: livePerDateAsia,
-                    lineWidth: 1,
-                    marker: {
-                        radius: 3
-                    }
+                    lineWidth: 1
                 }
 
             ]
