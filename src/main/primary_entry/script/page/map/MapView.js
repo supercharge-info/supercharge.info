@@ -32,11 +32,6 @@ export default class MapView {
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
         $(document).on('click', '.marker-toggle-all-trigger', $.proxy(this.handleMarkerRemoveAll, this));
 
-        // this works around stacking context issues with Leaflet controls (zoom, layers, search)
-        // which would otherwise appear on top of filter dropdowns and the mobile nav menu
-        $(document).on('show.bs.dropdown', $.proxy(this.hideLeafletControls, this));
-        $(document).on('hide.bs.dropdown', $.proxy(this.showLeafletControls, this));
-
         //
         // Map context menu
         //
@@ -392,11 +387,4 @@ export default class MapView {
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
     };
-
-    hideLeafletControls() {
-        $('.leaflet-control-container').addClass('hidden');
-    }
-    showLeafletControls() {
-        $('.leaflet-control-container').removeClass('hidden');
-    }
 }
