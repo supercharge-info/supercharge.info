@@ -62,10 +62,6 @@ export default class NavBar {
         $("#navbar-menu-item-list").find("a.page").click($.proxy(this.handlePageChangeClick, this));
         $("#navbar-dropdown-menu-item-list").find("a").click($.proxy(this.navBarOptions.handleAction, this.navBarOptions));
         EventBus.addListener('nav-change-page-event', this.handlePageChangeEvent, this);
-
-        const collapseFunction = $.proxy(this.autoCloseCollapsedNavBar, this);
-        $("body").click(collapseFunction);
-
         window.addEventListener('popstate', $.proxy(this.handlePageChangeHistory, this));
     };
 
@@ -128,18 +124,6 @@ export default class NavBar {
     showCurrentPage() {
         $("#page-" + this.currentPage).show();
         $("#page-link-" + this.currentPage).closest("li").addClass("active");
-    };
-
-    /**
-     * If the navbar is collapsed then hide/close it each time the user clicks a menu item (or the body).
-     */
-    autoCloseCollapsedNavBar(event) {
-        if (this.navbarToggle.is(":visible") && this.navbarCollapse.is(":visible")) {
-            const target = $(event.target);
-            if (!target.is(".dropdown-toggle") && (!target.is(".form-control") || target.closest(".navbar").length === 0)) {
-                this.navbarCollapse.collapse('toggle');
-            }
-        }
     };
 
 }
