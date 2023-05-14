@@ -36,7 +36,9 @@ export default class MapView {
         // which would otherwise appear on top of filter dropdowns
         $(document).on('show.bs.select', $.proxy(this.hideLeafletControls, this));
         $(document).on('hide.bs.select', $.proxy(this.showLeafletControls, this));
-        $('#navbar').on('hidden.bs.collapse', $.proxy(this.mapApi.invalidateSize, this));
+        
+        // this works around a bug related to the navbar expand/collapse animation on mobile
+        $('#navbar').on('hidden.bs.collapse', $.proxy(this.handleViewportChange, this));
 
         //
         // Map context menu
@@ -151,6 +153,7 @@ export default class MapView {
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     handleViewportChange() {
+        this.mapApi.invalidateSize();
         const latLngBounds = this.mapApi.getBounds();
         const northEast = latLngBounds.getNorthEast();
         const southWest = latLngBounds.getSouthWest();
