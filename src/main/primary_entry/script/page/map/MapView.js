@@ -49,6 +49,7 @@ export default class MapView {
 
         // draw map for first time.
         this.handleViewportChange();
+        setTimeout(() => { this.handleViewportChange() }, 500);
 
         // fixes leaflet and webpack not playing nice
         // https://github.com/PaulLeCam/react-leaflet/issues/453#issuecomment-761806673
@@ -145,6 +146,7 @@ export default class MapView {
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     handleViewportChange() {
+        this.mapApi.invalidateSize();
         const latLngBounds = this.mapApi.getBounds();
         const northEast = latLngBounds.getNorthEast();
         const southWest = latLngBounds.getSouthWest();
