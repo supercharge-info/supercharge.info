@@ -51,7 +51,7 @@ export default class ChangesView {
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
-            if (!target.is('a, b, ul, li')) {
+            if (!target.is('a, b, ul, li, .links img')) {
                 // TODO: decide whether this should be closest('table') or closest('tr')
                 if (target.closest('table').find('div.open').length === 0) {
                     const clickedSiteId = parseInt(target.closest('tr').data('siteid'));
@@ -69,13 +69,13 @@ export default class ChangesView {
     static buildStatus(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         var s = Status.fromString(changeRow.siteStatus);
-        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/>${s.shortName}</span>`
+        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}'/></span>`
     }
     
     static buildDetails(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        const stalls = `${site.numStalls} stalls`
-        const kw = site.powerKilowatt > 0 ?
+        const sitestalls = `${site.numStalls} stalls`
+        const sitekw = site.powerKilowatt > 0 ?
             ` | ${site.powerKilowatt} kW` :
             '';
 
@@ -115,28 +115,33 @@ export default class ChangesView {
             ];
         }
         */
+        var content = "";
         if (!changeRow.stalls) {
-            return stalls + kw;
+            content = sitestalls + sitekw;
         } else if (changeRow.stalls.length === 1) {
-            return `${stalls}${kw} | ${changeRow.stalls[0].type} | ${changeRow.stalls[0].connectors?.join(", ")}`;
+            content = `${sitestalls}${sitekw} | ${changeRow.stalls[0].type} | ${changeRow.stalls[0].connectors?.join(", ")}`;
+        } else {
+            var entries = "";
+            changeRow.stalls.forEach(s => {
+                entries += `
+                <li class="${s.status}">${s.count} @ ${s.power} kW → ${Status.fromString(s.status).displayName}
+                    <li class="${s.status} connectors">${s.type} | ${s.connectors?.join(", ")}</li>
+                </li>`;
+            });
+
+            content = `
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${sitestalls}${sitekw}
+                        <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                    <ul class="dropdown-menu">
+                        ${entries}
+                    </ul>
+                </div>`;
         }
-
-        var entries = "";
-        changeRow.stalls.forEach(s => {
-            entries += `
-            <li class="${s.status}">${s.count} @ ${s.power} kW → ${Status.fromString(s.status).displayName}
-                <li class="${s.status} connectors">${s.type} | ${s.connectors?.join(", ")}</li>
-            </li>`;
-        });
-
-        return `
-            <div class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${stalls}${kw}
-                    <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
-                <ul class="dropdown-menu">
-                    ${entries}
-                </ul>
-            </div>`;
+        if (site.solarCanopy) content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)     content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
+        if (site.otherEVs)    content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
+        return content;
     }
 
     static buildLinks(changeRow) {
@@ -148,7 +153,7 @@ export default class ChangesView {
             site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/Tesla_T_symbol.svg" title="tesla.com"/>') :
+            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/red_dot_t.svg" title="tesla.com"/>') :
             '';
         return `${gmapLink} | ${discussLink}${teslaLink}`;
     }
@@ -181,7 +186,7 @@ export default class ChangesView {
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
                     var resultSpan = $("#changes-result-count");
-                    resultSpan.html(`<span class="shrink">Showing </span>${json.recordsFiltered} result${json.recordsFiltered === 1 ? "" : "s"}`);
+                    resultSpan.html(`${json.recordsFiltered} result${json.recordsFiltered === 1 ? "" : "s"}<span class="shrink"> matched</span>`);
                     resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
                     resultSpan.attr("title", json.recordsFiltered === 0 ? "No results displayed. Adjust or reset filters to see more." : "");
                     return JSON.stringify(json);
@@ -200,7 +205,9 @@ export default class ChangesView {
             "rowId": "id",
             "columns": [
                 {
-                    "data": "dateFormatted",
+                    "data": (row, type, val, meta) => {
+                        return `<span class="wide">${row.dateFormatted}</span><span class="narrow">${row.date}</span>`
+                    },
                     "width": "12%"
                 },
                 {
@@ -248,6 +255,10 @@ export default class ChangesView {
                     rowJq.addClass('success');
                 }
             },
+            "drawCallback": () => {
+                $("#changes-table .status-select img").tooltip({ "container": "body", "placement": "right" });
+                $("#changes-table .links img, #changes-table img.details").tooltip({ "container": "body" });
+            },
             "dom": "" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 text-center'l>>" +
@@ -257,6 +268,10 @@ export default class ChangesView {
 
         }
 
+    }
+
+    hideTooltips() {
+        $(".tooltip").tooltip("hide");
     }
 
 }

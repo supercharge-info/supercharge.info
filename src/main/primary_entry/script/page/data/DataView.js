@@ -46,7 +46,7 @@ export default class DataView {
         if (!WindowUtil.isTextSelected()) {
             const clickTarget = $(event.target);
             const td = clickTarget.closest('td');
-            if (!td.hasClass('link')) {
+            if (!target.is('a, b, ul, li, .links img')) {
                 const clickedSiteId = parseInt(clickTarget.closest('tr').attr('id'));
                 EventBus.dispatch(MapEvents.show_location, clickedSiteId);
             }
@@ -56,7 +56,7 @@ export default class DataView {
     static buildStatus(supercharger) {
         const site = supercharger;
         var s = Status.fromString(supercharger.status);
-        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/>${s.shortName}</span>`
+        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}'/></span>`
     }
 
     static asLink(href, content, title) {
@@ -73,7 +73,7 @@ export default class DataView {
             site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " | " + DataView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/Tesla_T_symbol.svg" title="tesla.com"/>') :
+            " | " + DataView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/red_dot_t.svg" title="tesla.com"/>') :
             '';
         return `${gmapLink} | ${discussLink}${teslaLink}`;
     }

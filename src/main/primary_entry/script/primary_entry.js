@@ -25,7 +25,9 @@ import "../images/plus-circle.svg";
 import "../images/minus-circle.svg";
 import "../images/gmap.svg";
 import "../images/forum.svg";
-import "../images/Tesla_T_symbol.svg";
+import "../images/solar-power-variant.svg";
+import "../images/battery-charging.svg";
+import "../images/car-electric.svg";
 
 import "../images/blue_triangle.svg";
 import "../images/black_dot_x.svg";

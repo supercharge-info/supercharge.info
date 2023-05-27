@@ -37,7 +37,7 @@ td span.status-select.OPEN {
     color: red;
 }
 
-td.links img {
+td.links img, td img.details {
     height: 16px;
     margin-top: -3px;
 }

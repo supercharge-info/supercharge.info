@@ -11,7 +11,7 @@
     margin-bottom: 0;
 }
 
-#navbar-menu-item-list li:hover {
+#navbar-menu-item-list li a:hover {
     background-color: #ddd;
 }
 
@@ -30,6 +30,11 @@
     height: 40px;
     vertical-align: top;
 }
+.logo.collapse {
+    display: none;
+    margin-left: 8px;
+    line-height: 28px;
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Collapse navbar earlier than bootstrap's default 768px
@@ -43,6 +48,7 @@ Collapse navbar earlier than bootstrap's default 768px
     }
     .container-fluid {
         padding-right: 5px;
+        line-height: 14px;
     }
     button.form-control {
         margin: 0px !important;
@@ -52,16 +58,13 @@ Collapse navbar earlier than bootstrap's default 768px
     .navbar-collapse.collapse {
         display: none !important;
     }
-    .navbar-collapse.collapse.in {
+    .navbar-collapse.collapse.in, .logo.collapse {
         display: block !important;
     }
     .navbar-header .collapse, .navbar-toggle {
         display: block !important;
     }
-    .navbar-header {
-        float: none;
-    }
-    .navbar-toggle {
+    .navbar-header, .navbar-toggle {
         float: right;
     }
     .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {

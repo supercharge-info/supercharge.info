@@ -46,6 +46,32 @@ Navigation Bar
                 <img src="/images/logo.svg" width="40" height="40" title="supercharge.info"/>
                 <span>supercharge.info</span>
             </div>
+            <!--
+            Counts Table
+            -->
+            <table id="total-count-table" class="nav navbar-nav">
+                <tr class="lab">
+                    <td title="Open" class="open">Open</td>
+                    <td title="Construction" class="construction">Constr</td>
+                    <td title="Permit" class="permit">Permit</td>
+                    <td title="Closed" class="closed">Closed</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td title="Open" class="open">&nbsp;</td>
+                    <td title="Construction" class="construction">&nbsp;</td>
+                    <td title="Permit" class="permit">&nbsp;</td>
+                    <td title="Closed" class="closed">&nbsp;</td>
+                    <td class="lab"></td>
+                </tr>
+                <tr>
+                    <td title="Open" class="open">&nbsp;</td>
+                    <td title="Construction" class="construction">&nbsp;</td>
+                    <td title="Permit" class="permit">&nbsp;</td>
+                    <td title="Closed" class="closed">&nbsp;</td>
+                    <td class="lab"></td>
+                </tr>
+            </table>
             
             <!-- This is what gets shown for the navbar when it collapses for small screens. -->
             <div class="navbar-header">
@@ -60,37 +86,12 @@ Navigation Bar
             <!-- When the collapse is triggered each child of navbar-collapse is displayed on a separate line
                  of the new collapsing/expanding menu. -->
             <div class="navbar-collapse collapse">
-                <!--
-                Counts Table
-                -->
-                <table id="total-count-table" class="nav navbar-nav">
-                    <tr class="lab">
-                        <td title="Open" class="open">Open</td>
-                        <td title="Construction" class="construction">Constr</td>
-                        <td title="Permit" class="permit">Permit</td>
-                        <td title="Closed" class="closed">Closed</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td title="Open" class="open">&nbsp;</td>
-                        <td title="Construction" class="construction">&nbsp;</td>
-                        <td title="Permit" class="permit">&nbsp;</td>
-                        <td title="Closed" class="closed">&nbsp;</td>
-                        <td class="lab"></td>
-                    </tr>
-                    <tr>
-                        <td title="Open" class="open">&nbsp;</td>
-                        <td title="Construction" class="construction">&nbsp;</td>
-                        <td title="Permit" class="permit">&nbsp;</td>
-                        <td title="Closed" class="closed">&nbsp;</td>
-                        <td class="lab"></td>
-                    </tr>
-                </table>
 
                 <!--
                 Navigation Tabs
                 -->
                 <ul class="nav navbar-nav navbar-right" id="navbar-menu-item-list" style="margin-right: 5px">
+                    <li class="logo collapse">supercharge.info</li>
                     <li><a class="page" id="page-link-changes" href="#changes">Changes</a></li>
                     <li><a class="page" id="page-link-charts" href="#charts">Charts</a></li>
                     <li><a class="page" id="page-link-map" href="#map">Map</a></li>
@@ -205,7 +206,7 @@ PAGE: map
                         <input type="radio" name="markers" id="marker-f">
                         <span class="sample-markers collapse">
                             <img src="/images/red_dot.svg" alt="open" class="marker-icon collapse open"/>
-                            <img src="images/orange_triangle.svg" alt="construction" class="marker-icon collapse construction" style="width: 24px; height: 24px; margin-bottom: -4px;"/>
+                            <img src="images/orange_triangle.svg" alt="construction" class="marker-icon collapse construction"/>
                         </span>
                         <span title="Choose a marker size">Fixed<span class="collapse">&nbsp;Size</span></span>
                     </label>
@@ -629,11 +630,11 @@ PAGE: about
             <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
         </li>
         <li title="Permit">
-            <img src="images/blue_triangle.svg" style="width: 24px; height: 24px; margin: 0 -2px -4px -2px;"/>
+            <img src="images/blue_triangle.svg"/>
             <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
         </li>
         <li title="Construction">
-            <img src="images/orange_triangle.svg" style="width: 24px; height: 24px; margin: 0 -2px -4px -2px;"/>
+            <img src="images/orange_triangle.svg"/>
             <b>Construction</b> : Progress is visible at the site.
         </li>
         <li title="Open">
