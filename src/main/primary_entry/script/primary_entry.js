@@ -11,6 +11,7 @@ import "../css/main.css";
 // Tell webpack to include these images in our package. Ultimately it is is possible to have webpack rename the
 // image file to something like [md5].png and have the below import statements return the actual path (with the md5),
 // this for perfect caching.  For now let's keep it simple, webpack is configured not to change the image names.
+import "../images/logo.svg";
 import "../images/avatar-placeholder.png";
 import "../images/feed-icon.png";
 import "../images/become_a_patron_button@2x.png";
@@ -29,8 +30,9 @@ import "../images/gray_dot_x.svg";
 import "../images/green_dot.svg";
 import "../images/red_dot.svg";
 import "../images/red_dot_t.svg";
-import "../images/red_dot_limited.svg";
+import "../images/green_dot_limited.svg";
 import "../images/orange_triangle.svg";
+import "../images/custom_pin.svg";
 
 import "../images/red_dot_expansion_permit.svg";
 import "../images/red_dot_expansion_construction.svg";

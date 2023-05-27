@@ -14,7 +14,7 @@ class TotalCountPanel {
         this.table = $("#total-count-table");
         this.countMapCountry = SiteCount.getCountMapByCountry();
         this.countMapRegion = SiteCount.getCountMapByRegion();
-        this.updateView(0, this.countMapCountry[Address.COUNTRY_WORLD]);
+        this.updateView(1, this.countMapCountry[Address.COUNTRY_WORLD]);
         EventBus.addListener("map-viewport-change-event", this.mapViewPortChanged, this);
 
         TotalCountPanel.USA = L.latLngBounds(L.latLng(24.44715, -125.15625), L.latLng(49.0, -65.961914));
@@ -40,35 +40,37 @@ class TotalCountPanel {
             "CHN": TotalCountPanel.CHINA, 
             "JPN": TotalCountPanel.JAPAN
         };
+
+        $("#total-count-table .open").tooltip({ content: '<img src="../images/green_dot.svg"/> Open' });
     }
 
     mapViewPortChanged(event, latLngBounds) {
         const center = latLngBounds.getCenter();
 
         if (TotalCountPanel.USA.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_USA]);
+            this.updateView(2, this.countMapCountry[Address.COUNTRY_USA]);
         } else if (TotalCountPanel.CANADA.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_CANADA]);
+            this.updateView(2, this.countMapCountry[Address.COUNTRY_CANADA]);
         } else if (TotalCountPanel.EUROPE.contains(center)) {
-            this.updateView(1, this.countMapRegion[Address.REGION_EUROPE]);
+            this.updateView(2, this.countMapRegion[Address.REGION_EUROPE]);
         }
         /* Japan is inside of Asia */
         else if (TotalCountPanel.JAPAN.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_JAPAN]);
+            this.updateView(2, this.countMapCountry[Address.COUNTRY_JAPAN]);
         }
         /* China is inside of Asia */
         else if (TotalCountPanel.CHINA.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_CHINA]);
+            this.updateView(2, this.countMapCountry[Address.COUNTRY_CHINA]);
         }
         /* Australia is inside of Asia */
         else if (TotalCountPanel.AUSTRALIA.contains(center)) {
-            this.updateView(1, this.countMapCountry[Address.COUNTRY_AUSTRAILIA]);
+            this.updateView(2, this.countMapCountry[Address.COUNTRY_AUSTRAILIA]);
         }
         else if (TotalCountPanel.ASIA.contains(center)) {
-            this.updateView(1, this.countMapRegion[Address.REGION_ASIA_PACIFIC]);
+            this.updateView(2, this.countMapRegion[Address.REGION_ASIA_PACIFIC]);
         }
         else {
-            this.updateView(1, this.countMapRegion[Address.REGION_NORTH_AMERICA]);
+            this.updateView(2, this.countMapRegion[Address.REGION_NORTH_AMERICA]);
         }
 
     };
@@ -79,7 +81,8 @@ class TotalCountPanel {
         nonControlCells.eq(0).text(countMap.open);
         nonControlCells.eq(1).text(countMap.construction);
         nonControlCells.eq(2).text(countMap.permit);
-        nonControlCells.eq(3).text(countMap.key);
+        nonControlCells.eq(3).text(countMap.closed);
+        nonControlCells.eq(4).text(countMap.key);
     };
 
 }

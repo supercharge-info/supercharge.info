@@ -58,12 +58,13 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction)
         returnedArray = [];
     let totalOpen = 0,
         totalConstruction = 0,
-        totalPermit = 0;
+        totalPermit = 0,
+        totalClosed = 0;
 
     siteIterator.iterate(function (supercharger) {
             const aggregateKeyValue = supercharger.address[aggregateKey];
             if (!referenceMap[aggregateKeyValue]) {
-                const newEntry = {key: aggregateKeyValue, open: 0, construction: 0, permit: 0};
+                const newEntry = {key: aggregateKeyValue, open: 0, construction: 0, permit: 0, closed: 0};
                 referenceMap[aggregateKeyValue] = newEntry;
                 returnedArray.push(newEntry);
             }
@@ -80,14 +81,15 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction)
                 totalPermit++;
             }
             else if (supercharger.isClosedTemp() || supercharger.isClosedPerm()) {
-                // nothing
+                referenceMap[aggregateKeyValue].closed++;
+                totalClosed++;
             } else {
                 throw new Error("unexpected supercharger status" + supercharger);
             }
         }
     );
 
-    returnedArray.push({key: 'World', open: totalOpen, construction: totalConstruction, permit: totalPermit});
+    returnedArray.push({key: 'World', open: totalOpen, construction: totalConstruction, permit: totalPermit, closed: totalClosed});
     returnedArray.sort(sortFunction);
     return returnedArray;
 };

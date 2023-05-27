@@ -42,16 +42,16 @@ const Status = {
         sort: 4,
         displayName: "Open",
         className: "open",
-        getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "red_dot_limited.svg" : "red_dot.svg"),
-        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)"),
+        getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "green_dot_limited.svg" : "green_dot.svg"),
+        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#green_dot_limited)" : "url(#green_dot)"),
         getTitle: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "Open - limited hours" : "Open")
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
         className: "user",
-        getIcon: (supercharger) => "/images/green_dot.svg",
-        getFill: (supercharger) => "url(#green_dot)",
+        getIcon: (supercharger) => "/images/custom_pin.svg",
+        getFill: (supercharger) => "url(#custom_pin)",
         getTitle: (supercharger) => "Custom"
     }
 };
