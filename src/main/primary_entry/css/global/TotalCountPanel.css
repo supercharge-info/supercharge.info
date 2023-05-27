@@ -3,22 +3,22 @@
     border-collapse: collapse;
 
     margin: 0;
-    padding: 0.2em 0 0 0;
+    padding: 1px 0 0 0;
 
-    font-size: 1.1em;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 16px;
 
     border-spacing: 0;
 }
 
 #total-count-table tr {
     padding: 0;
-    margin: 0;
+    margin: 0 0 -2px 0;
 }
 
 #total-count-table td {
-    padding: 0 0.8em 0 0;
-    margin: 0;
+    padding: 0 6px 0 6px;
     text-align: right;
     vertical-align: bottom;
 }
@@ -28,7 +28,7 @@
 }
 
 #total-count-table td.construction {
-    color: orange;
+    color: darkorange;
 }
 
 #total-count-table td.permit {
@@ -37,4 +37,11 @@
 
 #total-count-table td.lab {
     text-align: left;
+}
+
+#total-count-table tr.lab td {
+    font-size: 9px;
+    font-weight: normal;
+    line-height: 15px;
+    position: relative;
 }

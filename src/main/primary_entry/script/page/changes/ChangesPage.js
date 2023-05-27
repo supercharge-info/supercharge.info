@@ -16,6 +16,7 @@ export default class ChangesPage {
     }
 
     onPageHide() {
+        if (this.initialized) this.changesView.hideTooltips();
     }
 
 }
