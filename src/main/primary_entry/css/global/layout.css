@@ -28,6 +28,28 @@ a.disabled {
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Data tables 
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+td span.status-select img {
+    margin-top: -3px;
+}
+td span.status-select.OPEN {
+    color: red;
+}
+
+td.links img, td img.details {
+    height: 16px;
+    margin-top: -3px;
+}
+td.links a {
+    white-space: nowrap;
+}
+td.links a:hover, td.links a:focus {
+    outline: 4px groove rgba(102, 175, 233, 0.6);
+    outline-offset: 2px;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Layout
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 

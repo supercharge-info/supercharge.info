@@ -55,8 +55,9 @@ export default class NavBar {
         if(QueryStrings.isShowSignIn()) {
             this.loginDialog.show();
         }
-    }
 
+        setTimeout(() => { $("body").css("visibility", ""); }, 100);
+    }
 
     initListeners() {
         $("#navbar-menu-item-list").find("a.page").click($.proxy(this.handlePageChangeClick, this));

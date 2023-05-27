@@ -248,7 +248,7 @@ export default class MapView {
             0.004, 0.002, 0.001, 0.0005, 0.0001,
             0, 0, 0, 0, 0
         ];
-        this.markerSize = 10;
+        this.updateMarkerSize(8);
         if (oldZoom !== newZoom) {
             // clear old cluster markers when zooming in/out
             infoWindows = this.removeAllMarkers(true);
@@ -311,13 +311,9 @@ export default class MapView {
             .iterate((supercharger) => {
                 if (supercharger.marker.setRadius) supercharger.marker.setRadius(markerSize * supercharger.getMarkerMultiplier());
             });
-        var samples = $(".sample-markers img.open");
+        var samples = $(".sample-markers img");
         samples.width(markerSize * 2);
         samples.height(markerSize * 2);
-        samples = $(".sample-markers img.construction");
-        samples.width(markerSize * 2.4);
-        samples.height(markerSize * 2.4);
-        samples.css("marginBottom", markerSize * -0.4);
     };
 
     setupForWayBack() {
