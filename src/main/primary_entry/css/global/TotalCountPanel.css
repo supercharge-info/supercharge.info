@@ -45,23 +45,3 @@
     line-height: 15px;
     position: relative;
 }
-
-#total-count-table tr.lab img {
-    width: 15px;
-    height: 15px;
-}
-
-#total-count-table td.construction img, #total-count-table td.permit img {
-    width: 18px;
-    height: 18px;
-    margin-bottom: -3px;
-}
-
-#total-count-table .legend {
-    position: absolute;
-    right: 6px;
-    opacity: 0.1;
-}
-#total-count-table .legend.hover {
-    opacity: 1;
-}

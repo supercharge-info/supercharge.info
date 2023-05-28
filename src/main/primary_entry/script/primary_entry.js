@@ -23,6 +23,9 @@ import "../images/link-symbol.svg";
 import "../images/history-icon.svg";
 import "../images/plus-circle.svg";
 import "../images/minus-circle.svg";
+import "../images/gmap.svg";
+import "../images/forum.svg";
+import "../images/Tesla_T_symbol.svg";
 
 import "../images/blue_triangle.svg";
 import "../images/black_dot_x.svg";

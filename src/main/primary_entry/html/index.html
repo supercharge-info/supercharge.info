@@ -65,33 +65,11 @@ Navigation Bar
                 -->
                 <table id="total-count-table" class="nav navbar-nav">
                     <tr class="lab">
-                        <td title="Open" class="open">
-                            <div class="legend">
-                                <img src="../images/red_dot.svg"/>
-                                <img src="../images/red_dot_limited.svg" title="Open - Limited Hours"/>
-                            </div>
-                            Open
-                        </td>
-                        <td title="Construction" class="construction">
-                            <div class="legend">
-                                <img src="../images/orange_triangle.svg"/>
-                            </div>
-                            Constr
-                        </td>
-                        <td title="Permit" class="permit">
-                            <div class="legend">
-                                <img src="../images/blue_triangle.svg"/>
-                            </div>
-                            Permit
-                        </td>
-                        <td title="Closed" class="closed">
-                            <div class="legend">
-                                <img src="../images/gray_dot_x.svg" title="Temporarily Closed"/>
-                                <img src="../images/black_dot_x.svg" title="Permanently Closed"/>
-                            </div>
-                            Closed
-                        </td>
-                        <td class="lab"></td>
+                        <td title="Open" class="open">Open</td>
+                        <td title="Construction" class="construction">Constr</td>
+                        <td title="Permit" class="permit">Permit</td>
+                        <td title="Closed" class="closed">Closed</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td title="Open" class="open">&nbsp;</td>
@@ -475,6 +453,7 @@ PAGE: data
 
     <div id="data-filter">
         <form class="form-inline" role="form">
+            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
             <select class="form-control region-select"></select>
             <select class="form-control country-select"
                     data-live-search="true"></select>
@@ -558,6 +537,7 @@ PAGE: changes
 
     <div id="changes-filter">
         <form class="form-inline" role="form">
+            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
             <select class="form-control changetype-select"></select>
             <select class="form-control region-select"></select>
             <select class="form-control country-select"

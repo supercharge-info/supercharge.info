@@ -29,7 +29,7 @@
     color: black;
 }
 #changes-table .dropdown .OPEN {
-    color: green;
+    color: red;
 }
 
 #changes-table .dropdown a, #changes-table .dropdown b {

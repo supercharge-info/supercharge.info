@@ -40,9 +40,6 @@ class TotalCountPanel {
             "CHN": TotalCountPanel.CHINA, 
             "JPN": TotalCountPanel.JAPAN
         };
-
-        $("#total-count-table").on("mouseover", function () { $(".legend").addClass("hover"); });
-        $("#total-count-table").on("mouseout", function () { $(".legend").removeClass("hover"); });
     }
 
     mapViewPortChanged(event, latLngBounds) {
