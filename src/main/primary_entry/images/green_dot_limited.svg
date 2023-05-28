@@ -7,7 +7,7 @@
         <stop offset="100%" stop-color="#004400" />
     </radialGradient>
  </defs>
- <circle r="500" cx="500" cy="500" fill="url(#green_fill_ltd)" />
+ <circle r="475" cx="500" cy="500" fill="url(#green_fill_ltd)" style="stroke: #000000; stroke-width: 50;"/>
  <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
     <g>
             <g transform="matrix(12 0 0 12 0 -125)">

@@ -65,10 +65,32 @@ Navigation Bar
                 -->
                 <table id="total-count-table" class="nav navbar-nav">
                     <tr class="lab">
-                        <td title="Open" class="open" data-toggle="tooltip">Open</td>
-                        <td title="Construction" class="construction">Constr</td>
-                        <td title="Permit" class="permit">Permit</td>
-                        <td title="Closed" class="closed">Closed</td>
+                        <td title="Open" class="open">
+                            <div class="legend">
+                                <img src="../images/green_dot.svg"/>
+                                <img src="../images/green_dot_limited.svg" title="Open - Limited Hours"/>
+                            </div>
+                            Open
+                        </td>
+                        <td title="Construction" class="construction">
+                            <div class="legend">
+                                <img src="../images/orange_triangle.svg"/>
+                            </div>
+                            Constr
+                        </td>
+                        <td title="Permit" class="permit">
+                            <div class="legend">
+                                <img src="../images/blue_triangle.svg"/>
+                            </div>
+                            Permit
+                        </td>
+                        <td title="Closed" class="closed">
+                            <div class="legend">
+                                <img src="../images/gray_dot_x.svg" title="Temporarily Closed"/>
+                                <img src="../images/black_dot_x.svg" title="Permanently Closed"/>
+                            </div>
+                            Closed
+                        </td>
                         <td class="lab"></td>
                     </tr>
                     <tr>
@@ -391,7 +413,7 @@ PAGE: map
                     <stop offset="100%" stop-color="#000000" />
                 </radialGradient>
                 <pattern id="black_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="500" cx="500" cy="500" fill="url(#black_fill)" />
+                    <circle r="475" cx="500" cy="500" fill="url(#black_fill)" style="stroke: #000000; stroke-width: 50;"/>
                     <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
                         <g>
                             <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">

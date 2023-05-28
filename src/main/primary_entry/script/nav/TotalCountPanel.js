@@ -41,7 +41,8 @@ class TotalCountPanel {
             "JPN": TotalCountPanel.JAPAN
         };
 
-        $("#total-count-table .open").tooltip({ content: '<img src="../images/green_dot.svg"/> Open' });
+        $("#total-count-table").on("mouseover", function () { $(".legend").addClass("hover"); });
+        $("#total-count-table").on("mouseout", function () { $(".legend").removeClass("hover"); });
     }
 
     mapViewPortChanged(event, latLngBounds) {
