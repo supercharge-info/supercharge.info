@@ -42,8 +42,8 @@ const Status = {
         sort: 4,
         displayName: "Open",
         className: "open",
-        getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "green_dot_limited.svg" : "green_dot.svg"),
-        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#green_dot_limited)" : "url(#green_dot)"),
+        getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "red_dot_limited.svg" : "red_dot.svg"),
+        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)"),
         getTitle: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "Open - limited hours" : "Open")
     },
     USER_ADDED: {

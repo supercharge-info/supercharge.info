@@ -58,29 +58,29 @@ Markers
     min-height: 15px;
     min-width: 22px;
 }
-.cluster-marker.open { background-color: rgba(0, 160, 0, 0.7); }
+.cluster-marker.open { background-color: rgba(240, 0, 0, 0.7); }
 .cluster-marker.construction { background-color: rgba(240, 144, 0, 0.7); }
 .cluster-marker.permit { background-color: rgba(0, 64, 255, 0.7); }
 .cluster-marker.closed-temp { background-color: rgba(160, 160, 160, 0.7); }
-.cluster-marker.closed-perm { background-color: rgba(0, 0, 0, 0.6); }
-.cluster-marker.user { background-color: rgba(192, 0, 192, 0.7); }
+.cluster-marker.closed-perm { background-color: rgba(0, 0, 0, 0.7); }
+.cluster-marker.user { background-color: rgba(0, 192, 0, 0.7); }
 
 .tooltip {
     color: white;
     font-weight: bold;
 }
 .tooltip .limited {
-    background-color: rgba(0, 128, 0, 0.9);
+    background-color: rgba(128, 0, 0, 0.9);
     color: yellow; 
     padding: 1px 5px;
     margin: 0 -5px;
 }
-.tooltip.open { background-color: rgba(0, 160, 0, 0.95); }
+.tooltip.open { background-color: rgba(240, 0, 0, 0.95); }
 .tooltip.construction { background-color: rgba(240, 144, 0, 0.95); }
 .tooltip.permit { background-color: rgba(0, 64, 255, 0.95); }
 .tooltip.closed-temp { background-color: rgba(160, 160, 160, 0.95); }
 .tooltip.closed-perm { background-color: rgba(0, 0, 0, 0.8); }
-.tooltip.user { background-color: rgba(160, 0, 160, 0.95); }
+.tooltip.user { background-color: rgba(0, 192, 0, 0.95); }
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -109,7 +109,7 @@ Info Window
 }
 
 .info-window-content .open {
-    color: green;
+    color: red;
     font-size: smaller;
     font-weight: bold
 }

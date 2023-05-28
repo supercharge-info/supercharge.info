@@ -30,7 +30,7 @@ import "../images/gray_dot_x.svg";
 import "../images/green_dot.svg";
 import "../images/red_dot.svg";
 import "../images/red_dot_t.svg";
-import "../images/green_dot_limited.svg";
+import "../images/red_dot_limited.svg";
 import "../images/orange_triangle.svg";
 import "../images/custom_pin.svg";
 

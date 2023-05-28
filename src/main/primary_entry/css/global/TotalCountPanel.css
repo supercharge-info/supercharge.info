@@ -24,7 +24,7 @@
 }
 
 #total-count-table td.open {
-    color: green;
+    color: red;
 }
 
 #total-count-table td.construction {
