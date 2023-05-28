@@ -54,7 +54,8 @@ export default class MarkerFactory {
         // Alternate formula: 2-6 => +1 || 7-19 => +2 || 20-53 => +3 || 54-999 --> +4
         //var zoomIncrement = Math.min(Math.floor(Math.log(superchargers.length + 1)), 4);
 
-        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}</span>) - ${numStalls} total stalls:<br/>`;
+        var stallInfo = superchargers[0].isUserAdded() ? "" : " - ${numStalls} total stalls";
+        var markerTitle = `${superchargers.length} locations (${superchargers[0].status.displayName}</span>)${stallInfo}:<br/>`;
         for (var i = 0; i < 3 && i < sc.length; i++) {
             markerTitle += sc[i].getShortMarkerTitle() + "<br/>";
         }
