@@ -15,10 +15,15 @@
     background-color: #ddd;
 }
 
+.nav > li > a {
+    padding: 15px 12px;
+}
+
 .logo {
     padding: 5px 10px 5px 0;
-    font-size: 2em;
+    font-size: 28px;
     float: left;
+    margin-left: -5px;
 }
 .logo img {
     width: 40px;
@@ -34,10 +39,13 @@ Collapse navbar earlier than bootstrap's default 768px
         display: none;
     }
     .nav > li > a {
-        padding: 15px 10px;
+        padding: 15px 8px;
     }
     .container-fluid {
         padding-right: 5px;
+    }
+    button.form-control {
+        margin: 0px !important;
     }
 }
 @media (max-width: 928px) {
@@ -51,10 +59,10 @@ Collapse navbar earlier than bootstrap's default 768px
         display: block !important;
     }
     .navbar-header {
-        float:none;
+        float: none;
     }
     .navbar-toggle {
-        float:right;
+        float: right;
     }
     .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
         margin-right: -15px;

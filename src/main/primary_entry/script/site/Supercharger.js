@@ -95,7 +95,7 @@ export default class Supercharger {
 	};
 
     getShortMarkerTitle() {
-        return `• ${this.displayName} (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`
+        return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`);
     }
 
     getMarkerMultiplier() {

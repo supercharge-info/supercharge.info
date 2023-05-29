@@ -248,7 +248,7 @@ export default class MapView {
             0.004, 0.002, 0.001, 0.0005, 0.0001,
             0, 0, 0, 0, 0
         ];
-        this.markerSize = 10;
+        this.updateMarkerSize(8);
         if (oldZoom !== newZoom) {
             // clear old cluster markers when zooming in/out
             infoWindows = this.removeAllMarkers(true);

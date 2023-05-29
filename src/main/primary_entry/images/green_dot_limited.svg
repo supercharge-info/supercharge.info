@@ -1,14 +1,13 @@
 <svg version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
  <defs>
-  <radialGradient id="red_fill_ltd"
-    cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-    <stop offset="0%" stop-color="#e00000" />
-    <stop offset="50%" stop-color="#c00000" />
-    <stop offset="90%" stop-color="#a00000" />
-    <stop offset="100%" stop-color="#600000" />
-  </radialGradient>
+    <radialGradient id="green_fill_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+        <stop offset="0%" stop-color="#00aa00" />
+        <stop offset="50%" stop-color="#008800" />
+        <stop offset="75%" stop-color="#006600" />
+        <stop offset="100%" stop-color="#004400" />
+    </radialGradient>
  </defs>
- <circle r="475" cx="500" cy="500" fill="url(#red_fill_ltd)" style="stroke: #000000; stroke-width: 50;" />
+ <circle r="475" cx="500" cy="500" fill="url(#green_fill_ltd)" style="stroke: #000000; stroke-width: 50;"/>
  <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
     <g>
             <g transform="matrix(12 0 0 12 0 -125)">

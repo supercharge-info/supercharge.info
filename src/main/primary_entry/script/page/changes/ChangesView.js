@@ -69,7 +69,7 @@ export default class ChangesView {
     static buildStatus(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         var s = Status.fromString(changeRow.siteStatus);
-        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/></span>`
+        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/>${s.shortName}</span>`
     }
     
     static buildDetails(changeRow) {
@@ -143,12 +143,12 @@ export default class ChangesView {
         const site = Sites.getById(changeRow.siteId);
         const addr = site.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, 'gmap', site.location.toString());
-        const discussLink = site.urlDiscuss ?
-            ChangesView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
-            ChangesView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');
+        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>', site.location.toString());
+        const discussLink = ChangesView.asLink(
+            site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
+            '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, 'tesla.com') :
+            " | " + ChangesView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/Tesla_T_symbol.svg" title="tesla.com"/>') :
             '';
         return `${gmapLink} | ${discussLink}${teslaLink}`;
     }
@@ -225,7 +225,7 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildStatus(row);
                     },
-                    "width": "5%"
+                    "width": "7%"
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -237,7 +237,8 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildLinks(row);
                     },
-                    "width": "12%"
+                    "className": "links",
+                    "width": "10%"
                 }
             ],
             "createdRow": (row, data, index) => {

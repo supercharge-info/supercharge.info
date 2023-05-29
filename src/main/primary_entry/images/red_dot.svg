@@ -1,11 +1,11 @@
 <svg version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
  <defs>
-  <radialGradient id="Shiny" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+  <radialGradient id="red_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
    <stop offset="0%" stop-color="#ff6060" />
    <stop offset="50%" stop-color="#d02020" />
    <stop offset="90%" stop-color="#a00000" />
    <stop offset="100%" stop-color="#600000" />
   </radialGradient>
  </defs>
- <circle r="500" cx="500" cy="500" fill="url(#Shiny)" />
+ <circle r="475" cx="500" cy="500" fill="url(#red_dot)" style="stroke: #000000; stroke-width: 50;"/>
 </svg>

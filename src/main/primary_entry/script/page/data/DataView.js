@@ -56,7 +56,7 @@ export default class DataView {
     static buildStatus(supercharger) {
         const site = supercharger;
         var s = Status.fromString(supercharger.status);
-        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/></span>`
+        return `<span class='${s.value} status-select' title='${s.getTitle(site)}'><img src='${s.getIcon(site)}'/>${s.shortName}</span>`
     }
 
     static asLink(href, content, title) {
@@ -68,19 +68,14 @@ export default class DataView {
         const site = supercharger;
         const addr = site.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, 'gmap');
-        const discussLink = site.urlDiscuss ?
-            DataView.asLink(`${ServiceURL.DISCUSS}?siteId=${site.id}`, 'forum') :
-            DataView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');
+        const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>');
+        const discussLink = DataView.asLink(
+            site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
+            '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " | " + DataView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, 'tesla') :
+            " | " + DataView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/Tesla_T_symbol.svg" title="tesla.com"/>') :
             '';
         return `${gmapLink} | ${discussLink}${teslaLink}`;
-    }
-    static buildDiscussionLink(supercharger) {
-        return supercharger.urlDiscuss ?
-            DataView.asLink(`${ServiceURL.DISCUSS}?siteId=${supercharger.id}`, 'forum') :
-            DataView.asLink(ServiceURL.DEFAULT_DISCUSS_URL, 'forum');
     }
 
     initDataTableOptions() {
@@ -164,7 +159,7 @@ export default class DataView {
                     "data": (row, type, val, meta) => {
                         return DataView.buildLinks(row);
                     },
-                    "className": "link",
+                    "className": "links",
                     "orderable": false
                 }
             ],

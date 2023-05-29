@@ -1,6 +1,6 @@
 <svg version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
  <defs>
-  <radialGradient id="Shiny"
+  <radialGradient id="gray_fill"
     cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
    <stop offset="0%" stop-color="#e0e0e0" />
    <stop offset="50%" stop-color="#c0c0c0" />
@@ -8,7 +8,7 @@
    <stop offset="100%" stop-color="#404040" />
   </radialGradient>
  </defs>
- <circle r="500" cx="500" cy="500" fill="url(#Shiny)" />
+ <circle r="475" cx="500" cy="500" fill="url(#gray_fill)" style="stroke: #000000; stroke-width: 50;" />
  <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
   <g>
       <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
