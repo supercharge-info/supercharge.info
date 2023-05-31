@@ -5,9 +5,9 @@
   <defs>
    <radialGradient id="green_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
       <stop offset="0%" stop-color="#00ff00" />
-      <stop offset="50%" stop-color="#00cc00" />
-      <stop offset="75%" stop-color="#009900" />
-      <stop offset="100%" stop-color="#006600" />
+      <stop offset="50%" stop-color="#00dd00" />
+      <stop offset="75%" stop-color="#00bb00" />
+      <stop offset="100%" stop-color="#009900" />
    </radialGradient>
   </defs>
   <g
