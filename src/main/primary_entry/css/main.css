@@ -33,4 +33,9 @@
 /* - - - - - - - - - - - - - - - - - - - - PAGE: Profile */
 @import "page/profile/Profile.css";
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,200;8..144,400;8..144,700&display=swap');
 
+/* default font override */
+body, .leaflet-container, .tooltip {
+    font-family: 'Roboto Flex', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}

@@ -22,6 +22,9 @@ export default class StallCountChart {
 
         Highcharts.chart("open-stalls-world-line-chart", {
             chart: {
+                style: {
+                    fontFamily: "'Roboto Flex', sans-serif"
+                },
                 zoomType: 'x',
                 type: 'spline'
             },
@@ -66,12 +69,7 @@ export default class StallCountChart {
                 {
                     data: stallCounts,
                     color: '#B22222',
-                    lineWidth: 1,
-                    marker: {
-                        enabled: true,
-                        radius: 3,
-                        fillColor: '#B22222'
-                    }
+                    lineWidth: 1
                 }
 
             ]

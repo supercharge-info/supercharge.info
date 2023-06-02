@@ -32,7 +32,8 @@
     </script>
 </head>
 
-<body>
+<!-- Hide EVERYTHING initially to allow styles to take effect - NavBar code unhides when ready -->
+<body style="visibility: hidden;">
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 Navigation Bar
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
@@ -42,9 +43,35 @@ Navigation Bar
         <div class="container-fluid">
 
             <div class="logo">
-                <img src="/images/red_dot_t.svg" width="40" height="40" title="supercharge.info"/>
+                <img src="/images/logo.svg" width="40" height="40" title="supercharge.info"/>
                 <span>supercharge.info</span>
             </div>
+            <!--
+            Counts Table
+            -->
+            <table id="total-count-table" class="nav navbar-nav">
+                <tr class="lab">
+                    <td title="Open" class="open">Open</td>
+                    <td title="Construction" class="construction">Constr</td>
+                    <td title="Permit" class="permit">Permit</td>
+                    <td title="Closed" class="closed">Closed</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td title="Open" class="open">&nbsp;</td>
+                    <td title="Construction" class="construction">&nbsp;</td>
+                    <td title="Permit" class="permit">&nbsp;</td>
+                    <td title="Closed" class="closed">&nbsp;</td>
+                    <td class="lab"></td>
+                </tr>
+                <tr>
+                    <td title="Open" class="open">&nbsp;</td>
+                    <td title="Construction" class="construction">&nbsp;</td>
+                    <td title="Permit" class="permit">&nbsp;</td>
+                    <td title="Closed" class="closed">&nbsp;</td>
+                    <td class="lab"></td>
+                </tr>
+            </table>
             
             <!-- This is what gets shown for the navbar when it collapses for small screens. -->
             <div class="navbar-header">
@@ -59,28 +86,12 @@ Navigation Bar
             <!-- When the collapse is triggered each child of navbar-collapse is displayed on a separate line
                  of the new collapsing/expanding menu. -->
             <div class="navbar-collapse collapse">
-                <!--
-                Counts Table
-                -->
-                <table id="total-count-table" class="nav navbar-nav">
-                    <tr>
-                        <td title="open" class="open">&nbsp;</td>
-                        <td title="under construction" class="construction">&nbsp;</td>
-                        <td title="permit" class="permit">&nbsp;</td>
-                        <td class="lab"></td>
-                    </tr>
-                    <tr>
-                        <td title="open" class="open">&nbsp;</td>
-                        <td title="under construction" class="construction">&nbsp;</td>
-                        <td title="permit" class="permit">&nbsp;</td>
-                        <td class="lab"></td>
-                    </tr>
-                </table>
 
                 <!--
                 Navigation Tabs
                 -->
                 <ul class="nav navbar-nav navbar-right" id="navbar-menu-item-list" style="margin-right: 5px">
+                    <li class="logo collapse">supercharge.info</li>
                     <li><a class="page" id="page-link-changes" href="#changes">Changes</a></li>
                     <li><a class="page" id="page-link-charts" href="#charts">Charts</a></li>
                     <li><a class="page" id="page-link-map" href="#map">Map</a></li>
@@ -279,50 +290,53 @@ PAGE: map
         </div>
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">
             <defs>
-                <radialGradient id="blue_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                <radialGradient id="blue_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
                     <stop offset="0%" stop-color="#90c0ff" />
                     <stop offset="50%" stop-color="#7090ee" />
                     <stop offset="75%" stop-color="#5070d0" />
                     <stop offset="100%" stop-color="#3050c0" />
                 </radialGradient>
                 <pattern id="blue_triangle" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <g transform="matrix(1.51 0 0 1.51 500 414)" id="843162">
+                    <g transform="matrix(1.57 0 0 1.57 500 414)" id="843162">
                         <path
-                            style="stroke: #0000ff; stroke-width: 60; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#blue_dot); fill-rule: nonzero; opacity: 1;"
+                            style="stroke: #000000; stroke-width: 30; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#blue_fill); fill-rule: nonzero; opacity: 1;"
                             transform=" translate(-255.6984, -251.0068)"
                             d="M 12.51 470.379 L 234.371 16.008 c 6.439 -13.187 25.17 -13.363 31.855 -0.299 l 232.51 454.371 c 6.064 11.849 -2.542 25.92 -15.853 25.92 H 28.512 C 15.348 496 6.734 482.209 12.51 470.379 z"
                             stroke-linecap="round" />
                     </g>
                 </pattern>
-                <radialGradient id="orange_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#ffa500" />
-                    <stop offset="50%" stop-color="#cc5500" />
-                    <stop offset="75%" stop-color="#804000" />
-                    <stop offset="100%" stop-color="#503000" />
+                <radialGradient id="orange_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="50%" stop-color="#ffa500" />
+                    <stop offset="75%" stop-color="#dd8500" />
+                    <stop offset="100%" stop-color="#a56500" />
                 </radialGradient>
                 <pattern id="orange_triangle" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <g transform="matrix(1.51 0 0 1.51 500 414)" id="843162">
+                    <g transform="matrix(1.57 0 0 1.57 500 414)" id="843162">
                         <path
-                            style="stroke: #603000; stroke-width: 60; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,165,0); fill-rule: nonzero; opacity: 1;"
+                            style="stroke: #000000; stroke-width: 30; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#orange_fill); fill-rule: nonzero; opacity: 1;"
                             transform=" translate(-255.6984, -251.0068)"
                             d="M 12.51 470.379 L 234.371 16.008 c 6.439 -13.187 25.17 -13.363 31.855 -0.299 l 232.51 454.371 c 6.064 11.849 -2.542 25.92 -15.853 25.92 H 28.512 C 15.348 496 6.734 482.209 12.51 470.379 z"
                             stroke-linecap="round" />
                     </g>
                 </pattern>
-                <radialGradient id="red_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                <radialGradient id="red_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
                     <stop offset="0%" stop-color="#ff6060" />
                     <stop offset="50%" stop-color="#d02020" />
                     <stop offset="90%" stop-color="#a00000" />
                     <stop offset="100%" stop-color="#600000" />
                 </radialGradient>
-                <radialGradient id="red_dot_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                <pattern id="red_dot" viewBox="0,0,1000,1000" width="100%" height="100%">
+                    <circle r="475" cx="500" cy="500" fill="url(#red_fill)" style="stroke: #000000; stroke-width: 50;"/>
+                </pattern>
+                <radialGradient id="red_fill_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
                     <stop offset="0%" stop-color="#e00000" />
                     <stop offset="50%" stop-color="#c00000" />
                     <stop offset="90%" stop-color="#a00000" />
                     <stop offset="100%" stop-color="#600000" />
                 </radialGradient>
                 <pattern id="red_dot_limited" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="500" cx="500" cy="500" fill="url(#red_dot_ltd)" />
+                    <circle r="475" cx="500" cy="500" fill="url(#red_fill_ltd)" style="stroke: #000000; stroke-width: 50;"/>
                     <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
                         <g>
                             <g transform="matrix(12 0 0 12 0 -125)">
@@ -348,14 +362,14 @@ PAGE: map
                         </g>
                     </g>
                 </pattern>
-                <radialGradient id="gray_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                <radialGradient id="gray_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
                     <stop offset="0%" stop-color="#e0e0e0" />
                     <stop offset="50%" stop-color="#c0c0c0" />
                     <stop offset="75%" stop-color="#a0a0a0" />
                     <stop offset="100%" stop-color="#404040" />
                 </radialGradient>
                 <pattern id="gray_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="500" cx="500" cy="500" fill="url(#gray_dot)" />
+                    <circle r="475" cx="500" cy="500" fill="url(#gray_fill)" style="stroke: #000000; stroke-width: 50;"/>
                     <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
                         <g>
                             <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
@@ -371,14 +385,14 @@ PAGE: map
                         </g>
                     </g>
                 </pattern>
-                 <radialGradient id="black_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                 <radialGradient id="black_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
                     <stop offset="0%" stop-color="#606060" />
                     <stop offset="50%" stop-color="#404040" />
                     <stop offset="75%" stop-color="#202020" />
                     <stop offset="100%" stop-color="#000000" />
                 </radialGradient>
                 <pattern id="black_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="500" cx="500" cy="500" fill="url(#black_dot)" />
+                    <circle r="475" cx="500" cy="500" fill="url(#black_fill)" style="stroke: #000000; stroke-width: 50;"/>
                     <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
                         <g>
                             <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
@@ -394,12 +408,39 @@ PAGE: map
                         </g>
                     </g>
                 </pattern>
-                <radialGradient id="green_dot" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                <radialGradient id="green_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
                     <stop offset="0%" stop-color="#00ff00" />
-                    <stop offset="50%" stop-color="#00c000" />
-                    <stop offset="75%" stop-color="#008000" />
-                    <stop offset="100%" stop-color="#004000" />
+                    <stop offset="50%" stop-color="#00dd00" />
+                    <stop offset="75%" stop-color="#00bb00" />
+                    <stop offset="100%" stop-color="#009900" />
                 </radialGradient>
+                <pattern id="green_dot" viewBox="0,0,1000,1000" width="100%" height="100%">
+                    <circle r="475" cx="500" cy="500" fill="url(#green_fill)" style="stroke: #000000; stroke-width: 50;"/>
+                </pattern>
+                <radialGradient id="purple_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                    <stop offset="0%" stop-color="#ff00ff" />
+                    <stop offset="50%" stop-color="#d020d0" />
+                    <stop offset="90%" stop-color="#a000a0" />
+                    <stop offset="100%" stop-color="#600060" />
+                </radialGradient>
+                <pattern id="custom_pin" viewBox="0,0,303,303" width="100%" height="100%">
+                    <g
+                    id="layer1"
+                    transform="translate(-295.5,-12)">
+                        <circle
+                            style="fill: url(#green_fill); fill-opacity: 1; fill-rule: nonzero; stroke: #000000; stroke-width: 16;"
+                            id="path4136"
+                            cx="446.73996"
+                            cy="163.17543"
+                            r="143" />
+                        <g transform="matrix(0.8 0 0 0.8 88 32)">
+                            <path
+                            id="path4159"
+                            d="m 548.80654,134.01734 c 0,-56.865669 -45.20091,-102.066581 -102.06658,-102.066581 -56.86567,0 -102.06658,45.200912 -102.06658,102.066581 0,20.41331 5.83237,37.91043 16.03903,53.94948 l 86.02755,106.44085 86.02754,-106.44085 c 10.20666,-16.03905 16.03904,-33.53617 16.03904,-53.94948 z m -102.06658,43.74282 c -23.32951,0 -43.74282,-20.41332 -43.74282,-43.74282 0,-23.32951 20.41331,-43.742827 43.74282,-43.742827 23.3295,0 43.74282,20.413317 43.74282,43.742827 0,23.3295 -20.41332,43.74282 -43.74282,43.74282 z"
+                            style="fill: #000000; fill-opacity: 1; stroke: none;" />
+                        </g>
+                    </g>
+                </pattern>
             </defs>
         </svg>
     </div>
@@ -413,6 +454,7 @@ PAGE: data
 
     <div id="data-filter">
         <form class="form-inline" role="form">
+            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
             <select class="form-control region-select"></select>
             <select class="form-control country-select"
                     data-live-search="true"></select>
@@ -496,6 +538,7 @@ PAGE: changes
 
     <div id="changes-filter">
         <form class="form-inline" role="form">
+            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
             <select class="form-control changetype-select"></select>
             <select class="form-control region-select"></select>
             <select class="form-control country-select"
@@ -579,28 +622,32 @@ PAGE: about
 
     <ul class="about-page-list">
         <li title="Permanently Closed">
-            <img src="images/black_dot_x.svg" alt="perm closed"/>
-            Closed - Site is permanently closed. Charging not possible.
+            <img src="images/black_dot_x.svg"/>
+            <b>Permanently Closed</b> : Site is permanently closed. Charging not possible.
         </li>
         <li title="Temporarily Closed">
-            <img src="images/gray_dot_x.svg" alt="temp closed"/>
-            Closed - Site is temporarily closed. Charging not possible.
+            <img src="images/gray_dot_x.svg"/>
+            <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
         </li>
         <li title="Permit">
-            <img src="images/blue_triangle.svg" alt="permit"/>
-            Permit - Tesla has submitted a permit/plan/application for a specific address.
+            <img src="images/blue_triangle.svg"/>
+            <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
         </li>
         <li title="Construction">
-            <img src="images/orange_triangle.svg" alt="construction"/>
-            Construction - Progress is visible at the site.
+            <img src="images/orange_triangle.svg"/>
+            <b>Construction</b> : Progress is visible at the site.
         </li>
         <li title="Open">
-            <img src="images/red_dot.svg" alt="open"/> <img src="images/red_dot_limited.svg" alt="open"/>
-            Open - It is possible to supercharge at the site.
+            <img src="images/red_dot.svg"/>
+            <b>Open</b> : It is possible to supercharge at the site at all times.
+        </li>
+        <li title="Open - Limited Hours">
+            <img src="images/red_dot_limited.svg"/>
+            <b>Open - Limited Hours</b> : It is possible to supercharge at the site during limited times.
         </li>
         <li title="Custom">
-            <img src="images/green_dot.svg" alt="custom"/>
-            Custom - User added custom marker. Right-click to add at any location.
+            <img src="images/custom_pin.svg" alt="custom"/>
+            <b>Custom</b> : User added custom marker. Right-click to add at any location.
         </li>
 
     </ul>
