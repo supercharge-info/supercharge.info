@@ -17,6 +17,7 @@ export default class DataPage {
     };
 
     onPageHide() {
+        if (this.initialized) this.dataView.hideTooltips();
     }
 
 }

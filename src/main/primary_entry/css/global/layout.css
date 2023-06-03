@@ -31,15 +31,18 @@ a.disabled {
 Data tables 
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 td span.status-select img {
-    margin-top: -3px;
+    width: 20px;
+    height: 20px;
+    margin-top: -5px;
 }
 td span.status-select.OPEN {
     color: red;
 }
 
 td.links img, td img.details {
-    height: 16px;
-    margin-top: -3px;
+    height: 22px;
+    margin-top: -5px;
+    padding: 1px;
 }
 td.links a {
     white-space: nowrap;
