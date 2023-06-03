@@ -58,7 +58,7 @@ export default class DataView {
     static buildStatus(supercharger) {
         const site = supercharger;
         var s = Status.fromString(supercharger.status);
-        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}'/></span>`
+        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`
     }
 
     static asLink(href, content, title) {
@@ -165,6 +165,10 @@ export default class DataView {
                     "orderable": false
                 }
             ],
+            "drawCallback": () => {
+                $("#supercharger-data-table .status-select img").tooltip({ "container": "body", "placement": "right" });
+                $("#supercharger-data-table .links img, #changes-table img.details").tooltip({ "container": "body" });
+            },
             "dom": "" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 text-center'l>>" +
@@ -173,6 +177,10 @@ export default class DataView {
                 ""
         }
 
+    }
+
+    hideTooltips() {
+        $(".tooltip").tooltip("hide");
     }
 
 }
