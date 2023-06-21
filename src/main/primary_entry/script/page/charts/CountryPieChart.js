@@ -21,12 +21,11 @@ export default class CountryPieChart {
             return colors;
         }());
 
-        const stateSiteCountList = SiteCount.getCountListByCountry();
+        const countrySiteCountList = SiteCount.getCountListByCountry();
         const countryOpenCountList = [];
         let otherSum = 0;
-
         let count = 0;
-        $.each(stateSiteCountList, function (index, value) {
+        $.each(countrySiteCountList, function (index, value) {
             if (value.key !== Address.COUNTRY_WORLD) {
                 count++;
                 if (count <= 10) {
@@ -38,7 +37,23 @@ export default class CountryPieChart {
         });
         countryOpenCountList.push(['Other', otherSum]);
 
-        Highcharts.chart("chart-country-pie", {
+        const countryStallCountList = SiteCount.getStallCountListByCountry();
+        const countryOpenStallCountList = [];
+        otherSum = 0;
+        count = 0;
+        $.each(countryStallCountList, function (index, value) {
+            if (value.key !== Address.COUNTRY_WORLD) {
+                count++;
+                if (count <= 10) {
+                    countryOpenStallCountList.push([value.key, value.open]);
+                } else {
+                    otherSum = otherSum + value.open;
+                }
+            }
+        });
+        countryOpenStallCountList.push(['Other', otherSum]);
+
+        var chartOptions = {
             credits: {
                 enabled: false
             },
@@ -54,7 +69,7 @@ export default class CountryPieChart {
                 enabled: false
             },
             title: {
-                text: 'Open Superchargers per Country <span style="color:#aaaaaa">(top ten)</span>'
+                text: 'Open Sites per Country <span style="color:#aaaaaa">(top ten)</span>'
             },
             tooltip: {
                 pointFormat: '{series.name}: {point.y}, <b>{point.percentage:.1f}%</b>'
@@ -80,12 +95,29 @@ export default class CountryPieChart {
             series: [
                 {
                     type: 'pie',
-                    name: "Open",
+                    name: "Open Sites",
                     data: countryOpenCountList
                 }
             ]
-        });
+        };
 
+        const pieContainer = document.getElementById("chart-country-pie");
+
+        const siteContainer = document.createElement("span");
+        siteContainer.style.display = "inline-block";
+        siteContainer.style.width = "49%";
+        pieContainer.appendChild(siteContainer);
+        Highcharts.chart(siteContainer, chartOptions);
+
+        chartOptions.title.text = 'Open Stalls per Country <span style="color:#aaaaaa">(top ten)</span>';
+        chartOptions.series[0].name = "Open Stalls";
+        chartOptions.series[0].data = countryOpenStallCountList;
+
+        const stallContainer = document.createElement("span");
+        stallContainer.style.display = "inline-block";
+        stallContainer.style.width = "49%";
+        pieContainer.appendChild(stallContainer);
+        Highcharts.chart(stallContainer, chartOptions);
     }
 
 }

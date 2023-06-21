@@ -6,6 +6,7 @@ import CountryPieChart from "./CountryPieChart";
 import StateBarChart from "./StateBarChart";
 import StatusDaysBarChart from "./StatusDaysBarChart";
 import StallCountChart from "./StallCountChart";
+import Highcharts from "highcharts";
 import $ from "jquery";
 
 export default class ChartsPage {
@@ -27,6 +28,7 @@ export default class ChartsPage {
         // highcharts 7.0+ tries to be too clever about responsive size and ends up shrinking every chart's height by default
         setTimeout(() => {
             $('#page-charts div').css("overflow", "visible");
+            Highcharts.charts.forEach((c) => { c.reflow(); });
         }, 100);
     };
 
