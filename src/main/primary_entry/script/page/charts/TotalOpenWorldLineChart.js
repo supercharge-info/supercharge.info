@@ -31,8 +31,7 @@ export default class TotalOpenWorldLineChart {
 
         const plotLinesArray = TotalOpen.buildVerticalYearPlotLines();
 
-
-        Highcharts.chart("total-open-world-line-chart", {
+        return Highcharts.chart("total-open-world-line-chart", {
             chart: {
                 style: {
                     fontFamily: "'Roboto Flex', sans-serif"
@@ -86,7 +85,6 @@ export default class TotalOpenWorldLineChart {
 
             ]
         });
-
 
     };
 
