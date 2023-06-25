@@ -38,13 +38,27 @@ SiteSorting.BY_OPENED_DATE_DESC = function (siteOne, siteTwo) {
  * @return {number}
  */
 SiteSorting.BY_STATUS_DAYS = function (siteOne, siteTwo) {
-    const statusSortOne = siteOne.status.sort;
-    const statusSortTwo = siteTwo.status.sort;
-    if (statusSortOne === statusSortTwo) {
-        return siteOne.statusDays - siteTwo.statusDays;
+    const statusSort = siteOne.status.sort - siteTwo.status.sort;
+    if (statusSort === 0) {
+        const daysSort = siteOne.statusDays - siteTwo.statusDays;
+        if (daysSort === 0) {
+            return siteTwo.dateOpened - siteOne.dateOpened;
+        }
+        return daysSort;
     }
-    return statusSortOne - statusSortTwo;
+    return statusSort;
 };
 
+SiteSorting.BY_STATUS_DAYS_DESC = function (siteOne, siteTwo) {
+    const statusSort = siteOne.status.sort - siteTwo.status.sort;
+    if (statusSort === 0) {
+        const daysSort = siteTwo.statusDays - siteOne.statusDays;
+        if (daysSort === 0) {
+            return siteOne.dateOpened - siteTwo.dateOpened;
+        }
+        return daysSort;
+    }
+    return statusSort;
+};
 export default SiteSorting;
 

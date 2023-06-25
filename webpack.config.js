@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     //
@@ -55,14 +56,15 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                use: ['style-loader', 'css-loader']
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
             },
             //
             // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
             // https://github.com/webpack-contrib/url-loader
             {
                 test: /(\.woff?$|\.woff2?$|\.ttf?$|\.eot?$|\.gif?$)/,
-                loader: 'url-loader'
+                exclude: /node_modules/,
+                loader: 'asset/resource'
             },
             //
             // Make images available to import/reference from JS.
@@ -89,8 +91,16 @@ module.exports = {
         //minimize: false,
         splitChunks: {
             cacheGroups: {
+                bootstrap: {
+                    test: /[\\/]node_modules[\\.]bootstrap.*/,
+                    chunks: "all"
+                },
                 chart: {
-                    test: /[\\/]node_modules[\\/]highcharts/,
+                    test: /[\\/]node_modules[\\/]highcharts.*/,
+                    chunks: "all"
+                },
+                core: {
+                    test: /[\\/]node_modules[\\/]core-js.*/,
                     chunks: "all"
                 },
                 datatables: {
@@ -103,6 +113,10 @@ module.exports = {
                 },
                 map: {
                     test: /[\\/]node_modules[\\/](leaflet|map-obj|@mapbox).*/,
+                    chunks: "all"
+                },
+                s: {
+                    test: /[\\/]node_modules[\\/](sortablejs|spectrum-colorpicker).*/,
                     chunks: "all"
                 }
             }
@@ -153,6 +167,7 @@ module.exports = {
                 {from: 'src/main/common_entry/favicon.ico'},
                 {from: 'src/main/common_entry/sitemap.xml'}
             ]
-        })
+        }),
+        new MiniCssExtractPlugin()
     ]
 };
