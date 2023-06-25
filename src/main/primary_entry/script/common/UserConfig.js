@@ -2,8 +2,6 @@ import ServiceURL from "./ServiceURL";
 import Objects from "../util/Objects";
 import $ from 'jquery';
 import Units from "../util/Units";
-import { utils } from "sortablejs";
-import Asserts from "../util/Asserts";
 
 
 /* Save an indication of the last config we persisted so we don't make extra service calls. */

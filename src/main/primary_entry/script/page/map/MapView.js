@@ -15,7 +15,7 @@ import routeResultModel from './route/RouteResultModel'
 import polyline from '@mapbox/polyline'
 import renderModel from "./RenderModel";
 import MapEvents from "./MapEvents";
-//import TotalCountPanel from "./TotalCountPanel";
+import TotalCountPanel from "../../nav/TotalCountPanel";
 
 export default class MapView {
 
@@ -44,7 +44,6 @@ export default class MapView {
         // Map context menu
         //
         new MapContextMenu(this.mapApi);
-        //EventBus.addListener(MapEvents.context_menu_add_route, $.proxy(this.handleAddToRouteContextMenu, this));
         EventBus.addListener("way-back-trigger-event", this.setupForWayBack, this);
         EventBus.addListener("places-changed-event", this.handlePlacesChange, this);
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
@@ -105,15 +104,40 @@ export default class MapView {
         this.mapApi = L.map('map-canvas', {
             center: [initialLat, initialLng],
             zoom: initialZoom,
+            zoomSnap: 1,
+            zoomDelta: 1,
             layers: mapLayers.getInitialLayers(),
             preferCanvas: false
         });
+
+        const mapApi = this.mapApi;
+        $(".leaflet-top.leaflet-left").append(L.DomUtil.create("div", "leaflet-control leaflet-zoom-control zoom-label fade"));
+        const zoomLabel = $(".zoom-label");
+
+        const zoomInControl = $(".leaflet-control-zoom-in"), zoomOutControl = $(".leaflet-control-zoom-out");
+        zoomInControl.tooltip({ placement: "right" }); zoomOutControl.tooltip({ placement: "right" });
+        zoomInControl.attr("data-original-title", "Zoom in • (shift: 3x)");
+        zoomOutControl.attr("data-original-title", "Zoom out • (shift: 3x)");
+
+        // dim markers and show zoom level indicator in bottom-left while zooming
         const markerPane = this.mapApi.createPane('markers');
         this.mapApi.on('zoomstart', function (e) {
             markerPane.style.opacity = 0.2;
+            var zoomLevel = mapApi.getZoom();
+            zoomLabel.html("Z<br/>" + zoomLevel);
+            zoomLabel.removeClass("fade");
         });
         this.mapApi.on('zoomend', function (e) {
+            var zoomLevel = mapApi.getZoom();
+            zoomLabel.html("Z<br/>" + zoomLevel);
+            setTimeout(function () { zoomLabel.addClass("fade") }, 2000);
             markerPane.style.opacity = 1;
+        });
+
+        this.mapApi.on('baselayerchange', function (e) {
+            this.layerName = e.name;
+            this.layerOptions = e.layer.options;
+            this.setMaxZoom(this.layerOptions.maxZoom);
         });
 
         // layers control
@@ -160,6 +184,12 @@ export default class MapView {
         const newNorthEast = L.latLng(northEast.lat + 1, northEast.lng + 2);
         const newSouthWest = L.latLng(southWest.lat - 1, southWest.lng - 2);
         const expandedBounds = L.latLngBounds(newSouthWest, newNorthEast);
+
+        if (this.mapApi.layerName === "USGS Imagery+Topo" && !TotalCountPanel.USA.contains(latLngBounds)) {
+            this.mapApi.setMaxZoom(8);
+        } else if (this.mapApi.layerOptions?.maxZoom) {
+            this.mapApi.setMaxZoom(this.mapApi.layerOptions.maxZoom);
+        }
 
         var oldMarkerType = this.markerType;
         this.markerType = renderModel.markerType;
@@ -241,19 +271,19 @@ export default class MapView {
 
     createClusteredMarkers(bounds, oldZoom) {
         var t = performance.now(), newZoom = this.zoom, created = 0, infoWindows = [];
-        // Cluster aggressively through zoom level 8, then much less aggressively from 9 to 14
+        // Cluster aggressively through zoom level 8, then much less aggressively from 9 to 14, then not at all for 15+
         const overlapRadius = [
             5, 3.2, 1.6, 0.8, 0.4,
             0.18, 0.11, 0.08, 0.035, 0.012,
             0.004, 0.002, 0.001, 0.0005, 0.0001,
-            0, 0, 0, 0, 0
+            0, 0, 0, 0, 0, 0, 0, 0, 0
         ];
         this.updateMarkerSize(8);
         if (oldZoom !== newZoom) {
             // clear old cluster markers when zooming in/out
             infoWindows = this.removeAllMarkers(true);
         }
-        const radius = overlapRadius[this.zoom] * renderModel.getCurrentClusterSize();
+        const radius = overlapRadius[Math.floor(this.zoom)] * renderModel.getCurrentClusterSize();
         const markers = [];
         new SiteIterator()
             .withPredicate(SitePredicates.HAS_NO_MARKER)

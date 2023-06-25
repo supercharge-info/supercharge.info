@@ -30,11 +30,10 @@
     "babel-loader": "8.2.2",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
-    "css-loader": "5.2.6",
+    "css-loader": "^6.8.1",
     "html-minifier": "4.0.0",
     "html-webpack-plugin": "5.3.1",
-    "style-loader": "2.0.0",
-    "url-loader": "4.1.1",
+    "mini-css-extract-plugin": "^2.7.6",
     "webpack": "^5.76.0",
     "webpack-cli": "4.10.0",
     "webpack-dev-server": "^4.11.1"
@@ -54,7 +53,7 @@
     "leaflet": "1.9.3",
     "leaflet-control-geocoder": "2.4.0",
     "leaflet-routing-machine": "3.2.12",
-    "sortablejs": "1.10.1",
+    "sortablejs": "^1.10.1",
     "spectrum-colorpicker": "1.8.0"
   }
 }
