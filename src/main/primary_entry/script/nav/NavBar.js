@@ -12,6 +12,7 @@ import ProfilePage from "../page/profile/ProfilePage";
 import Analytics from "../util/Analytics";
 import QueryStrings from "../common/QueryStrings";
 import ShowSiteAction from "../page/map/action/ShowSiteAction"
+import FilterDialog from "../common/FilterDialog";
 import LoginDialog from "../common/login/LoginDialog";
 
 
@@ -21,13 +22,14 @@ export default class NavBar {
 
         this.navBarOptions = new NavBarOptions();
 
+        this.filterDialog = new FilterDialog();
         this.loginDialog = new LoginDialog();
 
         this.pages = {
-            map: new MapPage(),
-            data: new DataPage(),
+            map: new MapPage(this.filterDialog),
+            data: new DataPage(this.filterDialog),
             charts: new ChartsPage(),
-            changes: new ChangesPage(),
+            changes: new ChangesPage(this.filterDialog),
             about: new AboutPage(),
             profile: new ProfilePage()
         };

@@ -103,12 +103,12 @@ label.control {
 }
 
 .control-row {
-    flex: 0 30px;
     padding: 0 2px;
     display: inline-flex;
     flex-wrap: wrap;
     margin: 2px 0;
     text-align: left;
+    float: left;
 }
 .control-row .collapse { 
     display: revert;

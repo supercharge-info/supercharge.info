@@ -2,28 +2,38 @@ import $ from 'jquery';
 import 'bootstrap-select';
 import Sites from '../site/Sites';
 import Status from '../site/SiteStatus';
+import userConfig from './UserConfig';
 
 export default class SiteFilterControl {
 
     /**
      * Constructor just does basic DOM reference and event handler setup.
      *
-     * @param controlParentDiv
+     * @param controlParent
      * @param changeCallback
      */
-    constructor(controlParentDiv, changeCallback, includeCustomStatus) {
+    constructor(controlParent, changeCallback, filterDialog) {
+        this.controlParent = controlParent;
         this.changeCallback = changeCallback;
-        this.includeCustomStatus = includeCustomStatus || false;
+        this.modal = null;
+        if (typeof filterDialog?.getFilterControl === 'function') {
+            this.modal = filterDialog;
+            this.modal.dialog.on("hide.bs.modal", () => {
+                 this.init();
+                 if (this.modal.changed) this.changeCallback();
+            });
+        }
+        this.isModal = this.modal === null;
 
-        this.changeTypeSelect = controlParentDiv.find(".changetype-select");
-        this.regionSelect = controlParentDiv.find(".region-select");
-        this.countrySelect = controlParentDiv.find(".country-select");
-        this.stateSelect = controlParentDiv.find(".state-select");
-        this.statusSelect = controlParentDiv.find(".status-select");
-        this.stallsSelect = controlParentDiv.find(".stalls-select");
-        this.powerSelect = controlParentDiv.find(".power-select");
-        this.otherEVsSelect = controlParentDiv.find(".other-evs-select");
-        this.resetButton = controlParentDiv.find(".reset");
+        this.changeTypeSelect = controlParent.find("select.changetype-select");
+        this.regionSelect = controlParent.find("select.region-select");
+        this.countrySelect = controlParent.find("select.country-select");
+        this.stateSelect = controlParent.find("select.state-select");
+        this.statusSelect = controlParent.find("select.status-select");
+        this.stallsSelect = controlParent.find("select.stalls-select");
+        this.powerSelect = controlParent.find("select.power-select");
+        this.otherEVsSelect = controlParent.find("select.otherEVs-select");
+        this.resetButton = controlParent.find(".reset");
 
         this.changeTypeSelect.change(this.changeCallback.bind(this));
         this.regionSelect.change(this.handleRegionChange.bind(this));
@@ -47,10 +57,10 @@ export default class SiteFilterControl {
      *
      * Users of this component probably don't want to take further action until this init method
      * completes (else calls go getRegionId() and getCountryId() will not return the right thing)
-     * so it return a promise.  Constructor cannot return promise, thus this must exist outside
+     * so it returns a promise.  Constructor cannot return promise, thus this must exist outside
      * of the constructor.
      */
-    init(userConfig) {
+    init() {
         this.populateChangeTypeOptions();
         this.setChangeType(userConfig?.filter.changeType);
 
@@ -74,7 +84,45 @@ export default class SiteFilterControl {
 
         this.populateOtherEVsOptions();
         this.setOtherEVs(userConfig?.filter.otherEVs);
+
+        if (!this.isModal) {
+            this.modal.getFilterControl().init();
+            this.updateVisibility();
+        }
+
+        $("button.filter").tooltip();
+        // Add extra context to the Status filter
+        $("div.status-select").tooltip({ title: 'Map excludes Permanently Closed sites by default - use the Select All button or click directly on the Permanently Closed option to include them', placement: 'right', container: 'body' });
     };
+
+    updateVisibility() {
+        this.setVisible("region", userConfig?.showAlways?.region || this.getRegionId() !== null);
+        this.setVisible("country", userConfig?.showAlways?.country || this.getCountryId() !== null);
+        this.setVisible("state", userConfig?.showAlways?.state || (this.getState() !== null && this.getState().length > 0));
+        this.setVisible("status", userConfig?.showAlways?.status || (this.getStatus() !== null && this.getStatus().length > 0));
+        this.setVisible("stalls", userConfig?.showAlways?.stalls || this.getStalls() !== null);
+        this.setVisible("power", userConfig?.showAlways?.power || this.getPower() !== null);
+        this.setVisible("otherEVs", userConfig?.showAlways?.otherEVs || this.getOtherEVs() !== null);
+
+        var showResetButton = false;
+        for (var f in userConfig?.filter) {
+            if (!(userConfig?.filter[f] === null || userConfig?.filter[f] === "" || userConfig?.filter[f]?.length === 0)) {
+                showResetButton = true;
+                this.resetButton.removeClass("hidden");
+                return;
+            }
+        }
+        this.resetButton.addClass("hidden");
+    }
+
+    setVisible(field, isVisible) {
+        var selectDiv = this.controlParent.find(`div.${field}-select`);
+        if (isVisible) {
+            selectDiv.removeClass("hidden");
+        } else {
+            selectDiv.addClass("hidden");
+        }
+    }
 
     /**
      * When a user selects REGION then:
@@ -103,7 +151,8 @@ export default class SiteFilterControl {
     };
 
     handleFilterReset() {
-        this.init(null);
+        userConfig.initFilters(this.isModal);
+        this.init();
         this.changeCallback();
     };
 
@@ -180,7 +229,7 @@ export default class SiteFilterControl {
     };
 
     populateStallCountOptions() {
-        this.stallsSelect.html("<option value=''>No Min. Stalls</option>");
+        this.stallsSelect.html("<option value=''>Any # Stalls</option>");
         var stallCounts = new Int16Array([4, 8, 12, 16, 20, 30, 40, 50]);
         stallCounts.forEach(s => {
             this.stallsSelect.append(`<option value='${s}'>&ge; ${s} stalls</option>`);
@@ -189,7 +238,7 @@ export default class SiteFilterControl {
     };
 
     populatePowerOptions() {
-        this.powerSelect.html("<option value=''>No Min. Power</option>");
+        this.powerSelect.html("<option value=''>Any Power</option>");
         var power = new Int16Array([72, 120, 150, 250]);
         $.each(power, (index, p) => {
             this.powerSelect.append(`<option value='${p}'>&ge; ${p} kW</option>`);
@@ -198,7 +247,7 @@ export default class SiteFilterControl {
     };
 
     populateOtherEVsOptions() {
-        this.otherEVsSelect.html("<option value=''>No Vehicle Filter</option>");
+        this.otherEVsSelect.html("<option value=''>Any Vehicle</option>");
         this.otherEVsSelect.append(`<option data-content="Teslas Only" value='false'></option>`);
         this.otherEVsSelect.append(`<option data-content="Teslas + Other EVs" value='true'></option>`);
         this.otherEVsSelect.selectpicker("refresh");
@@ -215,12 +264,12 @@ export default class SiteFilterControl {
 
     getCountryId() {
         const id = parseInt(this.countrySelect.val());
-        return isNaN(id) ? null : id;
+        return typeof id === 'number' && Number.isFinite(id) ? id : null;
     };
 
     getRegionId() {
         const id = parseInt(this.regionSelect.val());
-        return isNaN(id) ? null : id;
+        return typeof id === 'number' && Number.isFinite(id) ? id : null;
     };
 
     getState() {
@@ -235,12 +284,12 @@ export default class SiteFilterControl {
 
     getStalls() {
         const stalls = this.stallsSelect.val();
-        return isNaN(stalls) ? null : stalls;
+        return typeof stalls === 'number' && Number.isFinite(stalls) ? stalls : null;
     };
 
     getPower() {
         const power = this.powerSelect.val();
-        return isNaN(power) ? null : power;
+        return typeof power === 'number' && Number.isFinite(power) ? power : null;
     };
 
     getOtherEVs() {

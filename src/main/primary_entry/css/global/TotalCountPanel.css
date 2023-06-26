@@ -35,6 +35,10 @@
     color: #0000ff;
 }
 
+#total-count-table td.closed {
+    color: #999999;
+}
+
 #total-count-table td.lab {
     text-align: left;
 }

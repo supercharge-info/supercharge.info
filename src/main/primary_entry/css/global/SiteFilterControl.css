@@ -1,3 +1,19 @@
+#filter-dialog td {
+    padding: 8px;
+}
+#filter-dialog select, #filter-dialog button {
+    max-width: 1000px;
+    min-width: 100px;
+}
+#filter-dialog th {
+    width: 16%;
+    min-width: 90px;
+}
+#filter-dialog td.btn-xs {
+    font-weight: bold;
+    text-align: center;
+    padding: 0;
+}
 .form-control select, .form-control button {
     max-width: 250px;
     min-width: 50px;
@@ -30,16 +46,13 @@
     font-size: 0px;
 }
 
-.status-select img {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
+.status-select img, button.form-control.filter img {
+    width: 18px;
+    height: 18px;
+    margin: -3px 2px 0 2px;
 }
-
-.status-select img.CONSTRUCTION, .status-select img.PERMIT {
-    width: 19px;
-    height: 19px;
-    margin-bottom: -3px;
+.form-inline button.form-control.filter {
+    padding: 0 2px;
 }
 
 .text-muted {
@@ -47,9 +60,9 @@
     color: lightsteelblue;
 }
 
-button.reset {
+.form-inline button.form-control {
     display: inline-block;
-    padding: 0px 12px;
+    padding: 0 12px;
     height: 28px;
     width: auto;
     vertical-align: middle;
@@ -81,6 +94,6 @@ button.reset {
         box-shadow: none;
     }
     to {
-        box-shadow: 0 0 8px 2px #fcc;
+        box-shadow: 0 0 12px 2px #fcc;
     }
 }

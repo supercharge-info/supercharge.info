@@ -58,18 +58,18 @@ Navigation Bar
                     <td></td>
                 </tr>
                 <tr>
-                    <td title="Open" class="open">&nbsp;</td>
-                    <td title="Construction" class="construction">&nbsp;</td>
-                    <td title="Permit" class="permit">&nbsp;</td>
-                    <td title="Closed" class="closed">&nbsp;</td>
-                    <td class="lab"></td>
+                    <td title="Open" class="open">-</td>
+                    <td title="Construction" class="construction">-</td>
+                    <td title="Permit" class="permit">-</td>
+                    <td title="Closed" class="closed">-</td>
+                    <td class="lab">World</td>
                 </tr>
                 <tr>
-                    <td title="Open" class="open">&nbsp;</td>
-                    <td title="Construction" class="construction">&nbsp;</td>
-                    <td title="Permit" class="permit">&nbsp;</td>
-                    <td title="Closed" class="closed">&nbsp;</td>
-                    <td class="lab"></td>
+                    <td title="Open" class="open">-</td>
+                    <td title="Construction" class="construction">-</td>
+                    <td title="Permit" class="permit">-</td>
+                    <td title="Closed" class="closed">-</td>
+                    <td class="lab" title="Use map to see totals for a region"><span style="color: #888; font-weight: normal;">(region)</span></td>
                 </tr>
             </table>
             
@@ -117,9 +117,9 @@ Navigation Bar
                 -->
                 <ul class="nav navbar-nav navbar-right" id="navbar-map-dropdown" style="display: none;">
                     <li class="control-view-buttons">
-                        <button type="button" class="form-control active" id="filter-menu-item" title="show/hide filter options"><img src="/images/mono-filter.svg"/></button>
-                        <button type="button" class="form-control active" id="rendering-menu-item" title="show/hide rendering options"><img src="/images/sliders-icon.svg"/></button>
-                        <button type="button" class="form-control" id="range-menu-item" title="show/hide range circle options"><img src="/images/circle-center-icon.svg"/></button>
+                        <button type="button" class="form-control active" id="filter-menu-item" title="show/hide filter controls"><img src="/images/mono-filter.svg"/></button>
+                        <button type="button" class="form-control active" id="rendering-menu-item" title="show/hide rendering controls"><img src="/images/sliders-icon.svg"/></button>
+                        <button type="button" class="form-control" id="range-menu-item" title="show/hide range circle controls"><img src="/images/circle-center-icon.svg"/></button>
                         <button type="button" class="form-control" id="create-link-menu-item" title="Link to this view"><img src="/images/link-symbol.svg"/></button>
                         <button type="button" class="form-control" id="way-back-menu-item" title="Way Back"><img src="/images/history-icon.svg"/></button>
                     </li>
@@ -157,39 +157,39 @@ PAGE: map
     <div id="page-control">
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Filter-->
         <div id="control-row-filter" class="control-row">
-            <img src="/images/mono-filter.svg" class="collapse control-row-icon" title="Filter options"/>
             <form class="form-inline" role="form">
-                <select class="form-control region-select"></select>
-                <select class="form-control country-select"
+                <button type="button" class="form-control filter" id="map-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><img src="/images/mono-filter.svg"/></button>
+                <select class="form-control region-select hidden"></select>
+                <select class="form-control country-select hidden"
                         data-live-search="true"></select>
-                <select class="form-control state-select"
+                <select class="form-control state-select hidden"
                         multiple data-actions-box="true"
                         data-selected-text-format="count > 3"
                         title="Any State"
                         data-live-search="true"></select>
-                <select class="form-control status-select"
+                <select class="form-control status-select hidden"
                         multiple data-actions-box="true"
                         title="Any Status"></select>
-                <select class="form-control stalls-select"></select>
-                <select class="form-control power-select"></select>
-                <select class="form-control other-evs-select"></select>
-                <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+                <select class="form-control stalls-select hidden"></select>
+                <select class="form-control power-select hidden"></select>
+                <select class="form-control otherEVs-select hidden"></select>
+                <button class="form-control reset hidden" title="Reset filters" type="button">Reset</button>
                 <span id="map-result-count"></span>
             </form>
         </div>
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
         <div id="control-row-rendering" class="control-row">
-            <img src="/images/sliders-icon.svg" class="collapse control-row-icon" title="Rendering options"/>
+            <img src="/images/sliders-icon.svg" class="collapse control-row-icon" title="Rendering controls"/>
             <div>
                 <label for="range-slider" class="control">Range</label>
                 <input id="range-slider" type="range" min="0" max="405" step="10" value="175" class="slider-control"/>
                 <input id="range-number-text" class="slider-value-label" value="175"/>
                 <div class="btn-group" data-toggle="buttons" style="vertical-align: top">
                     <label id="range-unit-mi-label" class="btn btn-default btn-xs active">
-                        <input type="radio" name="options" id="option1" checked>mi
+                        <input type="radio" name="units" id="unit-mi" checked>mi
                     </label>
                     <label id="range-unit-km-label" class="btn btn-default btn-xs">
-                        <input type="radio" name="options" id="option2">km
+                        <input type="radio" name="units" id="unit-km">km
                     </label>
                 </div>
             </div>
@@ -230,7 +230,7 @@ PAGE: map
         </div>
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
         <div id="control-row-range" class="control-row" style="display: none">
-            <img src="/images/circle-center-icon.svg" class="collapse control-row-icon" title="Range circle options"/>
+            <img src="/images/circle-center-icon.svg" class="collapse control-row-icon" title="Range circle controls"/>
             <span class="control-view-buttons">
                 <label class="control collapse">Circles</label>
                 <button type="button" class="btn btn-default btn-xs" id="range-circles-all-on" title="All Range Circles On"><img src="/images/plus-circle.svg"/></button>
@@ -454,22 +454,22 @@ PAGE: data
 
     <div id="data-filter">
         <form class="form-inline" role="form">
-            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
-            <select class="form-control region-select"></select>
-            <select class="form-control country-select"
+            <button type="button" class="form-control filter" id="data-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><img src="/images/mono-filter.svg"/></button>
+            <select class="form-control region-select hidden"></select>
+            <select class="form-control country-select hidden"
                     data-live-search="true"></select>
-            <select class="form-control state-select"
+            <select class="form-control state-select hidden"
                     multiple data-actions-box="true"
                     data-selected-text-format="count > 3"
                     title="Any State"
                     data-live-search="true"></select>
-            <select class="form-control status-select"
+            <select class="form-control status-select hidden"
                     multiple data-actions-box="true"
                     title="Any Status"></select>
-            <select class="form-control stalls-select"></select>
-            <select class="form-control power-select"></select>
-            <select class="form-control other-evs-select"></select>
-            <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            <select class="form-control stalls-select hidden"></select>
+            <select class="form-control power-select hidden"></select>
+            <select class="form-control otherEVs-select hidden"></select>
+            <button class="form-control reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="data-result-count"></span>
         </form>
     </div>
@@ -538,23 +538,23 @@ PAGE: changes
 
     <div id="changes-filter">
         <form class="form-inline" role="form">
-            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
+            <button type="button" class="form-control filter" id="changes-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><img src="/images/mono-filter.svg"/></button>
             <select class="form-control changetype-select"></select>
-            <select class="form-control region-select"></select>
-            <select class="form-control country-select"
+            <select class="form-control region-select hidden"></select>
+            <select class="form-control country-select hidden"
                     data-live-search="true"></select>
-            <select class="form-control state-select"
+            <select class="form-control state-select hidden"
                     multiple data-actions-box="true"
                     data-selected-text-format="count > 3"
                     title="Any State"
                     data-live-search="true"></select>
-            <select class="form-control status-select"
+            <select class="form-control status-select hidden"
                     multiple data-actions-box="true"
                     title="Any Status"></select>
-            <select class="form-control stalls-select"></select>
-            <select class="form-control power-select"></select>
-            <select class="form-control other-evs-select"></select>
-            <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            <select class="form-control stalls-select hidden"></select>
+            <select class="form-control power-select hidden"></select>
+            <select class="form-control otherEVs-select hidden"></select>
+            <button class="form-control reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="changes-result-count"></span>
         </form>
     </div>
@@ -835,6 +835,132 @@ PAGE: profile
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 Dialogs
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+
+<div id="filter-dialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="filter-dialog-title" class="modal-title strong">
+                    <img src="/images/mono-filter.svg" class="control-row-icon" title="Manage Filters"/>
+                    Manage Filters
+                </h4>
+            </div>
+            <div id="common-filter" class="modal-body">
+                <form role="form">
+                    <table width="100%">
+                        <tr><td></td><td></td><td class="btn-xs">Show</td></tr>
+                        <tr>
+                            <th>Region</th>
+                            <td><select class="form-control region-select"
+                                        data-container="body"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="region-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="region-visibility" id="region-hide" checked>auto
+                                </label>
+                                <label id="region-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="region-visibility" id="region-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td><select class="form-control country-select" 
+                                        data-container="body"
+                                        data-live-search="true"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="country-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="country-visibility" id="country-hide" checked>auto
+                                </label>
+                                <label id="country-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="country-visibility" id="country-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td><select class="form-control state-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 3"
+                                        data-container="body"
+                                        data-live-search="true"
+                                        title="Any State"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="state-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="state-visibility" id="state-hide" checked>auto
+                                </label>
+                                <label id="state-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="state-visibility" id="state-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><select class="form-control status-select"
+                                        multiple data-actions-box="true"
+                                        data-container="body"
+                                        title="Any Status"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="status-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="status-visibility" id="status-hide" checked>auto
+                                </label>
+                                <label id="status-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="status-visibility" id="status-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <th>Stalls</th>
+                            <td><select class="form-control stalls-select"
+                                        data-container="body"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="stalls-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="stalls-visibility" id="stalls-hide" checked>auto
+                                </label>
+                                <label id="stalls-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="stalls-visibility" id="stalls-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <th>Power</th>
+                            <td><select class="form-control power-select"
+                                        data-container="body"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="power-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="power-visibility" id="power-hide" checked>auto
+                                </label>
+                                <label id="power-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="power-visibility" id="power-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <th>Vehicles</th>
+                            <td><select class="form-control otherEVs-select"
+                                        data-container="body"></select></td>
+                            <th><div class="btn-group" data-toggle="buttons">
+                                <label id="otherEVs-hide-label" class="btn btn-default btn-xs active">
+                                    <input type="radio" name="otherEVs-visibility" id="otherEVs-hide" checked>auto
+                                </label>
+                                <label id="otherEVs-show-label" class="btn btn-default btn-xs">
+                                    <input type="radio" name="otherEVs-visibility" id="otherEVs-show">always
+                                </label>
+                            </div></th>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="right">
+                                <button class="btn btn-primary apply" type="button">Apply</button>
+                                <button class="btn btn-default cancel" type="button">Cancel</button>
+                                <button class="btn btn-danger reset" title="Reset all filters" type="button">Reset All</button>
+                                <span id="modal-result-count"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="login-dialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">

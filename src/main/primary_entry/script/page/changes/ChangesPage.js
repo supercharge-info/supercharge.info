@@ -1,14 +1,15 @@
 import ChangesView from "./ChangesView";
 
 export default class ChangesPage {
-    constructor() {
+    constructor(filterDialog) {
         this.initialized = false;
         this.changesView = null;
+        this.filterDialog = filterDialog;
     }
 
     onPageShow() {
         if (!this.initialized) {
-            this.changesView = new ChangesView();
+            this.changesView = new ChangesView(this.filterDialog);
             this.initialized = true;
         } else {
             this.changesView.syncFilters();
