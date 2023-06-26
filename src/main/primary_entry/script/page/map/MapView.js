@@ -116,6 +116,13 @@ export default class MapView {
             markerPane.style.opacity = 1;
         });
 
+        this.mapApi.on('baselayerchange', function (e) {
+            this.layerName = e.name;
+            this.layerOptions = e.layer.options;
+            this.setMaxZoom(this.layerOptions.maxZoom);
+            this.setMinZoom(this.layerOptions.minZoom);
+        });
+
         // layers control
         //
         L.control.layers(mapLayers.getBaseMaps(), mapLayers.getOverlayMaps()).addTo(this.mapApi);

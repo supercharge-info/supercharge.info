@@ -37,7 +37,7 @@ const SitePredicates = {
 
     buildUserFilterPredicate: function (filter) {
         return (site) => {
-            if (site.isUserAdded()) return true; // short circuit for now to always show user-added markers
+            if (site.isUserAdded()) return true; // short circuit to always show user-added markers
             if (filter.regionId !== null && site.address.regionId !== filter.regionId) return false;
             if (filter.countryId !== null && site.address.countryId !== filter.countryId) return false;
             if (filter.state !== null && filter.state.length > 0 && filter.state.indexOf(site.address.state) < 0) return false;
@@ -45,6 +45,7 @@ const SitePredicates = {
             if (filter.power !== null && site.powerKilowatt < filter.power) return false;
             if (filter.status !== null && filter.status.length > 0 && filter.status.indexOf(site.status.value) < 0) return false;
             if (filter.otherEVs !== null && String(site.otherEVs) !== filter.otherEVs) return false;
+            if ((filter.status === null || filter.status.length === 0) && site.isClosedPerm()) return false; // for maps only, exclude Permanently Closed sites if "Any Status" is chosen in filters
             return true;
         };
     },

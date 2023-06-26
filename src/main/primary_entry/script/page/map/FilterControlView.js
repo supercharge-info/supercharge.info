@@ -6,20 +6,22 @@ import $ from "jquery";
 
 export default class FilterControlView {
 
-    constructor() {
+    constructor(filterDialog) {
         EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
 
         this.filterControl = new SiteFilterControl(
             $("#control-row-filter"),
             this.filterControlCallback.bind(this),
-            true
+            filterDialog
         );
+
+        filterDialog.dialog.on("hidden.bs.modal", () => { EventBus.dispatch("viewport-changed-event"); });
     
         this.syncFilters();
     }
     
     syncFilters() {
-        this.filterControl.init(userConfig);
+        this.filterControl.init();
         EventBus.dispatch("remove-all-markers-event");
         EventBus.dispatch("viewport-changed-event");
     }
@@ -32,6 +34,7 @@ export default class FilterControlView {
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        this.filterControl.updateVisibility();
         EventBus.dispatch("remove-all-markers-event");
         EventBus.dispatch("viewport-changed-event");
     }

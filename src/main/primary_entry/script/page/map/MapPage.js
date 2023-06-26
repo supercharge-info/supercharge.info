@@ -22,6 +22,9 @@ import "../../lib/jquery.doTimeout";
 
 
 export default class MapPage {
+    constructor(filterDialog) {
+        MapPage.filterControlView = new FilterControlView(filterDialog);
+    }
 
     /**
      * Note that part of the map page initialization takes place asynchronously (after user acknowledges or blocks
@@ -42,7 +45,6 @@ export default class MapPage {
     };
 
     initialize() {
-        MapPage.filterControlView = new FilterControlView();
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();

@@ -13,16 +13,6 @@ export default class NavBarOptions {
         $(".control-view-buttons button").on("click", this.handleButton.bind(this));
     }
 
-    handleAction(event) {
-        const eventDetail = Events.eventDetail(event);
-        if (eventDetail.actionName === "range-circles-all-off") {
-            EventBus.dispatch("circles-all-off-event");
-        }
-        else if (eventDetail.actionName === "range-circles-all-on") {
-            EventBus.dispatch("circles-all-on-event");
-        }
-    };
-
     handleButton(event) {
         if (event.currentTarget.id === "range-menu-item") {
             EventBus.dispatch("toggle-range-control-event");
@@ -38,12 +28,6 @@ export default class NavBarOptions {
         }
         else if (event.currentTarget.id === "way-back-menu-item") {
             EventBus.dispatch("way-back-trigger-event");
-        }
-        else if (event.currentTarget.id === "range-circles-all-off") {
-            EventBus.dispatch("circles-all-off-event");
-        }
-        else if (event.currentTarget.id === "range-circles-all-on") {
-            EventBus.dispatch("circles-all-on-event");
         }
     };
 
