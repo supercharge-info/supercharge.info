@@ -122,6 +122,7 @@ export default class MapView {
         // dim markers and show zoom level indicator in bottom-left while zooming
         const markerPane = this.mapApi.createPane('markers');
         this.mapApi.on('zoomstart', function (e) {
+            if (typeof window.zlt !== "undefined") clearTimeout(window.zlt);
             markerPane.style.opacity = 0.2;
             var zoomLevel = mapApi.getZoom();
             zoomLabel.html("Z<br/>" + zoomLevel);
@@ -130,7 +131,8 @@ export default class MapView {
         this.mapApi.on('zoomend', function (e) {
             var zoomLevel = mapApi.getZoom();
             zoomLabel.html("Z<br/>" + zoomLevel);
-            setTimeout(function () { zoomLabel.addClass("fade") }, 2000);
+            if (typeof window.zlt !== "undefined") clearTimeout(window.zlt);
+            window.zlt = setTimeout(function () { zoomLabel.addClass("fade") }, 2000);
             markerPane.style.opacity = 1;
         });
 
