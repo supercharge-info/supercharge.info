@@ -92,7 +92,7 @@ export default class SiteFilterControl {
 
         $("button.filter").tooltip();
         // Add extra context to the Status filter
-        $("div.status-select").tooltip({ title: 'Map excludes Permanently Closed sites by default - use the Select All button or click directly on the Permanently Closed option to include them', placement: 'right', container: 'body' });
+        $("div.status-select").tooltip({ title: 'Permanently Closed sites hidden by default on map - see About page for details', placement: 'top', container: 'body' });
     };
 
     updateVisibility() {

@@ -63,7 +63,6 @@ export default class NavBar {
 
     initListeners() {
         $("#navbar-menu-item-list").find("a.page").click($.proxy(this.handlePageChangeClick, this));
-        $("#navbar-dropdown-menu-item-list").find("a").click($.proxy(this.navBarOptions.handleAction, this.navBarOptions));
         EventBus.addListener('nav-change-page-event', this.handlePageChangeEvent, this);
 
         const collapseFunction = $.proxy(this.autoCloseCollapsedNavBar, this);

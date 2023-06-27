@@ -17,7 +17,7 @@ li.control-view-buttons button {
 .control-view-buttons .active:hover {
     background-color: #d4d4d4;
 }
-.control-view-buttons img {
+.control-view-buttons img, .range-circle-control img {
     width: 20px;
     height: 20px;
 }

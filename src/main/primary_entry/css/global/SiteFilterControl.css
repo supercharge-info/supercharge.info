@@ -34,7 +34,7 @@
     border-color: #ddd;
     background-color: #fff;
 }
-.bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button:hover {
+.bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button.btn:hover {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
