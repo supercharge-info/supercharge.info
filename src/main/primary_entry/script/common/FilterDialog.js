@@ -8,35 +8,33 @@ export default class FilterDialog {
     constructor() {
         this.dialog = $("#filter-dialog");
         this.filterControl = new SiteFilterControl($("#common-filter"), this.filterControlCallback.bind(this), true);
-        this.visibilityLabels = $("#common-filter label.btn");
+        this.visibilityInputs = $("#common-filter .show-always input");
         this.dialog.on('show.bs.modal', () => this.show());
         $("#filter-dialog button.apply").on("click", () => this.apply());
         $("#filter-dialog button.cancel").on("click", () => this.cancel());
+        $("#filter-dialog button.reset-visibility").on("click", () => {
+            userConfig.initShowAlways();
+            this.init();
+            this.filterControlCallback();
+        });
         this.init();
     }
 
     init() {
         this.filterControl.init();
-        this.visibilityLabels.each((l) => {
-            const vlid = this.visibilityLabels[l].id, vl = $("#" + vlid);
-            const vlField = vlid.split("-")[0], vlAction = vlid.split("-")[1];
-            vl.on("click", () => {
-                userConfig.showAlways[vlField] = (vlAction === "show");
+        this.visibilityInputs.each((i) => {
+            const viid = this.visibilityInputs[i].id, vi = $("#" + viid);
+            const viField = viid.split("-")[0];
+            vi.on("change", () => {
+                userConfig.showAlways[viField] = vi.prop("checked");
             });
-            if (vlAction === "show" && userConfig.showAlways[vlField]) {
-                vl.addClass("active");
-            } else if (vlAction === "hide" && !userConfig.showAlways[vlField]) {
-                vl.addClass("active");
-            } else {
-                vl.removeClass("active");
-            }
+            vi.prop("checked", userConfig.showAlways[viField])
         });
     }
 
     show() {
         this.changed = false;
         this.prevUserConfig = JSON.stringify(userConfig);
-        console.log(this.prevUserConfig);
         this.init();
     }
 
@@ -47,7 +45,8 @@ export default class FilterDialog {
 
     cancel() {
         this.changed = false;
-        userConfig.initFilters(true);
+        userConfig.initFilters();
+        userConfig.initShowAlways();
         userConfig.fromJSON(JSON.parse(this.prevUserConfig));
         this.init();
         this.dialog.modal('hide');

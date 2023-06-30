@@ -24,26 +24,33 @@ export default class SiteFilterControl {
             });
         }
         this.isModal = this.modal === null;
+        this.sel = {}, this.clear = {};
+        this.filters = ['changetype', 'region', 'country', 'state', 'status', 'stalls', 'power', 'otherEVs'];
+        for (var f in this.filters) {
+            const field = this.filters[f];
+            this.sel[field] = controlParent.find(`select.${field}-select`);
+            this.sel[field].change(this.changeCallback.bind(this));
+            // TODO: do we want shortcut "x" buttons next to each field to clear them?
+            /*
+            this.clear[field] = controlParent.find(`button.${field}-clear`);
+            this.clear[field]?.on("click", () => {
+                this.setField(field, "");
+                this.updateVisibility();
+            });
+            */
+        }
+        // can't handle region or country changes generically, so override those
+        this.sel['region'].change(this.handleRegionChange.bind(this));
+        this.sel['country'].change(this.handleCountryChange.bind(this));
 
-        this.changeTypeSelect = controlParent.find("select.changetype-select");
-        this.regionSelect = controlParent.find("select.region-select");
-        this.countrySelect = controlParent.find("select.country-select");
-        this.stateSelect = controlParent.find("select.state-select");
-        this.statusSelect = controlParent.find("select.status-select");
-        this.stallsSelect = controlParent.find("select.stalls-select");
-        this.powerSelect = controlParent.find("select.power-select");
-        this.otherEVsSelect = controlParent.find("select.otherEVs-select");
         this.resetButton = controlParent.find(".reset");
-
-        this.changeTypeSelect.change(this.changeCallback.bind(this));
-        this.regionSelect.change(this.handleRegionChange.bind(this));
-        this.countrySelect.change(this.handleCountryChange.bind(this));
-        this.stateSelect.change(this.changeCallback.bind(this));
-        this.statusSelect.change(this.changeCallback.bind(this));
-        this.stallsSelect.change(this.changeCallback.bind(this));
-        this.powerSelect.change(this.changeCallback.bind(this));
-        this.otherEVsSelect.change(this.changeCallback.bind(this));
         this.resetButton.on("click", this.handleFilterReset.bind(this));
+
+		// select searchbox text after making a change to a searchable dropdown -
+		// this facilitates multi-select or consecutive searches
+        controlParent.find("[data-live-search]").on("changed.bs.select", (e) => {
+            $(".dropdown.open .bs-searchbox input")[0]?.select();
+        });
     }
 
 
@@ -103,18 +110,17 @@ export default class SiteFilterControl {
     };
 
     updateVisibility() {
-        this.setVisible("region", userConfig?.showAlways?.region || this.getRegionId() !== null);
-        this.setVisible("country", userConfig?.showAlways?.country || this.getCountryId() !== null);
-        this.setVisible("state", userConfig?.showAlways?.state || (this.getState() !== null && this.getState().length > 0));
-        this.setVisible("status", userConfig?.showAlways?.status || (this.getStatus() !== null && this.getStatus().length > 0));
-        this.setVisible("stalls", userConfig?.showAlways?.stalls || this.getStalls() !== null);
-        this.setVisible("power", userConfig?.showAlways?.power || this.getPower() !== null);
-        this.setVisible("otherEVs", userConfig?.showAlways?.otherEVs || this.getOtherEVs() !== null);
+        this.setVisible("region",   userConfig?.showAlways?.region   || this.getRegionId()  !== null);
+        this.setVisible("country",  userConfig?.showAlways?.country  || this.getCountryId() !== null);
+        this.setVisible("state",    userConfig?.showAlways?.state    || (this.getState()    !== null && this.getState().length > 0));
+        this.setVisible("status",   userConfig?.showAlways?.status   || (this.getStatus()   !== null && this.getStatus().length > 0));
+        this.setVisible("stalls",   userConfig?.showAlways?.stalls   || this.getStalls()    !== null);
+        this.setVisible("power",    userConfig?.showAlways?.power    || this.getPower()     !== null);
+        this.setVisible("otherEVs", userConfig?.showAlways?.otherEVs || this.getOtherEVs()  !== null);
 
-        var showResetButton = false;
+        // show Reset button if any field is populated
         for (var f in userConfig?.filter) {
             if (!(userConfig?.filter[f] === null || userConfig?.filter[f] === "" || userConfig?.filter[f]?.length === 0)) {
-                showResetButton = true;
                 this.resetButton.removeClass("hidden");
                 return;
             }
@@ -126,8 +132,10 @@ export default class SiteFilterControl {
         var selectDiv = this.controlParent.find(`div.${field}-select`);
         if (isVisible) {
             selectDiv.removeClass("hidden");
+            //this.clear[field].removeClass("hidden");
         } else {
             selectDiv.addClass("hidden");
+            //this.clear[field].addClass("hidden");
         }
     }
 
@@ -138,8 +146,8 @@ export default class SiteFilterControl {
      *  (3) Invoke handleChangeFunction.
      */
     handleRegionChange() {
-        this.countrySelect.selectpicker("val", "");
-        this.stateSelect.selectpicker("val", "");
+        this.sel['country'].selectpicker("val", "");
+        this.sel['state'].selectpicker("val", "");
         this.populateCountryOptions();
         this.populateStateOptions();
         this.changeCallback();
@@ -152,13 +160,13 @@ export default class SiteFilterControl {
      *  (1) Invoke handleChangeFunction.
      */
     handleCountryChange() {
-        this.stateSelect.selectpicker("val", "");
+        this.sel['state'].selectpicker("val", "");
         this.populateStateOptions();
         this.changeCallback();
     };
 
     handleFilterReset() {
-        userConfig.initFilters(this.isModal);
+        userConfig.initFilters();
         this.init();
         this.changeCallback();
     };
@@ -168,19 +176,19 @@ export default class SiteFilterControl {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     populateChangeTypeOptions() {
-        this.changeTypeSelect.html("<option value=''>Any Change</option>");
-        this.changeTypeSelect.append("<option value='ADD'>Add</option>");
-        this.changeTypeSelect.append("<option value='UPDATE'>Update</option>");
-        this.changeTypeSelect.selectpicker("refresh");
+        this.sel['changetype'].html("<option value=''>Any Change</option>");
+        this.sel['changetype'].append("<option value='ADD'>Add</option>");
+        this.sel['changetype'].append("<option value='UPDATE'>Update</option>");
+        this.sel['changetype'].selectpicker("refresh");
     }
 
     populateRegionOptions() {
-        this.regionSelect.html("<option value=''>Any Region</option>");
+        this.sel['region'].html("<option value=''>Any Region</option>");
         var regions = [...Sites.getRegions()].sort((a,b) => a[0].localeCompare(b[0]));
         regions.forEach(r => {
-            this.regionSelect.append(`<option value='${r[1]}'>${r[0]}</option>`);
+            this.sel['region'].append(`<option value='${r[1]}'>${r[0]}</option>`);
         });
-        this.regionSelect.selectpicker("refresh");
+        this.sel['region'].selectpicker("refresh");
     };
 
     populateCountryOptions() {
@@ -192,11 +200,11 @@ export default class SiteFilterControl {
             countries = [...Sites.getCountries()];
         }
 
-        this.countrySelect.html("<option value=''>Any Country</option>");
+        this.sel['country'].html("<option value=''>Any Country</option>");
         countries.sort((a,b) => a[0].localeCompare(b[0])).forEach(c => {
-            this.countrySelect.append(`<option value='${c[1]}'>${c[0]}</option>`);
+            this.sel['country'].append(`<option value='${c[1]}'>${c[0]}</option>`);
         });
-        this.countrySelect.selectpicker("refresh");
+        this.sel['country'].selectpicker("refresh");
     };
 
     populateStateOptions() {
@@ -211,53 +219,47 @@ export default class SiteFilterControl {
             states = [...Sites.getStates()];
         }
         states = states.filter(s => s !== null).sort();
-        this.stateSelect.html("");
+        this.sel['state'].html("");
         states.forEach(s => {
             var sName = Sites.StateAbbreviations[s] || "";
-            this.stateSelect.append(`<option data-tokens='${sName}' value='${s}' data-subtext="${sName}">${s}</option>`);
+            this.sel['state'].append(`<option data-tokens='${sName}' value='${s}' data-subtext="${sName}">${s}</option>`);
         });
-        this.stateSelect.selectpicker("refresh");
+        this.sel['state'].selectpicker("refresh");
     };
 
     populateStatusOptions() {
-        this.statusSelect.html("");
+        this.sel['status'].html("");
         Status.ALL.forEach(s => {
             var imgHtml = `<img src='${s.getIcon()}' class='${s.value}' title='${s.displayName}'/>`;
             if (s === Status.OPEN) { imgHtml += `<img src='/images/red_dot_limited.svg' class='OPEN' title='Open - limited hours'/>`; }
-            this.statusSelect.append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`);
+            this.sel['status'].append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`);
         });
-        /*
-        if (this.includeCustomStatus) {
-            var imgHtml = `<img src='${Status.USER_ADDED.getIcon()}'/>`;
-            this.statusSelect.append(`<option data-content="${imgHtml}<span>${Status.USER_ADDED.displayName}</span>" value='${Status.USER_ADDED.value}'></option>`);
-        }
-        */
-        this.statusSelect.selectpicker("refresh");
+        this.sel['status'].selectpicker("refresh");
     };
 
     populateStallCountOptions() {
-        this.stallsSelect.html("<option value=''>Any # Stalls</option>");
+        this.sel['stalls'].html("<option value=''>Any # Stalls</option>");
         var stallCounts = new Int16Array([4, 8, 12, 16, 20, 30, 40, 50]);
         stallCounts.forEach(s => {
-            this.stallsSelect.append(`<option value='${s}'>&ge; ${s} stalls</option>`);
+            this.sel['stalls'].append(`<option value='${s}'>&ge; ${s} stalls</option>`);
         });
-        this.stallsSelect.selectpicker("refresh");
+        this.sel['stalls'].selectpicker("refresh");
     };
 
     populatePowerOptions() {
-        this.powerSelect.html("<option value=''>Any Power</option>");
+        this.sel['power'].html("<option value=''>Any Power</option>");
         var power = new Int16Array([72, 120, 150, 250]);
-        $.each(power, (index, p) => {
-            this.powerSelect.append(`<option value='${p}'>&ge; ${p} kW</option>`);
+        power.forEach(p => {
+            this.sel['power'].append(`<option value='${p}'>&ge; ${p} kW</option>`);
         });
-        this.powerSelect.selectpicker("refresh");
+        this.sel['power'].selectpicker("refresh");
     };
 
     populateOtherEVsOptions() {
-        this.otherEVsSelect.html("<option value=''>Any Vehicle</option>");
-        this.otherEVsSelect.append(`<option data-content="Teslas Only" value='false'></option>`);
-        this.otherEVsSelect.append(`<option data-content="Teslas + Other EVs" value='true'></option>`);
-        this.otherEVsSelect.selectpicker("refresh");
+        this.sel['otherEVs'].html("<option value=''>Any Vehicle</option>");
+        this.sel['otherEVs'].append(`<option data-content="Teslas Only" value='false'></option>`);
+        this.sel['otherEVs'].append(`<option data-content="Teslas + Other EVs" value='true'></option>`);
+        this.sel['otherEVs'].selectpicker("refresh");
     };
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -265,75 +267,80 @@ export default class SiteFilterControl {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     getChangeType() {
-        const changeType = this.changeTypeSelect.val();
+        const changeType = this.sel['changetype'].val();
         return changeType === "" ? null : changeType;
     };
 
     getCountryId() {
-        const id = parseInt(this.countrySelect.val());
+        const id = parseInt(this.sel['country'].val());
         return typeof id === 'number' && Number.isFinite(id) ? id : null;
     };
 
     getRegionId() {
-        const id = parseInt(this.regionSelect.val());
+        const id = parseInt(this.sel['region'].val());
         return typeof id === 'number' && Number.isFinite(id) ? id : null;
     };
 
     getState() {
-        const state = this.stateSelect.val();
+        const state = this.sel['state'].val();
         return state === "" ? null : state;
     };
 
     getStatus() {
-        const status = this.statusSelect.val();
+        const status = this.sel['status'].val();
         return status === "" ? null : status;
     };
 
     getStalls() {
-        const stalls = this.stallsSelect.val();
+        const stalls = parseInt(this.sel['stalls'].val());
         return typeof stalls === 'number' && Number.isFinite(stalls) ? stalls : null;
     };
 
     getPower() {
-        const power = this.powerSelect.val();
+        const power = parseInt(this.sel['power'].val());
         return typeof power === 'number' && Number.isFinite(power) ? power : null;
     };
 
     getOtherEVs() {
-        const otherEVs = this.otherEVsSelect.val();
+        const otherEVs = this.sel['otherEVs'].val();
         return otherEVs === "" ? null : otherEVs;
     };
 
+    setField(field, value) {
+        this.sel[field].selectpicker("val", value);
+        this.changeCallback();
+    }
+
     setChangeType(changeType) {
-        this.changeTypeSelect.selectpicker("val", changeType);
+        this.sel['changetype'].selectpicker("val", changeType);
     };
 
     setCountryId(countryId) {
-        this.countrySelect.selectpicker("val", countryId);
+        this.sel['country'].selectpicker("val", countryId);
     };
 
     setRegionId(regionId) {
-        this.regionSelect.selectpicker("val", regionId);
+        this.sel['region'].selectpicker("val", regionId);
     };
 
     setState(state) {
-        this.stateSelect.selectpicker("val", state);
+        this.sel['state'].selectpicker("val", state);
     };
 
     setStatus(status) {
-        this.statusSelect.selectpicker("val", status);
+        this.sel['status'].selectpicker("val", status);
     };
 
     setStalls(stalls) {
-        this.stallsSelect.selectpicker("val", stalls);
+        this.sel['stalls'].selectpicker("val", stalls);
     };
 
     setPower(power) {
-        this.powerSelect.selectpicker("val", power);
+        this.sel['power'].selectpicker("val", power);
     };
 
     setOtherEVs(otherEVs) {
-        this.otherEVsSelect.selectpicker("val", otherEVs);
+        this.sel['otherEVs'].selectpicker("val", otherEVs);
     };
 
 }

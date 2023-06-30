@@ -12,7 +12,8 @@ class UserConfig {
     constructor() {
         /* All fields are primitives currently for easy serialization. */
         this.unit = null;
-        this.initFilters(true);
+        this.initFilters();
+        this.initShowAlways();
 
         this.latitude = null;
         this.longitude = null;
@@ -24,29 +25,30 @@ class UserConfig {
         this.clusterSize = 5;
     }
 
-    initFilters(includeShowAlways) {
+    initFilters() {
         this.filter = {
             changeType: null,
             regionId: null,
             countryId: null,
-            state: null,
+            state: [],
             status: [],
             stalls: null,
             power: null,
             otherEVs: null
         };
-        if (includeShowAlways) {
-            this.showAlways = {
-                region: true,
-                country: false,
-                state: false,
-                status: true,
-                stalls: false,
-                power: false,
-                otherEVs: false
-            };
-        }
-    };
+    }
+
+    initShowAlways() {
+        this.showAlways = {
+            region: true,
+            country: false,
+            state: false,
+            status: true,
+            stalls: false,
+            power: false,
+            otherEVs: false
+        };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // setters -- these should all invoke this.scheduleSave()

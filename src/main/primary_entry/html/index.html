@@ -117,7 +117,7 @@ Navigation Bar
                 -->
                 <ul class="nav navbar-nav navbar-right" id="navbar-map-dropdown" style="display: none;">
                     <li class="control-view-buttons">
-                        <button type="button" class="form-control active" id="filter-menu-item" title="show/hide filter controls"><img src="/images/mono-filter.svg"/></button>
+                        <button type="button" class="form-control active" id="filter-menu-item" title="show/hide filter controls"><span class="glyphicon glyphicon-filter"></span></button>
                         <button type="button" class="form-control active" id="rendering-menu-item" title="show/hide rendering controls"><img src="/images/sliders-icon.svg"/></button>
                         <button type="button" class="form-control" id="range-menu-item" title="show/hide range circle controls"><img src="/images/circle-center-icon.svg"/></button>
                         <button type="button" class="form-control" id="create-link-menu-item" title="Link to this view"><img src="/images/link-symbol.svg"/></button>
@@ -158,7 +158,7 @@ PAGE: map
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Filter-->
         <div id="control-row-filter" class="control-row">
             <form class="form-inline" role="form">
-                <button type="button" class="form-control filter btn-primary" id="map-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><img src="/images/white-filter.svg"/></button>
+                <button type="button" class="form-control filter btn-primary" id="map-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-filter"></span></button>
                 <select class="form-control region-select hidden"></select>
                 <select class="form-control country-select hidden"
                         data-live-search="true"></select>
@@ -454,7 +454,7 @@ PAGE: data
 
     <div id="data-filter">
         <form class="form-inline" role="form">
-            <button type="button" class="form-control filter btn-primary" id="data-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><img src="/images/white-filter.svg"/></button>
+            <button type="button" class="form-control filter btn-primary" id="data-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-filter"></span></button>
             <select class="form-control region-select hidden"></select>
             <select class="form-control country-select hidden"
                     data-live-search="true"></select>
@@ -538,22 +538,30 @@ PAGE: changes
 
     <div id="changes-filter">
         <form class="form-inline" role="form">
-            <button type="button" class="form-control filter btn-primary" id="changes-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><img src="/images/white-filter.svg"/></button>
+            <button type="button" class="form-control filter btn-primary" id="changes-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-filter"></span></button>
             <select class="form-control changetype-select"></select>
+            <button class="clear changetype-clear hidden">×</button>
             <select class="form-control region-select hidden"></select>
+            <button class="clear region-clear hidden" type="button">×</button>
             <select class="form-control country-select hidden"
                     data-live-search="true"></select>
+            <button class="clear country-clear hidden" type="button">×</button>
             <select class="form-control state-select hidden"
                     multiple data-actions-box="true"
                     data-selected-text-format="count > 3"
                     title="Any State"
                     data-live-search="true"></select>
+            <button class="clear state-clear hidden" type="button">×</button>
             <select class="form-control status-select hidden"
                     multiple data-actions-box="true"
                     title="Any Status"></select>
+            <button class="clear status-clear hidden" type="button">×</button>
             <select class="form-control stalls-select hidden"></select>
+            <button class="clear stalls-clear hidden" type="button">×</button>
             <select class="form-control power-select hidden"></select>
+            <button class="clear power-clear hidden" type="button">×</button>
             <select class="form-control otherEVs-select hidden"></select>
+            <button class="clear otherEVs-clear hidden" type="button">×</button>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="changes-result-count"></span>
         </form>
@@ -658,15 +666,15 @@ PAGE: about
         <li>Right-click the map to add a custom marker and range circle. (Long-press for three seconds on
             phones/tablets).
         </li>
-        <li>Click a "construction" or "permit" Supercharger, then click "discuss" to read updates on
-            progress.
+        <li>Click a "construction" or "permit" Supercharger, then click <img src="/images/forum.svg"/>
+            or "forum" to read or provide updates on progress.
         </li>
         <li>Click any entry on the Changes tab to pan and zoom to the associated site on the Map tab.</li>
-        <li>Choose "Clusters" to group nearby markers together when zoomed out.
-        <ul>
-            <li>Clusters allow the map to be more responsive and less cluttered on older, smaller devices.</li>
-            <li>Hover over a numbered marker to see details about the locations included, and click to zoom in.</li>
-        </ul>
+        <li>Choose <div class="cluster-marker open">2</div> Clusters to group nearby markers together when zoomed out.
+            <ul>
+                <li>Clusters allow the map to be more responsive and less cluttered on older, smaller devices.</li>
+                <li>Hover over a numbered marker to see details about the locations included, and click to zoom in.</li>
+            </ul>
         </li>
         <li>This site is tested using <a href="https://www.google.com/intl/en/chrome/">Google Chrome</a>
             and consequently may perform best when viewed using that web browser.
@@ -841,40 +849,32 @@ Dialogs
         <div class="modal-content">
             <div class="modal-header">
                 <h4 id="filter-dialog-title" class="modal-title strong">
-                    <img src="/images/white-filter.svg" class="control-row-icon" title="Manage Filters"/>
+                    <span class="glyphicon glyphicon-filter"></span>
                     Manage Filters
                 </h4>
             </div>
             <div id="common-filter" class="modal-body">
                 <form role="form">
                     <table width="100%">
-                        <tr><td></td><td></td><td class="btn-xs">Show</td></tr>
+                        <tr><td></td>
+                            <td><span id="modal-result-count"></span></td>
+                            <td class="btn-xs">Show on main<br/>page by default</td></tr>
                         <tr>
                             <th>Region</th>
                             <td><select class="form-control region-select"
                                         data-container="body"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="region-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="region-visibility" id="region-hide" checked>auto
-                                </label>
-                                <label id="region-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="region-visibility" id="region-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="region-show" name="region-show" checked/>
+                            </td>
                         </tr>
                         <tr>
                             <th>Country</th>
                             <td><select class="form-control country-select" 
                                         data-container="body"
                                         data-live-search="true"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="country-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="country-visibility" id="country-hide" checked>auto
-                                </label>
-                                <label id="country-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="country-visibility" id="country-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="country-show" name="country-show"/>
+                            </td>
                         </tr>
                         <tr>
                             <th>State</th>
@@ -884,14 +884,9 @@ Dialogs
                                         data-container="body"
                                         data-live-search="true"
                                         title="Any State"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="state-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="state-visibility" id="state-hide" checked>auto
-                                </label>
-                                <label id="state-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="state-visibility" id="state-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="state-show" name="state-show"/>
+                            </td>
                         </tr>
                         <tr>
                             <th>Status</th>
@@ -899,60 +894,43 @@ Dialogs
                                         multiple data-actions-box="true"
                                         data-container="body"
                                         title="Any Status"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="status-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="status-visibility" id="status-hide" checked>auto
-                                </label>
-                                <label id="status-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="status-visibility" id="status-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="status-show" name="status-show" checked/>
+                            </td>
                         </tr>
                         <tr>
                             <th>Stalls</th>
                             <td><select class="form-control stalls-select"
                                         data-container="body"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="stalls-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="stalls-visibility" id="stalls-hide" checked>auto
-                                </label>
-                                <label id="stalls-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="stalls-visibility" id="stalls-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="stalls-show" name="stalls-show"/>
+                            </td>
                         </tr>
                         <tr>
                             <th>Power</th>
                             <td><select class="form-control power-select"
                                         data-container="body"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="power-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="power-visibility" id="power-hide" checked>auto
-                                </label>
-                                <label id="power-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="power-visibility" id="power-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="power-show" name="power-show"/>
+                            </td>
                         </tr>
                         <tr>
                             <th>Vehicles</th>
                             <td><select class="form-control otherEVs-select"
                                         data-container="body"></select></td>
-                            <th><div class="btn-group" data-toggle="buttons">
-                                <label id="otherEVs-hide-label" class="btn btn-default btn-xs active">
-                                    <input type="radio" name="otherEVs-visibility" id="otherEVs-hide" checked>auto
-                                </label>
-                                <label id="otherEVs-show-label" class="btn btn-default btn-xs">
-                                    <input type="radio" name="otherEVs-visibility" id="otherEVs-show">always
-                                </label>
-                            </div></th>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="otherEVs-show" name="otherEVs-show"/>
+                            </td>
                         </tr>
                         <tr>
-                            <td colspan="3" align="right">
+                            <td></td>
+                            <td>
                                 <button class="btn btn-primary apply" type="button">Apply</button>
                                 <button class="btn btn-default cancel" type="button">Cancel</button>
-                                <button class="btn btn-danger reset" title="Reset all filters" type="button">Reset All</button>
-                                <span id="modal-result-count"></span>
+                                <button class="btn btn-danger reset" title="Reset filter values" type="button">Reset <span class="glyphicon glyphicon-filter"></span></button>
+                            </td>
+                            <td class="btn-xs">
+                                <button class="btn btn-danger reset-visibility" title="Reset filter visibility" type="button">Reset <span class="glyphicon glyphicon-check"></span></button>
                             </td>
                         </tr>
                     </table>

@@ -21,6 +21,10 @@ li.control-view-buttons button {
     width: 20px;
     height: 20px;
 }
+.control-view-buttons span.glyphicon {
+    font-size: 20px;
+    color: black;
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  Slider styling
