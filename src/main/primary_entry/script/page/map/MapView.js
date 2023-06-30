@@ -3,6 +3,7 @@ import Analytics from "../../util/Analytics";
 import userConfig from "../../common/UserConfig";
 import SiteIterator from "../../site/SiteIterator";
 import SitePredicates from "../../site/SitePredicates";
+import SiteSorting from "../../site/SiteSorting";
 import Sites from "../../site/Sites";
 import MapContextMenu from "./context/MapContextMenu";
 import MarkerFactory from "./MarkerFactory";
@@ -271,6 +272,26 @@ export default class MapView {
 
     getMarkerSizeByZoom = (zoom) => zoom < 4 ? 4 : zoom > 16 ? 10 : Math.ceil(zoom / 2) + 2;
 
+    createIndividualMarkers(bounds, newMarkerSize) {
+        var t = performance.now(), created = 0, infoWindows = [];
+        if (this.markerSize !== newMarkerSize) {
+            this.updateMarkerSize(newMarkerSize);
+        }
+        const markers = [];
+        new SiteIterator()
+            .withPredicate(SitePredicates.HAS_NO_MARKER)
+            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
+            .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
+            .withSort(SiteSorting.BY_STATUS_DAYS_DESC) // show open above constr, constr above permit, and newest sites on top within each status
+            .iterate((supercharger) => {
+                markers.push(this.markerFactory.createMarker(supercharger, newMarkerSize, true));
+                created++;
+            });
+        mapLayers.addGroupToOverlay(markers);
+        this.restoreInfoWindows(infoWindows);
+        console.log(`zoom=${this.zoom} created=${created} markers=${newMarkerSize} t=${(performance.now() - t)}`);
+    };
+
     createClusteredMarkers(bounds, oldZoom) {
         var t = performance.now(), newZoom = this.zoom, created = 0, infoWindows = [];
         // Cluster aggressively through zoom level 8, then much less aggressively from 9 to 14, then not at all for 15+
@@ -291,6 +312,7 @@ export default class MapView {
             .withPredicate(SitePredicates.HAS_NO_MARKER)
             .withPredicate(SitePredicates.buildInViewPredicate(bounds))
             .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
+            .withSort(SiteSorting.BY_STATUS_DAYS_DESC) // same sort as createIndividualMarkers() but imperfect due to clustering
             .iterate((s1) => {
                 if (s1.marker === null || s1.marker === undefined) { // gotta check again because one site might set another site's marker
                     var overlapSites = [s1];
@@ -315,25 +337,6 @@ export default class MapView {
         mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${newZoom} created=${created} clusters=${renderModel.getCurrentClusterSize()} t=${(performance.now() - t)}`);
-    };
-
-    createIndividualMarkers(bounds, newMarkerSize) {
-        var t = performance.now(), created = 0, infoWindows = [];
-        if (this.markerSize !== newMarkerSize) {
-            this.updateMarkerSize(newMarkerSize);
-        }
-        const markers = [];
-        new SiteIterator()
-            .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .withPredicate(SitePredicates.buildInViewPredicate(bounds))
-            .withPredicate(SitePredicates.buildUserFilterPredicate(userConfig.filter))
-            .iterate((supercharger) => {
-                markers.push(this.markerFactory.createMarker(supercharger, newMarkerSize, true));
-                created++;
-            });
-        mapLayers.addGroupToOverlay(markers);
-        this.restoreInfoWindows(infoWindows);
-        console.log(`zoom=${this.zoom} created=${created} markers=${newMarkerSize} t=${(performance.now() - t)}`);
     };
 
     updateMarkerSize(markerSize) {

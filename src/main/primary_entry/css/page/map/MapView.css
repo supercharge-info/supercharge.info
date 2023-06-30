@@ -224,14 +224,14 @@ a.unpin {
 }
 .leaflet-right .leaflet-control {
     margin-right: 5px;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 .leaflet-top .leaflet-control {
     margin-top: 5px;
     opacity: 0.8;
 }
 .leaflet-control:hover {
-    opacity: 0.9;
+    opacity: 0.98;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
