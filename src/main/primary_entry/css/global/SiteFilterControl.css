@@ -125,3 +125,12 @@ button.clear {
         box-shadow: 0 0 12px 2px #fcc;
     }
 }
+
+@media (max-width: 928px) {
+    #filter-dialog select, #filter-dialog button, #filter-dialog td {
+        min-width: 50px;
+    }
+    #filter-dialog td {
+        padding: 3px;
+    }
+}
