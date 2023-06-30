@@ -1,9 +1,17 @@
+#filter-dialog .modal-dialog, #filter-dialog .modal-content {
+    width: 480px;
+    max-height: 98%;
+}
+#filter-dialog .modal-body {
+    max-height: calc(100vh - 125px);
+}
+
 #filter-dialog td {
     padding: 8px;
     white-space: nowrap;
 }
-#filter-dialog select, #filter-dialog button {
-    max-width: 1000px;
+#filter-dialog select, #filter-dialog button, #filter-dialog td {
+    max-width: 250px;
     min-width: 80px;
 }
 #filter-dialog th {
@@ -15,10 +23,17 @@
     font-weight: bold;
     text-align: center;
     border-left: 1px solid #e5e5e5;
+    line-height: 1.1;
 }
 #filter-dialog button.reset {
     float: right;
 }
+
+.show-always input {
+    width: 18px;
+    height: 18px;
+}
+
 .form-control select, .form-control button {
     max-width: 250px;
     min-width: 50px;
@@ -127,10 +142,13 @@ button.clear {
 }
 
 @media (max-width: 928px) {
+    #filter-dialog .modal-dialog {
+        width: 460px;
+    }
     #filter-dialog select, #filter-dialog button, #filter-dialog td {
         min-width: 50px;
     }
     #filter-dialog td {
-        padding: 3px;
+        padding: 4px 6px;
     }
 }
