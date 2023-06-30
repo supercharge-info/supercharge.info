@@ -1,19 +1,23 @@
 #filter-dialog td {
     padding: 8px;
+    white-space: nowrap;
 }
 #filter-dialog select, #filter-dialog button {
     max-width: 1000px;
-    min-width: 100px;
+    min-width: 80px;
 }
 #filter-dialog th {
-    width: 16%;
-    min-width: 90px;
+    width: 12%;
+    min-width: 80px;
 }
 #filter-dialog td.btn-xs {
+    width: 12%;
     font-weight: bold;
     text-align: center;
-    padding: 0;
     border-left: 1px solid #e5e5e5;
+}
+#filter-dialog button.reset {
+    float: right;
 }
 .form-control select, .form-control button {
     max-width: 250px;
