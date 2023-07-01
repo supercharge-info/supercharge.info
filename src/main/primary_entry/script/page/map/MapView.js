@@ -141,6 +141,7 @@ export default class MapView {
             this.layerName = e.name;
             this.layerOptions = e.layer.options;
             this.setMaxZoom(this.layerOptions.maxZoom);
+            this.setMinZoom(this.layerOptions.minZoom);
         });
 
         // layers control

@@ -144,6 +144,9 @@ button.clear {
 br.narrow {
     display: none;
 }
+br.wide {
+    display: inline;
+}
 
 @media (max-width: 768px) {
     #filter-dialog .modal-dialog, #filter-dialog .modal-content {
@@ -151,6 +154,9 @@ br.narrow {
     }
     br.narrow {
         display: inline;
+    }
+    br.wide {
+        display: none;
     }
 }
 
