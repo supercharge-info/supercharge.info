@@ -47,6 +47,17 @@ const mundialisLayer = L.tileLayer.wms('http://ows.mundialis.de/services/service
 	attribution: 'Contains modified SRTM data (2014)/NASA, processed by <a href="https://www.mundialis.de">mundialis</a> and vector data by <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (2020)'
 });
 
+const stamenTerrainLabelsLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-labels/{z}/{x}/{y}{r}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	subdomains: 'abcd',
+	ext: 'png'
+});
+
+const stamenTonerLabelsLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-labels/{z}/{x}/{y}{r}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	subdomains: 'abcd',
+	ext: 'png'
+});
 const markerLayer = L.layerGroup([]);
 
 const baseMaps = {
@@ -58,7 +69,8 @@ const baseMaps = {
 };
 
 const overlayMaps = {
-    'Markers': markerLayer
+    'Extra Labels - Terrain': stamenTerrainLabelsLayer,
+    'Extra Labels - Toner': stamenTonerLabelsLayer
 };
 
 class MapLayers {
