@@ -141,8 +141,21 @@ button.clear {
     }
 }
 
+br.narrow {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #filter-dialog .modal-dialog, #filter-dialog .modal-content {
+        width: 380px !important;
+    }
+    br.narrow {
+        display: inline;
+    }
+}
+
 @media (max-width: 928px) {
-    #filter-dialog .modal-dialog {
+    #filter-dialog .modal-dialog, #filter-dialog .modal-content {
         width: 460px;
     }
     #filter-dialog select, #filter-dialog button, #filter-dialog td {
