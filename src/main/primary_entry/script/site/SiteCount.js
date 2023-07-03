@@ -53,7 +53,7 @@ function sort(mapOne, mapTwo) {
      *   de: arrayRef
      * }
  */
-SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction) {
+SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction, countStalls = false) {
     const referenceMap = {},
         returnedArray = [];
     let totalOpen = 0,
@@ -68,21 +68,22 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction)
                 referenceMap[aggregateKeyValue] = newEntry;
                 returnedArray.push(newEntry);
             }
+            var incr = countStalls ? supercharger.numStalls : 1;
             if (supercharger.isOpen()) {
-                referenceMap[aggregateKeyValue].open++;
-                totalOpen++;
+                referenceMap[aggregateKeyValue].open += incr;
+                totalOpen += incr;
             }
             else if (supercharger.isConstruction()) {
-                referenceMap[aggregateKeyValue].construction++;
-                totalConstruction++;
+                referenceMap[aggregateKeyValue].construction += incr;
+                totalConstruction += incr;
             }
             else if (supercharger.isPermit()) {
-                referenceMap[aggregateKeyValue].permit++;
-                totalPermit++;
+                referenceMap[aggregateKeyValue].permit += incr;
+                totalPermit += incr;
             }
             else if (supercharger.isClosedTemp() || supercharger.isClosedPerm()) {
-                referenceMap[aggregateKeyValue].closed++;
-                totalClosed++;
+                referenceMap[aggregateKeyValue].closed == incr;
+                totalClosed += incr;
             } else {
                 throw new Error("unexpected supercharger status" + supercharger);
             }
@@ -102,8 +103,16 @@ SiteCount.getCountListByCountry = function () {
         .withPredicate(SitePredicates.NOT_USER_ADDED)
         .withPredicate(SitePredicates.IS_COUNTED);
 
-    return SiteCount.getCountListImpl(siteIterator, 'country', sort);
+    return SiteCount.getCountListImpl(siteIterator, 'country', sort, false);
+};
 
+SiteCount.getStallCountListByCountry = function () {
+
+    const siteIterator = new SiteIterator()
+        .withPredicate(SitePredicates.NOT_USER_ADDED)
+        .withPredicate(SitePredicates.IS_COUNTED);
+
+    return SiteCount.getCountListImpl(siteIterator, 'country', sort, true);
 };
 
 SiteCount.getCountMapByCountry = function () {
@@ -127,8 +136,7 @@ SiteCount.getCountListByState = function (country) {
             return country === site.address.country;
         });
 
-    return SiteCount.getCountListImpl(siteIterator, 'state', sort);
-
+    return SiteCount.getCountListImpl(siteIterator, 'state', sort, false);
 };
 
 // - - - - - - By Region
@@ -139,8 +147,7 @@ SiteCount.getCountListByRegion = function () {
         .withPredicate(SitePredicates.NOT_USER_ADDED)
         .withPredicate(SitePredicates.IS_COUNTED);
 
-    return SiteCount.getCountListImpl(siteIterator, 'region', sort);
-
+    return SiteCount.getCountListImpl(siteIterator, 'region', sort, false);
 };
 
 SiteCount.getCountMapByRegion = function () {

@@ -58,18 +58,18 @@ Navigation Bar
                     <td></td>
                 </tr>
                 <tr>
-                    <td title="Open" class="open">&nbsp;</td>
-                    <td title="Construction" class="construction">&nbsp;</td>
-                    <td title="Permit" class="permit">&nbsp;</td>
-                    <td title="Closed" class="closed">&nbsp;</td>
-                    <td class="lab"></td>
+                    <td title="Open" class="open">-</td>
+                    <td title="Construction" class="construction">-</td>
+                    <td title="Permit" class="permit">-</td>
+                    <td title="Closed" class="closed">-</td>
+                    <td class="lab">World</td>
                 </tr>
                 <tr>
-                    <td title="Open" class="open">&nbsp;</td>
-                    <td title="Construction" class="construction">&nbsp;</td>
-                    <td title="Permit" class="permit">&nbsp;</td>
-                    <td title="Closed" class="closed">&nbsp;</td>
-                    <td class="lab"></td>
+                    <td title="Open" class="open">-</td>
+                    <td title="Construction" class="construction">-</td>
+                    <td title="Permit" class="permit">-</td>
+                    <td title="Closed" class="closed">-</td>
+                    <td class="lab" title="Use map to see totals for a region"><span style="color: #888; font-weight: normal;">(region)</span></td>
                 </tr>
             </table>
             
@@ -117,9 +117,9 @@ Navigation Bar
                 -->
                 <ul class="nav navbar-nav navbar-right" id="navbar-map-dropdown" style="display: none;">
                     <li class="control-view-buttons">
-                        <button type="button" class="form-control active" id="filter-menu-item" title="show/hide filter options"><img src="/images/mono-filter.svg"/></button>
-                        <button type="button" class="form-control active" id="rendering-menu-item" title="show/hide rendering options"><img src="/images/sliders-icon.svg"/></button>
-                        <button type="button" class="form-control" id="range-menu-item" title="show/hide range circle options"><img src="/images/circle-center-icon.svg"/></button>
+                        <button type="button" class="form-control active" id="filter-menu-item" title="show/hide filter controls"><span class="glyphicon glyphicon-filter"></span></button>
+                        <button type="button" class="form-control active" id="rendering-menu-item" title="show/hide rendering controls"><img src="/images/sliders-icon.svg"/></button>
+                        <button type="button" class="form-control" id="range-menu-item" title="show/hide range circle controls"><img src="/images/circle-center-icon.svg"/></button>
                         <button type="button" class="form-control" id="create-link-menu-item" title="Link to this view"><img src="/images/link-symbol.svg"/></button>
                         <button type="button" class="form-control" id="way-back-menu-item" title="Way Back"><img src="/images/history-icon.svg"/></button>
                     </li>
@@ -152,44 +152,44 @@ Navigation Bar
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 PAGE: map
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<div class="page" id="page-map" style="display:none">
+<div class="page" id="page-map" style="display: none;">
 
     <div id="page-control">
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Filter-->
         <div id="control-row-filter" class="control-row">
-            <img src="/images/mono-filter.svg" class="collapse control-row-icon" title="Filter options"/>
             <form class="form-inline" role="form">
-                <select class="form-control region-select"></select>
-                <select class="form-control country-select"
+                <button type="button" class="form-control filter btn-primary" id="map-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-filter"></span></button>
+                <select class="form-control region-select hidden"></select>
+                <select class="form-control country-select hidden"
                         data-live-search="true"></select>
-                <select class="form-control state-select"
+                <select class="form-control state-select hidden"
                         multiple data-actions-box="true"
                         data-selected-text-format="count > 3"
                         title="Any State"
                         data-live-search="true"></select>
-                <select class="form-control status-select"
+                <select class="form-control status-select hidden"
                         multiple data-actions-box="true"
                         title="Any Status"></select>
-                <select class="form-control stalls-select"></select>
-                <select class="form-control power-select"></select>
-                <select class="form-control other-evs-select"></select>
-                <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+                <select class="form-control stalls-select hidden"></select>
+                <select class="form-control power-select hidden"></select>
+                <select class="form-control otherEVs-select hidden"></select>
+                <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
                 <span id="map-result-count"></span>
             </form>
         </div>
         <!--*   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Render-->
         <div id="control-row-rendering" class="control-row">
-            <img src="/images/sliders-icon.svg" class="collapse control-row-icon" title="Rendering options"/>
+            <img src="/images/sliders-icon.svg" class="collapse control-row-icon" title="Rendering controls"/>
             <div>
                 <label for="range-slider" class="control">Range</label>
                 <input id="range-slider" type="range" min="0" max="405" step="10" value="175" class="slider-control"/>
                 <input id="range-number-text" class="slider-value-label" value="175"/>
                 <div class="btn-group" data-toggle="buttons" style="vertical-align: top">
                     <label id="range-unit-mi-label" class="btn btn-default btn-xs active">
-                        <input type="radio" name="options" id="option1" checked>mi
+                        <input type="radio" name="units" id="unit-mi" checked>mi
                     </label>
                     <label id="range-unit-km-label" class="btn btn-default btn-xs">
-                        <input type="radio" name="options" id="option2">km
+                        <input type="radio" name="units" id="unit-km">km
                     </label>
                 </div>
             </div>
@@ -230,11 +230,11 @@ PAGE: map
         </div>
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * Control: Range -->
         <div id="control-row-range" class="control-row" style="display: none">
-            <img src="/images/circle-center-icon.svg" class="collapse control-row-icon" title="Range circle options"/>
-            <span class="control-view-buttons">
+            <img src="/images/circle-center-icon.svg" class="collapse control-row-icon" title="Range circle controls"/>
+            <span class="range-circle-control">
                 <label class="control collapse">Circles</label>
-                <button type="button" class="btn btn-default btn-xs" id="range-circles-all-on" title="All Range Circles On"><img src="/images/plus-circle.svg"/></button>
-                <button type="button" class="btn btn-default btn-xs" id="range-circles-all-off" title="All Range Circles Off"><img src="/images/minus-circle.svg"/></button>
+                <button type="button" class="btn-primary btn-xs" id="range-circles-all-on" title="All Range Circles On"><img src="/images/plus-circle.svg"/></button>
+                <button type="button" class="btn-primary btn-xs" id="range-circles-all-off" title="All Range Circles Off"><img src="/images/minus-circle.svg"/></button>
             </span>
             <div class="shrink" style="width: 24px;"></div>
             <div>
@@ -450,26 +450,26 @@ PAGE: map
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 PAGE: data
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<div class="page" id="page-data" style="display:none">
+<div class="page" id="page-data" style="display: none;">
 
     <div id="data-filter">
         <form class="form-inline" role="form">
-            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
-            <select class="form-control region-select"></select>
-            <select class="form-control country-select"
+            <button type="button" class="form-control filter btn-primary" id="data-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-filter"></span></button>
+            <select class="form-control region-select hidden"></select>
+            <select class="form-control country-select hidden"
                     data-live-search="true"></select>
-            <select class="form-control state-select"
+            <select class="form-control state-select hidden"
                     multiple data-actions-box="true"
                     data-selected-text-format="count > 3"
                     title="Any State"
                     data-live-search="true"></select>
-            <select class="form-control status-select"
+            <select class="form-control status-select hidden"
                     multiple data-actions-box="true"
                     title="Any Status"></select>
-            <select class="form-control stalls-select"></select>
-            <select class="form-control power-select"></select>
-            <select class="form-control other-evs-select"></select>
-            <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            <select class="form-control stalls-select hidden"></select>
+            <select class="form-control power-select hidden"></select>
+            <select class="form-control otherEVs-select hidden"></select>
+            <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="data-result-count"></span>
         </form>
     </div>
@@ -502,7 +502,7 @@ PAGE: data
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 PAGE: charts
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<div class="page" id="page-charts" style="display:none">
+<div class="page" id="page-charts" style="display: none;">
 
     <div id="total-open-world-line-chart"></div>
     <br/><br/><br/>
@@ -533,33 +533,40 @@ PAGE: charts
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 PAGE: changes
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<div class="page" id="page-changes" style="display:none">
-
+<div class="page" id="page-changes" style="display: none;">
 
     <div id="changes-filter">
         <form class="form-inline" role="form">
-            <img src="/images/mono-filter.svg" class="control-row-icon" title="Filter options"/>
-            <select class="form-control changetype-select"></select>
-            <select class="form-control region-select"></select>
-            <select class="form-control country-select"
+            <button type="button" class="form-control filter btn-primary" id="changes-modal-filter" title="Manage Filters" data-toggle="modal" data-target="#filter-dialog" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-filter"></span></button>
+            <select class="form-control region-select hidden"></select>
+            <button class="clear region-clear hidden" type="button">×</button>
+            <select class="form-control country-select hidden"
                     data-live-search="true"></select>
-            <select class="form-control state-select"
+            <button class="clear country-clear hidden" type="button">×</button>
+            <select class="form-control state-select hidden"
                     multiple data-actions-box="true"
                     data-selected-text-format="count > 3"
                     title="Any State"
                     data-live-search="true"></select>
-            <select class="form-control status-select"
+            <button class="clear state-clear hidden" type="button">×</button>
+            <select class="form-control status-select hidden"
                     multiple data-actions-box="true"
                     title="Any Status"></select>
-            <select class="form-control stalls-select"></select>
-            <select class="form-control power-select"></select>
-            <select class="form-control other-evs-select"></select>
-            <button class="form-control reset" title="Reset filters" type="button">Reset</button>
+            <button class="clear status-clear hidden" type="button">×</button>
+            <select class="form-control stalls-select hidden"></select>
+            <button class="clear stalls-clear hidden" type="button">×</button>
+            <select class="form-control power-select hidden"></select>
+            <button class="clear power-clear hidden" type="button">×</button>
+            <select class="form-control otherEVs-select hidden"></select>
+            <button class="clear otherEVs-clear hidden" type="button">×</button>
+            <select class="form-control changetype-select"></select>
+            <button class="clear changetype-clear hidden">×</button>
+            <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="changes-result-count"></span>
         </form>
     </div>
 
-    <table id='changes-table' class='table table-condensed table-hover' style="width: 99%">
+    <table id='changes-table' class='table table-condensed table-hover' style="width: 99%;">
         <thead>
         <tr>
             <th>Date</th>
@@ -579,7 +586,7 @@ PAGE: changes
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 PAGE: about
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<div class="page" id="page-about" style="display:none; padding: 10px">
+<div class="page" id="page-about" style="display: none; padding: 10px;">
 
     <h3>About</h3>
 
@@ -621,22 +628,6 @@ PAGE: about
     <h3 class="margin-top">Supercharger Status</h3>
 
     <ul class="about-page-list">
-        <li title="Permanently Closed">
-            <img src="images/black_dot_x.svg"/>
-            <b>Permanently Closed</b> : Site is permanently closed. Charging not possible.
-        </li>
-        <li title="Temporarily Closed">
-            <img src="images/gray_dot_x.svg"/>
-            <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
-        </li>
-        <li title="Permit">
-            <img src="images/blue_triangle.svg"/>
-            <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
-        </li>
-        <li title="Construction">
-            <img src="images/orange_triangle.svg"/>
-            <b>Construction</b> : Progress is visible at the site.
-        </li>
         <li title="Open">
             <img src="images/red_dot.svg"/>
             <b>Open</b> : It is possible to supercharge at the site at all times.
@@ -645,28 +636,51 @@ PAGE: about
             <img src="images/red_dot_limited.svg"/>
             <b>Open - Limited Hours</b> : It is possible to supercharge at the site during limited times.
         </li>
+        <li title="Construction">
+            <img src="images/orange_triangle.svg"/>
+            <b>Construction</b> : Progress is visible at the site.
+        </li>
+        <li title="Permit">
+            <img src="images/blue_triangle.svg"/>
+            <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
+        </li>
+        <li title="Temporarily Closed">
+            <img src="images/gray_dot_x.svg"/>
+            <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
+        </li>
+        <li title="Permanently Closed">
+            <img src="images/black_dot_x.svg"/>
+            <b>Permanently Closed</b>* : Site is permanently closed. Charging not possible.
+        </li>
         <li title="Custom">
             <img src="images/custom_pin.svg" alt="custom"/>
-            <b>Custom</b> : User added custom marker. Right-click to add at any location.
+            <b>Custom</b> : User added custom marker. Right-click map to add at any location.
         </li>
+    </ul>
+    <i>* Note that Permanently Closed sites are hidden by default on the map. To see them, use the Select All button or click directly on the Permanently Closed option in the Status filter.</i>
 
+    <h4>Other location icons on the Changes and Data pages</h4>
+    <ul class="about-page-list">
+        <li title="solar canopy"><img src="/images/solar-power-variant.svg"/> <b>Solar canopy</b> : Site is at least partially covered by a solar canopy.</li>
+        <li title="battery backup"><img src="/images/battery-charging.svg"/> <b>Battery backup</b> : Site includes battery backup power.</li>
+        <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, and certain CCS locations in Europe.</li>
     </ul>
 
     <h3 class="margin-top">Site Usage Tips</h3>
 
     <ul class="about-page-list">
-        <li>Right-click the map to add a custom marker and range circle. (Long-press for three seconds on
-            phones/tablets).
+        <li>Right-click the map to add a custom marker and range circle.
+            (Long-press for 2-3 seconds on mobile/touchscreen devices.)
         </li>
-        <li>Click a "construction" or "permit" Supercharger, then click "discuss" to read updates on
-            progress.
+        <li>Click a "Construction" or "Permit" Supercharger, then click <img src="/images/forum.svg"/>
+            or "forum" to read or provide updates on progress.
         </li>
         <li>Click any entry on the Changes tab to pan and zoom to the associated site on the Map tab.</li>
-        <li>Choose "Clusters" to group nearby markers together when zoomed out.
-        <ul>
-            <li>Clusters allow the map to be more responsive and less cluttered on older, smaller devices.</li>
-            <li>Hover over a numbered marker to see details about the locations included, and click to zoom in.</li>
-        </ul>
+        <li>Choose "<div class="cluster-marker open">2</div> Clusters" to group nearby markers together when zoomed out.
+            <ul class="about-page-list">
+                <li>Clusters allow the map to be more responsive and less cluttered on older, smaller devices.</li>
+                <li>Hover over a numbered marker to see details about the locations included, and click to zoom in.</li>
+            </ul>
         </li>
         <li>This site is tested using <a href="https://www.google.com/intl/en/chrome/">Google Chrome</a>
             and consequently may perform best when viewed using that web browser.
@@ -732,7 +746,7 @@ PAGE: about
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 PAGE: profile
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<div class="page" id="page-profile" style="display:none; padding: 10px">
+<div class="page" id="page-profile" style="display: none; padding: 10px;">
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
 
@@ -793,7 +807,7 @@ PAGE: profile
                                 </tr>
                                 <tr>
                                     <td>
-                                        <div id="profile-error-box" style="display:none" class="text-danger">
+                                        <div id="profile-error-box" style="display: none;" class="text-danger">
                                         </div>
                                     </td>
                                     <td>
@@ -836,6 +850,101 @@ PAGE: profile
 Dialogs
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
 
+<div id="filter-dialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="filter-dialog-title" class="modal-title strong">
+                    <span class="glyphicon glyphicon-filter"></span>
+                    Manage Filters
+                </h4>
+            </div>
+            <div id="common-filter" class="modal-body">
+                <form role="form">
+                    <table width="100%">
+                        <tr><td></td>
+                            <td><span id="modal-result-count"></span></td>
+                            <td class="btn-xs">Show on<br class="narrow"/> main<br class="wide"/> page<br class="narrow"/> by default</td></tr>
+                        <tr>
+                            <th>Region</th>
+                            <td><select class="form-control region-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="region-show" name="region-show" checked/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td><select class="form-control country-select" 
+                                        data-container="body"
+                                        data-live-search="true"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="country-show" name="country-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td><select class="form-control state-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 3"
+                                        data-container="body"
+                                        data-live-search="true"
+                                        title="Any State"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="state-show" name="state-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><select class="form-control status-select"
+                                        multiple data-actions-box="true"
+                                        data-container="body"
+                                        title="Any Status"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="status-show" name="status-show" checked/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Stalls</th>
+                            <td><select class="form-control stalls-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="stalls-show" name="stalls-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Power</th>
+                            <td><select class="form-control power-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="power-show" name="power-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Vehicles</th>
+                            <td><select class="form-control otherEVs-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="otherEVs-show" name="otherEVs-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button class="btn btn-primary apply" type="button">Apply</button>
+                                <button class="btn btn-default cancel" type="button">Cancel</button>
+                                <button class="btn btn-danger reset" title="Reset filter values" type="button">Reset <span class="glyphicon glyphicon-filter"></span></button>
+                            </td>
+                            <td class="btn-xs">
+                                <button class="btn btn-danger reset-visibility" title="Reset filter visibility" type="button">Reset <span class="glyphicon glyphicon-check"></span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="login-dialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
 
@@ -859,13 +968,13 @@ Dialogs
                             <button class="btn btn-large btn-primary btn-block">Login</button>
                         </div>
                     </form>
-                    <div id="login-error" style="display:none">
+                    <div id="login-error" style="display: none;">
                         <p class="text-danger"></p>
                     </div>
 
                 </div>
 
-                <div id="login-register-panel" style="display: none">
+                <div id="login-register-panel" style="display: none;">
                     <form>
                         <div class="form-group">
                             <input class="form-control" type="text" name="username" placeholder="Username" minlength="3" required>
@@ -880,7 +989,7 @@ Dialogs
                             <button class="btn btn-large btn-primary btn-block">Register</button>
                         </div>
                     </form>
-                    <div id="register-error" style="display:none" class="text-danger">
+                    <div id="register-error" style="display: none;" class="text-danger">
                     </div>
                     <div id="register-confirm" class="alert alert-success" style="display: none">
                         Thank you for registering! <br/><br/>Logging in...
@@ -902,7 +1011,7 @@ Dialogs
                             <button class="btn btn-large btn-primary btn-block">Reset Password</button>
                         </div>
                     </form>
-                    <div id="reset-error" style="display:none" class="text-danger">
+                    <div id="reset-error" style="display: none;" class="text-danger">
                     </div>
                     <div id="reset-password-confirm" class="alert alert-success" style="display: none">
                         Password reset instructions have been sent. Please check your email.
@@ -940,7 +1049,7 @@ Dialogs
                            required>
                     </div>
                     <button class="btn btn-primary btn-large">Change</button>
-                    <div id="change-password-error" style="display:none" class="text-danger">
+                    <div id="change-password-error" style="display: none;" class="text-danger">
                     </div>
                 </form>
             </div>
@@ -1003,7 +1112,7 @@ Dialogs
             </div>
             <div class="modal-body">
                 <div id="feedback-form">
-                    <div id="feedback-confirm" style="display:none">
+                    <div id="feedback-confirm" style="display: none;">
                         <h3>Thank you!</h3>
                         <p>Your feedback has been successfully submitted.</p>
                     </div>
@@ -1018,7 +1127,7 @@ Dialogs
                             </button>
                         </div>
                     </form>
-                    <div id="feedback-error" style="display:none">
+                    <div id="feedback-error" style="display: none;">
                         <p class="text-danger">There was an error when submitting your feedback. Please try
                             again later.</p>
                     </div>
@@ -1048,8 +1157,8 @@ Dialogs
         </div>
         <div id="save-route-confirm" class="alert alert-success" style="display: none">
             <div id="saving-route-message">Saving route...</div>
-            <div id="route-saved-message" style="display:none">Route has been saved.</div>
-            <div id="route-error-message" style="display:none">Error occurred while saving the route</div>
+            <div id="route-saved-message" style="display: none;">Route has been saved.</div>
+            <div id="route-error-message" style="display: none;">Error occurred while saving the route</div>
         </div>
     </div>
 </div>
@@ -1063,7 +1172,7 @@ Dialogs
             </div>
             <div class="modal-body">
                 <span></span>
-                <div id="load-route-error" style="display:none">
+                <div id="load-route-error" style="display: none;">
                     <br/>
                     <p class="text-danger"></p>
                 </div>

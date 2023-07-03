@@ -16,6 +16,26 @@
     z-index: 3;
 }
 
+.leaflet-control.zoom-label {
+    background: rgba(255,255,255,0.8);
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    width: 34px;
+    height: 36px;
+    text-align: center;
+    font-weight: bold;
+    opacity: 1;
+    transition-property: visibility, opacity;
+    transition-duration: 0s, 0.5s;
+}
+.leaflet-control.zoom-label.fade {
+    opacity: 0;
+    visibility: hidden;
+    transition-property: opacity, visibility;
+    transition-duration: 2s, 0s;
+    transition-delay: 0s, 2s;
+}
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Canvas
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -82,6 +102,13 @@ Markers
 .tooltip.closed-perm { background-color: rgba(0, 0, 0, 0.8); }
 .tooltip.user { background-color: rgba(0, 224, 0, 0.95); color: black; }
 
+/* style overrides that shouldn't be necessary but webpack is behaving weirdly */
+.leaflet-tooltip, .leaflet-control .tooltip {
+    white-space: nowrap;
+}
+.leaflet-bar a {
+    text-decoration: none;
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Info Window
@@ -197,14 +224,14 @@ a.unpin {
 }
 .leaflet-right .leaflet-control {
     margin-right: 5px;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 .leaflet-top .leaflet-control {
     margin-top: 5px;
     opacity: 0.8;
 }
 .leaflet-control:hover {
-    opacity: 0.9;
+    opacity: 0.98;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -

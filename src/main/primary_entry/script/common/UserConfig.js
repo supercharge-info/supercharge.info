@@ -2,8 +2,6 @@ import ServiceURL from "./ServiceURL";
 import Objects from "../util/Objects";
 import $ from 'jquery';
 import Units from "../util/Units";
-import { utils } from "sortablejs";
-import Asserts from "../util/Asserts";
 
 
 /* Save an indication of the last config we persisted so we don't make extra service calls. */
@@ -14,17 +12,8 @@ class UserConfig {
     constructor() {
         /* All fields are primitives currently for easy serialization. */
         this.unit = null;
-
-        this.filter = {
-            changeType: null,
-            regionId: null,
-            countryId: null,
-            state: null,
-            status: [],
-            stalls: null,
-            power: null,
-            otherEVs: null
-        };
+        this.initFilters();
+        this.initShowAlways();
 
         this.latitude = null;
         this.longitude = null;
@@ -34,6 +23,31 @@ class UserConfig {
         this.markerType = "Z";
         this.markerSize = 8;
         this.clusterSize = 5;
+    }
+
+    initFilters() {
+        this.filter = {
+            changeType: null,
+            regionId: null,
+            countryId: null,
+            state: [],
+            status: [],
+            stalls: null,
+            power: null,
+            otherEVs: null
+        };
+    }
+
+    initShowAlways() {
+        this.showAlways = {
+            region: true,
+            country: false,
+            state: false,
+            status: true,
+            stalls: false,
+            power: false,
+            otherEVs: false
+        };
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -107,6 +121,11 @@ class UserConfig {
         this.scheduleSave();
     };
 
+    setShowAlways(fieldName, newValue) {
+        this.showAlways[fieldName] = newValue;
+        this.scheduleSave();
+    };
+
     addCustomMarker(marker) {
         this.customMarkers.push(marker);
         this.scheduleSave();
@@ -175,14 +194,24 @@ class UserConfig {
         this.zoom = json.zoom || this.zoom;
 
         this.filter.changeType = json.filter?.changeType || this.filter?.changeType;
-        this.filter.regionId = json.filter?.regionId || json.dataPageRegionId || json.changesPageRegionId || this.filter?.regionId;
-        this.filter.countryId = json.filter?.countryId || json.dataPageCountryId || json.changesPageCountryId || this.filter?.countryId;
-        this.filter.state = json.filter?.state || this.filter?.state;
-        this.filter.status = json.filter?.status || this.filter?.status;
-        this.filter.stalls = json.filter?.stalls || this.filter?.stalls;
-        this.filter.power = json.filter?.power || this.filter?.power;
-        this.filter.otherEVs = typeof json.filter?.otherEVs == 'boolean'
-            ? String(json.filter?.otherEVs) : json.filter?.otherEVs || this.filter?.otherEVs;
+        this.filter.regionId   = json.filter?.regionId   || json.dataPageRegionId  || json.changesPageRegionId  || this.filter?.regionId;
+        this.filter.countryId  = json.filter?.countryId  || json.dataPageCountryId || json.changesPageCountryId || this.filter?.countryId;
+        this.filter.state      = json.filter?.state      || this.filter?.state;
+        this.filter.status     = json.filter?.status     || this.filter?.status;
+        this.filter.stalls     = json.filter?.stalls     || this.filter?.stalls;
+        this.filter.power      = json.filter?.power      || this.filter?.power;
+        this.filter.otherEVs =
+            typeof json.filter?.otherEVs === 'boolean'
+                ? String(json.filter?.otherEVs) 
+                : json.filter?.otherEVs || this.filter?.otherEVs;
+
+        this.showAlways.region   = json.showAlways?.region   || this.showAlways?.region;
+        this.showAlways.country  = json.showAlways?.country  || this.showAlways?.country;
+        this.showAlways.state    = json.showAlways?.state    || this.showAlways?.state;
+        this.showAlways.status   = json.showAlways?.status   || this.showAlways?.status;
+        this.showAlways.stalls   = json.showAlways?.stalls   || this.showAlways?.stalls;
+        this.showAlways.power    = json.showAlways?.power    || this.showAlways?.power;
+        this.showAlways.otherEVs = json.showAlways?.otherEVs || this.showAlways?.otherEVs;
 
         this.customMarkers = json.customMarkers || this.customMarkers;
 

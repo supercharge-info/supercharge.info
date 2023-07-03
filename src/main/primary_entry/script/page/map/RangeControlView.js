@@ -29,6 +29,8 @@ export default class RangeControlView {
         EventBus.addListener("range-model-range-changed-event", this.handleRangeChange, this);
         EventBus.addListener("range-model-unit-changed-event", this.handleRangeUnitChange, this);
         EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
+        $(".range-circle-control button").on("click", this.handleRangeCircleButton.bind(this));
+        $(".range-circle-control button").tooltip({ placement: "top" });
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -114,6 +116,15 @@ export default class RangeControlView {
         this.updateRangeSlider();
         this.updateRangeUnit();
     }
+
+    handleRangeCircleButton(event) {
+        if (event.currentTarget.id === "range-circles-all-off") {
+            EventBus.dispatch("circles-all-off-event");
+        }
+        else if (event.currentTarget.id === "range-circles-all-on") {
+            EventBus.dispatch("circles-all-on-event");
+        }
+    };
 
     /**
      * Handle fill color change.

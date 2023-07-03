@@ -1,6 +1,7 @@
 .highcharts-container {
     min-height: 400px;
-    width: 99%;
+    width: 98%;
+    margin: auto;
 }
 
 #status-days-bar-chart .highcharts-container {

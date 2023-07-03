@@ -12,7 +12,7 @@ import WindowUtil from "../../util/WindowUtil";
 
 export default class ChangesView {
 
-    constructor() {
+    constructor(filterDialog) {
         const table = $("#changes-table");
         this.tableBody = table.find("tbody");
         this.tableBody.click(ChangesView.handleChangeClick);
@@ -21,14 +21,15 @@ export default class ChangesView {
 
         this.filterControl = new SiteFilterControl(
             $("#changes-filter"),
-            this.filterControlCallback.bind(this)
+            this.filterControlCallback.bind(this),
+            filterDialog
         );
 
         this.syncFilters();
     }
 
     syncFilters() {
-        this.filterControl.init(userConfig);
+        this.filterControl.init();
         this.tableAPI.draw();
     }
 
@@ -46,6 +47,7 @@ export default class ChangesView {
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        this.filterControl.updateVisibility();
     };
 
     static handleChangeClick(event) {
@@ -69,7 +71,8 @@ export default class ChangesView {
     static buildStatus(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         var s = Status.fromString(changeRow.siteStatus);
-        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}'/></span>`
+        // includes title (for fancy tooltip) and alt (for copy/paste as text)
+        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`
     }
     
     static buildDetails(changeRow) {
@@ -186,9 +189,9 @@ export default class ChangesView {
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
                     var resultSpan = $("#changes-result-count");
-                    resultSpan.html(`${json.recordsFiltered} result${json.recordsFiltered === 1 ? "" : "s"}<span class="shrink"> matched</span>`);
+                    resultSpan.html(`${json.recordsFiltered} entr${json.recordsFiltered === 1 ? "y" : "ies"}<span class="shrink"> matched</span>`);
                     resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
-                    resultSpan.attr("title", json.recordsFiltered === 0 ? "No results displayed. Adjust or reset filters to see more." : "");
+                    resultSpan.attr("title", json.recordsFiltered === 0 ? "No change log entries displayed. Adjust or reset filters to see more." : "change log entries");
                     return JSON.stringify(json);
                 },
                 "data": function (d) {
@@ -265,7 +268,6 @@ export default class ChangesView {
                 "<'row'<'col-sm-12 text-center'p>>" +
                 "<'row'<'col-sm-12 text-center'i>>" +
                 ""
-
         }
 
     }
