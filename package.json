@@ -3,8 +3,10 @@
   "version": "3.6.0",
   "description": "map",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --mode=production",
-    "start": "cross-env NODE_ENV=development webpack serve",
+  	"build": "echo use 'npm run prodbuild' or 'npm run devbuild'",
+    "prodbuild": "cross-env NODE_ENV=production webpack --mode=production",
+    "devbuild": "cross-env NODE_ENV=development webpack --mode=development",
+    "start": "cross-env NODE_ENV=development webpack serve --mode=development",
     "clean": "rm -rf build"
   },
   "repository": {

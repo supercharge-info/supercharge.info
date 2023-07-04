@@ -40,7 +40,6 @@ module.exports = (env) => {
         entry: {
             primary: './src/main/primary_entry/script/primary_entry.js'
         },
-        mode: 'production',
         module: {
             rules: [
                 //
@@ -175,6 +174,7 @@ module.exports = (env) => {
             new MiniCssExtractPlugin()
         ]
     }
+    console.log("Using config:");
     console.log(config.devServer);
     return config; 
 };
