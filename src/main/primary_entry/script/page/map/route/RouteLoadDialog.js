@@ -64,8 +64,9 @@ export default class RouteLoadDialog {
     handleDeleteRoute(route) {
         const routeDialog = this;
         $.ajax({
-            type: 'GET',
-            url: ServiceURL.USER_ROUTE + "/delete/" + route.id,
+            type: 'POST',
+            url: ServiceURL.USER_ROUTE + "/delete",
+            data: { id: route.id },
             success: function () {
                 $("div#user_route_option_" + route.id).remove();
 
@@ -73,7 +74,7 @@ export default class RouteLoadDialog {
                     routeDialog.showNoRouteMessage();
                 }
             },
-            error: function () {
+            error: function (e) {
                 routeDialog.errorMessage.show().find("p").html("Error occurred while deleting the route " + route.name);
             }
         });
