@@ -27,7 +27,7 @@ export default class MapView {
         this.zoom = initialZoom;
         this.markerType = "Z";
         this.markerSize = 10;
-        this.markerIconRule = null;
+        this.wayBackActive = false;
         this.addCustomMarkers();
 
         $(document).on('click', '.marker-toggle-trigger', $.proxy(this.handleMarkerRemove, this));
@@ -46,6 +46,7 @@ export default class MapView {
         //
         new MapContextMenu(this.mapApi);
         EventBus.addListener("way-back-trigger-event", this.setupForWayBack, this);
+        EventBus.addListener("way-back-cleanup-event", this.cleanupWayBack, this);
         EventBus.addListener("places-changed-event", this.handlePlacesChange, this);
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
         EventBus.addListener("viewport-changed-event", this.handleViewportChange, this);
@@ -108,7 +109,10 @@ export default class MapView {
             zoomSnap: 1,
             zoomDelta: 1,
             layers: mapLayers.getInitialLayers(),
-            preferCanvas: false
+            preferCanvas: false,
+            maxBounds: TotalCountPanel.WORLD,
+            maxBoundsViscosity: 0,
+            worldCopyJump: true
         });
 
         const mapApi = this.mapApi;
@@ -125,12 +129,12 @@ export default class MapView {
         this.mapApi.on('zoomstart', function (e) {
             if (typeof window.zlt !== "undefined") clearTimeout(window.zlt);
             markerPane.style.opacity = 0.2;
-            var zoomLevel = mapApi.getZoom();
+            var zoomLevel = Math.floor(mapApi.getZoom() * 100) / 100;
             zoomLabel.html("Z<br/>" + zoomLevel);
             zoomLabel.removeClass("fade");
         });
         this.mapApi.on('zoomend', function (e) {
-            var zoomLevel = mapApi.getZoom();
+            var zoomLevel = Math.floor(mapApi.getZoom() * 100) / 100;
             zoomLabel.html("Z<br/>" + zoomLevel);
             if (typeof window.zlt !== "undefined") clearTimeout(window.zlt);
             window.zlt = setTimeout(function () { zoomLabel.addClass("fade") }, 2000);
@@ -194,6 +198,8 @@ export default class MapView {
         } else if (this.mapApi.layerOptions?.maxZoom) {
             this.mapApi.setMaxZoom(this.mapApi.layerOptions.maxZoom);
         }
+
+        if (this.wayBackActive) return;
 
         var oldMarkerType = this.markerType;
         this.markerType = renderModel.markerType;
@@ -353,12 +359,30 @@ export default class MapView {
     };
 
     setupForWayBack() {
+        this.prevUserConfig = JSON.stringify(userConfig);
+        this.wayBackActive = true;
+        this.zoom = 3;
+        renderModel.setMarkerType("Z");
+        this.updateMarkerSize(this.getMarkerSizeByZoom(3));
+        this.removeAllMarkers(false);
+        this.handleViewportChange();
         /* Initialize all markers */
         const markerFactory = this.markerFactory;
         new SiteIterator()
-            .withPredicate(SitePredicates.HAS_NO_MARKER)
-            .iterate((supercharger) => markerFactory.createMarker(supercharger, this.getMarkerSizeByZoom(this.Zoom)));
+            .iterate((supercharger) => markerFactory.createMarker(supercharger, this.markerSize, true));
         EventBus.dispatch("way-back-start-event");
+    };
+
+    cleanupWayBack() {
+        this.wayBackActive = false;
+        this.removeAllMarkers(false);
+        userConfig.initFilters();
+        userConfig.initShowAlways();
+        userConfig.fromJSON(JSON.parse(this.prevUserConfig));
+        this.zoom = userConfig.zoom;
+        renderModel.setMarkerType(this.markerType);
+        this.updateMarkerSize(userConfig.markerSize);
+        this.handleViewportChange();
     };
 
     handleRouteResult() {
