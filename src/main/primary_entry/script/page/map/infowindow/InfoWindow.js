@@ -173,12 +173,12 @@ export default class InfoWindow {
             //
             // Construction/Permit/Closed/Limited Hours
             //
-            if (site.isConstruction() || site.isPermit() || site.isClosedTemp() || site.isClosedPerm()) {
-                popupContent += ` • <span class='${site.status.className}'><img src='${site.status.getIcon()}' title='${site.status.displayName}'/> ${site.statusDays} days</span>`;
-            } else if (Objects.isNotNullOrUndef(site.hours)) {
-                popupContent += " • <span class='construction'>LIMITED HOURS</span>";
+            popupContent += ` • <span class='${site.status.className}'><img src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `
+            popupContent += `${site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays} days`;
+            if (Objects.isNotNullOrUndef(site.hours)) {
+                popupContent += `<div class="limited">${site.formatHours()}</div>`; 
             }
-            popupContent += "</div>";
+            popupContent += "</span></div>";
         }
 
         popupContent += "<hr/>";

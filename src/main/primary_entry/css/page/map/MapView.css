@@ -89,7 +89,7 @@ Markers
     color: white;
     font-weight: bold;
 }
-.tooltip .limited {
+.limited {
     background-color: rgba(128, 0, 0, 0.9);
     color: yellow; 
     padding: 1px 5px;
@@ -137,36 +137,32 @@ Info Window
 
 .info-window-content .open {
     color: red;
-    font-size: smaller;
     font-weight: bold
 }
 
 .info-window-content .construction {
     color: orange;
-    font-size: smaller;
     font-weight: bold
 }
 
 .info-window-content .permit {
     color: #0000ff;
-    font-size: smaller;
     font-weight: bold
 }
 
 .info-window-content .closed-temp {
     color: gray;
-    font-size: smaller;
     font-weight: bold
 }
 
 .info-window-content .closed-perm {
     color: black;
-    font-size: smaller;
     font-weight: bold
 }
 
 .info-window-content img {
-    width: 10px;
+    width: 16px;
+    margin-top: -4px;
 }
 
 .info-window-content .links-container {

@@ -65,7 +65,17 @@ export default class ChangesView {
 
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        return `<span title="${site.address.street}">${changeRow.siteName}</span>`
+        const state = site.address.state ? ', ' + site.address.state : '';
+
+        return `<div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${changeRow.siteName}
+                    <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>${site.address.street}</li>
+                        <li>${site.address.city}${state}</li>
+                        <li>${site.address.country}</li>
+                    </ul>
+                </div>`;
     }
 
     static buildStatus(changeRow) {
@@ -77,58 +87,62 @@ export default class ChangesView {
     
     static buildDetails(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        const sitestalls = `${site.numStalls} stalls`
-        const sitekw = site.powerKilowatt > 0 ?
-            ` | ${site.powerKilowatt} kW` :
-            '';
 
         // mock stall details for now
         /*
         if (Math.random() > 0.8) {
-            changeRow.stalls = [
+            changeRow.summary = "Something changed!";
+            changeRow.stallGroups = [
                 {
                     "count": site.numStalls,
                     "power": site.powerKilowatt,
-                    "type": "n/a",
-                    "status": changeRow.siteStatus
+                    "type": "Tesla V3",
+                    "connector": "NACS",
+                    "status": changeRow.siteStatus,
                 },
                 {
                     "count": 4,
                     "power": 120,
                     "type": "V2 - Tesla",
                     "status": "CLOSED_TEMP",
-                    "connectors": ["NACS"]
+                    "connector": "NACS"
                 },
                 {
                     "count": 8,
                     "power": 250,
                     "type": "V3 - Tesla",
                     "status": "CONSTRUCTION",
-                    "connectors": ["NACS", "CCS"]
+                    "connector": "Magic"
                 }
             ];
         } else if (Math.random() > 0.5) {
-            changeRow.stalls = [
+            changeRow.summary = "Something changed?";
+            changeRow.stallGroups = [
                 {
                     "count": site.numStalls,
                     "power": site.powerKilowatt,
                     "type": "Vn - Tesla",
-                    "connectors": ["NACS"]
+                    "status": changeRow.siteStatus,
+                    "connector": "NACS"
                 }
             ];
         }
         */
+        const sitestalls = `${site.numStalls} stalls`
+        const sitekw = site.powerKilowatt > 0 ?
+            ` | ${site.powerKilowatt} kW` :
+            '';
+        const sitenote = changeRow.summary ? ' | ' + changeRow.summary : '';
+
         var content = "";
-        if (!changeRow.stalls) {
-            content = sitestalls + sitekw;
-        } else if (changeRow.stalls.length === 1) {
-            content = `${sitestalls}${sitekw} | ${changeRow.stalls[0].type} | ${changeRow.stalls[0].connectors?.join(", ")}`;
+        if (!changeRow.stallGroups) {
+            content = sitestalls + sitekw + sitenote;
         } else {
-            var entries = "";
-            changeRow.stalls.forEach(s => {
+            var entries = `<li class="${changeRow.siteStatus} connectors"><b>${changeRow.summary}</b></li>`;
+            changeRow.stallGroups.forEach(sg => {
                 entries += `
-                <li class="${s.status}">${s.count} @ ${s.power} kW → ${Status.fromString(s.status).displayName}
-                    <li class="${s.status} connectors">${s.type} | ${s.connectors?.join(", ")}</li>
+                <li class="${sg.status}">${sg.count} @ ${sg.power} kW → ${Status.fromString(sg.status).displayName}
+                    <li class="${sg.status} connectors">${sg.type} | ${sg.connector}</li>
                 </li>`;
             });
 

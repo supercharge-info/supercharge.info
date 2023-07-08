@@ -23,7 +23,7 @@ Create a pull request to upstream master for the above branch to include the new
 
 Build the bundle for a browser:
 
-     $ npm run build
+    $ npm run prodbuild
 
 Deploy: 
 

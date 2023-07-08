@@ -33,7 +33,7 @@ export default function buildDetailsDiv(supercharger, displayUnit) {
     // Hours
     //
     if (!supercharger.isUserAdded()) {
-        const hoursClass = Objects.isNullOrUndef(supercharger.hours) ? '' : 'construction';
+        const hoursClass = Objects.isNullOrUndef(supercharger.hours) ? '' : 'open';
         div += "<tr><th>Hours</th><td class='" + hoursClass + "'>" + supercharger.formatHours() + "</td></tr>";
     }
 

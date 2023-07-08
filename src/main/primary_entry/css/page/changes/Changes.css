@@ -38,10 +38,14 @@
 }
 
 #changes-table .dropdown-menu {
-    min-width: 150%;
+    min-width: 50%;
+    max-width: 150%;
     padding: 3px;
     margin: 0 auto;
     background-color: #ffe;
+}
+#changes-table li {
+    white-space: nowrap;
 }
 
 #changes-table a:hover {

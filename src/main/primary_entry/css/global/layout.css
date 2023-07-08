@@ -27,6 +27,11 @@ a.disabled {
     cursor: default;
 }
 
+.light {
+    font-weight: normal;
+    color: #888;
+}
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Data tables 
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -77,6 +82,7 @@ Layout
 
 .tooltip-inner {
     max-width: 320px;
+    white-space: pre-line;
 }
 
 
