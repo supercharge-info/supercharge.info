@@ -7,28 +7,32 @@
 }
 
 #way-back-button-panel {
-    width: 30%;
-    float: left;
+    width: auto;
     padding-left: 10px;
     text-align: left;
+    margin: auto 2px;
+}
+#way-back-button-panel * {
+    margin: auto 2px;
 }
 
 #way-back-date {
-    width: 30%;
+    width: auto;
     color: #777777;
-    font-size: 3em;
+    font-size: 1.5em;
+    font-weight: bold;
     display: inline-block;
     margin: 0 auto;
 }
 
 #way-back-close-trigger {
-    width: 30%;
+    width: auto;
     float: right;
     padding: 5px;
     text-align: right;
 }
 
-#way-back-delay {
+#way-back-status {
     font-size: .8em;
     color: #777777;
 }
@@ -41,4 +45,10 @@
 .way-back-info .date {
     font-size: small;
     text-align: right;
+}
+
+@media (max-width: 768px) {
+    #way-back-close-trigger {
+        width: 5%;
+    }
 }

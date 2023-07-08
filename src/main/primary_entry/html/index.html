@@ -130,9 +130,23 @@ Navigation Bar
     </div>
 
     <div id="way-back-container" class="well well-lg">
-        <div id="way-back-button-panel">
+        <div id="way-back-button-panel" class="control-row">
+            <img src="/images/history-icon.svg" class="control-row-icon"/>
+            <label class="control">Way Back</label>
             <button id='way-back-mute' class="btn btn-default btn-sm" type="button">
                 <span class="glyphicon glyphicon-subtitles"></span><span id='mute-button-label'> Sound On</span>
+            </button>
+            <button id='way-back-rew' class="btn btn-default btn-sm" type="button">
+                <span class="glyphicon glyphicon-fast-backward" title="Skip back 100"></span>
+            </button>
+            <button id='way-back-pause' class="btn btn-default btn-sm" type="button">
+                <span class="glyphicon glyphicon-pause" title="Pause"></span>
+            </button>
+            <button id='way-back-play' class="btn btn-default btn-sm" type="button">
+                <span class="glyphicon glyphicon-play" title="Continue"></span>
+            </button>
+            <button id='way-back-ff' class="btn btn-default btn-sm" type="button">
+                <span class="glyphicon glyphicon-fast-forward" title="Skip ahead 100"></span>
             </button>
             <button id='way-back-slow' class="btn btn-default btn-sm" type="button">
                 <span class="glyphicon glyphicon-minus"></span> Slower
@@ -141,7 +155,7 @@ Navigation Bar
                 <span class="glyphicon glyphicon-plus"></span> Faster
             </button>
             &nbsp;
-            <span id='way-back-delay'></span>
+            <span id='way-back-status'></span>
         </div>
         <a id="way-back-close-trigger" href="" class="glyphicon glyphicon-remove"></a>
 

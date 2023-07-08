@@ -77,6 +77,11 @@ button.reset span.glyphicon-filter {
     min-width: 180px;
 }
 
+ul.dropdown-menu.inner {
+    max-height: 520px;
+    overflow-y: auto;
+}
+
 .status-select .filter-option-inner-inner span {
     font-size: 0px;
 }
@@ -91,6 +96,7 @@ button.reset span.glyphicon-filter {
 }
 
 .text-muted {
+    font-weight: normal;
     font-size: 80%;
     color: lightsteelblue;
 }
@@ -169,5 +175,11 @@ br.wide {
     }
     #filter-dialog td {
         padding: 4px 6px;
+    }
+}
+
+@media (max-height: 800px) {
+    ul.dropdown-menu.inner {
+        max-height: 260px;
     }
 }
