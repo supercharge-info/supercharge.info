@@ -65,17 +65,10 @@ export default class ChangesView {
 
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        const state = site.address.state ? ', ' + site.address.state : '';
-
-        return `<div class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${changeRow.siteName}
-                    <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>${site.address.street}</li>
-                        <li>${site.address.city}${state}</li>
-                        <li>${site.address.country}</li>
-                    </ul>
-                </div>`;
+        var hoverText = site.address.street + ' | ' + site.address.city;
+        if (site.address.state)   hoverText += ' | ' + site.address.state;
+        if (site.address.country) hoverText += ' | ' + site.address.country;
+        return `<span title="${hoverText}">${changeRow.siteName}</span>`
     }
 
     static buildStatus(changeRow) {

@@ -47,11 +47,6 @@
 #changes-table li {
     white-space: nowrap;
 }
-
-#changes-table a:hover {
-    color: violet;
-}
-
 #changes-table li.connectors {
     padding-left: 20px;
     border-bottom: 1px dotted #ccc;

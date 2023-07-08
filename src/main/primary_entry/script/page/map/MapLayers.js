@@ -13,7 +13,7 @@ import MapBox from './MapBox';
 const streetsLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
-    minZoom: 0
+    minZoom: 1
 });
 
 const satelliteLayer = L.tileLayer(MapBox.url, {
@@ -26,7 +26,7 @@ const satelliteLayer = L.tileLayer(MapBox.url, {
 
 const usgsLayer = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
 	maxZoom: 16,
-    minZoom: 0,
+    minZoom: 1,
 	attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
 });
 usgsLayer.on('tileerror', function (e) {
@@ -42,7 +42,7 @@ const openTopoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.
 
 const mundialisLayer = L.tileLayer.wms('http://ows.mundialis.de/services/service?', {
 	maxZoom: 14,
-    minZoom: 0,
+    minZoom: 1,
     layers: 'TOPO-OSM-WMS',
 	attribution: 'Contains modified SRTM data (2014)/NASA, processed by <a href="https://www.mundialis.de">mundialis</a> and vector data by <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (2020)'
 });
