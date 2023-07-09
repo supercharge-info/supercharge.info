@@ -4,7 +4,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
+// TODO: add ESLintPlugin after initial cleanup
+//const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = (env) => {
     const config = {
@@ -176,7 +177,7 @@ module.exports = (env) => {
                     {from: 'src/main/common_entry/sitemap.xml'}
                 ]
             }),
-            new ESLintPlugin(),
+            //new ESLintPlugin(),
             new MiniCssExtractPlugin()
         ]
     }
