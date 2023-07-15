@@ -17,6 +17,7 @@ class TotalCountPanel {
         this.updateView(1, this.countMapCountry[Address.COUNTRY_WORLD]);
         EventBus.addListener("map-viewport-change-event", this.mapViewPortChanged, this);
 
+        TotalCountPanel.WORLD = L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180));
         TotalCountPanel.USA = L.latLngBounds(L.latLng(24.44715, -125.15625), L.latLng(49.0, -65.961914));
         TotalCountPanel.USAPACIFIC = L.latLngBounds(L.latLng(18.7, -179.999999), L.latLng(71.6, -140.976562));
         TotalCountPanel.CANADA = L.latLngBounds(L.latLng(43.2, -140.976562), L.latLng(83.2, -52.5));

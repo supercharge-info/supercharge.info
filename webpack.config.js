@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// TODO: add ESLintPlugin after initial cleanup
+//const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = (env) => {
     const config = {
@@ -20,9 +22,10 @@ module.exports = (env) => {
             proxy: {
                 "/service": {
                     // Remove "test." prefix from this hostname to test locally with prod API/data.
-                    target: "https://test.supercharge.info:443",
+                    target: env.api ?? 'https://test.supercharge.info',
                     secure: true,
-                    changeOrigin: true
+                    changeOrigin: true,
+                    logLevel: 'debug'
                 }
             },
             historyApiFallback: {
@@ -39,6 +42,9 @@ module.exports = (env) => {
         },
         entry: {
             primary: './src/main/primary_entry/script/primary_entry.js'
+        },
+        infrastructureLogging: {
+            debug: env.api && [name => name.includes('webpack-dev-server')]
         },
         module: {
             rules: [
@@ -171,10 +177,13 @@ module.exports = (env) => {
                     {from: 'src/main/common_entry/sitemap.xml'}
                 ]
             }),
+            //new ESLintPlugin(),
             new MiniCssExtractPlugin()
         ]
     }
-    console.log("Using config:");
-    console.log(config.devServer);
+    if (env.WEBPACK_SERVE) {
+        console.log("Using config:");
+        console.log(config.devServer);
+    }
     return config; 
 };

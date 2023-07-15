@@ -1,0 +1,18 @@
+{
+    "parser": "@babel/eslint-parser",
+    "env": {
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "google": "readonly",
+        "jQuery": "readonly",
+        "$": "readonly"
+    },
+    "rules": {
+        "comma-dangle": "error",
+        "prefer-const": "error",
+        "semi": "error",
+        "semi-style": "error"
+    }
+}
