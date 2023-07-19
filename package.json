@@ -29,29 +29,29 @@
   },
   "devDependencies": {
     "@babel/core": "7.14.6",
-    "@babel/eslint-parser": "^7.22.7",
+    "@babel/eslint-parser": "^7.22.9",
     "@babel/preset-env": "7.14.5",
     "babel-loader": "8.2.2",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
-    "eslint": "^8.44.0",
+    "eslint": "^8.45.0",
     "eslint-webpack-plugin": "^4.0.1",
     "html-minifier": "4.0.0",
     "html-webpack-plugin": "5.3.1",
     "mini-css-extract-plugin": "^2.7.6",
-    "webpack": "^5.76.0",
+    "webpack": "^5.88.2",
     "webpack-cli": "4.10.0",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "@mapbox/mapbox-sdk": "^0.15.0",
-    "@mapbox/polyline": "^1.1.0",
+    "@mapbox/mapbox-sdk": "^0.15.2",
+    "@mapbox/polyline": "^1.2.0",
     "bootstrap": "3.4.1",
     "bootstrap-select": "1.13.18",
-    "core-js": "^3.23.3",
-    "datatables.net": "^1.13.4",
-    "datatables.net-bs": "^1.13.4",
+    "core-js": "^3.31.1",
+    "datatables.net": "^1.13.5",
+    "datatables.net-bs": "^1.13.5",
     "highcharts": "^10.3.3",
     "jquery": "3.5.1",
     "jquery-validation": "^1.19.5",
@@ -59,7 +59,7 @@
     "leaflet": "1.9.3",
     "leaflet-control-geocoder": "2.4.0",
     "leaflet-routing-machine": "3.2.12",
-    "sortablejs": "^1.10.1",
+    "sortablejs": "^1.15.0",
     "spectrum-colorpicker": "1.8.0"
   }
 }
