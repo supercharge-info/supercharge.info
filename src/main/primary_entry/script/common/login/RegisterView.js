@@ -54,5 +54,5 @@ export default class RegisterView {
             jqXHR.responseJSON.messages.forEach((m) =>
                 this.errorMessge.append(`${m} <br/>`));
         });
-    };
+    }
 }

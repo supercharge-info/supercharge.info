@@ -55,7 +55,7 @@ export default class RouteSaveDialog {
 
         // CASE 1: update saved route
         if (formRouteName === routeInputModel.routeName) {
-            this.saveRoute(routeInputModel.routeId, routeInputModel.routeName)
+            this.saveRoute(routeInputModel.routeId, routeInputModel.routeName);
         }
         // CASE 2: save for the first time, OR save copy of route using new name.
         else {
@@ -63,21 +63,21 @@ export default class RouteSaveDialog {
         }
 
 
-    };
+    }
 
     saveRoute(routeId, routeName) {
         const route = {id: routeId, name: routeName, waypoints: []};
 
         routeInputModel.getWaypoints().forEach((waypoint) => {
             const routeWaypoint = {name: waypoint.displayName, lat: waypoint.latLng.lat, lng: waypoint.latLng.lng};
-            route.waypoints.push(routeWaypoint)
+            route.waypoints.push(routeWaypoint);
         });
 
         const saveRouteDialog = this.dialog;
 
         $.ajax({
             type: 'POST', url: ServiceURL.USER_ROUTE, data: JSON.stringify(route),
-            contentType: "application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8"
         }).done((response) => {
                 if (response.result === 'SUCCESS') {
                     saveRouteDialog.find("#saving-route-message").hide();
@@ -97,6 +97,6 @@ export default class RouteSaveDialog {
             setTimeout(() => {
                 saveRouteDialog.modal('hide');
             }, 2000);
-        })
-    };
+        });
+    }
 }

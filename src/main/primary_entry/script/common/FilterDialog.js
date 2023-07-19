@@ -1,7 +1,6 @@
 import $ from "jquery";
 import SiteFilterControl from "./SiteFilterControl";
 import userConfig from "./UserConfig";
-import ServiceURL from "./ServiceURL";
 
 export default class FilterDialog {
 
@@ -28,7 +27,7 @@ export default class FilterDialog {
             vi.on("change", () => {
                 userConfig.showAlways[viField] = vi.prop("checked");
             });
-            vi.prop("checked", userConfig.showAlways[viField])
+            vi.prop("checked", userConfig.showAlways[viField]);
         });
     }
 

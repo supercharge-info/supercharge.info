@@ -18,7 +18,7 @@ const RouteEvents = {
     /**
      * Fired when a new waypoint should be added to the current route.  Data is the waypoint to add.
      */
-    add_waypoint: "route-add-waypoint-event",
+    add_waypoint: "route-add-waypoint-event"
 
 
 };

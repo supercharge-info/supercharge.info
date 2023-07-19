@@ -57,79 +57,79 @@ class UserConfig {
     setUnit(newUnit) {
         this.unit = newUnit.getCode();
         this.scheduleSave();
-    };
+    }
 
     setLatLngZoom(lat, lng, zoom) {
         this.latitude = lat;
         this.longitude = lng;
         this.zoom = zoom;
         this.scheduleSave();
-    };
+    }
 
     setChangeType(newChangeType) {
         this.filter.changeType = newChangeType;
         this.scheduleSave();
-    };
+    }
 
     setRegionId(newRegionId) {
         this.filter.regionId = newRegionId;
         this.scheduleSave();
-    };
+    }
 
     setCountryId(newCountryId) {
         this.filter.countryId = newCountryId;
         this.scheduleSave();
-    };
+    }
 
     setState(newState) {
         this.filter.state = newState;
         this.scheduleSave();
-    };
+    }
 
     setStatus(newStatus) {
         this.filter.status = newStatus;
         this.scheduleSave();
-    };
+    }
 
     setStalls(newStalls) {
         this.filter.stalls = newStalls;
         this.scheduleSave();
-    };
+    }
 
     setPower(newPower) {
         this.filter.power = newPower;
         this.scheduleSave();
-    };
+    }
 
     setOtherEVs(newOtherEVs) {
         this.filter.otherEVs = newOtherEVs;
         this.scheduleSave();
-    };
+    }
 
     setMarkerType(newMarkerType) {
         this.markerType = newMarkerType;
         this.scheduleSave();
-    };
+    }
     
     setMarkerSize(newMarkerSize) {
         this.markerSize = newMarkerSize;
         this.scheduleSave();
-    };
+    }
 
     setClusterSize(newClusterSize) {
         this.clusterSize = newClusterSize;
         this.scheduleSave();
-    };
+    }
 
     setShowAlways(fieldName, newValue) {
         this.showAlways[fieldName] = newValue;
         this.scheduleSave();
-    };
+    }
 
     addCustomMarker(marker) {
         this.customMarkers.push(marker);
         this.scheduleSave();
-    };
+    }
 
     removeCustomMarker(name, lat, lng) {
         for (let i = 0; i < this.customMarkers.length; i++) {
@@ -139,7 +139,7 @@ class UserConfig {
             }
         }
         this.scheduleSave();
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // getters
@@ -147,15 +147,15 @@ class UserConfig {
 
     isLocationSet() {
         return Objects.isNotNullOrUndef(this.latitude) && Objects.isNotNullOrUndef(this.longitude);
-    };
+    }
 
     isZoomSet() {
         return Objects.isNotNullOrUndef(this.zoom);
-    };
+    }
 
     getUnit() {
         return Units.fromString(this.unit);
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // load/save
@@ -185,7 +185,7 @@ class UserConfig {
             .fail(() =>
                 console.log("failed to load userConfig from API, falling back to localStorage")
             );
-    };
+    }
 
     fromJSON(json) {
         this.unit = json.unit || this.unit;
@@ -218,7 +218,7 @@ class UserConfig {
         this.markerType = json.markerType || this.markerType;
         this.markerSize = json.markerSize || this.markerSize;
         this.clusterSize = json.clusterSize || this.clusterSize;
-    };
+    }
 
     save() {
         if (toCompString(this) === lastSaved) {
@@ -235,8 +235,8 @@ class UserConfig {
             type: 'POST'
         }).done(() => {
             console.log("UserConfig.save(): " + lastSaved);
-        })
-    };
+        });
+    }
 
     /**
      * Don't save in response to every user action. Instead save at most every 2 seconds.
@@ -246,7 +246,7 @@ class UserConfig {
         $.doTimeout("saveUserConfigTimerId", 2000, function () {
             userConfig.save();
         });
-    };
+    }
 
 }
 

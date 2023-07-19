@@ -17,23 +17,23 @@ class RouteInputModel {
 
     static fireChangeEvent() {
         EventBus.dispatch(RouteEvents.input_model_changed);
-    };
+    }
 
     getWaypoints() {
         return this.waypointList;
-    };
+    }
 
     updateRoute(routeId, routeName, waypointList) {
         this.routeId = routeId;
         this.routeName = routeName;
         this.waypointList = waypointList.slice();
         RouteInputModel.fireChangeEvent();
-    };
+    }
 
     addWaypoint(waypoint) {
         this.waypointList.push(waypoint);
         RouteInputModel.fireChangeEvent();
-    };
+    }
 
     clearWaypoints() {
         this.waypointList = [];
@@ -51,7 +51,7 @@ class RouteInputModel {
         }
         RouteInputModel.fireChangeEvent();
         Analytics.sendEvent("route", "remove-waypoint-from-route");
-    };
+    }
 
     moveWaypoint(beginIdx, endIdx) {
         const waypoint = this.waypointList[beginIdx];
@@ -60,11 +60,11 @@ class RouteInputModel {
         RouteInputModel.fireChangeEvent();
 
         Analytics.sendEvent("route", "move-waypoint");
-    };
+    }
 
     size() {
         return this.waypointList.length;
-    };
+    }
 
     isEmpty() {
         return this.size() === 0;
@@ -77,11 +77,11 @@ class RouteInputModel {
 
     getFirstLatLng() {
         return this.waypointList[0];
-    };
+    }
 
     getLastLatLng() {
         return this.waypointList[this.size() - 1];
-    };
+    }
 
     getBetweenLatLngList() {
         const wayPointLatLngList = [];
@@ -93,7 +93,7 @@ class RouteInputModel {
             }
         });
         return wayPointLatLngList;
-    };
+    }
 
 }
 

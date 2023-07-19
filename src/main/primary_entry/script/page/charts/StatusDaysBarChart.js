@@ -32,7 +32,7 @@ export default class StatusDaysBarChart {
             StatusDaysBarChart._options(siteNameList, constructionDaysList, permitDaysList));
 
 
-    };
+    }
 
     static _options(siteNameList, constructionDaysList, permitDaysList) {
         return {
@@ -90,7 +90,7 @@ export default class StatusDaysBarChart {
                     color: ChartColor.STATUS_CONSTRUCTION
                 }
             ]
-        }
+        };
     }
 
 

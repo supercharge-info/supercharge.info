@@ -10,10 +10,10 @@ import MarkerFactory from "./MarkerFactory";
 import $ from "jquery";
 import L from 'leaflet';
 import 'leaflet-control-geocoder';
-import mapLayers from './MapLayers'
+import mapLayers from './MapLayers';
 import RouteEvents from "./route/RouteEvents";
-import routeResultModel from './route/RouteResultModel'
-import polyline from '@mapbox/polyline'
+import routeResultModel from './route/RouteResultModel';
+import polyline from '@mapbox/polyline';
 import renderModel from "./RenderModel";
 import MapEvents from "./MapEvents";
 import TotalCountPanel from "../../nav/TotalCountPanel";
@@ -90,7 +90,7 @@ export default class MapView {
      */
     getCenter() {
         return this.mapApi.getCenter().wrap();
-    };
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Initialization
@@ -137,7 +137,7 @@ export default class MapView {
             var zoomLevel = Math.floor(mapApi.getZoom() * 100) / 100;
             zoomLabel.html("Z<br/>" + zoomLevel);
             if (typeof window.zlt !== "undefined") clearTimeout(window.zlt);
-            window.zlt = setTimeout(function () { zoomLabel.addClass("fade") }, 2000);
+            window.zlt = setTimeout(function () { zoomLabel.addClass("fade"); }, 2000);
             markerPane.style.opacity = 1;
         });
 
@@ -167,7 +167,7 @@ export default class MapView {
         // marker factory
         //
         this.markerFactory = new MarkerFactory(this.mapApi);
-    };
+    }
 
     /**
      * Add custom markers from user config to the map.
@@ -178,7 +178,7 @@ export default class MapView {
             const cm = customMarkers[i];
             Sites.addCustomSite(cm.name, L.latLng(cm.lat, cm.lng));
         }
-    };
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Drawing
@@ -218,7 +218,7 @@ export default class MapView {
             var newMarkerSize = this.getMarkerSizeByZoom(this.zoom);
             this.createIndividualMarkers(expandedBounds, newMarkerSize);
         } else {
-        	// markerType represents a fixed marker size (4-10)
+            // markerType represents a fixed marker size (4-10)
             this.createIndividualMarkers(expandedBounds, renderModel.getCurrentMarkerSize());
         }
 
@@ -236,7 +236,7 @@ export default class MapView {
         resultSpan.html(`<span class="shrink">Showing </span>${resultCount} site${resultCount === 1 ? "" : "s"}`);
         resultSpan.attr("class", resultCount === 0 ? "zero-sites" : "site-results");
         resultSpan.attr("title", resultCount === 0 ? "No sites displayed. Adjust or reset filters, zoom out, or move the map to see more." : "");
-    };
+    }
 
     removeAllMarkers(saveInfoWindows) {
         var t = performance.now(), removed = 0, infoWindows = [];
@@ -261,7 +261,7 @@ export default class MapView {
         });
         console.log(`zoom=${this.zoom} removed=${removed} t=${(performance.now() - t)}`);
         return infoWindows;
-    };
+    }
 
     restoreInfoWindows(infoWindows) {
         for (var i in infoWindows) {
@@ -275,7 +275,7 @@ export default class MapView {
                 iw.showWindow();
             }
         }
-    };
+    }
 
     getMarkerSizeByZoom = (zoom) => zoom < 4 ? 4 : zoom > 16 ? 10 : Math.ceil(zoom / 2) + 2;
 
@@ -297,7 +297,7 @@ export default class MapView {
         mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${this.zoom} created=${created} markers=${newMarkerSize} t=${(performance.now() - t)}`);
-    };
+    }
 
     createClusteredMarkers(bounds, oldZoom) {
         var t = performance.now(), newZoom = this.zoom, created = 0, infoWindows = [];
@@ -344,7 +344,7 @@ export default class MapView {
         mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${newZoom} created=${created} clusters=${renderModel.getCurrentClusterSize()} t=${(performance.now() - t)}`);
-    };
+    }
 
     updateMarkerSize(markerSize) {
         this.markerSize = markerSize;
@@ -356,7 +356,7 @@ export default class MapView {
         var samples = $(".sample-markers img");
         samples.width(markerSize * 2);
         samples.height(markerSize * 2);
-    };
+    }
 
     setupForWayBack() {
         this.prevUserConfig = JSON.stringify(userConfig);
@@ -371,7 +371,7 @@ export default class MapView {
         new SiteIterator()
             .iterate((supercharger) => markerFactory.createMarker(supercharger, this.markerSize, true));
         EventBus.dispatch("way-back-start-event");
-    };
+    }
 
     cleanupWayBack() {
         this.wayBackActive = false;
@@ -383,7 +383,7 @@ export default class MapView {
         renderModel.setMarkerType(this.markerType);
         this.updateMarkerSize(userConfig.markerSize);
         this.handleViewportChange();
-    };
+    }
 
     handleRouteResult() {
         // We can only display one route at a time, so in any case, remove the existing line on a route model update.
@@ -402,7 +402,7 @@ export default class MapView {
             }).addTo(this.mapApi);
             this.mapApi.fitBounds(this.routeLine.getBounds());
         }
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // InfoWindow Event handlers
@@ -411,7 +411,7 @@ export default class MapView {
     handleZoomToSite(event, data) {
         const newZoom = (this.zoom > 14 && this.zoom < 19 ? 19 : 15);
         EventBus.dispatch(MapEvents.pan_zoom, { latLng: data.supercharger.location, zoom: newZoom });
-    };
+    }
 
     handleMarkerRemove(event) {
         event.preventDefault();
@@ -419,7 +419,7 @@ export default class MapView {
         const supercharger = Sites.getById(id);
         this.removeCustomMarker(supercharger);
         Analytics.sendEvent("route", "remove-custom-marker");
-    };
+    }
 
     handleMarkerRemoveAll(event) {
         event.preventDefault();
@@ -434,7 +434,7 @@ export default class MapView {
             this.removeCustomMarker(toRemoveList[i]);
         }
         Analytics.sendEvent("route", "remove-custom-marker");
-    };
+    }
 
     removeCustomMarker(supercharger) {
         if (supercharger.marker) {
@@ -449,7 +449,7 @@ export default class MapView {
         Sites.removeById(supercharger.id);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
         userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
-    };
+    }
 
     hideLeafletControls() {
         $('.leaflet-control-container').addClass('hidden');

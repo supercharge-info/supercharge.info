@@ -12,10 +12,10 @@ const Analytics = {
 
         if (typeof gtag === 'function') {
             gtag('event', eventAction, {
-            'event_category': eventCategory,
-            'event_label': eventLabel ? eventLabel : null,
-            'value': eventValue ? eventLabel : null
-        });
+                'event_category': eventCategory,
+                'event_label': eventLabel ? eventLabel : null,
+                'value': eventValue ? eventLabel : null
+            });
         } else {
             if (warnCount++ < 1)
                 console.log("WARNING: analytics disabled");
@@ -23,6 +23,7 @@ const Analytics = {
 
     }
 
+    
 };
 
 

@@ -22,7 +22,7 @@ const MapEvents = {
     /**
      * Fired when the user selects "add marker" from context menu.
      */
-    context_menu_add_marker: "context-menu-add-marker-event",
+    context_menu_add_marker: "context-menu-add-marker-event"
     
 };
 

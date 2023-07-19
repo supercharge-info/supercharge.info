@@ -16,7 +16,7 @@ export default class RouteLoadDialog {
         this.dialog.on('shown.bs.modal', $.proxy(this.onDialogOpen, this));
         this.dialog.on('hidden.bs.modal', $.proxy(this.onDialogClose, this));
         this.dialog.find($(".btn-primary")).on('click', $.proxy(this.handleLoadButton, this));
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // open / close
@@ -26,12 +26,12 @@ export default class RouteLoadDialog {
         $.getJSON(ServiceURL.USER_ROUTE)
             .done($.proxy(this.handleLoadRoutesResponse, this))
             .fail($.proxy(this.handleLoadRoutesFailure, this));
-    };
+    }
 
     onDialogClose() {
         this.dialog.find("span").empty();
         $("#load-route-error").hide().find("p").html("");
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     //
@@ -49,7 +49,7 @@ export default class RouteLoadDialog {
         } else {
             resultList.forEach((route) => {
                 this.dialog.find("span").append(`<div class='route-option' id='user_route_option_${route.id}'></div>`);
-                let option = this.dialog.find(".route-option:last");
+                const option = this.dialog.find(".route-option:last");
                 option.append(`<input id='user_route_${route.id}' type='radio' name='route-name-select' value = '${route.id}'/>`);
                 option.append(`<label for='user_route_${route.id}'>&nbsp; ${route.name} -- ${route.waypoints.length} waypoints &nbsp;</label>`);
                 option.append("<span class='glyphicon glyphicon-trash remove-route-trigger' data-toggle='tooltip' data-placement='right' title='delete'></span><br/>");
@@ -93,6 +93,6 @@ export default class RouteLoadDialog {
                 this.dialog.modal('hide');
             }
         });
-    };
-};
+    }
+}
 

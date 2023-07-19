@@ -2,6 +2,7 @@ import Objects from "../../../util/Objects";
 import Analytics from "../../../util/Analytics";
 import rangeModel from "../RangeModel";
 import $ from "jquery";
+import L from "leaflet";
 import ServiceURL from "../../../common/ServiceURL";
 import EventBus from "../../../util/EventBus";
 import buildDetailsDiv from "./DetailsTableRenderer";
@@ -32,7 +33,7 @@ export default class InfoWindow {
                     if (!h || !h.length) {
                         return;
                     } else if (Objects.isNullOrUndef(supercharger.history) || supercharger.history.length < 1) {
-                        ;
+                        // no adjustment needed if history is null or empty
                     } else if (supercharger.history[0].siteStatus != h[0].siteStatus && new Date(supercharger.history[0].date) < new Date(h[0].date)) {
                         h.unshift(supercharger.history[0]);
                     } else if (supercharger.history[0].siteStatus != h[h.length - 1].siteStatus && new Date(supercharger.history[0].date) > new Date(h[h.length - 1].date)) {
@@ -56,14 +57,14 @@ export default class InfoWindow {
         if (this.popup === null) {
             this._initializePopup();
         }
-    };
+    }
 
     closeWindow() {
         if (this.popup !== null) {
             this.popup.remove();
         }
         this._resetStateToClosed();
-    };
+    }
 
     redraw() {
         this.popup.setContent(this._buildHtmlContent());
@@ -79,7 +80,7 @@ export default class InfoWindow {
         if (this.showDetails) {
             Analytics.sendEvent("map", "view-marker-details");
         }
-    };
+    }
 
     toggleHistory(showHistory) {
         if (Objects.isNotNullOrUndef(showHistory)) {
@@ -91,7 +92,7 @@ export default class InfoWindow {
         if (this.showHistory) {
             Analytics.sendEvent("map", "view-marker-history");
         }
-    };
+    }
 
     togglePin() {
         this.pinned = !this.pinned;
@@ -105,7 +106,7 @@ export default class InfoWindow {
         if (this.pinned) {
             Analytics.sendEvent("map", "pin-marker");
         }
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // private
@@ -165,7 +166,7 @@ export default class InfoWindow {
             //
             if (Objects.isNotNullOrUndef(site.powerKilowatt) && site.powerKilowatt > 0) {
                 if (Objects.isNotNullOrUndef(site.numStalls)) {
-                    popupContent += " • "
+                    popupContent += " • ";
                 }
                 popupContent += `${site.powerKilowatt} kW`;
             }
@@ -173,7 +174,7 @@ export default class InfoWindow {
             //
             // Construction/Permit/Closed/Limited Hours
             //
-            popupContent += ` • <span class='${site.status.className}'><img src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `
+            popupContent += ` • <span class='${site.status.className}'><img src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `;
             popupContent += `${site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays} days`;
             if (Objects.isNotNullOrUndef(site.hours)) {
                 popupContent += `<div class="limited">${site.formatHours()}</div>`; 
@@ -195,9 +196,9 @@ export default class InfoWindow {
 
         popupContent += "</div>";
         return popupContent;
-    };
+    }
 
-};
+}
 
 
 /**
@@ -325,6 +326,6 @@ function buildLinkDetailsOrHistory(supercharger, showDetails) {
 }
 
 function buildPinMarker(supercharger, isPinned) {
-    let pinClass = isPinned ? 'unpin' : 'pin';
+    const pinClass = isPinned ? 'unpin' : 'pin';
     return `<a class='pin-marker-trigger pull-right ${pinClass} glyphicon glyphicon-pushpin' title='pin this window' href='#${supercharger.id}'></a>`;
 }

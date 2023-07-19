@@ -86,7 +86,7 @@ export default class TotalOpenWorldLineChart {
             ]
         });
 
-    };
+    }
 
-};
+}
 

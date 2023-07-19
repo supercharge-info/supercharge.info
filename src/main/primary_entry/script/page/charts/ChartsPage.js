@@ -30,13 +30,13 @@ export default class ChartsPage {
             $('#page-charts div').css("overflow", "visible");
             Highcharts.charts.forEach((c) => { c.reflow(); });
         }, 100);
-    };
+    }
 
     onPageHide() {
     }
 
 
-};
+}
 
 
 

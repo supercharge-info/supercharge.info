@@ -23,7 +23,7 @@ export default class Sites {
             }
         }
         return null;
-    };
+    }
 
     static removeById(id) {
         Asserts.isInteger(id, "id must be an integer");
@@ -35,33 +35,33 @@ export default class Sites {
                 break;
             }
         }
-    };
+    }
 
     static addCustomSite(displayName, location) {
         const list = Sites.getAll();
         const charger = Supercharger.buildNewCustom(list.length + 25000, displayName, location);
         list.push(charger);
         return charger;
-    };
+    }
 
     static getAll() {
         return LIST;
-    };
+    }
     static getRegions() {
         return Regions;
-    };
+    }
     static getCountries() {
         return Countries;
-    };
+    }
     static getCountriesByRegion(regionId) {
         return CountriesByRegion.get(regionId);
     }
     static getStatesByRegion(regionId) {
         return StatesByRegion.get(regionId);
-    };
+    }
     static getStatesByCountry(countryId) {
         return StatesByCountry.get(countryId);
-    };
+    }
     static getStates() {
         return States;
     }
@@ -100,7 +100,7 @@ S-by-C: Map(cid, Set(sname))
                 });
             }
         );
-    };
+    }
 
     static StateAbbreviations = {
         "AB": "Alberta",

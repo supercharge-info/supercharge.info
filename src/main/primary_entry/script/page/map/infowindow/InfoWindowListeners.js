@@ -44,7 +44,7 @@ class InfoWindowListeners {
 
         $(document).on('click', '.zoom-to-site-trigger', (event) => {
             const supercharger = toSupercharger(event);
-            EventBus.dispatch("zoom-to-site-event", {supercharger: supercharger})
+            EventBus.dispatch("zoom-to-site-event", {supercharger: supercharger});
         });
 
         $(document).on('click', '.circle-toggle-trigger', (event) => {

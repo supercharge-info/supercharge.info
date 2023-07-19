@@ -3,7 +3,7 @@ import EventBus from "../../../util/EventBus";
 import Analytics from "../../../util/Analytics";
 import Sites from "../../../site/Sites";
 import userConfig from "../../../common/UserConfig";
-import MapEvents from '../MapEvents'
+import MapEvents from '../MapEvents';
 
 export default class AddCustomMarkerAction {
 
@@ -27,7 +27,7 @@ export default class AddCustomMarkerAction {
         this.markerDialog = $("#new-marker-dialog");
         this.markerNameInput = $("#new-marker-name-input");
         this.markerAddButton = this.markerDialog.find(".btn-primary");
-    };
+    }
 
     initListeners() {
         this.markerNameInput.on("keypress", (e) => {
@@ -48,7 +48,7 @@ export default class AddCustomMarkerAction {
             this.markerAddButton.unbind();
         });
 
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     //
@@ -61,8 +61,8 @@ export default class AddCustomMarkerAction {
         this.mapView.markerFactory.createMarker(newCharger, this.mapView.markerSize);
         newCharger.marker.fire('click');
         Analytics.sendEvent("route", "add-custom-marker");
-        userConfig.addCustomMarker({name: markerName, lat: this.currentLatLng.lat, lng: this.currentLatLng.lng})
-    };
+        userConfig.addCustomMarker({name: markerName, lat: this.currentLatLng.lat, lng: this.currentLatLng.lng});
+    }
 
     showDialog(event, currentLatLng) {
         if (!this.initialized) {
@@ -73,5 +73,5 @@ export default class AddCustomMarkerAction {
 
         this.currentLatLng = currentLatLng;
         this.markerDialog.modal('show');
-    };
+    }
 }

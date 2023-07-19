@@ -73,7 +73,7 @@ class TotalCountPanel {
             this.updateView(2, this.countMapRegion[Address.REGION_NORTH_AMERICA]);
         }
 
-    };
+    }
 
     updateView(row, countMap) {
         const row1 = this.table.find("tr").eq(row);
@@ -83,7 +83,7 @@ class TotalCountPanel {
         nonControlCells.eq(2).text(countMap.permit);
         nonControlCells.eq(3).text(countMap.closed);
         nonControlCells.eq(4).text(countMap.key);
-    };
+    }
 
 }
 

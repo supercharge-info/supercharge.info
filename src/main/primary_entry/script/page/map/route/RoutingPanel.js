@@ -29,7 +29,7 @@ export default class RoutingPanel {
 
         $("#save-route-trigger").click((event) => {
             event.preventDefault();
-            this.routeSaveDialog.show()
+            this.routeSaveDialog.show();
         }).tooltip();
 
         const waypointsList = document.getElementById('route-waypoints-list');
@@ -48,14 +48,14 @@ export default class RoutingPanel {
         } else {
             this.show();
         }
-    };
+    }
 
     show() {
         this.routingPanel.css("flex-basis", "400px");
         this.panelToggleButton.find(".glyphicon-menu-left").show();
         this.panelToggleButton.find(".glyphicon-menu-right").hide();
         this.showToggleButton();
-    };
+    }
 
     hide(event) {
         event.preventDefault();
@@ -65,15 +65,15 @@ export default class RoutingPanel {
         if (routeInputModel.isEmpty()) {
             this.hideToggleButton();
         }
-    };
+    }
 
     hideToggleButton() {
         this.panelToggleButton.css('visibility', 'hidden');
-    };
+    }
 
     showToggleButton() {
         this.panelToggleButton.css('visibility', 'visible');
-    };
+    }
 
     updatePanelView() {
         const unorderedList = this.waypointsPanel.find("ul");
@@ -101,7 +101,7 @@ export default class RoutingPanel {
             });
             unorderedList.find("button").on("click", $.proxy(this.handleRemoveWaypoint, this));
         }
-    };
+    }
 
     updateDirections() {
         this.directionPanel.html(directionFormatter.format());
@@ -111,11 +111,11 @@ export default class RoutingPanel {
         const beginIdx = event.oldIndex;
         const endIdx = event.newIndex;
         routeInputModel.moveWaypoint(beginIdx, endIdx);
-    };
+    }
 
     handleRemoveWaypoint(event) {
         const index = $(event.target).data('index');
         routeInputModel.removeWaypoint(index);
-    };
+    }
 
-};
+}

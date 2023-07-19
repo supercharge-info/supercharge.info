@@ -2,7 +2,7 @@ import $ from "jquery";
 import ServiceURL from "../common/ServiceURL";
 import EventBus from "../util/EventBus";
 import LoginEvents from "../common/login/LoginEvents";
-import RouteLoadDialog from "../page/map/route/RouteLoadDialog"
+import RouteLoadDialog from "../page/map/route/RouteLoadDialog";
 
 
 /**
@@ -23,7 +23,7 @@ export default class NavBarUserDropdown {
         // log out click
         $("#logout-link").click(NavBarUserDropdown.handleLogoutClick);
 
-        EventBus.addListener(LoginEvents.login_check_success, this.updateViewToLoggedIn, this)
+        EventBus.addListener(LoginEvents.login_check_success, this.updateViewToLoggedIn, this);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -33,13 +33,13 @@ export default class NavBarUserDropdown {
     static handleSavedRoutesClick(event) {
         event.preventDefault();
         $("#load-route-dialog").modal('show');
-    };
+    }
 
 
     static handleLogoutClick(e) {
         e.preventDefault();
         $.get(ServiceURL.LOGOUT).done(() => document.location.href = "/");
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     //
@@ -55,5 +55,5 @@ export default class NavBarUserDropdown {
 
         $("#save-route-trigger").show();
         $("#login-warning").hide();
-    };
+    }
 }

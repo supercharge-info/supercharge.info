@@ -3,8 +3,8 @@ import RoutingWaypoint from "./RoutingWaypoint";
 import RouteEvents from "./RouteEvents";
 import L from 'leaflet';
 import mbxDirections from '@mapbox/mapbox-sdk/services/directions';
-import MapBox from '../MapBox'
-import routeInputModel from './RouteInputModel'
+import MapBox from '../MapBox';
+import routeInputModel from './RouteInputModel';
 import routeResultModel from './RouteResultModel';
 
 export default class RoutingAction {
@@ -22,7 +22,7 @@ export default class RoutingAction {
         if (!routeInputModel.isFull()) {
             routeInputModel.addWaypoint(routingWaypoint);
         }
-    };
+    }
 
     handleRouteSelectedForLoad(event, route) {
         // convert route waypoints to supercharger type
@@ -31,12 +31,12 @@ export default class RoutingAction {
             routeWaypoints.push(new RoutingWaypoint(L.latLng(waypoint.lat, waypoint.lng), waypoint.name));
         });
         routeInputModel.updateRoute(route.id, route.name, routeWaypoints);
-    };
+    }
 
     handleInputModelChange() {
         if (routeInputModel.size() > 1) {
             const wp = routeInputModel.getWaypoints().map((e) => {
-                    return {'coordinates': [e.latLng.lng, e.latLng.lat]}
+                    return {'coordinates': [e.latLng.lng, e.latLng.lat]};
                 }
             );
 
@@ -52,8 +52,8 @@ export default class RoutingAction {
                 .then(response => {
                     const directions = response.body;
                     routeResultModel.setResult(directions);
-                })
+                });
         }
-    };
+    }
 
-};
+}

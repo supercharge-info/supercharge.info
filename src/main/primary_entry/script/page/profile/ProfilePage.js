@@ -32,7 +32,7 @@ export default class ProfilePage {
         // Has to be updated every time we show the page.
         this.view.setMarkerCount(userConfig.customMarkers.length);
         $.getJSON(ServiceURL.USER_ROUTE_COUNT).done((result) => view.setRouteCount(result.count));
-    };
+    }
 
     onPageHide() {
     }
@@ -46,7 +46,7 @@ export default class ProfilePage {
         this.view.setDescription(data.description);
         this.view.setCreationDate(data.creationDate);
         this.view.setEmailVerified(data.emailVerified);
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // for listeners
@@ -71,4 +71,4 @@ export default class ProfilePage {
 
     }
 
-};
+}

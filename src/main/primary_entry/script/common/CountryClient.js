@@ -51,7 +51,7 @@ class CountryClient {
     /* Returns a promise */
     load() {
         if (this.countries.length === 0) {
-            return $.getJSON(ServiceURL.COUNTRY).done($.proxy(this.countriesServiceCallback, this))
+            return $.getJSON(ServiceURL.COUNTRY).done($.proxy(this.countriesServiceCallback, this));
         }
         else {
             return $.when();
@@ -76,10 +76,10 @@ class CountryClient {
 
         // sort by region ascending
         this.regions.sort((a, b) => {
-            return a.region > b.region
+            return a.region > b.region;
         });
-    };
+    }
 
 }
 
-export default new CountryClient()
+export default new CountryClient();

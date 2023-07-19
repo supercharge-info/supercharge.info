@@ -45,6 +45,6 @@ export default class FilterControlView {
 
     handleVisibilityModelChange() {
         $("#control-row-filter").toggle(controlVisibleModel.filterControlVisible);
-    };
+    }
 
 }

@@ -1,7 +1,8 @@
-import EventBus from "../../../util/EventBus";
-import rangeModel from "../RangeModel";
-import MapEvents from '../MapEvents'
-import mapLayers from '../MapLayers'
+import L from 'leaflet';
+import EventBus from '../../../util/EventBus';
+import rangeModel from '../RangeModel';
+import MapEvents from '../MapEvents';
+import mapLayers from '../MapLayers';
 
 export default class ToggleRangeCirclesAction {
 
@@ -16,7 +17,7 @@ export default class ToggleRangeCirclesAction {
         }
         if (!supercharger.circle) {
             supercharger.circle = ToggleRangeCirclesAction.buildCircle(supercharger);
-            mapLayers.addToOverlay(supercharger.circle)
+            mapLayers.addToOverlay(supercharger.circle);
         }
         else {
             supercharger.circle.remove();
@@ -33,7 +34,7 @@ export default class ToggleRangeCirclesAction {
             fillOpacity: rangeModel.fillOpacity,
             radius: rangeModel.getRangeMeters(),
             clickable: false
-        })
+        });
 
     }
 

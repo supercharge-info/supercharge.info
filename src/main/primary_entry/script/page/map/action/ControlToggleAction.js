@@ -21,17 +21,17 @@ export default class ControlToggleAction {
     rangeToggle() {
         controlVisibilityModel.toggleRangeControlVisible();
         controlVisibilityModel.fireChangeEvent();
-    };
+    }
 
     renderToggle() {
         controlVisibilityModel.toggleRenderControlVisible();
         controlVisibilityModel.fireChangeEvent();
-    };
+    }
 
     filterToggle() {
         controlVisibilityModel.toggleFilterControlVisible();
         controlVisibilityModel.fireChangeEvent();
-    };
+    }
 
     hideAll() {
         this.wasRangeControlVisible = controlVisibilityModel.rangeControlVisible;
@@ -42,13 +42,13 @@ export default class ControlToggleAction {
         controlVisibilityModel.setRenderControlVisible(false);
         controlVisibilityModel.setFilterControlVisible(false);
         controlVisibilityModel.fireChangeEvent();
-    };
+    }
 
     restoreControls() {
         controlVisibilityModel.setRangeControlVisible(this.wasRangeControlVisible);
         controlVisibilityModel.setRenderControlVisible(this.wasRenderControlVisible);
         controlVisibilityModel.setFilterControlVisible(this.wasFilterControlVisible);
         controlVisibilityModel.fireChangeEvent();
-    };
+    }
 
 }

@@ -48,7 +48,7 @@ export default class ChangesView {
         userConfig.setPower(this.filterControl.getPower());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
         this.filterControl.updateVisibility();
-    };
+    }
 
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
@@ -61,21 +61,21 @@ export default class ChangesView {
                 }
             }
         }
-    };
+    }
 
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         var hoverText = site.address.street + ' | ' + site.address.city;
         if (site.address.state)   hoverText += ' | ' + site.address.state;
         if (site.address.country) hoverText += ' | ' + site.address.country;
-        return `<span title="${hoverText}">${changeRow.siteName}</span>`
+        return `<span title="${hoverText}">${changeRow.siteName}</span>`;
     }
 
     static buildStatus(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         var s = Status.fromString(changeRow.siteStatus);
         // includes title (for fancy tooltip) and alt (for copy/paste as text)
-        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`
+        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
     }
     
     static buildDetails(changeRow) {
@@ -121,7 +121,7 @@ export default class ChangesView {
             ];
         }
         */
-        const sitestalls = `${site.numStalls} stalls`
+        const sitestalls = `${site.numStalls} stalls`;
         const sitekw = site.powerKilowatt > 0 ?
             ` | ${site.powerKilowatt} kW` :
             '';
@@ -216,7 +216,7 @@ export default class ChangesView {
             "columns": [
                 {
                     "data": (row, type, val, meta) => {
-                        return `<span class="wide">${row.dateFormatted}</span><span class="narrow">${row.date}</span>`
+                        return `<span class="wide">${row.dateFormatted}</span><span class="narrow">${row.date}</span>`;
                     },
                     "width": "12%"
                 },
@@ -275,7 +275,7 @@ export default class ChangesView {
                 "<'row'<'col-sm-12 text-center'p>>" +
                 "<'row'<'col-sm-12 text-center'i>>" +
                 ""
-        }
+        };
 
     }
 

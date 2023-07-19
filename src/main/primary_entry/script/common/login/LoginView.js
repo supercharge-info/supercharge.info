@@ -2,7 +2,7 @@ import $ from "jquery";
 import "jquery-validation";
 import "../../lib/jquery.validate.additional-methods";
 import ServiceURL from "../ServiceURL";
-import QueryStrings from "../QueryStrings"
+import QueryStrings from "../QueryStrings";
 
 
 export default class LoginView {
@@ -36,7 +36,7 @@ export default class LoginView {
             .done(this.handleResponse)
             // We go here on bad password, etc, because server side responds with 401/Unauthorized.
             .fail((jqXHR, textStatus, errorThrown) => this.handleResponse(jqXHR.responseJSON));
-    };
+    }
 
     handleResponse(loginResponse) {
         if (loginResponse.result === 'SUCCESS') {

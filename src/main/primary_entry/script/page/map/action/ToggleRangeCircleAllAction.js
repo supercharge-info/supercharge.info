@@ -2,7 +2,7 @@ import EventBus from "../../../util/EventBus";
 import rangeModel from "../RangeModel";
 import SiteIterator from "../../../site/SiteIterator";
 import SitePredicates from "../../../site/SitePredicates";
-import ToggleRangeCirclesAction from './ToggleRangeCircleAction'
+import ToggleRangeCirclesAction from './ToggleRangeCircleAction';
 
 export default class ToggleRangeCircleAllAction {
     constructor(mapApi) {
@@ -21,7 +21,7 @@ export default class ToggleRangeCircleAllAction {
             .iterate((supercharger) => {
                     if (supercharger.marker) {
                         supercharger.circle = ToggleRangeCirclesAction.buildCircle(supercharger);
-                        supercharger.circle.addTo(this.mapApi)
+                        supercharger.circle.addTo(this.mapApi);
                     }
                 }
             );

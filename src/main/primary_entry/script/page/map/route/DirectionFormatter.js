@@ -45,7 +45,7 @@ class DirectionFormatter {
         return `<div class='route-panel-leg-summary'>
                     Leg ${index + 1}: ${leg.summary} ${leg.steps.length}<br/>
                     <b>${formatDistance(leg.distance)}</b> &nbsp; <b>${toHourMinSec(leg.duration)}</b>
-                </div>`
+                </div>`;
     }
 
 }

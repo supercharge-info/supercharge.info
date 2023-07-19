@@ -30,9 +30,7 @@ export default class RenderControlView {
     }
 
     initMarkerType() {
-        const control = this;
-        for (var markerLabel in this.markerLabels) {
-            const ml = markerLabel;
+        for (const ml in this.markerLabels) {
             this.markerLabels[ml].click(function () {
                 renderModel.setMarkerType(ml);
                 Analytics.sendEvent("map", "change-marker-type", ml);
@@ -114,6 +112,6 @@ export default class RenderControlView {
 
     handleVisibilityModelChange() {
         $("#control-row-rendering").toggle(controlVisibleModel.renderControlVisible);
-    };
+    }
 
 }

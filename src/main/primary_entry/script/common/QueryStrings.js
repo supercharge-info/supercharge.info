@@ -15,7 +15,7 @@ const VAL_PAGE = getByName("Page");
  */
 function getByName(parameterName) {
     const paramRegex = new RegExp('[?|&]' + parameterName + '=' + '([^&;]+?)(&|#|;|$)', 'i');
-    const paramValueArray = (paramRegex.exec(window.location.search) || [, ""]);
+    const paramValueArray = (paramRegex.exec(window.location.search) || ["", ""]);
     const encodedParamValue = paramValueArray[1].replace(/\+/g, '%20');
     return decodeURIComponent(encodedParamValue) || null;
 }
@@ -85,7 +85,7 @@ const QueryStrings = {
 
         const page = VAL_PAGE;
         const pageLower = page !== null ? page.toLowerCase() : "";
-        let pageOptions = QueryStrings.PAGE_OPTIONS;
+        const pageOptions = QueryStrings.PAGE_OPTIONS;
         if (pageOptions.indexOf(pageLower) >= 0) {
             return pageLower;
         }

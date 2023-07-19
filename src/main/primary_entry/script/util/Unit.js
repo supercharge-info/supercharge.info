@@ -10,27 +10,27 @@ export default class Unit {
         this.name = name;
         this.code = code;
         this.meters = meters;
-    };
+    }
 
     getName() {
         return this.name;
-    };
+    }
 
     getCode() {
         return this.code;
-    };
+    }
 
     isMiles() {
         return this.code === "mi";
-    };
+    }
 
     isKilometers() {
         return this.code === "km";
-    };
+    }
 
     isMeters() {
         return this.code === "m";
-    };
+    }
 
     isMetric() {
         return this.isKilometers() || this.isMeters();

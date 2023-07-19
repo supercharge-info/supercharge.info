@@ -5,4 +5,4 @@ export default class RoutingWaypoint {
         this.displayName = displayName;
     }
 
-};
+}

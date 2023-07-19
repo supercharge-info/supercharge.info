@@ -49,8 +49,8 @@ export default class ResetView {
                 this.errorMessage.html("").show();
                 jqXHR.responseJSON.messages.forEach((m) =>
                     this.errorMessage.append(`${m} <br/>`));
-            })
-    };
+            });
+    }
 
 
 }

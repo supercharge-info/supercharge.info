@@ -1,18 +1,24 @@
 {
     "parser": "@babel/eslint-parser",
     "env": {
-        "browser": true
+        "browser": true,
+        "node": true,
+        "es6": true
     },
     "extends": "eslint:recommended",
     "globals": {
-        "google": "readonly",
-        "jQuery": "readonly",
-        "$": "readonly"
+        "gtag": "readonly"
     },
+    "ignorePatterns": [
+        "webpack.config.js",
+        "build/**",
+        "**/primary_entry/script/lib/**"
+    ],
     "rules": {
         "comma-dangle": "error",
         "prefer-const": "error",
         "semi": "error",
-        "semi-style": "error"
+        "semi-style": "error",
+        "no-unused-vars": ["error", { "args": "none" }]
     }
 }

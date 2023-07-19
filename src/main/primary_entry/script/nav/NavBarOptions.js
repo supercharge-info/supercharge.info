@@ -1,6 +1,5 @@
 import $ from "jquery";
 import EventBus from "../util/EventBus";
-import Events from "../util/Events";
 
 
 export default class NavBarOptions {
@@ -29,13 +28,13 @@ export default class NavBarOptions {
         else if (event.currentTarget.id === "way-back-menu-item") {
             EventBus.dispatch("way-back-trigger-event");
         }
-    };
+    }
 
     handleControlVisibilityChange(event, controlVisibilityModel) {
         NavBarOptions.checkboxUpdate(this.rangeControlMenuItem, controlVisibilityModel.rangeControlVisible);
         NavBarOptions.checkboxUpdate(this.renderControlMenuItem, controlVisibilityModel.renderControlVisible);
         NavBarOptions.checkboxUpdate(this.filterControlMenuItem, controlVisibilityModel.filterControlVisible);
-    };
+    }
 
     static checkboxUpdate(menuItem, checked) {
         if (checked) {

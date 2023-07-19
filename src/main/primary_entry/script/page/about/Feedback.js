@@ -9,7 +9,7 @@ export default class Feedback {
         this.feedbackForm = $("#feedback-form").find("form");
         this.feedbackValidator = this.feedbackForm.validate({submitHandler: $.proxy(this.handleSubmit, this)});
         $("#feedback-dialog").on('hidden.bs.modal', $.proxy(this.resetForm, this));
-    };
+    }
 
     resetForm() {
         $("#feedback-confirm").hide();
@@ -18,7 +18,7 @@ export default class Feedback {
         $("#feedback-input").show();
         $("#feedback-submit").show();
         this.feedbackValidator.resetForm();
-    };
+    }
 
     handleSubmit(event) {
         const feedbackText = this.feedbackForm.find("textarea").val();
@@ -36,6 +36,6 @@ export default class Feedback {
                 $("#feedback-error").show();
             }
         });
-    };
+    }
 
 }

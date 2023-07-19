@@ -24,14 +24,14 @@ export default class ChangePasswordDialog {
 
         this.dialog.on('shown.bs.modal', $.proxy(this.onDialogOpen, this));
         this.dialog.on('hidden.bs.modal', $.proxy(this.onDialogClose, this));
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // open / close
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     onDialogOpen() {
-    };
+    }
 
     onDialogClose() {
         this.dialog.find("input[type=password]").val("");
@@ -39,7 +39,7 @@ export default class ChangePasswordDialog {
         this.confirmMessage.hide();
         this.formContainer.show();
         this.validator.resetForm();
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // submit validator
@@ -59,13 +59,13 @@ export default class ChangePasswordDialog {
                 jqXHR.responseJSON.messages.forEach((m) =>
                     dialog.errorBox.show().append(m + "<br/>"));
             });
-    };
+    }
 
     doneSubmit(data) {
         const dialog = this;
         this.confirmMessage.show();
         setTimeout(() => dialog.dialog.modal('hide'), 4000);
-    };
+    }
 
-};
+}
 
