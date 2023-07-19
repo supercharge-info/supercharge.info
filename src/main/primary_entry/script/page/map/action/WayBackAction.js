@@ -33,7 +33,7 @@ export default class WayBack {
 
 
         EventBus.addListener("way-back-start-event", this.start, this);
-    };
+    }
 
     showStatus() {
         $("#way-back-status").html(`delay: ${this.delay}<br/>${this.index} / ${this.superchargers.length}`);
@@ -44,13 +44,13 @@ export default class WayBack {
             this.delay -= 1;
         }
         this.showStatus();
-    };
+    }
     slower(event) {
         if (this.delay < 10) {
             this.delay += 1;
         }
         this.showStatus();
-    };
+    }
     rew(event) {
         for (var i = this.index - 1; i > 0 && i > this.index - 100; i--) {
             const supercharger = this.superchargers[i];
@@ -58,11 +58,11 @@ export default class WayBack {
         }
         this.index = i;
         this.showStatus();
-    };
+    }
     pause(event) {
         if (this.timeout) clearTimeout(this.timeout);
         this.showStatus();
-    };
+    }
     ff(event) {
         for (var i = this.index; i < this.superchargers.length - 1 && i < this.index + 100; i++) {
             const supercharger = this.superchargers[i];
@@ -70,7 +70,7 @@ export default class WayBack {
         }
         this.index = i;
         this.showStatus();
-    };
+    }
 
     /*
      * Stop animation.
@@ -94,7 +94,7 @@ export default class WayBack {
         }
         EventBus.dispatch("restore-all-control-event");
         EventBus.dispatch("way-back-cleanup-event");
-    };
+    }
 
     /**
      * Start animation.
@@ -120,7 +120,7 @@ export default class WayBack {
             this.mapApi.removeLayer(l);
         }, this);
         this.doNext();
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -130,12 +130,12 @@ export default class WayBack {
         this.dateDiv.html(
             dateOpened.getFullYear() + "&nbsp;" + MONTH_NAMES[dateOpened.getMonth()]
         );
-    };
+    }
 
     showNextMarker() {
         const supercharger = this.superchargers[this.index];
         supercharger.marker?.addTo(this.mapApi);
-    };
+    }
 
     showNextInfoWindow() {
         const supercharger = this.superchargers[this.index];
@@ -147,7 +147,7 @@ export default class WayBack {
                                         "<div class='date'>" + dateString + "</div>" +
                                         "<div>", supercharger.location);
         this.lastInfoWindow = infoWindow;
-    };
+    }
 
 
     doNext() {
@@ -165,7 +165,7 @@ export default class WayBack {
         } else {
             this.fadeOut();
         }
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -179,7 +179,7 @@ export default class WayBack {
             this.sound.muted = !this.sound.muted;
         }
         this.updateSoundButtonText();
-    };
+    }
 
     updateSoundButtonText() {
         if (Objects.isNullOrUndef(this.sound) || this.sound.muted) {
@@ -187,7 +187,7 @@ export default class WayBack {
         } else {
             $("#mute-button-label").text(" Sound Off");
         }
-    };
+    }
 
     fadeOut() {
         const wayBack = this;
@@ -203,7 +203,7 @@ export default class WayBack {
                 wayBack.stop();
             }
         });
-    };
+    }
 
 }
 

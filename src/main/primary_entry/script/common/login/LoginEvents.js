@@ -8,7 +8,7 @@ const LoginEvents = {
     /**
      * Logout was successful.
      */
-    logout: "logout",
+    logout: "logout"
 
 };
 

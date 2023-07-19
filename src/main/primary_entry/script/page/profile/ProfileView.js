@@ -1,8 +1,8 @@
 import $ from "jquery";
 import EventBus from "../../util/EventBus";
 import ProfileEvents from "./ProfileEvents";
-import ServiceURL from "../../common/ServiceURL"
-import QueryStrings from "../../common/QueryStrings"
+import ServiceURL from "../../common/ServiceURL";
+import QueryStrings from "../../common/QueryStrings";
 
 export default class ProfileView {
 
@@ -38,7 +38,7 @@ export default class ProfileView {
         if (QueryStrings.isEmailVerifyRequired()) {
             this.form.prepend(
                 `<h3 class="text-danger">Email verification is required before signing in to forum. Use below "Send Verification Email" link.<h3>`
-            )
+            );
         }
     }
 
@@ -59,7 +59,7 @@ export default class ProfileView {
         const data = {
             email: this.getEmail(),
             unit: this.getUnit(),
-            description: this.getDescription(),
+            description: this.getDescription()
         };
         EventBus.dispatch(ProfileEvents.save_pressed, data);
     }
@@ -69,11 +69,11 @@ export default class ProfileView {
         const view = this;
         $.getJSON(ServiceURL.USER_VERIFY_EMAIL)
             .done(() => {
-                view.verifyMessage.html("<strong>email sent...</strong>")
+                view.verifyMessage.html("<strong>email sent...</strong>");
             })
             .fail(() => {
-                view.verifyMessage.html("could not send email")
-            })
+                view.verifyMessage.html("could not send email");
+            });
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -88,7 +88,7 @@ export default class ProfileView {
     errorsSet(messages) {
         this.errorBox.html("").show();
         messages.forEach((m) => {
-            this.errorBox.append(`${m} <br/><br/>`)
+            this.errorBox.append(`${m} <br/><br/>`);
         });
     }
 

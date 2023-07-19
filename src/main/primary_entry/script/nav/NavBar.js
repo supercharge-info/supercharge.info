@@ -11,7 +11,7 @@ import AboutPage from "../page/about/AboutPage";
 import ProfilePage from "../page/profile/ProfilePage";
 import Analytics from "../util/Analytics";
 import QueryStrings from "../common/QueryStrings";
-import ShowSiteAction from "../page/map/action/ShowSiteAction"
+import ShowSiteAction from "../page/map/action/ShowSiteAction";
 import FilterDialog from "../common/FilterDialog";
 import LoginDialog from "../common/login/LoginDialog";
 
@@ -57,8 +57,6 @@ export default class NavBar {
         if(QueryStrings.isShowSignIn()) {
             this.loginDialog.show();
         }
-
-        setTimeout(() => { $("body").css("visibility", ""); }, 100);
     }
 
     initListeners() {
@@ -69,7 +67,7 @@ export default class NavBar {
         $("body").click(collapseFunction);
 
         window.addEventListener('popstate', $.proxy(this.handlePageChangeHistory, this));
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // event listeners
@@ -78,13 +76,13 @@ export default class NavBar {
     handlePageChangeEvent(event, newPage) {
         this.changePage(newPage);
         window.history.pushState(newPage, null, newPage);
-    };
+    }
 
     handlePageChangeClick(event) {
         const eventDetail = Events.eventDetail(event);
         this.changePage(eventDetail.actionName);
         window.history.pushState(eventDetail.actionName, null, eventDetail.actionName);
-    };
+    }
 
     /**
      * Invoked on BACK or FORWARD clicks.  Note that the browser/history-API takes care of updating the
@@ -120,17 +118,17 @@ export default class NavBar {
         /* Let the browser do the DOM updating associated with change the page, then execute the logic associated
          with the page change. */
         setTimeout(() => pages[newPageName].onPageShow(), 1);
-    };
+    }
 
     hideCurrentPage() {
         $("#page-" + this.currentPage).hide();
         $("#page-link-" + this.currentPage).closest("li").removeClass("active");
-    };
+    }
 
     showCurrentPage() {
         $("#page-" + this.currentPage).show();
         $("#page-link-" + this.currentPage).closest("li").addClass("active");
-    };
+    }
 
     /**
      * If the navbar is collapsed then hide/close it each time the user clicks a menu item (or the body).
@@ -142,6 +140,6 @@ export default class NavBar {
                 this.navbarCollapse.collapse('toggle');
             }
         }
-    };
+    }
 
 }

@@ -94,7 +94,7 @@ class RangeModel {
     setDisplayUnit(newUnit) {
         this.displayUnit = newUnit;
         this.fireUnitChangedEvent();
-        userConfig.setUnit(newUnit)
+        userConfig.setUnit(newUnit);
     }
 
     getDisplayUnit() {

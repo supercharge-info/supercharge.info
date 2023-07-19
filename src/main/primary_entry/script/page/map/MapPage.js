@@ -38,11 +38,11 @@ export default class MapPage {
             MapPage.filterControlView.syncFilters();
         }
         $("#navbar-map-dropdown").show();
-    };
+    }
 
     onPageHide() {
         $("#navbar-map-dropdown").hide();
-    };
+    }
 
     initialize() {
         new RenderControlView();
@@ -78,13 +78,13 @@ export default class MapPage {
             this.initializeAtDefault();
             Analytics.sendEvent('map', 'geolocation', 'not-available');
         }
-    };
+    }
 
     geoLocationSuccess(position) {
         const newLat = position.coords.latitude;
         const newLng = position.coords.longitude;
         this.initializeAt(newLat, newLng);
-    };
+    }
 
     // PositionError: https://developer.mozilla.org/en-US/docs/Web/API/PositionError
     // 1    PERMISSION_DENIED
@@ -93,12 +93,12 @@ export default class MapPage {
     geoLocationError(positionError) {
         this.initializeAtDefault();
         Analytics.sendEvent('map', 'geolocation', 'error_' + positionError.code);
-    };
+    }
 
     initializeAtDefault() {
         const INITIAL_CENTER = QueryStrings.getCenter();
         this.initializeAt(INITIAL_CENTER.latitude, INITIAL_CENTER.longitude);
-    };
+    }
 
     initializeAt(lat, lng) {
 
@@ -136,6 +136,6 @@ export default class MapPage {
         }
 
         MapPage.initComplete = true;
-    };
+    }
 
 }

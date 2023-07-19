@@ -27,49 +27,49 @@ export default class Supercharger {
 
     isPermit() {
         return this.status === Status.PERMIT;
-    };
+    }
     isConstruction() {
         return this.status === Status.CONSTRUCTION;
-    };
+    }
     isOpen() {
         return this.status === Status.OPEN;
-    };
+    }
     isClosedTemp() {
         return this.status === Status.CLOSED_TEMP;
-    };
+    }
     isClosedPerm() {
         return this.status === Status.CLOSED_PERM;
-    };
+    }
     isUserAdded() {
         return this.status === Status.USER_ADDED;
-    };
+    }
 
     hasOpenDate() {
         return Objects.isNotNullOrUndef(this.dateOpened);
-    };
+    }
 
     toString() {
         return JSON.stringify(this);
-    };
+    }
 
     formatStalls() {
         return Objects.isNullOrUndef(this.numStalls) ? "" : this.numStalls;
-    };
+    }
 
     formatLocation() {
         return Objects.isNullOrUndef(this.location) ? "" : `${this.location.lat}, ${this.location.lng}`;
-    };
+    }
 
     formatDateOpened() {
         return Objects.isNullOrUndef(this.dateOpened) ? "" : Dates.toString(this.dateOpened);
-    };
+    }
 
     formatElevation(targetUnits) {
         if (Objects.isNullOrUndef(this.elevation)) {
             return "";
         }
         return this.formatElevationNoUnits(targetUnits) + " " + targetUnits.code;
-    };
+    }
 
     formatElevationNoUnits(targetUnits) {
         if (Objects.isNullOrUndef(this.elevation)) {
@@ -77,22 +77,22 @@ export default class Supercharger {
         }
         const elevationNumber = unitConversion(Units.M, targetUnits, 0)(this.elevation);
         return elevationNumber.toLocaleString();
-    };
+    }
 
     formatHours() {
         return Objects.isNullOrUndef(this.hours) ? "24/7" : this.hours;
-    };
+    }
 
     formatPower() {
         return Objects.isNullOrUndef(this.powerKilowatt) ? "" : this.powerKilowatt;
-    };
+    }
 
     getMarkerTitle() {
         return `<div>${this.displayName} (${this.status?.displayName})</div>` +
             (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
             (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${this.numStalls} stalls`) +
             (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : ` • ${this.powerKilowatt} kW`);
-	};
+	}
 
     getShortMarkerTitle() {
         return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`);
@@ -103,7 +103,7 @@ export default class Supercharger {
     }
 
 
-};
+}
 
 Supercharger.fromJSON = function (jsonObject) {
     const today = new Date();

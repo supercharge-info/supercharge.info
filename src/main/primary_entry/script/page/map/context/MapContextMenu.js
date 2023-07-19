@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import EventBus from '../../../util/EventBus';
 import L from 'leaflet';
-import MapEvents from '../MapEvents'
+import MapEvents from '../MapEvents';
 import RouteEvents from "../route/RouteEvents";
 import RoutingWaypoint from "../route/RoutingWaypoint";
 import Analytics from "../../../util/Analytics";
@@ -39,11 +39,11 @@ export default class MapContextMenu {
             contextMenu.show(event);
         });
         return true;
-    };
+    }
 
     mouseup(event) {
         $(this).doTimeout('detect-long-click');
-    };
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     //
@@ -54,7 +54,7 @@ export default class MapContextMenu {
      */
     hide() {
         this.popup.remove();
-    };
+    }
 
     /**
      * Show context menu at some lat/lon.
@@ -66,7 +66,7 @@ export default class MapContextMenu {
             .setLatLng(event.latlng)
             .setContent(this.createMenu())
             .openOn(this.mapApi);
-    };
+    }
 
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -79,7 +79,7 @@ export default class MapContextMenu {
                         <li><a href='' class='context-menu-add-marker'>Add custom marker...</a></li>
                         <li><a href='' class='context-menu-add-to-route'>Add to route...</a></li>
                     </ul>
-                </div>`
-    };
+                </div>`;
+    }
 
 }

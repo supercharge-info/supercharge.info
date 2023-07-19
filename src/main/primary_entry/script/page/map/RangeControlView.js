@@ -52,7 +52,7 @@ export default class RangeControlView {
             rangeModel.borderOpacity = newOpacity;
             rangeModel.fireRangeChangedEvent();
         });
-    };
+    }
 
     initColorInputs() {
         $("#fill-color-input").spectrum({
@@ -64,7 +64,7 @@ export default class RangeControlView {
             color: rangeModel.borderColor,
             change: $.proxy(this.handleBorderColorChange, this)
         });
-    };
+    }
 
     initRangeSlider() {
         this.rangeSlider = new RangeInput("#range-slider", "#range-number-text",
@@ -124,7 +124,7 @@ export default class RangeControlView {
         else if (event.currentTarget.id === "range-circles-all-on") {
             EventBus.dispatch("circles-all-on-event");
         }
-    };
+    }
 
     /**
      * Handle fill color change.

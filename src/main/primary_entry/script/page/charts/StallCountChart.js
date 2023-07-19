@@ -17,7 +17,7 @@ export default class StallCountChart {
         counts.forEach((count) => {
             const date = Dates.fromString(count.date);
             const dateUTC = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-            stallCounts.push([dateUTC, count.stallCount])
+            stallCounts.push([dateUTC, count.stallCount]);
         });
 
         Highcharts.chart("open-stalls-world-line-chart", {
@@ -76,7 +76,7 @@ export default class StallCountChart {
         });
 
 
-    };
+    }
 
-};
+}
 

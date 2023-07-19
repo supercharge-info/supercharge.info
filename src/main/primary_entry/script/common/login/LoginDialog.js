@@ -64,5 +64,5 @@ export default class LoginDialog {
             this.title.html("Reset Password");
         });
 
-    };
+    }
 }

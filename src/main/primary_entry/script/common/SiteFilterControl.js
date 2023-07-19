@@ -107,7 +107,7 @@ export default class SiteFilterControl {
         $("div.form-control.status-select").on("hide.bs.tooltip", () => {
             if (typeof window.sst !== "undefined") clearTimeout(window.sst);
         });
-    };
+    }
 
     updateVisibility() {
         this.setVisible("region",   userConfig?.showAlways?.region   || this.getRegionId()  !== null);
@@ -151,7 +151,7 @@ export default class SiteFilterControl {
         this.populateCountryOptions();
         this.populateStateOptions();
         this.changeCallback();
-    };
+    }
 
     /**
      * When a user selects COUNTRY then:
@@ -163,13 +163,13 @@ export default class SiteFilterControl {
         this.sel['state'].selectpicker("val", "");
         this.populateStateOptions();
         this.changeCallback();
-    };
+    }
 
     handleFilterReset() {
         userConfig.initFilters();
         this.init();
         this.changeCallback();
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // UI update methods
@@ -189,7 +189,7 @@ export default class SiteFilterControl {
             this.sel['region'].append(`<option value='${r[1]}'>${r[0]}</option>`);
         });
         this.sel['region'].selectpicker("refresh");
-    };
+    }
 
     populateCountryOptions() {
         var newRegionId = this.getRegionId();
@@ -205,7 +205,7 @@ export default class SiteFilterControl {
             this.sel['country'].append(`<option value='${c[1]}'>${c[0]}</option>`);
         });
         this.sel['country'].selectpicker("refresh");
-    };
+    }
 
     populateStateOptions() {
         var newCountryId = this.getCountryId();
@@ -225,7 +225,7 @@ export default class SiteFilterControl {
             this.sel['state'].append(`<option data-tokens='${sName}' value='${s}' data-subtext="${sName}">${s}</option>`);
         });
         this.sel['state'].selectpicker("refresh");
-    };
+    }
 
     populateStatusOptions() {
         this.sel['status'].html("");
@@ -235,32 +235,32 @@ export default class SiteFilterControl {
             this.sel['status'].append(`<option data-content="${imgHtml}<span>${s.displayName}</span>" value='${s.value}'></option>`);
         });
         this.sel['status'].selectpicker("refresh");
-    };
+    }
 
     populateStallCountOptions() {
         this.sel['stalls'].html("<option value=''>Any # Stalls</option>");
-        var stallCounts = new Int16Array([4, 8, 12, 16, 20, 30, 40, 50]);
+        var stallCounts = [4, 8, 12, 16, 20, 30, 40, 50];
         stallCounts.forEach(s => {
             this.sel['stalls'].append(`<option value='${s}'>&ge; ${s} stalls</option>`);
         });
         this.sel['stalls'].selectpicker("refresh");
-    };
+    }
 
     populatePowerOptions() {
         this.sel['power'].html("<option value=''>Any Power</option>");
-        var power = new Int16Array([72, 120, 150, 250]);
+        var power = [72, 120, 150, 250];
         power.forEach(p => {
             this.sel['power'].append(`<option value='${p}'>&ge; ${p} kW</option>`);
         });
         this.sel['power'].selectpicker("refresh");
-    };
+    }
 
     populateOtherEVsOptions() {
         this.sel['otherEVs'].html("<option value=''>Any Vehicle</option>");
         this.sel['otherEVs'].append(`<option data-content="Teslas Only" value='false'></option>`);
         this.sel['otherEVs'].append(`<option data-content="Teslas + Other EVs" value='true'></option>`);
         this.sel['otherEVs'].selectpicker("refresh");
-    };
+    }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // getters/setters
@@ -269,42 +269,42 @@ export default class SiteFilterControl {
     getChangeType() {
         const changeType = this.sel['changetype'].val();
         return changeType === "" ? null : changeType;
-    };
+    }
 
     getCountryId() {
         const id = parseInt(this.sel['country'].val());
         return typeof id === 'number' && Number.isFinite(id) ? id : null;
-    };
+    }
 
     getRegionId() {
         const id = parseInt(this.sel['region'].val());
         return typeof id === 'number' && Number.isFinite(id) ? id : null;
-    };
+    }
 
     getState() {
         const state = this.sel['state'].val();
         return state === "" ? null : state;
-    };
+    }
 
     getStatus() {
         const status = this.sel['status'].val();
         return status === "" ? null : status;
-    };
+    }
 
     getStalls() {
         const stalls = parseInt(this.sel['stalls'].val());
         return typeof stalls === 'number' && Number.isFinite(stalls) ? stalls : null;
-    };
+    }
 
     getPower() {
         const power = parseInt(this.sel['power'].val());
         return typeof power === 'number' && Number.isFinite(power) ? power : null;
-    };
+    }
 
     getOtherEVs() {
         const otherEVs = this.sel['otherEVs'].val();
         return otherEVs === "" ? null : otherEVs;
-    };
+    }
 
     setField(field, value) {
         this.sel[field].selectpicker("val", value);
@@ -313,34 +313,34 @@ export default class SiteFilterControl {
 
     setChangeType(changeType) {
         this.sel['changetype'].selectpicker("val", changeType);
-    };
+    }
 
     setCountryId(countryId) {
         this.sel['country'].selectpicker("val", countryId);
-    };
+    }
 
     setRegionId(regionId) {
         this.sel['region'].selectpicker("val", regionId);
-    };
+    }
 
     setState(state) {
         this.sel['state'].selectpicker("val", state);
-    };
+    }
 
     setStatus(status) {
         this.sel['status'].selectpicker("val", status);
-    };
+    }
 
     setStalls(stalls) {
         this.sel['stalls'].selectpicker("val", stalls);
-    };
+    }
 
     setPower(power) {
         this.sel['power'].selectpicker("val", power);
-    };
+    }
 
     setOtherEVs(otherEVs) {
         this.sel['otherEVs'].selectpicker("val", otherEVs);
-    };
+    }
 
 }

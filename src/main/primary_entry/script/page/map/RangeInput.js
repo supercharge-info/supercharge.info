@@ -87,7 +87,7 @@ function internalHandleSliderMoved() {
     const newValue = this.sliderDiv.val();
     this.setLabelText(newValue);
     this.notifyListeners(newValue);
-    Analytics.sendEvent("map", "adjust-range", "slider")
+    Analytics.sendEvent("map", "adjust-range", "slider");
 }
 
 /**
@@ -103,7 +103,7 @@ function labelValueChanged() {
         this.setLabelText(newValue);
     }
     this.notifyListeners(newValue);
-    Analytics.sendEvent("map", "adjust-range", "text")
+    Analytics.sendEvent("map", "adjust-range", "text");
 }
 
 export default RangeInput;

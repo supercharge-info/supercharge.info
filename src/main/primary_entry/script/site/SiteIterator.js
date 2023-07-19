@@ -12,12 +12,12 @@ export default class SiteIterator {
     withPredicate(predicateFunction) {
         this.predicates.push(predicateFunction);
         return this;
-    };
+    }
 
     withSort(sortFunction) {
         this.sortFunction = sortFunction;
         return this;
-    };
+    }
 
     count() {
         const sitesList = Sites.getAll();
@@ -30,7 +30,7 @@ export default class SiteIterator {
             }
         }
         return result;
-    };
+    }
 
     iterate(applyFunction) {
         const sitesList = Sites.getAll();
@@ -47,7 +47,7 @@ export default class SiteIterator {
                 applyFunction(site);
             }
         }
-    };
+    }
 
     predicatesApply(site) {
         let i = 0;
@@ -57,7 +57,7 @@ export default class SiteIterator {
             }
         }
         return true;
-    };
+    }
 
     toArray() {
         const superchargers = [];
@@ -65,9 +65,9 @@ export default class SiteIterator {
             superchargers.push(supercharger);
         });
         return superchargers;
-    };
+    }
 
 
-};
+}
 
 

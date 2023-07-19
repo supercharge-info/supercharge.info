@@ -15,7 +15,7 @@ export default class DataPage {
         } else {
             this.dataView.syncFilters();
         }
-    };
+    }
 
     onPageHide() {
         if (this.initialized) this.dataView.hideTooltips();

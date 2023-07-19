@@ -92,8 +92,8 @@ export default class CountryBarChart {
         });
 
 
-    };
+    }
 
-};
+}
 
 

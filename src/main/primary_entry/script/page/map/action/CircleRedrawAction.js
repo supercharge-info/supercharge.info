@@ -21,9 +21,9 @@ export default class CircleRedrawAction {
                         weight: 1,
                         fillColor: rangeModel.fillColor,
                         fillOpacity: rangeModel.fillOpacity
-                    })
+                    });
                 }
             );
-    };
+    }
 
 }

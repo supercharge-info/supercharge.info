@@ -119,6 +119,6 @@ export default class TotalOpenRegionChart {
         });
 
 
-    };
+    }
 
-};
+}

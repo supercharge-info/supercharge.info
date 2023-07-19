@@ -225,12 +225,12 @@
       } else if ( id ) {
         delete cache[ id ];
       }
-    };
+    }
 
     // Yes, there actually is a setTimeout call in here!
     function actually_setTimeout() {
       data.id = setTimeout( function(){ data.fn(); }, delay );
-    };
+    }
 
     if ( callback ) {
       // A callback (and delay) were specified. Store the callback reference for
@@ -272,6 +272,6 @@
       cleanup();
     }
 
-  };
+  }
 
 })(jQuery);

@@ -25,9 +25,9 @@ export default class FeatureDialog {
             dialogContent.append(`<p>${feature.description}</p>`);
             dialogContent.append("<br/><br/>");
         });
-    };
+    }
 
     show() {
         this.dialogDiv.modal('show');
-    };
+    }
 }

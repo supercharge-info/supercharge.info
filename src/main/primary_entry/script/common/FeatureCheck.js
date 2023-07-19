@@ -12,16 +12,16 @@ export default class FeatureCheck {
         $.getJSON(ServiceURL.FEATURE_CHECK)
             .done($.proxy(this.handleResponse, this))
             .fail(function () {
-                console.log("FAILED to check for features")
-            })
-    };
+                console.log("FAILED to check for features");
+            });
+    }
 
     handleResponse(response) {
         if (response.messages[0] === "new features") {
             this.showNotification();
         }
         // Else do nothing and we are done with the new feature check.
-    };
+    }
 
     showNotification() {
         const alertDiv = $('<div/>', {id: 'new-feature-notify', class: 'alert alert-info', role: 'alert'});
@@ -39,12 +39,12 @@ export default class FeatureCheck {
         alertDiv.append("<span>.</span>");
         alertDiv.append(button);
 
-        $(".layout-header").prepend(alertDiv)
-    };
+        $(".layout-header").prepend(alertDiv);
+    }
 
     showDialog() {
         $("#new-feature-notify").remove();
         this.featureDialog.show();
     }
 
-};
+}

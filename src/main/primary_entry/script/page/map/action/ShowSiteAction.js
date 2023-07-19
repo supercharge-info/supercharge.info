@@ -14,7 +14,7 @@ import Sites from "../../../site/Sites";
 export default class ShowSiteAction {
 
     constructor() {
-        EventBus.addListener(MapEvents.show_location, this.showSite, this)
+        EventBus.addListener(MapEvents.show_location, this.showSite, this);
     }
 
     showSite(event, clickedSiteId) {

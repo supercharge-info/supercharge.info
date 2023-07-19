@@ -14,19 +14,19 @@ class Address {
         a.regionId = jsonObject.regionId;
         a.region = jsonObject.region;
         return a;
-    };
+    }
 
     isNorthAmerica() {
         return this.region === Address.REGION_NORTH_AMERICA;
-    };
+    }
 
     isAsia() {
         return this.region === Address.REGION_ASIA_PACIFIC;
-    };
+    }
 
     isEurope() {
         return this.region === Address.REGION_EUROPE;
-    };
+    }
 
 
 }

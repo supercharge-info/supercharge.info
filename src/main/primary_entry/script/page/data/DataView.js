@@ -42,23 +42,22 @@ export default class DataView {
         userConfig.setPower(this.filterControl.getPower());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
         this.filterControl.updateVisibility();
-    };
+    }
 
     static handleDataClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const clickTarget = $(event.target);
-            const td = clickTarget.closest('td');
             if (!clickTarget.is('a, b, ul, li, .links img')) {
                 const clickedSiteId = parseInt(clickTarget.closest('tr').attr('id'));
                 EventBus.dispatch(MapEvents.show_location, clickedSiteId);
             }
         }
-    };
+    }
 
     static buildStatus(supercharger) {
         const site = supercharger;
         var s = Status.fromString(supercharger.status);
-        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`
+        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
     }
 
     static asLink(href, content, title) {
@@ -97,7 +96,7 @@ export default class DataView {
             "ajax": {
                 url: ServiceURL.SITES_PAGE,
                 dataFilter: function (data) {
-                    const json = jQuery.parseJSON(data);
+                    const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
@@ -106,7 +105,7 @@ export default class DataView {
                     resultSpan.html(`${json.recordsFiltered} site${json.recordsFiltered === 1 ? "" : "s"}<span class="shrink"> matched</span>`);
                     resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
                     resultSpan.attr("title", json.recordsFiltered === 0 ? "No sites displayed. Adjust or reset filters to see more." : "");
-                    return JSON.stringify(json)
+                    return JSON.stringify(json);
                 },
                 "data": function (d) {
                     d.regionId = dataView.filterControl.getRegionId();
@@ -133,13 +132,13 @@ export default class DataView {
                 {
                     "data": "powerKilowatt",
                     "render": (data, type, row, meta) => {
-                        return data || ''
+                        return data || '';
                     },
                     "className": "number"
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return `${row.gps.latitude}, ${row.gps.longitude}`
+                        return `${row.gps.latitude}, ${row.gps.longitude}`;
                     },
                     "className": "gps",
                     "orderable": false
@@ -175,7 +174,7 @@ export default class DataView {
                 "<'row'<'col-sm-12 text-center'p>>" +
                 "<'row'<'col-sm-12 text-center'i>>" +
                 ""
-        }
+        };
 
     }
 
