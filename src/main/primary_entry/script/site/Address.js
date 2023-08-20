@@ -28,6 +28,11 @@ class Address {
         return this.region === Address.REGION_EUROPE;
     }
 
+    isTeslaCN() {
+        // Hong Kong & Macau superchargers seem to work on both tesla.com and tesla.cn, but tesla.com
+        // is generally kept more up-to-date, so for those two locations we'll direct links to tesla.com.
+        return this.country === Address.COUNTRY_CHINA && this.state !== "Hong Kong" && this.state !== "Macau";
+    }
 
 }
 

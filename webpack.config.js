@@ -70,7 +70,7 @@ module.exports = (env) => {
                 // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
                 // https://github.com/webpack-contrib/url-loader
                 {
-                    test: /(\.woff?$|\.woff2?$|\.ttf?$|\.eot?$|\.gif?$)/,
+                    test: /(\.woff?$|\.woff2?$|\.ttf?$|\.eot?$)/,
                     exclude: /node_modules/,
                     loader: 'asset/resource'
                 },
@@ -79,7 +79,7 @@ module.exports = (env) => {
                 //
                 // https://webpack.js.org/guides/asset-modules/
                 {
-                    test: /\.(png|svg)$/,
+                    test: /\.(gif|png|svg)$/,
                     type: 'asset/resource',
                     generator: {
                         filename: 'images/[name][ext]'

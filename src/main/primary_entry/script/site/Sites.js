@@ -10,6 +10,8 @@ const CountriesByRegion = new Map();
 const StatesByRegion = new Map();
 const StatesByCountry = new Map();
 const States = new Set();
+var loaded = performance.now();
+
 
 export default class Sites {
 
@@ -100,6 +102,23 @@ S-by-C: Map(cid, Set(sname))
                 });
             }
         );
+    }
+
+    static async checkReload() {
+        // Skip if data is less than an hour old
+        if (performance.now() - loaded < 3600000) return false;
+        console.log('reloading all sites');
+        loaded = performance.now();
+        LIST.length = 0;
+        Regions.clear();
+        Countries.clear();
+        CountriesByRegion.clear();
+        StatesByRegion.clear();
+        StatesByCountry.clear();
+        States.clear();
+        await Sites.load();
+        console.log(`reloaded ${LIST.length} sites`);
+        return true;
     }
 
     static StateAbbreviations = {

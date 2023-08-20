@@ -36,6 +36,14 @@
     line-height: 28px;
 }
 
+.wait {
+    display: none;
+}
+.wait.show {
+    display: inline !important;
+    margin: auto 4px;
+}
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Collapse navbar earlier than bootstrap's default 768px
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

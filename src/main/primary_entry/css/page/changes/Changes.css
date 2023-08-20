@@ -55,6 +55,11 @@
     border-bottom: 0px;
 }
 
+#changes-table .text-muted img {
+    width: 12px !important;
+    height: 12px !important;
+}
+
 #changes-table .narrow {
     display: none;
 }

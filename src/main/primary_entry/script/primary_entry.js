@@ -16,6 +16,7 @@ import "../images/avatar-placeholder.png";
 import "../images/feed-icon.png";
 import "../images/become_a_patron_button@2x.png";
 
+import "../images/ellipsis-anim.gif";
 import "../images/mono-filter.svg";
 import "../images/white-filter.svg";
 import "../images/sliders-icon.svg";

@@ -5,6 +5,7 @@ import Units from "../util/Units";
 import unitConversion from "../util/UnitConversion";
 import Status from "./SiteStatus";
 import L from 'leaflet';
+import ServiceURL from "../common/ServiceURL";
 
 
 /**
@@ -102,6 +103,16 @@ export default class Supercharger {
         return (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) ? 1.2 : 1.0;
     }
 
+    getImg(status, extraClasses) {
+        return '' +
+            `<span class='${status.value} status-select ${extraClasses}'>` +
+                `<img src='${status.getIcon(this)}' title='${status.getTitle(this)}' alt='${status.getTitle(this)}'/>` +
+            `</span>`;
+    }
+
+    getTeslaLink() {
+        return (this.address.isTeslaCN() ? ServiceURL.TESLA_CN_PAGE : ServiceURL.TESLA_WEB_PAGE) + this.locationId;
+    }
 
 }
 
