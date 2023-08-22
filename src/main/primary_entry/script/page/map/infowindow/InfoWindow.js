@@ -237,7 +237,7 @@ function _buildLinksDiv(supercharger, showDetails) {
         buildLinkDetailsOrHistory(supercharger, showDetails),
         buildLinkMapURL(supercharger),
         buildLinkDiscussURL(supercharger),
-        buildLinkURL(supercharger),
+        buildLinkTeslaURL(supercharger),
         buildLinkRemoveMarker(supercharger),
         buildLinkRemoveAllMarkers(supercharger)
     ];
@@ -279,9 +279,9 @@ function buildLinkAddToRoute(supercharger) {
     return `<a class='add-to-route-trigger' href='${supercharger.id}'>add to route</a>`;
 }
 
-function buildLinkURL(supercharger) {
+function buildLinkTeslaURL(supercharger) {
     if (Objects.isNotNullOrUndef(supercharger.locationId)) {
-        return `<a target='_blank' href='${ServiceURL.TESLA_WEB_PAGE + supercharger.locationId}'>tesla.com</a>`;
+        return `<a target='_blank' href='${supercharger.getTeslaLink()}'>tesla.${supercharger.address.isTeslaCN() ? 'cn' : 'com'}</a>`;
     }
     return null;
 }

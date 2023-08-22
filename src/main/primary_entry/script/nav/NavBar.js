@@ -14,6 +14,7 @@ import QueryStrings from "../common/QueryStrings";
 import ShowSiteAction from "../page/map/action/ShowSiteAction";
 import FilterDialog from "../common/FilterDialog";
 import LoginDialog from "../common/login/LoginDialog";
+import Sites from "../site/Sites";
 
 
 export default class NavBar {
@@ -50,7 +51,7 @@ export default class NavBar {
         // first page in history.
         this.currentPage = QueryStrings.getPage();
         // Always add / as /changes in the history
-        const adjustedPath = window.location.pathname === "/" ? "/changes" : window.location.pathname;
+        const adjustedPath = window.location.pathname === "/" ? ("/" + QueryStrings.DEFAULT_PAGE) : window.location.pathname;
         history.replaceState(this.currentPage, null, adjustedPath + window.location.search);
         this.changePage(this.currentPage);
 
@@ -102,7 +103,8 @@ export default class NavBar {
      * Since this method is invoked as part of the history API (user clicks browser forward-back) it should NOT
      * itself invoke any history API methods.
      */
-    changePage(newPageName) {
+    async changePage(newPageName) {
+        await Sites.checkReload();
         const pages = this.pages;
         if (newPageName === null) {
             newPageName = this.currentPage;

@@ -103,7 +103,7 @@ Markers
 .tooltip.user { background-color: rgba(0, 224, 0, 0.95); color: black; }
 
 /* style overrides that shouldn't be necessary but webpack is behaving weirdly */
-.leaflet-tooltip, .leaflet-control .tooltip {
+.leaflet-tooltip, .leaflet-control .tooltip-inner {
     white-space: nowrap;
 }
 .leaflet-bar a {

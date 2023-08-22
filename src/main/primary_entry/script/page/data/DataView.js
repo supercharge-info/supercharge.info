@@ -5,6 +5,7 @@ import EventBus from "../../util/EventBus";
 import userConfig from "../../common/UserConfig";
 import SiteFilterControl from "../../common/SiteFilterControl";
 import Status from "../../site/SiteStatus";
+import Supercharger from "../../site/Supercharger";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
@@ -55,9 +56,9 @@ export default class DataView {
     }
 
     static buildStatus(supercharger) {
-        const site = supercharger;
+        const site = Supercharger.fromJSON(supercharger);
         var s = Status.fromString(supercharger.status);
-        return `<span class='${s.value} status-select'><img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
+        return site.getImg(s);
     }
 
     static asLink(href, content, title) {
@@ -66,7 +67,7 @@ export default class DataView {
     }
 
     static buildLinks(supercharger) {
-        const site = supercharger;
+        const site = Supercharger.fromJSON(supercharger);
         const addr = site.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
         const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>');
@@ -74,9 +75,9 @@ export default class DataView {
             site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " | " + DataView.asLink(ServiceURL.TESLA_WEB_PAGE + site.locationId, '<img src="/images/red_dot_t.svg" title="tesla.com"/>') :
+            " • " + DataView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
-        return `${gmapLink} | ${discussLink}${teslaLink}`;
+        return `${gmapLink} • ${discussLink}${teslaLink}`;
     }
 
     initDataTableOptions() {
@@ -88,10 +89,10 @@ export default class DataView {
             "processing": true,
             "serverSide": true,
             "deferLoading": 0,
-            "order": [[10, "desc"]],
+            "order": [[11, "desc"], [0, "asc"]],
             "lengthMenu": [
-                [10, 25, 50, 100, 1000, 10000],
-                [10, 25, 50, 100, 1000, 10000]],
+                [10, 25, 50, 100, 500, 1000],
+                [10, 25, 50, 100, 500, 1000]],
             "pageLength": 50,
             "ajax": {
                 url: ServiceURL.SITES_PAGE,
@@ -122,51 +123,80 @@ export default class DataView {
                 {"data": "name"},
                 {"data": "address.street"},
                 {"data": "address.city"},
-                {"data": "address.state"},
-                {"data": "address.zip"},
-                {"data": "address.country"},
+                {"data": "address.state", "width": "5%"},
+                {"data": "address.zip", "width": "5%"},
+                {"data": "address.country", "width": "7%"},
                 {
                     "data": "stallCount",
-                    "className": "number"
+                    "className": "number",
+                    "width": "1%"
                 },
                 {
                     "data": "powerKilowatt",
                     "render": (data, type, row, meta) => {
                         return data || '';
                     },
-                    "className": "number"
+                    "className": "number",
+                    "width": "1%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return `${row.gps.latitude}, ${row.gps.longitude}`;
                     },
                     "className": "gps",
-                    "orderable": false
+                    //"orderable": false,
+                    "width": "1%"
                 },
                 {
                     "data": "elevationMeters",
-                    "className": "number"
+                    "className": "number",
+                    "width": "1%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return DataView.buildStatus(row);
-                    }
+                    },
+                    "width": "1%"
                 },
                 {
                     "data": "dateOpened",
-                    "defaultContent": ""
+                    "defaultContent": "",
+                    "width": "7%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return DataView.buildLinks(row);
                     },
                     "className": "links",
-                    "orderable": false
+                    "orderable": false,
+                    "width": "9%"
                 }
             ],
             "drawCallback": () => {
-                $("#supercharger-data-table .status-select img").tooltip({ "container": "body", "placement": "right" });
-                $("#supercharger-data-table .links img, #changes-table img.details").tooltip({ "container": "body" });
+                // Don't bother with tooltips on narrow (usually mobile) devices
+                if (window.innerWidth <= 928) return;
+                
+                $("li img.wait").addClass("show");
+                window.dataTooltips = performance.now();
+                window.dataIcons = [];
+                $("#supercharger-data-table img").each(function () {
+                    window.dataIcons.push($(this));
+                });
+                clearInterval(window.dataInterval);
+                window.dataInterval = setInterval(() => {
+                    // Asynchronously initialize tooltips, starting from both ends of the table and working toward the middle
+                    for (var i = 0; i < 40 && window.dataIcons.length > 0; i++) {
+                        window.dataIcons.shift().tooltip({ "container": "body" });
+                    }
+                    for (var i = 0; i < 10 && window.dataIcons.length > 0; i++) {
+                        window.dataIcons.pop().tooltip({ "container": "body" });
+                    }
+                    if (window.dataIcons.length === 0) {
+                        clearInterval(window.dataInterval);
+                        $("li img.wait").removeClass("show");
+                        console.log(`Data tooltips: t=${(performance.now() - window.dataTooltips)}`);
+                    }
+                }, 100);
             },
             "dom": "" +
                 "<'row'<'col-sm-12'tr>>" +
@@ -179,6 +209,7 @@ export default class DataView {
     }
 
     hideTooltips() {
+        window.dataIcons = [];
         $(".tooltip").tooltip("hide");
     }
 
