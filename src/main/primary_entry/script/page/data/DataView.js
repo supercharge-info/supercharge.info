@@ -58,7 +58,11 @@ export default class DataView {
     static buildStatus(supercharger) {
         const site = Supercharger.fromJSON(supercharger);
         var s = Status.fromString(supercharger.status);
-        return site.getImg(s);
+        var content = site.getImg(s);
+        if (site.otherEVs)     content += '<img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
+        if (site.solarCanopy)  content += '<img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)      content += '<img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
+        return content;
     }
 
     static asLink(href, content, title) {
@@ -156,12 +160,12 @@ export default class DataView {
                     "data": (row, type, val, meta) => {
                         return DataView.buildStatus(row);
                     },
-                    "width": "1%"
+                    "width": "5%"
                 },
                 {
                     "data": "dateOpened",
                     "defaultContent": "",
-                    "width": "7%"
+                    "width": "5%"
                 },
                 {
                     "data": (row, type, val, meta) => {

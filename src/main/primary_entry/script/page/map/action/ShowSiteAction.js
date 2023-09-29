@@ -18,6 +18,8 @@ export default class ShowSiteAction {
     }
 
     showSite(event, clickedSiteId) {
+        var t = performance.now();
+
         // Change page to the map page.
         EventBus.dispatch("nav-change-page-event", 'map');
 
@@ -44,14 +46,14 @@ export default class ShowSiteAction {
                         }
                         return false;
                     }
-                    else {
-                        // If we return true here the timeout will try again in 75ms
+                    else if (performance.now() - t < 10000) {
+                        // If we return true here the inner doTimeout will try again in 75ms
                         return true;
                     }
                 });
                 return false;
             } else {
-                // If we return true here the timeout will try again in 75ms
+                // If we return true here the outer doTimeout will try again in 250ms
                 return true;
             }
         });

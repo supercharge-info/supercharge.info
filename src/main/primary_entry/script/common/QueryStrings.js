@@ -9,6 +9,7 @@ const VAL_RANGE_KM = getByName("RangeKm");
 const VAL_WAYBACK = getByName("wayback");
 const VAL_CONTROLS = getByName("Controls");
 const VAL_PAGE = getByName("Page");
+const VAL_SITE_ID = getByName("SiteID");
 
 /**
  * Get a Query (URL) parameter by name (this is case insensitive)
@@ -44,17 +45,13 @@ const QueryStrings = {
         return QueryStrings.DEFAULT_CENTER;
     },
 
-    isCenterSet: function () {
-        return VAL_CENTER !== null;
-    },
+    isCenterSet: () => VAL_CENTER !== null,
 
-    isZoomSet: function () {
-        return VAL_ZOOM !== null;
-    },
+    isZoomSet: () => VAL_ZOOM !== null,
 
-    isRangeUnitSet: function () {
-        return VAL_RANGE_MI !== null || VAL_RANGE_KM !== null;
-    },
+    isRangeUnitSet: () => VAL_RANGE_MI !== null || VAL_RANGE_KM !== null,
+
+    isSiteIdSet: () => VAL_SITE_ID !== null && Objects.isNumber(parseInt(VAL_SITE_ID)),
 
     isShowSignIn: () => getByName("sign-in") === "true",
 
@@ -111,17 +108,13 @@ const QueryStrings = {
     /**
      * Wayback
      */
-    getWayBack: function () {
-        return "start" === VAL_WAYBACK;
-    },
+    getWayBack: () => "start" === VAL_WAYBACK,
 
-    getRangeMi: function () {
-        return VAL_RANGE_MI;
-    },
+    getRangeMi: () => VAL_RANGE_MI,
 
-    getRangeKm: function () {
-        return VAL_RANGE_KM;
-    }
+    getRangeKm: () => VAL_RANGE_KM,
+
+    getSiteId: () => parseInt(VAL_SITE_ID)
 };
 
 

@@ -113,16 +113,20 @@ Markers
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Info Window
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.leaflet-popup-content {
+    margin: 8px;
+}
 .info-window-content {
     width: 100%;
     height: 100%;
-    min-width: 210px;
-    min-height: 80px;
+    min-width: 200px;
+    min-height: 50px;
     padding: 0;
     margin: 0;
 }
 
 .info-window-content .title {
+    margin-right: 10px;
     font-weight: bold !important;
     font-size: 1.5em !important;
 }
@@ -185,11 +189,13 @@ Info Window
 }
 
 a.pin {
+    margin: -3px 3px;
     font-size: medium;
     text-decoration: none !important;
 }
 
 a.unpin {
+    margin: -3px 3px;
     color: #e34646 !important;
     font-size: medium;
     text-decoration: none !important;
@@ -233,7 +239,11 @@ a.unpin {
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 For smaller screens
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+    .info-window-content .title {
+        font-size: 1.2em !important;
+    }
+
     #map-main-content {
         flex-direction: column;
     }
