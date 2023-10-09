@@ -67,7 +67,7 @@ export default class DataView {
 
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
-        return `<a href='${href}' ${titleAttr} target='_blank'>${content}</a>`;
+        return `<a href="${href.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
     }
 
     static buildLinks(supercharger) {

@@ -302,7 +302,7 @@ function buildLinkMapURL(supercharger) {
     if (Objects.isNotNullOrUndef(supercharger.address.street)) {
         const addr = supercharger.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        return `<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${query}'>gmap</a>`;
+        return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}">gmap</a>`;
     }
     return null;
 }
