@@ -17,6 +17,7 @@ import RangeControlView from "./RangeControlView";
 import RenderControlView from "./RenderControlView";
 import RoutingPanel from "./route/RoutingPanel";
 import rangeModel from "./RangeModel";
+import Sites from "../../site/Sites";
 import $ from "jquery";
 import "../../lib/jquery.doTimeout";
 
@@ -49,17 +50,26 @@ export default class MapPage {
         new RangeControlView();
         new RoutingPanel();
 
+        const initSite = QueryStrings.isSiteIdSet() ? Sites.getById(QueryStrings.getSiteId()) : null;
+
         /* CASE 1: User has explicitly specified initial map center via 'Center' URL param. */
         if (QueryStrings.isCenterSet()) {
             this.initializeAtDefault();
             Analytics.sendEvent('map', 'geolocation', 'user-provided-center');
         }
-        /* CASE 2: We have a location from UserConfig. */
+        /* CASE 2: User has explicitly specified a valid site ID */
+        else if (initSite !== null) {
+            // TODO: if specified site would be filtered out, either clear user filters, or skip entirely and/or show error message
+            console.log(`initializing map with site ${initSite.id} (${initSite.location.lat},${initSite.location.lng})`);
+            this.initializeAt(initSite.location.lat, initSite.location.lng);
+            EventBus.dispatch("map-show-location-event", QueryStrings.getSiteId());
+        }
+        /* CASE 3: We have a location from UserConfig. */
         else if (userConfig.isLocationSet()) {
-            console.log("initializing map with lat/lng from userConfig: " + userConfig.latitude + "," + userConfig.longitude);
+            console.log(`initializing map with lat/lng from userConfig: ${userConfig.latitude},${userConfig.longitude}`);
             this.initializeAt(userConfig.latitude, userConfig.longitude);
         }
-        /* CASE 3: We can get initial map center from geolocation API. */
+        /* CASE 4: We can get initial map center from geolocation API. */
         else if (navigator.geolocation) {
 
             /* Some users don't know how to acknowledge geolocation prompt, do it for them after timeout. */
@@ -73,7 +83,7 @@ export default class MapPage {
             const errorCallback = $.proxy(this.geoLocationError, this);
             navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         }
-        /* CASE 4: geolocation API is not available */
+        /* CASE 5: geolocation API is not available */
         else {
             this.initializeAtDefault();
             Analytics.sendEvent('map', 'geolocation', 'not-available');

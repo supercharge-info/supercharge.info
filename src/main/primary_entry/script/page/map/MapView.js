@@ -415,6 +415,7 @@ export default class MapView {
 
     handleMarkerRemove(event) {
         event.preventDefault();
+        if (!confirm("Remove this custom marker? This cannot be undone.")) return;
         const id = parseInt($(event.target).attr('href'));
         const supercharger = Sites.getById(id);
         this.removeCustomMarker(supercharger);
@@ -423,6 +424,7 @@ export default class MapView {
 
     handleMarkerRemoveAll(event) {
         event.preventDefault();
+        if (!confirm("Remove ALL custom markers? This cannot be undone.")) return;
         const toRemoveList = [];
         new SiteIterator()
             .withPredicate(SitePredicates.USER_ADDED)

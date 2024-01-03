@@ -31,6 +31,7 @@ Action.prototype.createLink = function (event) {
     }
     $('#create-link-input').val(linkStr);
     $("#go-to-button").attr('disabled', false);
+    $("#link-dialog .modal-title").html("Link to Current View");
 
     showLinkModal();
 };

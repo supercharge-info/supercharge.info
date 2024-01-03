@@ -66,6 +66,35 @@ class InfoWindowListeners {
             EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(supercharger.location, supercharger.displayName));
             Analytics.sendEvent("route", "add-marker-to-route", "pop up");
         });
+
+        $(document).on('click', '.direct-link-trigger', (event) => {
+            const supercharger = toSupercharger(event);
+
+            const linkDialog = $("#link-dialog");
+            const linkInput = $("#create-link-input");
+            const goButton = $("#go-to-button");
+
+            $("#link-dialog .modal-title").html("Link to Current Site");
+            linkInput.val(`${window.location.href.split('?')[0]}?siteID=${supercharger.id}`);
+        
+            // Go to URL when "Go to! button is pressed"
+            goButton.on('click', function () {
+                window.location.href = linkInput.val();
+            });
+            goButton.attr('disabled', false);
+
+            // Focus on input field after dialog is shown
+            // and select its contents for quick copy & paste
+            linkDialog.on('shown.bs.modal', function (e) {
+                linkInput.focus().select();
+            });
+            // Clear input field after any type of dialog close
+            linkDialog.on('hidden.bs.modal', function (e) {
+                linkInput.val("");
+            });
+        
+            linkDialog.modal();
+        });
     }
 
 }

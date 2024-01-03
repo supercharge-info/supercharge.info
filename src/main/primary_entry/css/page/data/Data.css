@@ -34,10 +34,6 @@
     text-align: left;
 }
 
-#supercharger-data-table td.links, #supercharger-data-table th.links {
-    text-align: center;
-}
-
 #supercharger-data-table td.gps {
     font-family: monospace;
     font-size: .75em;

@@ -163,9 +163,9 @@ export default class ChangesView {
                     </ul>
                 </div>`;
         }
+        if (site.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
-        if (site.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         
         const s = site.status;
         if (s !== Status.fromString(changeRow.siteStatus)) content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
@@ -189,7 +189,7 @@ export default class ChangesView {
 
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
-        return `<a href='${href}' ${titleAttr} target='_blank'>${content}</a>`;
+        return `<a href="${href.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
     }
 
     initDataTableOptions() {

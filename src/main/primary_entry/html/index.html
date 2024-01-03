@@ -674,9 +674,9 @@ PAGE: about
 
     <h4>Other icons on the Changes and Data pages</h4>
     <ul class="about-page-list">
+        <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, and certain CCS locations in Europe.</li>
         <li title="solar canopy"><img src="/images/solar-power-variant.svg"/> <b>Solar canopy</b> : Site is at least partially covered by a solar canopy.</li>
         <li title="battery backup"><img src="/images/battery-charging.svg"/> <b>Battery backup</b> : Site includes battery backup power.</li>
-        <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, and certain CCS locations in Europe.</li>
         <li title="Google Map"><img src="/images/gmap.svg"/> <b>Google Map</b> : Link to Google Maps based on the site's address (which might be slightly different than the GPS coordinates).</li>
         <li title="Forum"><img src="/images/forum.svg"/> <b>Forum</b> : Link to the site's relevant thread on a discussion forum.</li>
         <li title="tesla.com or tesla.cn"><img src="/images/red_dot_t.svg"/> <b>Tesla.com</b> or <b>Tesla.cn</b> : Link to Tesla's "Find Us" page for the site.</li>
@@ -715,15 +715,12 @@ PAGE: about
     <h3 class="margin-top">Links</h3>
 
     <p>
-        Links to specific GPS coordinates can be constructed using <strong>center</strong> and <strong>zoom</strong>
-        parameters. For
-        example, here is a link that
-        will show supercharges in the Chicago area:
+        Map links to specific GPS coordinates can be constructed using <strong>center</strong> and <strong>zoom</strong>
+        parameters. For example, here is a link that will show supercharges in the Chicago area:<br/>
         <a href="https://supercharge.info/map?center=41.615648,-87.304997&amp;zoom=9">https://supercharge.info/map?<b>center</b>=41.615648,-87.304997&<b>zoom</b>=9</a>
     </p>
 
-    All available URL parameters:
-    <br/><br/>
+    <h4>All available URL parameters</h4>
     <table class="table table-bordered">
         <tr>
             <th>Parameter</th>
@@ -735,7 +732,11 @@ PAGE: about
         </tr>
         <tr>
             <td>zoom</td>
-            <td>Zoom level; 1 = minimum zoom, 21 = maximum zoom</td>
+            <td>Zoom level; 1 = minimum zoom, 21 = maximum zoom.</td>
+        </tr>
+        <tr>
+            <td>siteID</td>
+            <td>Numeric ID of site. Used for direct links, available to copy from each site's detail pop-up.</td>
         </tr>
         <tr>
             <td>rangeMi</td>
@@ -747,9 +748,7 @@ PAGE: about
         </tr>
         <tr>
             <td>controls</td>
-            <td>Controls to show. Possible values are: none or comma separated combinations of range, status,
-                render
-            </td>
+            <td>Controls to show. Possible values are: none or comma separated combinations of range, status, render.</td>
         </tr>
     </table>
 

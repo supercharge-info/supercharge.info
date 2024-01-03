@@ -141,7 +141,7 @@ export default class InfoWindow {
         //
         // Title/Supercharger-name
         //
-        popupContent += `<div class='title'>${site.displayName} ${buildPinMarker(site, this.pinned)}</div>`;
+        popupContent += `<div class='title'>${buildPinMarker(site, this.pinned)} ${site.displayName}</div>`;
 
 
         //
@@ -232,6 +232,7 @@ function _buildLinksDiv(supercharger, showDetails) {
         buildLinkZoom(supercharger),
         buildLinkCircleToggle(supercharger),
         buildLinkAddToRoute(supercharger),
+        buildLinkDirectToSite(supercharger),
 
         // links that are NOT always present.
         buildLinkDetailsOrHistory(supercharger, showDetails),
@@ -246,7 +247,7 @@ function _buildLinksDiv(supercharger, showDetails) {
     $.each(linkList, function (index, value) {
         if (value !== null) {
             content += value + "";
-            if (count++ == 3) {
+            if (count++ == 4) {
                 content += "<br/>";
             }
         }
@@ -279,6 +280,10 @@ function buildLinkAddToRoute(supercharger) {
     return `<a class='add-to-route-trigger' href='${supercharger.id}'>add to route</a>`;
 }
 
+function buildLinkDirectToSite(supercharger) {
+    return `<a class='direct-link-trigger' href='${supercharger.id}'>direct link</a>`;
+}
+
 function buildLinkTeslaURL(supercharger) {
     if (Objects.isNotNullOrUndef(supercharger.locationId)) {
         return `<a target='_blank' href='${supercharger.getTeslaLink()}'>tesla.${supercharger.address.isTeslaCN() ? 'cn' : 'com'}</a>`;
@@ -297,7 +302,7 @@ function buildLinkMapURL(supercharger) {
     if (Objects.isNotNullOrUndef(supercharger.address.street)) {
         const addr = supercharger.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        return `<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${query}'>gmap</a>`;
+        return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}">gmap</a>`;
     }
     return null;
 }
