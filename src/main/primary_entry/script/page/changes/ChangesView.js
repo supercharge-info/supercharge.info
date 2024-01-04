@@ -9,6 +9,7 @@ import Status from "../../site/SiteStatus";
 import Sites from "../../site/Sites";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
+import Objects from "../../util/Objects";
 
 export default class ChangesView {
 
@@ -65,7 +66,10 @@ export default class ChangesView {
 
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        var hoverText = site.address.street + ' • ' + site.address.city;
+        if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) return changeRow.siteName;
+        var hoverText = '';
+        if (site.address.street)  hoverText += site.address.street
+        if (site.address.city)    hoverText += ' • ' + site.address.city;
         if (site.address.state)   hoverText += ' • ' + site.address.state;
         if (site.address.country) hoverText += ' • ' + site.address.country;
         return `<span title="${hoverText}">${changeRow.siteName}</span>`;
@@ -76,7 +80,7 @@ export default class ChangesView {
         const s = Status.fromString(changeRow.siteStatus);
         var chg = changeRow.changeType.toLowerCase();
         return (changeRow.statusText ? `<span title="${changeRow.statusText}">${chg}*</span>` : chg)
-            + (s === site.status ? '' : ' <span class="text-muted">(old)</span>');
+            + (s === site?.status ? '' : ' <span class="text-muted">(old)</span>');
     }
 
     static buildStatus(changeRow) {
@@ -85,9 +89,9 @@ export default class ChangesView {
         const s = Status.fromString(changeRow.siteStatus);
         // includes title (for fancy tooltip) and alt (for copy/paste as text)
         var prev = isUpdate && changeRow.prevStatus ?
-            site.getImg(Status.fromString(changeRow.prevStatus), 'text-muted') :
+            site?.getImg(Status.fromString(changeRow.prevStatus), 'text-muted') :
             `<span class="text-muted CLOSED_PERM">${isUpdate ? "???" : "n/a"}</span>`;
-        return `${prev} ➜ ${site.getImg(s)}`;
+        return `${prev} ➜ ${site?.getImg(s)}`;
     }
     
     static buildDetails(changeRow) {
@@ -136,9 +140,9 @@ export default class ChangesView {
             row.statusText = "Editor's note goes here";
         }
         */
-        const sitestalls = `${site.numStalls} stalls`;
-        const sitekw = site.powerKilowatt > 0 ?
-            ` • ${site.powerKilowatt} kW` :
+        const sitestalls = `${site?.numStalls} stalls`;
+        const sitekw = site?.powerKilowatt > 0 ?
+            ` • ${site?.powerKilowatt} kW` :
             '';
         const sitenote = changeRow.summary ? ' • ' + changeRow.summary : '';
 
@@ -163,11 +167,11 @@ export default class ChangesView {
                     </ul>
                 </div>`;
         }
-        if (site.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
-        if (site.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
-        if (site.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
+        if (site?.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
+        if (site?.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site?.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
         
-        const s = site.status;
+        const s = site?.status;
         if (s !== Status.fromString(changeRow.siteStatus)) content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
 
         return content;
@@ -175,21 +179,21 @@ export default class ChangesView {
 
     static buildLinks(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        const addr = site.address;
-        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>', site.location.toString());
+        const addr = site?.address;
+        const query = encodeURI(`${addr?.street||''} ${addr?.city||''} ${addr?.state||''} ${addr?.zip||''} ${addr?.country||''}`);
+        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>', site?.location?.toString());
         const discussLink = ChangesView.asLink(
-            site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
+            site?.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${changeRow.siteId}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " • " + ChangesView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
+            " • " + ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
         return `${gmapLink} • ${discussLink}${teslaLink}`;
     }
 
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
-        return `<a href="${href.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
+        return `<a href="${href?.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
     }
 
     initDataTableOptions() {
