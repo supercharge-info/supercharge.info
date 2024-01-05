@@ -172,8 +172,9 @@ export default class ChangesView {
         if (site?.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
         
         const s = site?.status;
-        if (s !== Status.fromString(changeRow.siteStatus)) content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
-
+        if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
+            content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
+        }
         return content;
     }
 
