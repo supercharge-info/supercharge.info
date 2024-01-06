@@ -31,7 +31,8 @@ export default class ChangesView {
 
     syncFilters() {
         this.filterControl.init();
-        this.tableAPI.draw();
+        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
+        Sites.reloadCallback = () => this.tableAPI.draw(false);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -186,7 +187,7 @@ export default class ChangesView {
         const discussLink = ChangesView.asLink(
             site?.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${changeRow.siteId}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
-        const teslaLink = site.locationId ?
+        const teslaLink = site?.locationId ?
             " • " + ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
         return `${gmapLink} • ${discussLink}${teslaLink}`;
@@ -215,13 +216,14 @@ export default class ChangesView {
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
+                    Sites.checkReload();
                     const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
                     var resultSpan = $("#changes-result-count");
-                    resultSpan.html(`${json.recordsFiltered} entr${json.recordsFiltered === 1 ? "y" : "ies"}<span class="shrink"> matched</span>`);
+                    resultSpan.html(`${json.recordsFiltered.toLocaleString()} entr${json.recordsFiltered === 1 ? "y" : "ies"}<span class="shrink"> matched</span>`);
                     resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
                     resultSpan.attr("title", json.recordsFiltered === 0 ? "No change log entries displayed. Adjust or reset filters to see more." : "change log entries");
                     return JSON.stringify(json);

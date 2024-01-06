@@ -10,10 +10,7 @@ export default class AboutPage {
         if (!AboutPage.initialized) {
 
             this.versionContainer = $("#page-about-version-container");
-            this.emailContainer = $("#page-about-email-container");
-
             this.loadVersionInfo();
-            this.insertEmailAddress();
             AboutPage.initialized = true;
 
             new Feedback();
@@ -31,10 +28,6 @@ export default class AboutPage {
         const version = nodePackage.version;
         this.versionContainer.append(`Version <b>${version}</b>. `);
         this.versionContainer.append(`Database last updated <b>${databaseInfo.lastModifiedString}</b>`);
-    }
-
-    insertEmailAddress() {
-        this.emailContainer.html("<b>map" + "@superch" + "arge.info</b>");
     }
 
 }
