@@ -32,7 +32,8 @@
     </script>
 </head>
 
-<body>
+<!-- body style is set to display: none initially to make initial rendering cleaner -->
+<body style="display: none;">
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 Navigation Bar
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
@@ -131,7 +132,7 @@ Navigation Bar
 
     <div id="way-back-container" class="well well-lg">
         <div id="way-back-button-panel" class="control-row">
-            <img src="/images/history-icon.svg" class="control-row-icon"/>
+            <img src="/images/history-icon.svg" class="collapse control-row-icon"/>
             <label class="control">Way Back</label>
             <button id='way-back-mute' class="btn btn-default btn-sm" type="button">
                 <span class="glyphicon glyphicon-subtitles"></span><span id='mute-button-label'> Sound On</span>

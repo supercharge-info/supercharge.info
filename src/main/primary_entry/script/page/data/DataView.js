@@ -9,6 +9,7 @@ import Supercharger from "../../site/Supercharger";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
+import Sites from "../../site/Sites";
 
 export default class DataView {
 
@@ -29,8 +30,9 @@ export default class DataView {
     }
 
     syncFilters() {
+        console.log("syncFilters: DataView");
         this.filterControl.init();
-        this.tableAPI.draw();
+        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
     }
 
     filterControlCallback() {

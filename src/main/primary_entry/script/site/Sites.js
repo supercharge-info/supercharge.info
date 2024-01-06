@@ -15,8 +15,20 @@ var loaded = performance.now();
 
 export default class Sites {
 
+    static loading = true;
+
+    static deferIfLoading() {
+        // defer execution via brief timeout if sites are still loading
+        if (Sites.loading) {
+            console.log("loading");
+            (async () => await new Promise(r => setTimeout(r, 10)))();
+        }
+    }
+
     static getById(id) {
         Asserts.isInteger(id, "id must be an integer");
+        Sites.deferIfLoading();
+
         const list = Sites.getAll();
         for (let i = 0; i < list.length; i++) {
             const supercharger = list[i];
@@ -47,24 +59,31 @@ export default class Sites {
     }
 
     static getAll() {
+        Sites.deferIfLoading();
         return LIST;
     }
     static getRegions() {
+        Sites.deferIfLoading();
         return Regions;
     }
     static getCountries() {
+        Sites.deferIfLoading();
         return Countries;
     }
     static getCountriesByRegion(regionId) {
+        Sites.deferIfLoading();
         return CountriesByRegion.get(regionId);
     }
     static getStatesByRegion(regionId) {
+        Sites.deferIfLoading();
         return StatesByRegion.get(regionId);
     }
     static getStatesByCountry(countryId) {
+        Sites.deferIfLoading();
         return StatesByCountry.get(countryId);
     }
     static getStates() {
+        Sites.deferIfLoading();
         return States;
     }
 
@@ -81,6 +100,7 @@ S-by-C: Map(cid, Set(sname))
      * Load all sites data.  This method must be called before any other in this class.
      */
     static load() {
+        Sites.loading = true;
         return $.getJSON(ServiceURL.SITES).done(
             (siteList) => {
                 siteList.forEach((site) => {
@@ -100,15 +120,17 @@ S-by-C: Map(cid, Set(sname))
                     StatesByCountry.get(s.address.countryId).add(s.address.state);
                     States.add(s.address.state);
                 });
+                Sites.loading = false;
             }
         );
     }
 
     static async checkReload() {
-        // Skip if data is less than an hour old
-        if (performance.now() - loaded < 3600000) return false;
-        console.log('reloading all sites');
+        // Skip if data is less than 30 minutes old
+        if (Sites.loading || performance.now() - loaded < 1800000) return false;
+        Sites.loading = true;
         loaded = performance.now();
+        console.log(`reloading all sites @ ${loaded}`);
         LIST.length = 0;
         Regions.clear();
         Countries.clear();
@@ -117,7 +139,7 @@ S-by-C: Map(cid, Set(sname))
         StatesByCountry.clear();
         States.clear();
         await Sites.load();
-        console.log(`reloaded ${LIST.length} sites`);
+        console.log(`reloaded ${LIST.length} sites @ ${performance.now()}`);
         return true;
     }
 

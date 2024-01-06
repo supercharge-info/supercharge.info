@@ -30,8 +30,9 @@ export default class ChangesView {
     }
 
     syncFilters() {
+        console.log("syncFilters: ChangesView");
         this.filterControl.init();
-        this.tableAPI.draw();
+        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -186,7 +187,7 @@ export default class ChangesView {
         const discussLink = ChangesView.asLink(
             site?.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${changeRow.siteId}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
-        const teslaLink = site.locationId ?
+        const teslaLink = site?.locationId ?
             " • " + ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
         return `${gmapLink} • ${discussLink}${teslaLink}`;

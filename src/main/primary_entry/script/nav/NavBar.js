@@ -58,6 +58,9 @@ export default class NavBar {
         if(QueryStrings.isShowSignIn()) {
             this.loginDialog.show();
         }
+
+        // body style is set to display: none initially to make initial rendering cleaner
+        $("body")[0].style.display = "";
     }
 
     initListeners() {
@@ -117,7 +120,7 @@ export default class NavBar {
         this.currentPage = newPageName;
         this.showCurrentPage();
 
-        /* Let the browser do the DOM updating associated with change the page, then execute the logic associated
+        /* Let the browser do the DOM updating associated with changing the page, then execute the logic associated
          with the page change. */
         setTimeout(() => pages[newPageName].onPageShow(), 1);
     }
