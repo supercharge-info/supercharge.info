@@ -233,7 +233,7 @@ export default class MapView {
                 .count();
 
         var resultSpan = $("#map-result-count");
-        resultSpan.html(`<span class="shrink">Showing </span>${resultCount} site${resultCount === 1 ? "" : "s"}`);
+        resultSpan.html(`<span class="shrink">Showing </span>${resultCount.toLocaleString()} site${resultCount === 1 ? "" : "s"}`);
         resultSpan.attr("class", resultCount === 0 ? "zero-sites" : "site-results");
         resultSpan.attr("title", resultCount === 0 ? "No sites displayed. Adjust or reset filters, zoom out, or move the map to see more." : "");
     }

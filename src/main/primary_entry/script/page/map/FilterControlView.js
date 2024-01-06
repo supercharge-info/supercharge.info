@@ -21,7 +21,6 @@ export default class FilterControlView {
     }
     
     syncFilters() {
-        console.log("syncFilters: FilterControlView");
         this.filterControl.init();
         EventBus.dispatch("remove-all-markers-event");
         EventBus.dispatch("viewport-changed-event");

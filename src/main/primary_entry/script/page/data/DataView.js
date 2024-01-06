@@ -30,9 +30,9 @@ export default class DataView {
     }
 
     syncFilters() {
-        console.log("syncFilters: DataView");
         this.filterControl.init();
         setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
+        Sites.reloadCallback = () => this.tableAPI.draw(false);
     }
 
     filterControlCallback() {
@@ -109,7 +109,7 @@ export default class DataView {
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
                     var resultSpan = $("#data-result-count");
-                    resultSpan.html(`${json.recordsFiltered} site${json.recordsFiltered === 1 ? "" : "s"}<span class="shrink"> matched</span>`);
+                    resultSpan.html(`${json.recordsFiltered.toLocaleString()} site${json.recordsFiltered === 1 ? "" : "s"}<span class="shrink"> matched</span>`);
                     resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
                     resultSpan.attr("title", json.recordsFiltered === 0 ? "No sites displayed. Adjust or reset filters to see more." : "");
                     return JSON.stringify(json);

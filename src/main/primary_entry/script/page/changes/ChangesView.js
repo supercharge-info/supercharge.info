@@ -30,9 +30,9 @@ export default class ChangesView {
     }
 
     syncFilters() {
-        console.log("syncFilters: ChangesView");
         this.filterControl.init();
         setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
+        Sites.reloadCallback = () => this.tableAPI.draw(false);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -216,13 +216,14 @@ export default class ChangesView {
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
+                    Sites.checkReload();
                     const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
                     json.recordsFiltered = json.recordCount;
                     json.data = json.results;
                     var resultSpan = $("#changes-result-count");
-                    resultSpan.html(`${json.recordsFiltered} entr${json.recordsFiltered === 1 ? "y" : "ies"}<span class="shrink"> matched</span>`);
+                    resultSpan.html(`${json.recordsFiltered.toLocaleString()} entr${json.recordsFiltered === 1 ? "y" : "ies"}<span class="shrink"> matched</span>`);
                     resultSpan.attr("class", json.recordsFiltered === 0 ? "zero-sites" : "site-results");
                     resultSpan.attr("title", json.recordsFiltered === 0 ? "No change log entries displayed. Adjust or reset filters to see more." : "change log entries");
                     return JSON.stringify(json);

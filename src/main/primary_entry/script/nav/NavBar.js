@@ -107,6 +107,7 @@ export default class NavBar {
      * itself invoke any history API methods.
      */
     async changePage(newPageName) {
+        Sites.reloadCallback = null;
         await Sites.checkReload();
         const pages = this.pages;
         if (newPageName === null) {
