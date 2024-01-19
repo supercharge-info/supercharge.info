@@ -17,6 +17,11 @@
     cursor: pointer;
 }
 
+#changes-table .status {
+    text-align: right;
+    padding-right: 8px;
+}
+
 #changes-table td .PERMIT {
     color: #0000ff;
 }
