@@ -92,7 +92,7 @@ export default class ChangesView {
         var prev = isUpdate && changeRow.prevStatus ?
             site?.getImg(Status.fromString(changeRow.prevStatus), 'text-muted') :
             (isUpdate ? "?" : "");
-        return `<div class="status">${prev} ${isUpdate ? "➜" : "+"} ${site?.getImg(s)}</div>`;
+        return `${prev} ${isUpdate ? "➜" : "+"} ${site?.getImg(s)}`;
     }
     
     static buildDetails(changeRow) {
@@ -258,20 +258,20 @@ export default class ChangesView {
                         return ChangesView.buildStatus(row);
                     },
                     "className": "status",
-                    "width": "9%"
+                    "width": "12%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildDetails(row);
                     },
-                    "width": "28%"
+                    "width": "24%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildLinks(row);
                     },
                     "className": "links",
-                    "width": "11%"
+                    "width": "12%"
                 }
             ],
             "createdRow": (row, data, index) => {
