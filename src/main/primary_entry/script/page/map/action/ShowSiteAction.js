@@ -3,7 +3,6 @@ import MapEvents from "../MapEvents";
 import $ from "jquery";
 import MapPage from "../../map/MapPage";
 import Sites from "../../../site/Sites";
-import userConfig from "../../../common/UserConfig";
 
 /**
  * Show a location on the map page. Even if the map is not the current page.
@@ -52,9 +51,9 @@ export default class ShowSiteAction {
                         supercharger.marker.fire('click');
                     }
                 }
-                else if (userConfig.isAnyFilterSet()) {
-                	// If there's no marker, clear filters and try again in 75ms
-                    EventBus.dispatch("reset-filters");
+                else if (supercharger) {
+                	// If there's no marker, create it (essentially bypassing/overriding any filters) and try again in 75ms
+                    EventBus.dispatch("pin-site-event", supercharger);
                     return true;
                 }
                 return false;

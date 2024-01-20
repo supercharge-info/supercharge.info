@@ -35,6 +35,7 @@ export default class FilterControlView {
         userConfig.setPower(this.filterControl.getPower());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
         this.filterControl.updateVisibility();
+        EventBus.dispatch("unpin-sites-event");
         EventBus.dispatch("remove-all-markers-event");
         EventBus.dispatch("viewport-changed-event");
     }

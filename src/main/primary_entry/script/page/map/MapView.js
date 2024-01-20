@@ -21,7 +21,7 @@ import TotalCountPanel from "../../nav/TotalCountPanel";
 export default class MapView {
 
     constructor(lat, lng, initialZoom) {
-        this.searchMarker = null;
+        this.pinnedSites = [];
 
         this.initMap(lat, lng, initialZoom);
         this.zoom = initialZoom;
@@ -47,12 +47,13 @@ export default class MapView {
         new MapContextMenu(this.mapApi);
         EventBus.addListener("way-back-trigger-event", this.setupForWayBack, this);
         EventBus.addListener("way-back-cleanup-event", this.cleanupWayBack, this);
-        EventBus.addListener("places-changed-event", this.handlePlacesChange, this);
         EventBus.addListener(RouteEvents.result_model_changed, this.handleRouteResult, this);
         EventBus.addListener("viewport-changed-event", this.handleViewportChange, this);
         EventBus.addListener("markersize-changed-event", this.updateMarkerSize, this);
         EventBus.addListener("remove-all-markers-event", this.removeAllMarkers, this);
         EventBus.addListener("zoom-to-site-event", this.handleZoomToSite, this);
+        EventBus.addListener("pin-site-event", this.pinSite, this);
+        EventBus.addListener("unpin-sites-event", this.unpinSites, this);
         
         this.mapApi.on('moveend', $.proxy(this.handleViewportChange, this));
 
@@ -279,6 +280,17 @@ export default class MapView {
 
     getMarkerSizeByZoom = (zoom) => zoom < 4 ? 4 : zoom > 16 ? 10 : Math.ceil(zoom / 2) + 2;
 
+    pinSite(event, supercharger) {
+        if (supercharger.marker === null || supercharger.marker === undefined) {
+            if (this.pinnedSites.indexOf(supercharger) < 0) this.pinnedSites.push(supercharger);
+            this.markerFactory.createMarker(supercharger, this.markerSize, false);
+        }
+    }
+
+    unpinSites() {
+        this.pinnedSites = [];
+    }
+
     createIndividualMarkers(bounds, newMarkerSize) {
         var t = performance.now(), created = 0, infoWindows = [];
         if (this.markerSize !== newMarkerSize) {
@@ -294,6 +306,12 @@ export default class MapView {
                 markers.push(this.markerFactory.createMarker(supercharger, newMarkerSize, true));
                 created++;
             });
+        this.pinnedSites.forEach((supercharger) => {
+            if (supercharger.marker === null || supercharger.marker === undefined) {
+                markers.push(this.markerFactory.createMarker(supercharger, newMarkerSize, true));
+                created++;
+            }
+        });
         mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${this.zoom} created=${created} markers=${newMarkerSize} t=${(performance.now() - t)}`);
@@ -341,6 +359,13 @@ export default class MapView {
                 }
             });
         
+        this.pinnedSites.forEach((supercharger) => {
+            if (supercharger.marker === null || supercharger.marker === undefined) {
+                markers.push(this.markerFactory.createMarker(supercharger, this.markerSize, true));
+                created++;
+            }
+        });
+
         mapLayers.addGroupToOverlay(markers);
         this.restoreInfoWindows(infoWindows);
         console.log(`zoom=${newZoom} created=${created} clusters=${renderModel.getCurrentClusterSize()} t=${(performance.now() - t)}`);
