@@ -60,7 +60,6 @@ export default class MapPage {
         }
         /* CASE 2: User has explicitly specified a valid site ID */
         else if (initSite !== null) {
-            // TODO: if specified site would be filtered out, either clear user filters, or skip entirely and/or show error message
             console.log(`initializing map with site ${initSite.id} (${initSite.location.lat},${initSite.location.lng})`);
             this.initializeAt(initSite.location.lat, initSite.location.lng);
             EventBus.dispatch("map-show-location-event", QueryStrings.getSiteId());
