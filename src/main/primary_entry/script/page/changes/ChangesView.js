@@ -91,8 +91,8 @@ export default class ChangesView {
         // includes title (for fancy tooltip) and alt (for copy/paste as text)
         var prev = isUpdate && changeRow.prevStatus ?
             site?.getImg(Status.fromString(changeRow.prevStatus), 'text-muted') :
-            `<span class="text-muted CLOSED_PERM">${isUpdate ? "???" : "n/a"}</span>`;
-        return `${prev} ➜ ${site?.getImg(s)}`;
+            (isUpdate ? "?" : "");
+        return `${prev} ${isUpdate ? "➜" : "+"} ${site?.getImg(s)}`;
     }
     
     static buildDetails(changeRow) {
@@ -257,20 +257,21 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildStatus(row);
                     },
-                    "width": "10%"
+                    "className": "status",
+                    "width": "12%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildDetails(row);
                     },
-                    "width": "28%"
+                    "width": "24%"
                 },
                 {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildLinks(row);
                     },
                     "className": "links",
-                    "width": "10%"
+                    "width": "12%"
                 }
             ],
             "createdRow": (row, data, index) => {
