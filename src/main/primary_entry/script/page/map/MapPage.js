@@ -29,7 +29,7 @@ export default class MapPage {
 
     /**
      * Note that part of the map page initialization takes place asynchronously (after user acknowledges or blocks
-     * geolocation prompt). We use MapPage.initStarted, MapPage.initViewStarted, MapView.initComplete.
+     * geolocation prompt). We use MapPage.initStarted, MapPage.initViewStarted, MapPage.initComplete, MapPage.initViewComplete.
      */
     onPageShow() {
         if (!MapPage.initStarted) {
@@ -49,6 +49,7 @@ export default class MapPage {
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();
+        EventBus.addListener("map-viewport-change-event", this.setInitViewComplete, this);
 
         const initSite = QueryStrings.isSiteIdSet() ? Sites.getById(QueryStrings.getSiteId()) : null;
 
@@ -146,6 +147,10 @@ export default class MapPage {
         }
 
         MapPage.initComplete = true;
+    }
+
+    setInitViewComplete() {
+        MapPage.initViewComplete = true;
     }
 
 }

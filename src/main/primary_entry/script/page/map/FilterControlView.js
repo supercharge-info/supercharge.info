@@ -7,16 +7,16 @@ import $ from "jquery";
 export default class FilterControlView {
 
     constructor(filterDialog) {
-        EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
-
         this.filterControl = new SiteFilterControl(
             $("#control-row-filter"),
             this.filterControlCallback.bind(this),
             filterDialog
         );
 
+        EventBus.addListener("control-visible-model-changed-event", this.handleVisibilityModelChange, this);
+        EventBus.addListener("reset-filters", this.filterControl.handleFilterReset, this.filterControl);
         filterDialog.dialog.on("hidden.bs.modal", () => { EventBus.dispatch("viewport-changed-event"); });
-    
+
         this.syncFilters();
     }
     
