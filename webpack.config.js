@@ -176,8 +176,11 @@ module.exports = (env) => {
                     {from: 'src/main/common_entry/sitemap.xml'}
                 ]
             }),
-            //new ESLintPlugin(),
-            new MiniCssExtractPlugin()
+            new ESLintPlugin(),
+            new MiniCssExtractPlugin({
+                filename: "[name].[contenthash].css",
+                chunkFilename: "[id].[contenthash].css"
+            })
         ]
     }
     if (env.WEBPACK_SERVE) {

@@ -191,10 +191,10 @@ export default class DataView {
                 clearInterval(window.dataInterval);
                 window.dataInterval = setInterval(() => {
                     // Asynchronously initialize tooltips, starting from both ends of the table and working toward the middle
-                    for (var i = 0; i < 40 && window.dataIcons.length > 0; i++) {
+                    for (var i1 = 0; i1 < 40 && window.dataIcons.length > 0; i1++) {
                         window.dataIcons.shift().tooltip({ "container": "body" });
                     }
-                    for (var i = 0; i < 10 && window.dataIcons.length > 0; i++) {
+                    for (var i2 = 0; i2 < 10 && window.dataIcons.length > 0; i2++) {
                         window.dataIcons.pop().tooltip({ "container": "body" });
                     }
                     if (window.dataIcons.length === 0) {

@@ -32,10 +32,10 @@ export default class ShowSiteAction {
          */
         $.doTimeout(250, () => {
             if (!MapPage.initComplete) {
-	            // If we return true here the outer doTimeout will try again in 250ms
-	            return true;
-			}
-			
+                // If we return true here the outer doTimeout will try again in 250ms
+                return true;
+            }
+
             EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, zoom: 10 });
 
             /* Now the map is initialized, but the selected marker may not be because we initialize markers
@@ -52,7 +52,7 @@ export default class ShowSiteAction {
                     }
                 }
                 else if (supercharger) {
-                	// If there's no marker, create it (essentially bypassing/overriding any filters) and try again in 75ms
+                    // If there's no marker, create it (essentially bypassing/overriding any filters) and try again in 75ms
                     EventBus.dispatch("pin-site-event", supercharger);
                     return true;
                 }
