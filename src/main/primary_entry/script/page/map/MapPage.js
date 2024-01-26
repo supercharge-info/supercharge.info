@@ -29,7 +29,7 @@ export default class MapPage {
 
     /**
      * Note that part of the map page initialization takes place asynchronously (after user acknowledges or blocks
-     * geolocation prompt). We use MapPage.initStarted, MapPage.initViewStarted, MapView.initComplete.
+     * geolocation prompt). We use MapPage.initStarted, MapPage.initViewStarted, MapPage.initComplete, MapPage.initViewComplete.
      */
     onPageShow() {
         if (!MapPage.initStarted) {
@@ -49,6 +49,7 @@ export default class MapPage {
         new RenderControlView();
         new RangeControlView();
         new RoutingPanel();
+        EventBus.addListener("map-viewport-change-event", this.setInitViewComplete, this);
 
         const initSite = QueryStrings.isSiteIdSet() ? Sites.getById(QueryStrings.getSiteId()) : null;
 
@@ -59,7 +60,6 @@ export default class MapPage {
         }
         /* CASE 2: User has explicitly specified a valid site ID */
         else if (initSite !== null) {
-            // TODO: if specified site would be filtered out, either clear user filters, or skip entirely and/or show error message
             console.log(`initializing map with site ${initSite.id} (${initSite.location.lat},${initSite.location.lng})`);
             this.initializeAt(initSite.location.lat, initSite.location.lng);
             EventBus.dispatch("map-show-location-event", QueryStrings.getSiteId());
@@ -146,6 +146,10 @@ export default class MapPage {
         }
 
         MapPage.initComplete = true;
+    }
+
+    setInitViewComplete() {
+        MapPage.initViewComplete = true;
     }
 
 }

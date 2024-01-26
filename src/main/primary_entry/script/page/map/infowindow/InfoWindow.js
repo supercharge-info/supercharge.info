@@ -172,14 +172,20 @@ export default class InfoWindow {
             }
 
             //
-            // Construction/Permit/Closed/Limited Hours
+            // Status, other attributes, limited hours
             //
-            popupContent += ` • <span class='${site.status.className}'><img src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `;
-            popupContent += `${site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays} days`;
+            popupContent += ` • <span class='${site.status.className}'><img class="status" src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `;
+            popupContent += `${site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays} day${site.statusDays == 1 ? "" : "s"}</span>`;
+    
+            if (site.otherEVs || site.solarCanopy || site.battery) popupContent += ' • ';
+            if (site.otherEVs)     popupContent += '<img title="other EVs OK" src="/images/car-electric.svg"/>';
+            if (site.solarCanopy)  popupContent += '<img title="solar canopy" src="/images/solar-power-variant.svg"/>';
+            if (site.battery)      popupContent += '<img title="battery backup" src="/images/battery-charging.svg"/>';
+
             if (Objects.isNotNullOrUndef(site.hours)) {
                 popupContent += `<div class="limited">${site.formatHours()}</div>`; 
             }
-            popupContent += "</span></div>";
+            popupContent += "</div>";
         }
 
         popupContent += "<hr/>";

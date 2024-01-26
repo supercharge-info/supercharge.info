@@ -4,7 +4,6 @@ import $ from "jquery";
 import MapPage from "../../map/MapPage";
 import Sites from "../../../site/Sites";
 
-
 /**
  * Show a location on the map page. Even if the map is not the current page.
  *
@@ -32,30 +31,34 @@ export default class ShowSiteAction {
          * thing which may not be initialized yet.
          */
         $.doTimeout(250, () => {
-            if (MapPage.initComplete) {
-
-                EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, zoom: 10 });
-
-                /* Now the map is initialized, but the selected marker may not be because we initialize markers
-                 * in response to viewport changes on the map. */
-                $.doTimeout(75, () => {
-                    if (supercharger && supercharger.marker) {
-                        if (!supercharger.marker.infoWindow || !supercharger.marker.infoWindow.isShown()) {
-                            // Do not remove popup if it exists
-                            supercharger.marker.fire('click');
-                        }
-                        return false;
-                    }
-                    else if (performance.now() - t < 10000) {
-                        // If we return true here the inner doTimeout will try again in 75ms
-                        return true;
-                    }
-                });
-                return false;
-            } else {
+            if (!MapPage.initComplete) {
                 // If we return true here the outer doTimeout will try again in 250ms
                 return true;
             }
+
+            EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, zoom: 10 });
+
+            /* Now the map is initialized, but the selected marker may not be because we initialize markers
+             * in response to viewport changes on the map. */
+            $.doTimeout(75, () => {
+                if (!MapPage.initViewComplete && performance.now() - t < 10000) {
+                    // If we return true here the inner doTimeout will try again in 75ms
+                    return true;
+                }
+                if (supercharger && supercharger.marker) {
+                    if (!supercharger.marker.infoWindow || !supercharger.marker.infoWindow.isShown()) {
+                        // Do not remove popup if it exists
+                        supercharger.marker.fire('click');
+                    }
+                }
+                else if (supercharger) {
+                    // If there's no marker, create it (essentially bypassing/overriding any filters) and try again in 75ms
+                    EventBus.dispatch("pin-site-event", supercharger);
+                    return true;
+                }
+                return false;
+            });
+            return false;
         });
     }
 

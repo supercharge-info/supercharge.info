@@ -157,6 +157,17 @@ class UserConfig {
         return Units.fromString(this.unit);
     }
 
+    isAnyFilterSet() {
+        return this.filter.changeType !== null
+            || this.filter.regionId !== null
+            || this.filter.countryId !== null
+            || this.filter.state.length > 0
+            || this.filter.status.length> 0
+            || this.filter.stalls !== null
+            || this.filter.power !== null
+            || this.filter.otherEVs !== null;
+    }
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // load/save
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

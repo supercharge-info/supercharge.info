@@ -69,7 +69,7 @@ export default class ChangesView {
         const site = Sites.getById(changeRow.siteId);
         if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) return changeRow.siteName;
         var hoverText = '';
-        if (site.address.street)  hoverText += site.address.street
+        if (site.address.street)  hoverText += site.address.street;
         if (site.address.city)    hoverText += ' • ' + site.address.city;
         if (site.address.state)   hoverText += ' • ' + site.address.state;
         if (site.address.country) hoverText += ' • ' + site.address.country;
@@ -294,10 +294,10 @@ export default class ChangesView {
                 clearInterval(window.changesInterval);
                 window.changesInterval = setInterval(() => {
                     // Asynchronously initialize tooltips, starting from both ends of the table and working toward the middle
-                    for (var i = 0; i < 40 && window.changesIcons.length > 0; i++) {
+                    for (var i1 = 0; i1 < 40 && window.changesIcons.length > 0; i1++) {
                         window.changesIcons.shift().tooltip({ "container": "body" });
                     }
-                    for (var i = 0; i < 10 && window.changesIcons.length > 0; i++) {
+                    for (var i2 = 0; i2 < 10 && window.changesIcons.length > 0; i2++) {
                         window.changesIcons.pop().tooltip({ "container": "body" });
                     }
                     if (window.changesIcons.length === 0) {
