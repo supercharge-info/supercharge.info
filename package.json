@@ -56,7 +56,7 @@
     "jquery": "3.5.1",
     "jquery-validation": "^1.19.5",
     "jquery.browser": "0.1.0",
-    "leaflet": "1.9.3",
+    "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "2.4.0",
     "leaflet-routing-machine": "3.2.12",
     "sortablejs": "^1.15.0",

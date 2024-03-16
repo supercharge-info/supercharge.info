@@ -174,8 +174,9 @@ export default class InfoWindow {
             //
             // Status, other attributes, limited hours
             //
+            var days = site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays;
             popupContent += ` • <span class='${site.status.className}'><img class="status" src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `;
-            popupContent += `${site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays} day${site.statusDays == 1 ? "" : "s"}</span>`;
+            popupContent += `${days} day${days == 1 ? "" : "s"}</span>`;
     
             if (site.otherEVs || site.solarCanopy || site.battery) popupContent += ' • ';
             if (site.otherEVs)     popupContent += '<img title="other EVs OK" src="/images/car-electric.svg"/>';
