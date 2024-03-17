@@ -140,7 +140,7 @@ export default class ChangesView {
             }
             if (site.parkingId !== 1) {
                 const park = Sites.getParking().get(site.parkingId);
-                entries += `<li title='${park.description}'><b>Parking:</b> ${park.name}</li>`;
+                entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
             }
             if (site.addressNotes) entries += `<li class="notes">${site.addressNotes}</li>`;
             if (site.accessNotes) entries += `<li class="notes">${site.accessNotes}</li>`;

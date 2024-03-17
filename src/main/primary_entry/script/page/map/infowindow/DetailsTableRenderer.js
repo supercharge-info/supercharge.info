@@ -44,7 +44,7 @@ export default function buildDetailsDiv(site, displayUnit) {
     // Parking
     if (site.parkingId) {
         const park = Sites.getParking().get(site.parkingId);
-        div += `<tr title='${park.description}'><th>Parking</th><td>${park.name}</td></tr>`;
+        div += `<tr title='${park?.description ?? '(unknown)'}'><th>Parking</th><td>${park?.name ?? '(unknown)'}</td></tr>`;
     }
 
     // Date Opened
