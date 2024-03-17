@@ -18,6 +18,10 @@
     padding: 0;
 }
 
+#supercharger-data-table th.sorting::before, #supercharger-data-table th.sorting::after {
+    right: 2px;
+}
+
 #supercharger-data-table span.PERMIT {
     color: #0000ff;
 }
@@ -26,12 +30,12 @@
     color: orange;
 }
 
-#supercharger-data-table th {
+#supercharger-data-table th, #supercharger-data-table td {
     text-align: left;
+    padding: 4px;
 }
-
-#supercharger-data-table td {
-    text-align: left;
+#supercharger-data-table th.number {
+    padding-right: 16px;
 }
 
 #supercharger-data-table td.gps {
@@ -56,6 +60,11 @@
     padding: 8px;
     background-color: #ffe;
 }
+
 #supercharger-data-table li {
     white-space: pre;
+}
+#supercharger-data-table td.links {
+    padding-top: 2px;
+    line-height: 24px;
 }

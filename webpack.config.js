@@ -43,7 +43,7 @@ module.exports = (env) => {
             primary: './src/main/primary_entry/script/primary_entry.js'
         },
         infrastructureLogging: {
-            debug: env.api && [name => name.includes('webpack-dev-server')]
+            debug: !env.api && [name => name.includes('webpack-dev-server')]
         },
         module: {
             rules: [

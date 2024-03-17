@@ -119,29 +119,11 @@ S-by-C: Map(cid, Set(sname))
     }
 
     static checkReload() {
-        console.log(`checkReload loading=${Sites.loading}`);
-        if (Sites.loading) return false;
-        const prevLoaded = loaded;
         return $.getJSON(ServiceURL.DB_INFO).done(
             (dbInfo) => {
                 console.log(`checkReload loaded=${loaded} lastModified=${dbInfo.lastModified} reload=${loaded <= dbInfo.lastModified}`);
                 if (!dbInfo || loaded > dbInfo.lastModified) return;
-                Sites.loading = true;
-                loaded = Date.now();
-                console.log(`reloading all sites @ ${loaded}`);
-                LIST.length = 0;
-                Regions.clear();
-                Countries.clear();
-                CountriesByRegion.clear();
-                StatesByRegion.clear();
-                StatesByCountry.clear();
-                States.clear();
-                Sites.load().then(() => {
-                    // to avoid callback loops, don't call reloadCallback more than once per 10 seconds
-                    console.log(`reloaded ${LIST.length} sites t=${Date.now() - loaded} p=${loaded - prevLoaded}`);
-                    console.log(Sites.reloadCallback);
-                    if (Sites.reloadCallback && loaded - prevLoaded > 10000) Sites.reloadCallback();
-                });
+                location.reload();
             }
         );
     }
