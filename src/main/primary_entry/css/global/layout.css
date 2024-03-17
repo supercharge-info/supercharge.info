@@ -35,6 +35,9 @@ a.disabled {
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Data tables 
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+td.number, th.number {
+    text-align: right !important;
+}
 td span.status-select img {
     width: 20px;
     height: 20px;

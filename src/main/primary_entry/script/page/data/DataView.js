@@ -49,12 +49,68 @@ export default class DataView {
 
     static handleDataClick(event) {
         if (!WindowUtil.isTextSelected()) {
-            const clickTarget = $(event.target);
-            if (!clickTarget.is('a, b, ul, li, .links img')) {
-                const clickedSiteId = parseInt(clickTarget.closest('tr').attr('id'));
-                EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+            const target = $(event.target);
+            if (!target.is('a, b, ul, li, img, .details')) {
+                if (target.closest('table').find('div.open').length === 0) {
+                    const clickedSiteId = parseInt(target.closest('tr')[0].id);
+                    EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+                }
             }
         }
+    }
+
+    static buildStalls(supercharger) {
+        const site = Supercharger.fromJSON(supercharger);
+
+        const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+        var sitestalls = (Object.keys(site.stalls)?.length == 1 ? `${site.numStalls} ${Object.keys(site.stalls)[0]}` : `${site.numStalls}`) +
+            (Object.keys(site.plugs)?.length == 1 ? ` ${site.plugImg(Object.keys(site.plugs)[0])}` : '');
+        // special case for MagicDock
+        if (showDetail && site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
+            sitestalls = `<span class="details" title="MagicDock (NACS+CCS1)">${site.numStalls} ${Object.keys(site.stalls)[0]} <img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/></span>`;
+        }
+
+        var content = sitestalls;
+
+        if (showDetail) {
+            var entries = '<li><b>Stalls:</b>';
+            Object.keys(site.stalls).forEach(s => {
+                if (site.stalls[s] > 0) {
+                    entries += ` • ${site.stalls[s]} `;
+                    if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="accessible" alt="accessible"/>';
+                    else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
+                    else entries += s;
+                }
+            });
+            entries += '</li><li><b>Plugs:</b>';
+            Object.keys(site.plugs).forEach(p => {
+                if (site.plugs[p] > 0) {
+                    if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+                }
+            });
+            entries += '</li>';
+            if (site.facilityName) {
+                entries += `<li><b>Host:</b> ${site.facilityName}`;
+                if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+                entries += '</li>';
+            }
+            if (site.parkingId !== 1) {
+                const park = Sites.getParking().get(site.parkingId);
+                entries += `<li title='${park.description}'><b>Parking:</b> ${park.name}</li>`;
+            }
+            if (site.addressNotes) entries += `<li class="notes">${site.addressNotes}</li>`;
+            if (site.accessNotes) entries += `<li class="notes">${site.accessNotes}</li>`;
+
+            content = `
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="glyphicon glyphicon-chevron-down btn-xs"></b>${content}</a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        ${entries}
+                    </ul>
+                </div>`;
+        }
+        return content;
+
     }
 
     static buildStatus(supercharger) {
@@ -83,7 +139,13 @@ export default class DataView {
         const teslaLink = site.locationId ?
             " • " + DataView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
-        return `${gmapLink} • ${discussLink}${teslaLink}`;
+            const psLink = site.plugshareId ?
+            " • " + DataView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
+            '';
+        const osmLink = site.osmId ?
+            " • " + DataView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
+            '';
+        return `${gmapLink} • ${discussLink}${teslaLink}${psLink}${osmLink}`;
     }
 
     initDataTableOptions() {
@@ -131,20 +193,7 @@ export default class DataView {
                 {"data": "address.city"},
                 {"data": "address.state", "width": "5%"},
                 {"data": "address.zip", "width": "5%"},
-                {"data": "address.country", "width": "7%"},
-                {
-                    "data": "stallCount",
-                    "className": "number",
-                    "width": "1%"
-                },
-                {
-                    "data": "powerKilowatt",
-                    "render": (data, type, row, meta) => {
-                        return data || '';
-                    },
-                    "className": "number",
-                    "width": "1%"
-                },
+                {"data": "address.country", "width": "5%"},
                 {
                     "data": (row, type, val, meta) => {
                         return `${row.gps.latitude}, ${row.gps.longitude}`;
@@ -155,6 +204,21 @@ export default class DataView {
                 },
                 {
                     "data": "elevationMeters",
+                    "className": "number",
+                    "width": "1%"
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return DataView.buildStalls(row);
+                    },
+                    "className": "number",
+                    "width": "7%"
+                },
+                {
+                    "data": "powerKilowatt",
+                    "render": (data, type, row, meta) => {
+                        return data || '';
+                    },
                     "className": "number",
                     "width": "1%"
                 },
@@ -185,7 +249,7 @@ export default class DataView {
                 $("li img.wait").addClass("show");
                 window.dataTooltips = performance.now();
                 window.dataIcons = [];
-                $("#supercharger-data-table img").each(function () {
+                $("#supercharger-data-table img, #supercharger-data-table span.details").each(function () {
                     window.dataIcons.push($(this));
                 });
                 clearInterval(window.dataInterval);
