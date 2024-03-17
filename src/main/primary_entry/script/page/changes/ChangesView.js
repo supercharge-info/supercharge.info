@@ -67,7 +67,10 @@ export default class ChangesView {
 
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) return changeRow.siteName;
+        if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) {
+            Sites.checkReload();
+            return changeRow.siteName;
+        }
         var hoverText = '';
         if (site.address.street)  hoverText += site.address.street;
         if (site.address.city)    hoverText += ' • ' + site.address.city;
@@ -76,98 +79,39 @@ export default class ChangesView {
         return `<span title="${hoverText}">${changeRow.siteName}</span>`;
     }
 
-    static buildChangeType(changeRow) {
-        const site = Sites.getById(changeRow.siteId);
-        const s = Status.fromString(changeRow.siteStatus);
-        var chg = changeRow.changeType.toLowerCase();
-        return (changeRow.statusText ? `<span title="${changeRow.statusText}">${chg}*</span>` : chg)
-            + (s === site?.status ? '' : ' <span class="text-muted">(old)</span>');
-    }
-
     static buildStatus(changeRow) {
-        const isUpdate = changeRow.changeType.toLowerCase() === 'update';
         const site = Sites.getById(changeRow.siteId);
+        if (!site) Sites.checkReload();
+
+        const isUpdate = changeRow.changeType.toLowerCase() === 'update';
         const s = Status.fromString(changeRow.siteStatus);
+
         // includes title (for fancy tooltip) and alt (for copy/paste as text)
         var prev = isUpdate && changeRow.prevStatus ?
-            site?.getImg(Status.fromString(changeRow.prevStatus), 'text-muted') :
+            Status.getImg(site, Status.fromString(changeRow.prevStatus), 'text-muted') :
             (isUpdate ? "?" : "");
-        return `${prev} ${isUpdate ? "➜" : "+"} ${site?.getImg(s)}`;
+        return `${prev} ${isUpdate ? "➜" : "+"} ${Status.getImg(site, s)}`;
     }
     
     static buildDetails(changeRow) {
+        const kw = changeRow.powerKilowatt > 0 ? ` • ${changeRow.powerKilowatt} kW` : '';
+
         const site = Sites.getById(changeRow.siteId);
-
-        // mock stall details for now
-        /*
-        if (Math.random() > 0.8) {
-            changeRow.summary = "Something changed!";
-            changeRow.stallGroups = [
-                {
-                    "count": site.numStalls,
-                    "power": site.powerKilowatt,
-                    "type": "Tesla V3",
-                    "connector": "NACS",
-                    "status": changeRow.siteStatus,
-                },
-                {
-                    "count": 4,
-                    "power": 120,
-                    "type": "V2 - Tesla",
-                    "status": "CLOSED_TEMP",
-                    "connector": "NACS"
-                },
-                {
-                    "count": 8,
-                    "power": 250,
-                    "type": "V3 - Tesla",
-                    "status": "CONSTRUCTION",
-                    "connector": "Magic"
-                }
-            ];
-        } else if (Math.random() > 0.5) {
-            changeRow.summary = "Something changed?";
-            changeRow.stallGroups = [
-                {
-                    "count": site.numStalls,
-                    "power": site.powerKilowatt,
-                    "type": "Vn - Tesla",
-                    "status": changeRow.siteStatus,
-                    "connector": "NACS"
-                }
-            ];
+        if (!site) {
+            Sites.checkReload();
+            return `${changeRow.stallCount} stalls${kw}`;
         }
-        if (Math.random() > 0.8) {
-            row.statusText = "Editor's note goes here";
-        }
-        */
-        const sitestalls = `${site?.numStalls} stalls`;
-        const sitekw = site?.powerKilowatt > 0 ?
-            ` • ${site?.powerKilowatt} kW` :
-            '';
-        const sitenote = changeRow.summary ? ' • ' + changeRow.summary : '';
 
-        var content = "";
-        if (!changeRow.stallGroups) {
-            content = sitestalls + sitekw + sitenote;
-        } else {
-            var entries = `<li class="${changeRow.siteStatus} connectors"><b>${changeRow.summary}</b></li>`;
-            changeRow.stallGroups.forEach(sg => {
-                entries += `
-                <li class="${sg.status}">${sg.count} @ ${sg.power} kW → ${Status.fromString(sg.status).displayName}
-                    <li class="${sg.status} connectors">${sg.type} • ${sg.connector}</li>
-                </li>`;
-            });
-
-            content = `
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${sitestalls}${sitekw}
-                        <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
-                    <ul class="dropdown-menu">
-                        ${entries}
-                    </ul>
-                </div>`;
+        const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+        var sitestalls = (Object.keys(site?.stalls)?.length == 1 ? `${site?.numStalls} ${Object.keys(site?.stalls)[0]}` : `${site?.numStalls}`) +
+            (Object.keys(site?.plugs)?.length == 1 ? ` ${site.plugImg(Object.keys(site?.plugs)[0])}` : ' stalls');
+        // special case for MagicDock
+        if (showDetail && site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
+            sitestalls = `<span class="details" title="MagicDock (NACS+CCS1)">${site.numStalls} ${Object.keys(site?.stalls)[0]} <img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/></span>`;
         }
+
+        var content = sitestalls + kw;
+
         if (site?.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site?.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site?.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
@@ -175,6 +119,45 @@ export default class ChangesView {
         const s = site?.status;
         if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
             content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
+        }
+
+        if (showDetail) {
+            var entries = '<li><b>Stalls:</b>';
+            Object.keys(site.stalls).forEach(s => {
+                if (site.stalls[s] > 0) {
+                    entries += ` • ${site.stalls[s]} `;
+                    if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="accessible" alt="accessible"/>';
+                    else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
+                    else entries += s;
+                }
+            });
+            entries += '</li><li><b>Plugs:</b>';
+            Object.keys(site.plugs).forEach(p => {
+                if (site.plugs[p] > 0) {
+                    if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+                }
+            });
+            entries += '</li>';
+            if (site.facilityName) {
+                entries += `<li><b>Host:</b> ${site.facilityName}`;
+                if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+                entries += '</li>';
+            }
+            if (site.parkingId !== 1) {
+                const park = Sites.getParking().get(site.parkingId);
+                entries += `<li title='${park.description}'><b>Parking:</b> ${park.name}</li>`;
+            }
+            if (site.addressNotes) entries += `<li class="notes">${site.addressNotes}</li>`;
+            if (site.accessNotes) entries += `<li class="notes">${site.accessNotes}</li>`;
+
+            content = `
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${content}
+                        <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        ${entries}
+                    </ul>
+                </div>`;
         }
         return content;
     }
@@ -190,12 +173,18 @@ export default class ChangesView {
         const teslaLink = site?.locationId ?
             " • " + ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
-        return `${gmapLink} • ${discussLink}${teslaLink}`;
+        const psLink = site?.plugshareId ?
+            " • " + ChangesView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
+            '';
+        const osmLink = site?.osmId ?
+            " • " + ChangesView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
+            '';
+        return `${gmapLink} • ${discussLink}${teslaLink}${psLink}${osmLink}`;
     }
 
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
-        return `<a href="${href?.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
+        return `<a href="${href?.replace(/"/g, '%22')}" ${titleAttr} target="scinfolink">${content}</a>`;
     }
 
     initDataTableOptions() {
@@ -288,7 +277,7 @@ export default class ChangesView {
                 $("li img.wait").addClass("show");
                 window.changesTooltips = performance.now();
                 window.changesIcons = [];
-                $("#changes-table img").each(function () {
+                $("#changes-table img, #changes-table span.details").each(function () {
                     window.changesIcons.push($(this));
                 });
                 clearInterval(window.changesInterval);

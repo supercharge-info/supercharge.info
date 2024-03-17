@@ -27,9 +27,18 @@ import "../images/plus-circle.svg";
 import "../images/minus-circle.svg";
 import "../images/gmap.svg";
 import "../images/forum.svg";
+import "../images/osm.svg";
 import "../images/solar-power-variant.svg";
 import "../images/battery-charging.svg";
 import "../images/car-electric.svg";
+import "../images/accessible.svg";
+import "../images/trailer.svg";
+import "../images/NACS.svg";
+import "../images/CCS1.svg";
+import "../images/CCS2.svg";
+import "../images/TYPE2.svg";
+import "../images/GBT.svg";
+import "../images/OTHER.svg";
 
 import "../images/blue_triangle.svg";
 import "../images/black_dot_x.svg";

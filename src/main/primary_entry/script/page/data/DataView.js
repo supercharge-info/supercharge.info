@@ -60,7 +60,7 @@ export default class DataView {
     static buildStatus(supercharger) {
         const site = Supercharger.fromJSON(supercharger);
         var s = Status.fromString(supercharger.status);
-        var content = site.getImg(s);
+        var content = Status.getImg(site, s);
         if (site.otherEVs)     content += '<img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site.solarCanopy)  content += '<img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site.battery)      content += '<img class="details" title="battery backup" src="/images/battery-charging.svg"/>';

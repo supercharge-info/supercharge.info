@@ -34,8 +34,12 @@
 #changes-table td .CLOSED_PERM {
     color: black;
 }
-#changes-table .dropdown .OPEN {
+#changes-table td .OPEN {
     color: red;
+}
+
+#changes-table .dropdown {
+    margin-top: -1px;
 }
 
 #changes-table .dropdown a, #changes-table .dropdown b {
@@ -43,21 +47,19 @@
 }
 
 #changes-table .dropdown-menu {
-    min-width: 50%;
-    max-width: 150%;
+    min-width: 75%;
+    max-width: 325%;
     padding: 3px;
-    margin: 0 auto;
     background-color: #ffe;
+    margin-right: 20%;
 }
 #changes-table li {
-    white-space: nowrap;
+    white-space: pre;
 }
-#changes-table li.connectors {
-    padding-left: 20px;
-    border-bottom: 1px dotted #ccc;
-}
-#changes-table li.connectors:last-child {
-    border-bottom: 0px;
+#changes-table li.notes {
+    padding-top: 2px;
+    margin-top: 2px;
+    border-top: 1px dotted #999;
 }
 
 #changes-table .text-muted img {

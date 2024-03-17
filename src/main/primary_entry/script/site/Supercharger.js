@@ -103,15 +103,13 @@ export default class Supercharger {
         return (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) ? 1.2 : 1.0;
     }
 
-    getImg(status, extraClasses) {
-        return '' +
-            `<span class='${status.value} status-select ${extraClasses}'>` +
-                `<img src='${status.getIcon(this)}' title='${status.getTitle(this)}' alt='${status.getTitle(this)}'/>` +
-            `</span>`;
-    }
-
     getTeslaLink() {
         return (this.address.isTeslaCN() ? ServiceURL.TESLA_CN_PAGE : ServiceURL.TESLA_WEB_PAGE) + this.locationId;
+    }
+
+    plugImg(plug) {
+        const up = plug.toUpperCase();
+        return `<img class="details" src="/images/${up}.svg" title="${up}" alt="${up}"/>`;
     }
 
 }
@@ -138,8 +136,22 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.solarCanopy = jsonObject.solarCanopy;
     supercharger.battery = jsonObject.battery;
     supercharger.otherEVs = jsonObject.otherEVs;
+    supercharger.stalls = jsonObject.stalls;
+    supercharger.plugs = jsonObject.plugs;
+    // For now at least, treat TPC as NACS
+    if (supercharger.plugs?.tpc > 0) {
+        supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
+        delete supercharger.plugs.tpc;
+    }
+    supercharger.parkingId = jsonObject.parkingId;
+    supercharger.facilityName = jsonObject.facilityName;
+    supercharger.facilityHours = jsonObject.facilityHours;
+    supercharger.accessNotes = jsonObject.accessNotes;
+    supercharger.addressNotes = jsonObject.addressNotes;
+    supercharger.plugshareId = jsonObject.plugshareId;
+    supercharger.osmId = jsonObject.osmId;
     supercharger.history =
-        jsonObject.status == 'OPEN' ?
+        jsonObject.status == 'OPEN' || jsonObject.status == 'EXPANDING' ?
             [{ siteStatus: jsonObject.status, date: jsonObject.dateOpened }]
         : jsonObject.statusDays ? [{
             siteStatus: jsonObject.status,

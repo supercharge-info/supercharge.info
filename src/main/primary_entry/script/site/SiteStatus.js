@@ -59,10 +59,26 @@ const Status = {
         getIcon: (supercharger) => "/images/custom_pin.svg",
         getFill: (supercharger) => "url(#custom_pin)",
         getTitle: (supercharger) => "Custom"
+    },
+    UNKNOWN: {
+        value: 'UNKNOWN',
+        displayName: "Unknown",
+        shortName: "Unknown",
+        className: "unknown",
+        getIcon: (supercharger) => "/images/OTHER.svg",
+        getFill: (supercharger) => "#aa0",
+        getTitle: (supercharger) => "Unknown"
     }
 };
 
 Status.ALL = [Status.OPEN, Status.CONSTRUCTION, Status.PERMIT, Status.CLOSED_TEMP, Status.CLOSED_PERM];
+
+Status.getImg = function (site, status, extraClasses) {
+    return '' +
+        `<span class='${status.value} status-select ${extraClasses ?? ''}'>` +
+            `<img src='${status.getIcon(site)}' title='${status.getTitle(site)}' alt='${status.getTitle(site)}'/>` +
+        `</span>`;
+};
 
 Status.fromString = function (string) {
     const s = string.trim();
@@ -79,7 +95,8 @@ Status.fromString = function (string) {
     } else if (s === 'USER_ADDED') {
         return Status.USER_ADDED;
     }
-    throw new Error("invalid status: " + string);
+    console.log("invalid status: " + string);
+    return Status.UNKNOWN;
 };
 
 export default Status;
