@@ -1,6 +1,7 @@
 import Asserts from "../util/Asserts";
 import Supercharger from "./Supercharger";
 import ServiceURL from "../common/ServiceURL";
+import UpdateCheck from "../common/UpdateCheck";
 import $ from "jquery";
 
 const LIST = [];
@@ -11,12 +12,8 @@ const StatesByRegion = new Map();
 const StatesByCountry = new Map();
 const States = new Set();
 const Parking = new Map();
-var loaded = Date.now();
 
 export default class Sites {
-
-    static loading = true;
-    static reloadCallback = null;
 
     static getById(id) {
         Asserts.isInteger(id, "id must be an integer");
@@ -27,8 +24,8 @@ export default class Sites {
                 return supercharger;
             }
         }
-        // force a reload check if we can't find a site by its id, as that likely means data in the browser is stale
-        Sites.checkReload();
+        // check for DB updates if we can't find a site by its id, as that likely means data in the browser is stale
+        UpdateCheck.doCheck();
         return null;
     }
 
@@ -89,7 +86,6 @@ S-by-C: Map(cid, Set(sname))
      * Load all sites data.  This method must be called before any other in this class.
      */
     static load() {
-        Sites.loading = true;
         $.getJSON(ServiceURL.PARKING).done(
             (parkingList) => { parkingList.forEach((p) => Parking.set(p.parkingId, p)); }
         );
@@ -113,17 +109,6 @@ S-by-C: Map(cid, Set(sname))
                     StatesByCountry.get(s.address.countryId).add(s.address.state);
                     States.add(s.address.state);
                 });
-                Sites.loading = false;
-            }
-        );
-    }
-
-    static checkReload() {
-        return $.getJSON(ServiceURL.DB_INFO).done(
-            (dbInfo) => {
-                console.log(`checkReload loaded=${loaded} lastModified=${dbInfo.lastModified} reload=${loaded <= dbInfo.lastModified}`);
-                if (!dbInfo || loaded > dbInfo.lastModified) return;
-                location.reload();
             }
         );
     }

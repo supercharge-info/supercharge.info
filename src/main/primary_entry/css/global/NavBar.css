@@ -117,13 +117,13 @@ Collapse navbar earlier than bootstrap's default 768px
     }
 }
 
-#new-feature-notify {
+#new-feature-notify, #db-update-notify {
     text-align: center;
     margin:0;
     padding: .5em;
 }
 
-#new-feature-notify a {
+#new-feature-notify a, #db-update-notify a {
     color: blue;
     font-weight: bold;
     cursor: pointer;

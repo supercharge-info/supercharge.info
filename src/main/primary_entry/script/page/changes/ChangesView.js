@@ -67,7 +67,6 @@ export default class ChangesView {
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) {
-            Sites.checkReload();
             return changeRow.siteName;
         }
         var hoverText = '';
@@ -80,7 +79,6 @@ export default class ChangesView {
 
     static buildStatus(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        if (!site) Sites.checkReload();
 
         const isUpdate = changeRow.changeType.toLowerCase() === 'update';
         const s = Status.fromString(changeRow.siteStatus);
@@ -97,7 +95,6 @@ export default class ChangesView {
 
         const site = Sites.getById(changeRow.siteId);
         if (!site) {
-            Sites.checkReload();
             return `${changeRow.stallCount} stalls${kw}`;
         }
 
@@ -204,7 +201,6 @@ export default class ChangesView {
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
-                    Sites.checkReload();
                     const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
