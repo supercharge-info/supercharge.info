@@ -31,8 +31,7 @@ export default class ChangesView {
 
     syncFilters() {
         this.filterControl.init();
-        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
-        Sites.reloadCallback = () => this.tableAPI.draw(false);
+        setTimeout(this.tableAPI.draw, 1000);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -56,9 +55,9 @@ export default class ChangesView {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
             if (!target.is('a, b, ul, li, img, .details')) {
-                if (target.closest('table').find('div.open').length === 0) {
-                    const clickedSiteId = parseInt(target.closest('tr').data('siteid'));
-                    EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+                if (target.closest('table')?.find('div.open')?.length === 0) {
+                    const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
+                    if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);
                 }
             }
         }

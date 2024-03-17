@@ -138,10 +138,6 @@ Info Window
     margin: 5px 0;
 }
 
-.statusLine > * {
-    vertical-align: text-top;
-}
-
 .info-window-content .open {
     color: red;
     font-weight: bold;
@@ -168,23 +164,23 @@ Info Window
 }
 
 .info-window-content img {
-    width: 16px;
-    height: 16px;
-}
-.info-window-content img.status {
-    margin-top: -4px;
+    width: 16px !important;
+    height: 16px !important;
+    margin-top: -2px !important;
+    padding: 0px !important;
 }
 
-.info-window-content .links-container {
+.info-window-content .links {
     border: 0 solid black;
 }
-.info-window-content .links-container a {
+.info-window-content .links a {
     line-height: 2em;
     margin: 3px;
+    padding-bottom: 1px;
 }
-.info-window-content .links-container img {
-    width: 20px;
-    height: 20px;
+.info-window-content .links img {
+    width: 20px !important;
+    height: 20px !important;
 }
 
 .info-window-content th {

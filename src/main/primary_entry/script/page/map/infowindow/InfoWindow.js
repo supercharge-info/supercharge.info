@@ -223,7 +223,7 @@ function _buildHistoryDiv(site) {
 }
 
 function _buildLinksDiv(site, showDetails) {
-    return "<div class='links-container'>"
+    return '<div class="links">'
         + buildLinkDetailsOrHistory(site, showDetails)
 
         // links that are always present

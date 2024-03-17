@@ -31,8 +31,7 @@ export default class DataView {
 
     syncFilters() {
         this.filterControl.init();
-        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
-        Sites.reloadCallback = () => this.tableAPI.draw(false);
+        setTimeout(this.tableAPI.draw, 1000);
     }
 
     filterControlCallback() {
@@ -51,9 +50,9 @@ export default class DataView {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
             if (!target.is('a, b, ul, li, img, .details')) {
-                if (target.closest('table').find('div.open').length === 0) {
-                    const clickedSiteId = parseInt(target.closest('tr')[0].id);
-                    EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+                if (target.closest('table')?.find('div.open')?.length === 0) {
+                    const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
+                    if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);
                 }
             }
         }
@@ -200,7 +199,7 @@ export default class DataView {
                     },
                     "className": "gps",
                     //"orderable": false,
-                    "width": "1%"
+                    "width": "5%"
                 },
                 {
                     "data": "elevationMeters",
@@ -242,6 +241,10 @@ export default class DataView {
                     "width": "9%"
                 }
             ],
+            "createdRow": (row, data, index) => {
+                const rowJq = $(row);
+                rowJq.attr('data-siteid', data.id);
+            },
             "drawCallback": () => {
                 // Don't bother with tooltips on narrow (usually mobile) devices
                 if (window.innerWidth <= 928) return;

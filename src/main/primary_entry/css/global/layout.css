@@ -52,10 +52,10 @@ td.links img, td img.details, .details img {
     margin: -6px -1px -2px -1px;
     padding: 1px;
 }
-td.links a {
+.links a {
     white-space: nowrap;
 }
-td.links a:hover, td.links a:focus {
+.links a:hover, .links a:focus {
     outline: 4px groove rgba(102, 175, 233, 0.6);
     outline-offset: 2px;
 }

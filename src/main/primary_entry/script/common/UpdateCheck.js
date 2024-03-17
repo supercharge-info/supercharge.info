@@ -19,7 +19,7 @@ export default class UpdateCheck {
     static showNotification() {
         if ($('#db-update-notify').length > 0) return;
 
-        const alertDiv = $('<div/>', {id: 'db-update-notify', class: 'alert alert-info', role: 'alert'});
+        const alertDiv = $('<div/>', {id: 'db-update-notify', class: 'alert alert-info', role: 'alert', title: 'Some details might be incorrect or outdated until the page reloads'});
 
         const button = $('<button/>', {type: 'button', class: 'close'});
         button.attr('data-dismiss', 'alert');
