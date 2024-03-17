@@ -46,19 +46,16 @@
 #supercharger-data-table .dropdown a, #supercharger-data-table .dropdown b {
     text-decoration: none;
     white-space: nowrap;
+    padding: 1px 2px;
 }
 
 #supercharger-data-table .dropdown-menu {
-    min-width: 150%;
-    max-width: 1200%;
-    padding: 3px;
+    width: max-content;
+    min-width: 100%;
+    max-width: 500%;
+    padding: 8px;
     background-color: #ffe;
 }
 #supercharger-data-table li {
     white-space: pre;
-}
-#supercharger-data-table li.notes {
-    padding-top: 2px;
-    margin-top: 2px;
-    border-top: 1px dotted #999;
 }

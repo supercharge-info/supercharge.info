@@ -118,6 +118,7 @@ Info Window
 .leaflet-popup-content {
     margin: 8px;
 }
+
 .info-window-content {
     width: 100%;
     height: 100%;
@@ -168,6 +169,7 @@ Info Window
 
 .info-window-content img {
     width: 16px;
+    height: 16px;
 }
 .info-window-content img.status {
     margin-top: -4px;
@@ -176,10 +178,13 @@ Info Window
 .info-window-content .links-container {
     border: 0 solid black;
 }
-
 .info-window-content .links-container a {
     line-height: 2em;
-    margin: 0 1em 0 0;
+    margin: 3px;
+}
+.info-window-content .links-container img {
+    width: 20px;
+    height: 20px;
 }
 
 .info-window-content th {
@@ -190,6 +195,10 @@ Info Window
 .info-window-content hr {
     margin: 5px 0;
     border-color: #e0e0e0;
+}
+
+.info-window-details th, .info-window-details td {
+    width: max-content;
 }
 
 a.pin {

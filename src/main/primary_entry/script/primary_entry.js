@@ -25,6 +25,9 @@ import "../images/link-symbol.svg";
 import "../images/history-icon.svg";
 import "../images/plus-circle.svg";
 import "../images/minus-circle.svg";
+import "../images/zoom-to-site.svg";
+import "../images/route.svg";
+
 import "../images/gmap.svg";
 import "../images/forum.svg";
 import "../images/osm.svg";

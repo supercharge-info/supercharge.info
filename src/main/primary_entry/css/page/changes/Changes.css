@@ -47,19 +47,15 @@
 }
 
 #changes-table .dropdown-menu {
-    min-width: 75%;
-    max-width: 325%;
-    padding: 3px;
+    width: max-content;
+    min-width: 50%;
+    max-width: 250%;
+    padding: 4px;
     background-color: #ffe;
-    margin-right: 20%;
+    margin-right: 25%;
 }
 #changes-table li {
     white-space: pre;
-}
-#changes-table li.notes {
-    padding-top: 2px;
-    margin-top: 2px;
-    border-top: 1px dotted #999;
 }
 
 #changes-table .text-muted img {

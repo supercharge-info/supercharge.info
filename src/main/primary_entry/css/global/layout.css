@@ -33,7 +33,7 @@ a.disabled {
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Data tables 
+Data tables and other details
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 td.number, th.number {
     text-align: right !important;
@@ -63,6 +63,14 @@ td.links a:hover, td.links a:focus {
 .dataTables_paginate.paging_simple_numbers {
     text-align: center !important;
 }
+
+.notes {
+    white-space: pre-wrap !important;
+    padding-top: 2px;
+    margin-top: 2px;
+    border-top: 1px dotted #999;
+}
+
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Layout

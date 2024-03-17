@@ -13,34 +13,34 @@ import "./InfoWindowListeners";
  */
 export default class InfoWindow {
 
-    constructor(mapApi, marker, supercharger) {
+    constructor(mapApi, marker, site) {
 
         // reference fields
         this.marker = marker;
-        this.supercharger = supercharger;
+        this.site = site;
         this.mapApi = mapApi;
 
         // state fields
         this.popup = null;
-        this.showDetails = supercharger.isUserAdded();
+        this.showDetails = site.isUserAdded();
         this.showHistory = false;
         this.pinned = false;
 
         // Download history
-        if (supercharger.historyLoaded !== true) {
-            $.getJSON(ServiceURL.SITE_HISTORY, { siteId: supercharger.id })
+        if (site.historyLoaded !== true) {
+            $.getJSON(ServiceURL.SITE_HISTORY, { siteId: site.id })
                 .done((h) => {
                     if (!h || !h.length) {
                         return;
-                    } else if (Objects.isNullOrUndef(supercharger.history) || supercharger.history.length < 1) {
+                    } else if (Objects.isNullOrUndef(site.history) || site.history.length < 1) {
                         // no adjustment needed if history is null or empty
-                    } else if (supercharger.history[0].siteStatus != h[0].siteStatus && new Date(supercharger.history[0].date) < new Date(h[0].date)) {
-                        h.unshift(supercharger.history[0]);
-                    } else if (supercharger.history[0].siteStatus != h[h.length - 1].siteStatus && new Date(supercharger.history[0].date) > new Date(h[h.length - 1].date)) {
-                        h.push(supercharger.history[0]);
+                    } else if (site.history[0].siteStatus != h[0].siteStatus && new Date(site.history[0].date) < new Date(h[0].date)) {
+                        h.unshift(site.history[0]);
+                    } else if (site.history[0].siteStatus != h[h.length - 1].siteStatus && new Date(site.history[0].date) > new Date(h[h.length - 1].date)) {
+                        h.push(site.history[0]);
                     }
-                    supercharger.history = h;
-                    supercharger.historyLoaded = true;
+                    site.history = h;
+                    site.historyLoaded = true;
                 });
         }
     }
@@ -122,7 +122,7 @@ export default class InfoWindow {
         // appears and disappears when changing layers. Doesn't seem possible currently through
         // leaflet API.
         this.popup = L.popup({autoClose: false, closeOnClick: false})
-            .setLatLng(this.supercharger.location)
+            .setLatLng(this.site.location)
             .setContent(this._buildHtmlContent())
             .openOn(this.mapApi);
         this.mapApi.on('popupclose', this._handleMapApiPopupCloseEvent, this);
@@ -136,10 +136,10 @@ export default class InfoWindow {
     }
 
     _buildHtmlContent() {
-        const site = this.supercharger;
+        const site = this.site;
         let popupContent = "<div class='info-window-content'>";
         //
-        // Title/Supercharger-name
+        // Title/site-name
         //
         popupContent += `<div class='title'>${buildPinMarker(site, this.pinned)} ${site.displayName}</div>`;
 
@@ -154,23 +154,15 @@ export default class InfoWindow {
         if (!site.isUserAdded()) {
             popupContent += "<div class='statusLine'>";
 
-            //
-            // Number of charging stalls
-            //
-            if (Objects.isNotNullOrUndef(site.numStalls)) {
-                popupContent += `${site.numStalls} stalls`;
+            var sitestalls = (Object.keys(site.stalls)?.length == 1 ? `${site.numStalls} ${Object.keys(site.stalls)[0]}` : `${site.numStalls}`) +
+                (Object.keys(site.plugs)?.length == 1 ? ` ${site.plugImg(Object.keys(site.plugs)[0])}` : ' stalls');
+            // special case for MagicDock
+            if (site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
+                sitestalls = `<span title="MagicDock (NACS+CCS1)">${site.numStalls} ${Object.keys(site?.stalls)[0]} <img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/></span>`;
             }
-
-            //
-            // Power
-            //
-            if (Objects.isNotNullOrUndef(site.powerKilowatt) && site.powerKilowatt > 0) {
-                if (Objects.isNotNullOrUndef(site.numStalls)) {
-                    popupContent += " • ";
-                }
-                popupContent += `${site.powerKilowatt} kW`;
-            }
-
+            const kw = site.powerKilowatt > 0 ? ` • ${site.powerKilowatt} kW` : '';
+            popupContent += sitestalls + kw;
+    
             //
             // Status, other attributes, limited hours
             //
@@ -211,133 +203,137 @@ export default class InfoWindow {
 /**
  * This is the content in the InfoWindow that shows up when the user clicks 'details'.
  */
-function _buildHistoryDiv(supercharger) {
+function _buildHistoryDiv(site) {
     let div = "";
-    div += `<div class='info-window-details' id='nearby-details-${supercharger.id}'>`;
-    div += `<a style='position:absolute; right: 19px;' class='history-trigger' href='#${supercharger.id}'>(hide)</a>`;
+    div += `<div class='info-window-details' id='nearby-details-${site.id}'>`;
+    div += `<a style='position:absolute; right: 19px;' class='history-trigger' href='#${site.id}'>(hide)</a>`;
     div += "<table style='width:100%;'>";
 
     div += "<tr style='font-weight:bold;'><td>Date</td><td>Status</td></tr>";
 
-    if (!supercharger.history.length) {
-        div += `<tr><td>Unknown</td><td class='${supercharger.status.value.toLowerCase().replace('_','-')}'>${supercharger.status.value}</td></tr>`;
+    if (!site.history.length) {
+        div += `<tr><td>Unknown</td><td class='${site.status.value.toLowerCase().replace('_','-')}'>${site.status.value}</td></tr>`;
     } else {
-        div += supercharger.history.map(a => `<tr><td>${a.date}</td><td class='${a.siteStatus.toLowerCase().replace('_','-')}'>${a.siteStatus}</td></tr>`).join('');
+        div += site.history.map(a => `<tr><td>${a.date}</td><td class='${a.siteStatus.toLowerCase().replace('_','-')}'>${a.siteStatus}</td></tr>`).join('');
     }
 
     div += "</table>";
-    div += "</div>";
+    div += "<hr/></div>";
     return div;
 }
 
-function _buildLinksDiv(supercharger, showDetails) {
-    let content = "<div class='links-container'>";
-
-    const linkList = [
+function _buildLinksDiv(site, showDetails) {
+    return "<div class='links-container'>"
+        + buildLinkDetailsOrHistory(site, showDetails)
 
         // links that are always present
-        buildLinkZoom(supercharger),
-        buildLinkCircleToggle(supercharger),
-        buildLinkAddToRoute(supercharger),
-        buildLinkDirectToSite(supercharger),
+        + buildLinkZoom(site)
+        + buildLinkCircleToggle(site)
+        + buildLinkAddToRoute(site)
+        + buildLinkDirectToSite(site)
 
         // links that are NOT always present.
-        buildLinkDetailsOrHistory(supercharger, showDetails),
-        buildLinkMapURL(supercharger),
-        buildLinkDiscussURL(supercharger),
-        buildLinkTeslaURL(supercharger),
-        buildLinkRemoveMarker(supercharger),
-        buildLinkRemoveAllMarkers(supercharger)
-    ];
-
-    let count = 1;
-    $.each(linkList, function (index, value) {
-        if (value !== null) {
-            content += value + "";
-            if (count++ == 4) {
-                content += "<br/>";
-            }
-        }
-    });
-    content += "</div>";
-    return content;
+        + buildLinkGMapURL(site)
+        + buildLinkDiscussURL(site)
+        + buildLinkTeslaURL(site)
+        + buildLinkPSURL(site)
+        + buildLinkOSMURL(site)
+        + buildLinkRemoveMarker(site)
+        + buildLinkRemoveAllMarkers(site)
+        + "</div>";
 }
 
-function buildLinkZoom(supercharger) {
-    return `<a class='zoom-to-site-trigger' href='${supercharger.id}'>zoom</a>`;
+function buildLinkZoom(site) {
+    return `<a class='zoom-to-site-trigger' href='${site.id}'><img src="/images/zoom-to-site.svg" title="zoom to site" alt="zoom to site"></a>`;
 }
 
-function buildLinkCircleToggle(supercharger) {
+function buildLinkCircleToggle(site) {
     // If circles are turned on via the map drop-down menu update the text of our circle on/off label accordingly.
     // We only need one listener for all info windows, not one per info window.
     if (!InfoWindow.circleFlag) {
         EventBus.addListener("circles-all-on-event", function () {
-            $("a.circle-toggle-trigger").html("circle off");
+            $("a.circle-toggle-trigger img").attr("title", "circle off");
+            $("a.circle-toggle-trigger img").attr("alt", "circle off");
         });
         EventBus.addListener("circles-all-off-event", function () {
-            $("a.circle-toggle-trigger").html("circle on");
+            $("a.circle-toggle-trigger img").attr("title", "circle on");
+            $("a.circle-toggle-trigger img").attr("alt", "circle on");
         });
         InfoWindow.circleFlag = true;
     }
-    const circleOnOffLabel = (supercharger.circle ? "circle off" : "circle on");
-    return `<a class='circle-toggle-trigger' href='${supercharger.id}'>${circleOnOffLabel}</a>`;
+    const circleOnOffLabel = `circle ${site.circle ? "off" : "on"}`;
+    return `<a class='circle-toggle-trigger' href='${site.id}'><img src="/images/circle-center-icon.svg" title="${circleOnOffLabel}" alt="${circleOnOffLabel}"/></a>`;
 }
 
-function buildLinkAddToRoute(supercharger) {
-    return `<a class='add-to-route-trigger' href='${supercharger.id}'>add to route</a>`;
+function buildLinkAddToRoute(site) {
+    return `<a class='add-to-route-trigger' href='${site.id}'><img src="/images/route.svg" title="add to route" alt="add to route"/></a>`;
 }
 
-function buildLinkDirectToSite(supercharger) {
-    return `<a class='direct-link-trigger' href='${supercharger.id}'>direct link</a>`;
+function buildLinkDirectToSite(site) {
+    return `<a class='direct-link-trigger' href='${site.id}'><img src="/images/link-symbol.svg" title="direct link" alt="direct link"/></a>`;
 }
 
-function buildLinkTeslaURL(supercharger) {
-    if (Objects.isNotNullOrUndef(supercharger.locationId)) {
-        return `<a target='_blank' href='${supercharger.getTeslaLink()}'>tesla.${supercharger.address.isTeslaCN() ? 'cn' : 'com'}</a>`;
+function buildLinkTeslaURL(site) {
+    if (Objects.isNotNullOrUndef(site.locationId)) {
+        return `<a target='_blank' href='${site.getTeslaLink()}'><img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/></a>`;
     }
-    return null;
+    return '';
 }
 
-function buildLinkDiscussURL(supercharger) {
-    if (supercharger.urlDiscuss) {
-        return `<a target='_blank' href='${ServiceURL.DISCUSS}?siteId=${supercharger.id}'>forum</a>`;
+function buildLinkDiscussURL(site) {
+    if (site.urlDiscuss) {
+        return `<a target='_blank' href='${ServiceURL.DISCUSS}?siteId=${site.id}'><img src="/images/forum.svg" title="forum"/></a>`;
     }
-    return null;
+    return '';
 }
 
-function buildLinkMapURL(supercharger) {
-    if (Objects.isNotNullOrUndef(supercharger.address.street)) {
-        const addr = supercharger.address;
+function buildLinkGMapURL(site) {
+    if (Objects.isNotNullOrUndef(site.address.street)) {
+        const addr = site.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}">gmap</a>`;
+        return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
     }
-    return null;
+    return '';
 }
 
-function buildLinkRemoveMarker(supercharger) {
-    if (supercharger.isUserAdded()) {
-        return `<a class='marker-toggle-trigger' title='remove this custom marker' href='${supercharger.id}'>remove</a>`;
+function buildLinkPSURL(site) {
+    if (site.plugshareId) {
+        return `<a href="https://api.plugshare.com/view/location/${site.plugshareId}" target="_blank"><img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/></a>`;
     }
-    return null;
+    return '';
 }
 
-function buildLinkRemoveAllMarkers(supercharger) {
-    if (supercharger.isUserAdded()) {
+function buildLinkOSMURL(site) {
+    if (site.osmId) {
+        return `<a href="https://www.openstreetmap.org/node/${site.osmId}" target="_blank"><img src="/images/osm.svg" title="OpenStreetMap"/></a>`;
+    }
+    return '';
+}
+
+function buildLinkRemoveMarker(site) {
+    if (site.isUserAdded()) {
+        return `<a class='marker-toggle-trigger' title='remove this custom marker' href='${site.id}'>remove</a>`;
+    }
+    return '';
+}
+
+function buildLinkRemoveAllMarkers(site) {
+    if (site.isUserAdded()) {
         return "<a class='marker-toggle-all-trigger' title='remove all custom markers' href=''>remove all</a>";
     }
-    return null;
+    return '';
 }
 
-function buildLinkDetailsOrHistory(supercharger, showDetails) {
+function buildLinkDetailsOrHistory(site, showDetails) {
     if (!showDetails) {
-        return `<a class='details-trigger' href='#${supercharger.id}'>details</a>`;
-    } else if (Objects.isNotNullOrUndef(supercharger.history)) {
-        return `<a class='history-trigger' href='#${supercharger.id}'>history</a>`;
+        return `<a class='details-trigger' href='#${site.id}'>details</a>`;
+    } else if (Objects.isNotNullOrUndef(site.history)) {
+        return `<a class='history-trigger' href='#${site.id}'>history</a>`;
     }
-    return null;
+    return '';
 }
 
-function buildPinMarker(supercharger, isPinned) {
+function buildPinMarker(site, isPinned) {
     const pinClass = isPinned ? 'unpin' : 'pin';
-    return `<a class='pin-marker-trigger pull-right ${pinClass} glyphicon glyphicon-pushpin' title='pin this window' href='#${supercharger.id}'></a>`;
+    return `<a class='pin-marker-trigger pull-right ${pinClass} glyphicon glyphicon-pushpin' title='pin this window' href='#${site.id}'></a>`;
 }

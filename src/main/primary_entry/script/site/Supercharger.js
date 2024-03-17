@@ -89,9 +89,16 @@ export default class Supercharger {
     }
 
     getMarkerTitle() {
+        const site = this;
+        var sitestalls = (Object.keys(site.stalls)?.length == 1 ? `${site.numStalls} ${Object.keys(site.stalls)[0]}` : `${site.numStalls}`) +
+            (Object.keys(site.plugs)?.length == 1 ? ` ${Object.keys(site.plugs)[0].toUpperCase()}` : '');
+        // special case for MagicDock
+        if (site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
+            sitestalls = `${site.numStalls} ${Object.keys(site.stalls)[0]} MagicDock`;
+        }
         return `<div>${this.displayName} (${this.status?.displayName})</div>` +
             (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
-            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${this.numStalls} stalls`) +
+            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${sitestalls}`) +
             (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : ` • ${this.powerKilowatt} kW`);
 	}
 
