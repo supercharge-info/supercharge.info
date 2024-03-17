@@ -11,6 +11,7 @@ export default class UpdateCheck {
                 console.log(`UpdateCheck loaded=${UpdateCheck.loaded} lastModified=${dbInfo.lastModified} reload=${UpdateCheck.loaded <= dbInfo.lastModified}`);
                 if (!dbInfo || UpdateCheck.loaded > dbInfo.lastModified) return;
                 UpdateCheck.showNotification();
+                UpdateCheck.loaded = Date.now();
             }
         );
     }
