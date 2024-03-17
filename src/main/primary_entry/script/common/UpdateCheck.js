@@ -25,6 +25,7 @@ export default class UpdateCheck {
         button.attr('data-dismiss', 'alert');
         button.attr('aria-label', 'close');
         button.html("x");
+        button.on('click', () => { UpdateCheck.loaded = Date.now(); });
 
         const link = $("<a>click to reload</a>", {href: '#'});
         link.on('click', () => { location.reload(); });
