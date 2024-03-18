@@ -118,6 +118,14 @@ Info Window
 .leaflet-popup-content {
     margin: 8px;
 }
+.leaflet-popup-content hr {
+    margin: 5px 0;
+    border-color: #e0e0e0;
+}
+
+.context-menu {
+    margin: 0 12px;
+}
 
 .info-window-content {
     width: 100%;
@@ -186,11 +194,6 @@ Info Window
 .info-window-content th {
     padding-right: 5px;
     text-align: right;
-}
-
-.info-window-content hr {
-    margin: 5px 0;
-    border-color: #e0e0e0;
 }
 
 .info-window-details th, .info-window-details td {

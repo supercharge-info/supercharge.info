@@ -88,14 +88,29 @@ export default class Supercharger {
         return Objects.isNullOrUndef(this.powerKilowatt) ? "" : this.powerKilowatt;
     }
 
-    getMarkerTitle() {
-        const site = this;
-        var sitestalls = (Object.keys(site.stalls)?.length == 1 ? `${site.numStalls} ${Object.keys(site.stalls)[0]}` : `${site.numStalls}`) +
-            (Object.keys(site.plugs)?.length == 1 ? ` ${Object.keys(site.plugs)[0].toUpperCase()}` : '');
-        // special case for MagicDock
-        if (site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
-            sitestalls = `${site.numStalls} ${Object.keys(site.stalls)[0]} MagicDock`;
+    getStallPlugSummary(useImages) {
+        if (!this.stalls || !this.numStalls || this.numStalls == 0) return '';
+
+        var summary = '';
+        if (this.stalls && Object.keys(this.stalls).length === 1) {
+            summary = `${this.numStalls} ${Object.keys(this.stalls)[0]} `;
+        } else {
+            summary = this.numStalls + ' ';
         }
+        if (this.plugs && Object.keys(this.plugs).length === 1) {
+            summary += useImages ? this.plugImg(Object.keys(this.plugs)[0]) : Object.keys(this.plugs)[0].toUpperCase();
+        } else {
+            summary += 'stalls';
+        }
+        // special case for MagicDock
+        if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
+            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Object.keys(this.stalls)[0]} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
+        }
+        return summary;
+    }
+
+    getMarkerTitle() {
+        const sitestalls = this.getStallPlugSummary(false);
         return `<div>${this.displayName} (${this.status?.displayName})</div>` +
             (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
             (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${sitestalls}`) +

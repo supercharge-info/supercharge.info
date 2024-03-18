@@ -16,6 +16,8 @@ export default class MapContextMenu {
         //TODO: this.mapApi.on('mousedown', $.proxy(this.mousedown, this));
         //TODO: this.mapApi.on('mouseup', $.proxy(this.mouseup, this));
 
+        const map = mapApi;
+
         $(document).on('click', '.context-menu-add-marker', (event) => {
             event.preventDefault();
             EventBus.dispatch(MapEvents.context_menu_add_marker, this.popup.getLatLng());
@@ -26,6 +28,30 @@ export default class MapContextMenu {
             EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(this.popup.getLatLng(), "Custom Location"));
             Analytics.sendEvent("route", "add-marker-to-route", "context menu");
         });
+
+        $(document).on('click', '.context-menu-gmap', (event) => {
+            var center = this.popup.getLatLng();
+            event.target.href = `https://www.google.com/maps/@?api=1&map_action=map&center=${center.lat},${center.lng}&zoom=${map.getZoom()}`;
+            event.target.target = "_blank";
+            this.popup.close();
+        });
+
+        $(document).on('click', '.context-menu-plugshare', (event) => {
+            var center = this.popup.getLatLng();
+            var spanLat = Math.abs(map.getBounds().getNorthEast().lat - map.getBounds().getSouthWest().lat);
+            var spanLng = Math.abs(map.getBounds().getNorthEast().lng - map.getBounds().getSouthWest().lng);
+            event.target.href = `https://api.plugshare.com/view/map?latitude=${center.lat}&longitude=${center.lng}&spanLat=${spanLat}&spanLng=${spanLng}`;
+            event.target.target = "_blank";
+            this.popup.close();
+        });
+
+        $(document).on('click', '.context-menu-osm', (event) => {
+            var center = this.popup.getLatLng();
+            event.target.href = `https://www.openstreetmap.org/#map=${map.getZoom()}/${center.lat}/${center.lng}`;
+            event.target.target = "_blank";
+            this.popup.close();
+        });
+
     }
 
 
@@ -64,7 +90,7 @@ export default class MapContextMenu {
         event.latlng.lng = Math.round(event.latlng.lng * 1000000) / 1000000;
         this.popup = L.popup()
             .setLatLng(event.latlng)
-            .setContent(this.createMenu())
+            .setContent(this.createMenu(event.latlng))
             .openOn(this.mapApi);
     }
 
@@ -73,12 +99,17 @@ export default class MapContextMenu {
     // class methods
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    createMenu() {
+    createMenu(center) {
         return `<div>
-                    <ul>
+                    <ul class='context-menu'>
+                        <li><a href='' class='context-menu-gmap'>Google Map here</a></li>
+                        <li><a href='' class='context-menu-plugshare'>PlugShare Map here</a></li>
+                        <li><a href='' class='context-menu-osm'>OpenStreetMap here</a></li>
                         <li><a href='' class='context-menu-add-marker'>Add custom marker...</a></li>
                         <li><a href='' class='context-menu-add-to-route'>Add to route...</a></li>
                     </ul>
+                    <hr/>
+                    <b>GPS</b> ${center.lat}, ${center.lng}
                 </div>`;
     }
 

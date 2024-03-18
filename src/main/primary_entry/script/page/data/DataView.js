@@ -62,14 +62,8 @@ export default class DataView {
         const site = Supercharger.fromJSON(supercharger);
 
         const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
-        var sitestalls = (Object.keys(site.stalls)?.length == 1 ? `${site.numStalls} ${Object.keys(site.stalls)[0]}` : `${site.numStalls}`) +
-            (Object.keys(site.plugs)?.length == 1 ? ` ${site.plugImg(Object.keys(site.plugs)[0])}` : '');
-        // special case for MagicDock
-        if (showDetail && site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
-            sitestalls = `<span class="details" title="MagicDock (NACS+CCS1)">${site.numStalls} ${Object.keys(site.stalls)[0]} <img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/></span>`;
-        }
 
-        var content = sitestalls;
+        var content = site.getStallPlugSummary(true);
 
         if (showDetail) {
             var entries = '<li><b>Stalls:</b>';

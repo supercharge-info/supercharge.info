@@ -14,26 +14,30 @@ export default function buildDetailsDiv(site, displayUnit) {
     div += "<table>";
 
     // Stalls
-    div += "<tr><th>Stalls</th><td>";
-    Object.keys(site.stalls).forEach(s => {
-        if (site.stalls[s] > 0) {
-            div += ` • ${site.stalls[s]} `;
-            if (s === 'accessible') div += '<img src="/images/accessible.svg" title="accessible" alt="accessible"/>';
-            else if (s === 'trailerFriendly') div += '<img src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
-            else div += s;
-        }
-    });
-    div += "</td></tr>";
+    if (site.stalls) {
+        div += "<tr><th>Stalls</th><td>";
+        Object.keys(site.stalls).forEach(s => {
+            if (site.stalls[s] > 0) {
+                div += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') div += '<img src="/images/accessible.svg" title="accessible" alt="accessible"/>';
+                else if (s === 'trailerFriendly') div += '<img src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
+                else div += s;
+            }
+        });
+        div += "</td></tr>";
+    }
 
     // Plugs
-    div += "<tr><th>Plugs</th><td>";
-    Object.keys(site.plugs).forEach(p => {
-        if (site.plugs[p] > 0) {
-            if (p !== 'multi') div += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
-        }
-    });
-    div += "</td></tr>";
-
+    if (site.plugs) {
+        div += "<tr><th>Plugs</th><td>";
+        Object.keys(site.plugs).forEach(p => {
+            if (site.plugs[p] > 0) {
+                if (p !== 'multi') div += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+            }
+        });
+        div += "</td></tr>";
+    }
+    
     // Host
     if (site.facilityName) {
         div += `<tr><th>Host</th><td>${site.facilityName}`;

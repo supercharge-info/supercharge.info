@@ -98,14 +98,8 @@ export default class ChangesView {
         }
 
         const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
-        var sitestalls = (Object.keys(site?.stalls)?.length == 1 ? `${site?.numStalls} ${Object.keys(site?.stalls)[0]}` : `${site?.numStalls}`) +
-            (Object.keys(site?.plugs)?.length == 1 ? ` ${site.plugImg(Object.keys(site?.plugs)[0])}` : ' stalls');
-        // special case for MagicDock
-        if (showDetail && site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
-            sitestalls = `<span class="details" title="MagicDock (NACS+CCS1)">${site.numStalls} ${Object.keys(site?.stalls)[0]} <img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/></span>`;
-        }
 
-        var content = sitestalls + kw;
+        var content = site.getStallPlugSummary(true) + kw;
 
         if (site?.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site?.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
