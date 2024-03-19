@@ -151,10 +151,8 @@ export default class DataView {
             "serverSide": true,
             "deferLoading": 0,
             "order": [[11, "desc"], [0, "asc"]],
-            "lengthMenu": [
-                [10, 25, 50, 100, 500, 1000],
-                [10, 25, 50, 100, 500, 1000]],
-            "pageLength": 50,
+            "lengthMenu": [10, 20, 25, 50, 100, 500, 1000],
+            "pageLength": 20,
             "ajax": {
                 url: ServiceURL.SITES_PAGE,
                 dataFilter: function (data) {

@@ -16,9 +16,10 @@ export default class ChangesView {
     constructor(filterDialog) {
         const table = $("#changes-table");
         this.tableBody = table.find("tbody");
-        this.tableBody.click(ChangesView.handleChangeClick);
+        this.tableBody.on('click', ChangesView.handleChangeClick);
 
         this.tableAPI = table.DataTable(this.initDataTableOptions());
+        $(this.tableAPI.table().container()).find('#changes-title').html('Supercharger Change History');
 
         this.filterControl = new SiteFilterControl(
             $("#changes-filter"),
@@ -187,10 +188,8 @@ export default class ChangesView {
             "serverSide": true,
             "deferLoading": 0,
             "deferRender": true,
-            "lengthMenu": [
-                [10, 25, 50, 100, 500, 1000],
-                [10, 25, 50, 100, 500, 1000]],
-            "pageLength": 50,
+            "lengthMenu": [10, 20, 25, 50, 100, 500, 1000],
+            "pageLength": 25,
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
@@ -285,11 +284,10 @@ export default class ChangesView {
                 }, 100);
             },
             "dom": "" +
+                "<'row'<'col-sm-3'><'#changes-title.col-sm-6'><'col-sm-3'l>>" +
                 "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-12 text-center'l>>" +
                 "<'row'<'col-sm-12 text-center'p>>" +
-                "<'row'<'col-sm-12 text-center'i>>" +
-                ""
+                "<'row'<'col-sm-12 text-center'i>>"
         };
 
     }

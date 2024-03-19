@@ -32,7 +32,7 @@
 
 #supercharger-data-table th, #supercharger-data-table td {
     text-align: left;
-    padding: 4px;
+    padding: 4px 4px 3px 4px;
 }
 #supercharger-data-table th {
     padding-right: 16px;
