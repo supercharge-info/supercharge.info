@@ -38,20 +38,20 @@ export default class ShowSiteAction {
             }
 
             //console.log(`${supercharger.id} calling pan_zoom`);
-            EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, zoom: 10 });
+            EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, minZoom: 10 });
 
             /* Now the map is initialized, but the selected marker may not be because we initialize markers
              * in response to viewport changes on the map. */
             $.doTimeout(100, () => {
-                if (supercharger?.marker?.infoWindow?.isShown()) {
-                    //console.log(`${supercharger.id} infowindow shown - DONE`);
-                    return false;
-                }
-
                 if (!MapPage.initViewComplete && performance.now() - t < 15000) {
                     // If we return true here the inner doTimeout will try again in 125ms
                     //console.log(`${supercharger.id} waiting for initViewCompelte`);
                     return true;
+                }
+
+                if (supercharger?.marker?.infoWindow?.isShown()) {
+                    //console.log(`${supercharger.id} infowindow shown - DONE`);
+                    return false;
                 }
 
                 if (supercharger) {
