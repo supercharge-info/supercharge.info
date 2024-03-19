@@ -51,6 +51,8 @@ class TotalCountPanel {
             this.updateView(2, this.countMapCountry[Address.COUNTRY_USA]);
         } else if (TotalCountPanel.CANADA.contains(center)) {
             this.updateView(2, this.countMapCountry[Address.COUNTRY_CANADA]);
+        } else if (TotalCountPanel.SOUTHAMERICA.contains(center)) {
+            this.updateView(2, this.countMapRegion[Address.REGION_SOUTH_AMERICA]);
         } else if (TotalCountPanel.EUROPE.contains(center)) {
             this.updateView(2, this.countMapRegion[Address.REGION_EUROPE]);
         }

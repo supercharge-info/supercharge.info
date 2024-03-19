@@ -31,7 +31,7 @@ export default class DataView {
 
     syncFilters() {
         this.filterControl.init();
-        setTimeout(this.tableAPI.draw, 1000);
+        setTimeout(this.tableAPI.draw, 100);
     }
 
     filterControlCallback() {

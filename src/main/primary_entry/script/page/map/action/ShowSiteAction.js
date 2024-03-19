@@ -31,32 +31,36 @@ export default class ShowSiteAction {
          * thing which may not be initialized yet.
          */
         $.doTimeout(250, () => {
-            if (!MapPage.initComplete) {
+            if (!MapPage.initComplete && performance.now() - t < 10000) {
                 // If we return true here the outer doTimeout will try again in 250ms
+                //console.log(`${supercharger.id} waiting for initComplete`);
                 return true;
             }
 
+            //console.log(`${supercharger.id} calling pan_zoom`);
             EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, zoom: 10 });
 
             /* Now the map is initialized, but the selected marker may not be because we initialize markers
              * in response to viewport changes on the map. */
-            $.doTimeout(75, () => {
-                if (!MapPage.initViewComplete && performance.now() - t < 10000) {
-                    // If we return true here the inner doTimeout will try again in 75ms
+            $.doTimeout(100, () => {
+                if (supercharger?.marker?.infoWindow?.isShown()) {
+                    //console.log(`${supercharger.id} infowindow shown - DONE`);
+                    return false;
+                }
+
+                if (!MapPage.initViewComplete && performance.now() - t < 15000) {
+                    // If we return true here the inner doTimeout will try again in 125ms
+                    //console.log(`${supercharger.id} waiting for initViewCompelte`);
                     return true;
                 }
-                if (supercharger && supercharger.marker) {
-                    if (!supercharger.marker.infoWindow || !supercharger.marker.infoWindow.isShown()) {
-                        // Do not remove popup if it exists
-                        supercharger.marker.fire('click');
-                    }
-                }
-                else if (supercharger) {
-                    // If there's no marker, create it (essentially bypassing/overriding any filters) and try again in 75ms
+
+                if (supercharger) {
+                    //console.log(`${supercharger.id} calling pinSite`);
                     EventBus.dispatch("pin-site-event", supercharger);
-                    return true;
                 }
-                return false;
+
+                //console.log(`${supercharger.id} inner retry`);
+                return true;
             });
             return false;
         });

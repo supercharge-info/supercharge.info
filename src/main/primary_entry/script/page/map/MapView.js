@@ -265,8 +265,8 @@ export default class MapView {
     }
 
     restoreInfoWindows(infoWindows) {
-        for (var i in infoWindows) {
-            var iw = infoWindows[i], s = iw.site, m = iw.marker;
+        for (const iw of infoWindows) {
+            const s = iw.site, m = iw.marker;
             if (s.marker === null) {
                 iw.closeWindow();
             } else if (s.marker !== m) {
@@ -285,6 +285,7 @@ export default class MapView {
             if (this.pinnedSites.indexOf(supercharger) < 0) this.pinnedSites.push(supercharger);
             this.markerFactory.createMarker(supercharger, this.markerSize, false);
         }
+        supercharger.marker.fire('click');
     }
 
     unpinSites() {

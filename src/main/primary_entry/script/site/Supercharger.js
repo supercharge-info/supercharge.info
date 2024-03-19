@@ -8,6 +8,9 @@ import L from 'leaflet';
 import ServiceURL from "../common/ServiceURL";
 
 
+const BASE_STALLS = ['v2', 'v3', 'v4', 'urban'];
+const BASE_PLUGS = ['nacs', 'ccs1', 'ccs2', 'type2', 'gbt'];
+
 /**
  * Properties:
  *
@@ -91,20 +94,15 @@ export default class Supercharger {
     getStallPlugSummary(useImages) {
         if (!this.stalls || !this.numStalls || this.numStalls == 0) return '';
 
-        var summary = '';
-        if (this.stalls && Object.keys(this.stalls).length === 1) {
-            summary = `${this.numStalls} ${Object.keys(this.stalls)[0]} `;
-        } else {
-            summary = this.numStalls + ' ';
-        }
-        if (this.plugs && Object.keys(this.plugs).length === 1) {
-            summary += useImages ? this.plugImg(Object.keys(this.plugs)[0]) : Object.keys(this.plugs)[0].toUpperCase();
+        var summary = `${this.numStalls} ${this.stallType ?? ''} `;
+        if (this.plugType) {
+            summary += useImages ? this.plugImg(this.plugType) : this.plugType.toUpperCase();
         } else {
             summary += 'stalls';
         }
         // special case for MagicDock
         if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
-            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Object.keys(this.stalls)[0]} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
+            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${this.stallType} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
         }
         return summary;
     }
@@ -159,11 +157,27 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.battery = jsonObject.battery;
     supercharger.otherEVs = jsonObject.otherEVs;
     supercharger.stalls = jsonObject.stalls;
+    if (supercharger.stalls) {
+        for (const s of BASE_STALLS) {
+            if (supercharger.stalls[s] === supercharger.numStalls) {
+                supercharger.stallType = s;
+                break;
+            }
+        }
+    }
     supercharger.plugs = jsonObject.plugs;
-    // For now at least, treat TPC as NACS
-    if (supercharger.plugs?.tpc > 0) {
-        supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
-        delete supercharger.plugs.tpc;
+    if (supercharger.plugs) {
+        // For now at least, treat TPC as NACS
+        if (supercharger.plugs?.tpc > 0) {
+            supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
+            delete supercharger.plugs.tpc;
+        }
+        for (const p of BASE_PLUGS) {
+            if (supercharger.plugs[p] === supercharger.numStalls) {
+                supercharger.plugType = p;
+                break;
+            }
+        }
     }
     supercharger.parkingId = jsonObject.parkingId;
     supercharger.facilityName = jsonObject.facilityName;
