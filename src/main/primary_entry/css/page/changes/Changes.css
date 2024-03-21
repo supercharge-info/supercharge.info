@@ -39,11 +39,20 @@
     padding-right: 8px;
 }
 
+#changes-table td .VOTING {
+    color: #8800aa;
+}
+#changes-table td .PLAN {
+    color: #8800aa; /* TODO: distinguish? */
+}
 #changes-table td .PERMIT {
     color: #0000ff;
 }
 #changes-table td .CONSTRUCTION {
     color: orange;
+}
+#changes-table td .EXPANDING {
+    color: red; /* TODO: distinguish? */
 }
 #changes-table td .CLOSED_TEMP {
     color: gray;

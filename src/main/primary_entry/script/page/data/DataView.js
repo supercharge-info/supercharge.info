@@ -10,6 +10,7 @@ import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
 import Sites from "../../site/Sites";
+import Strings from "../../util/Strings";
 
 export default class DataView {
 
@@ -61,49 +62,46 @@ export default class DataView {
     static buildStalls(supercharger) {
         const site = Supercharger.fromJSON(supercharger);
 
-        const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+        //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
 
         var content = site.getStallPlugSummary(true);
 
-        if (showDetail) {
-            var entries = '<li><b>Stalls:</b>';
-            Object.keys(site.stalls).forEach(s => {
-                if (site.stalls[s] > 0) {
-                    entries += ` • ${site.stalls[s]} `;
-                    if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="accessible" alt="accessible"/>';
-                    else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
-                    else entries += s;
-                }
-            });
-            entries += '</li><li><b>Plugs:</b>';
-            Object.keys(site.plugs).forEach(p => {
-                if (site.plugs[p] > 0) {
-                    if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
-                }
-            });
+        var entries = '<li><b>Stalls:</b>';
+        Object.keys(site.stalls).forEach(s => {
+            if (site.stalls[s] > 0) {
+                entries += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else entries += Strings.upperCaseInitial(s);
+            }
+        });
+        entries += '</li><li><b>Plugs:</b>';
+        Object.keys(site.plugs).forEach(p => {
+            if (site.plugs[p] > 0) {
+                if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+            }
+        });
+        entries += '</li>';
+        if (site.facilityName) {
+            entries += `<li><b>Host:</b> ${site.facilityName}`;
+            if (site.facilityHours) entries += ` • ${site.facilityHours}`;
             entries += '</li>';
-            if (site.facilityName) {
-                entries += `<li><b>Host:</b> ${site.facilityName}`;
-                if (site.facilityHours) entries += ` • ${site.facilityHours}`;
-                entries += '</li>';
-            }
-            if (site.parkingId !== 1) {
-                const park = Sites.getParking().get(site.parkingId);
-                entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
-            }
-            if (site.addressNotes) entries += `<li class="notes">${site.addressNotes}</li>`;
-            if (site.accessNotes) entries += `<li class="notes">${site.accessNotes}</li>`;
-
-            content = `
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="glyphicon glyphicon-chevron-down btn-xs"></b>${content}</a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        ${entries}
-                    </ul>
-                </div>`;
         }
-        return content;
+        if (site.parkingId !== 1) {
+            const park = Sites.getParking().get(site.parkingId);
+            entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
+        }
+        if (site.addressNotes) entries += `<li class="notes"><b>Address notes:</b><br/>${site.addressNotes}</li>`;
+        if (site.accessNotes) entries += `<li class="notes"><b>Access notes:</b><br/>${site.accessNotes}</li>`;
 
+        return `
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${content}<b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    ${entries}
+                    <li class="notes"><div class="links">${DataView.buildLinks(site)}</div></li>
+                </ul>
+            </div>`;
     }
 
     static buildStatus(supercharger) {
@@ -121,8 +119,8 @@ export default class DataView {
         return `<a href="${href.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
     }
 
-    static buildLinks(supercharger) {
-        const site = Supercharger.fromJSON(supercharger);
+    static buildLinks(site) {
+        //const site = Supercharger.fromJSON(supercharger);
         const addr = site.address;
         const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
         const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>');
@@ -130,15 +128,15 @@ export default class DataView {
             site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site.locationId ?
-            " • " + DataView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
+            " " + DataView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
             const psLink = site.plugshareId ?
-            " • " + DataView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
+            " " + DataView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
             '';
         const osmLink = site.osmId ?
-            " • " + DataView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
+            " " + DataView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
             '';
-        return `${gmapLink} • ${discussLink}${teslaLink}${psLink}${osmLink}`;
+        return `${gmapLink} ${discussLink}${teslaLink}${psLink}${osmLink}`;
     }
 
     initDataTableOptions() {
@@ -223,14 +221,6 @@ export default class DataView {
                     "data": "dateOpened",
                     "defaultContent": "",
                     "width": "5%"
-                },
-                {
-                    "data": (row, type, val, meta) => {
-                        return DataView.buildLinks(row);
-                    },
-                    "className": "links",
-                    "orderable": false,
-                    "width": "9%"
                 }
             ],
             "createdRow": (row, data, index) => {

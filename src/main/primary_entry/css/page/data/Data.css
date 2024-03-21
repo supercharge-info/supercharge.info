@@ -22,6 +22,10 @@
     right: 2px;
 }
 
+#supercharger-data-table span.VOTING, #supercharger-data-table span.PLAN {
+    color: #8800aa;
+}
+
 #supercharger-data-table span.PERMIT {
     color: #0000ff;
 }
@@ -50,7 +54,7 @@
 #supercharger-data-table .dropdown a, #supercharger-data-table .dropdown b {
     text-decoration: none;
     white-space: nowrap;
-    padding: 1px 2px;
+    padding: 1px 0px 0px 0px;
 }
 
 #supercharger-data-table .dropdown-menu {
@@ -64,7 +68,7 @@
 #supercharger-data-table li {
     white-space: pre;
 }
-#supercharger-data-table td.links {
+#supercharger-data-table .links {
     padding-top: 2px;
     line-height: 24px;
 }

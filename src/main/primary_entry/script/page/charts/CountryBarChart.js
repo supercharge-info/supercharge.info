@@ -13,14 +13,14 @@ export default class CountryBarChart {
         const countryNameList = [];
         const countryOpenCountList = [];
         const countryConstructionCountList = [];
-        const countryPermitCountList = [];
+        const countryPlanCountList = [];
 
         $.each(stateSiteCountList, function (index, value) {
             if (value.key !== Address.COUNTRY_WORLD && value.key !== Address.COUNTRY_USA && value.key !== Address.COUNTRY_CHINA) {
                 countryNameList.push(value.key);
                 countryOpenCountList.push(value.open);
                 countryConstructionCountList.push(value.construction);
-                countryPermitCountList.push(value.permit);
+                countryPlanCountList.push(value.plan);
             }
         });
 
@@ -68,9 +68,9 @@ export default class CountryBarChart {
             },
             series: [
                 {
-                    name: "Permit",
-                    data: countryPermitCountList,
-                    color: ChartColor.STATUS_PERMIT
+                    name: "Plan",
+                    data: countryPlanCountList,
+                    color: ChartColor.STATUS_PLAN
                 },
                 {
                     name: "Construction",

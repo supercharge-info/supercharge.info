@@ -8,9 +8,6 @@ import Sites from "../../../site/Sites";
 export default function buildDetailsDiv(site, displayUnit) {
     let div = "";
     div += "<div class='info-window-details'>";
-    if (!site.isUserAdded()) {
-        div += `<a style='position:absolute; right: 10px;' class='details-trigger' href='#${site.id}'>(hide)</a>`;
-    }
     div += "<table>";
 
     // Stalls

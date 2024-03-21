@@ -1,5 +1,6 @@
 import Address from "./Address";
 import Objects from "../util/Objects";
+import Strings from "../util/Strings";
 import Dates from "../util/Dates";
 import Units from "../util/Units";
 import unitConversion from "../util/UnitConversion";
@@ -29,11 +30,20 @@ export default class Supercharger {
         this.markerSize = 8;
     }
 
+    isVoting() {
+        return this.status === Status.VOTING;
+    }
+    isPlan() {
+        return this.status === Status.PLAN;
+    }
     isPermit() {
         return this.status === Status.PERMIT;
     }
     isConstruction() {
         return this.status === Status.CONSTRUCTION;
+    }
+    isExpanding() {
+        return this.status === Status.EXPANDING;
     }
     isOpen() {
         return this.status === Status.OPEN;
@@ -94,7 +104,7 @@ export default class Supercharger {
     getStallPlugSummary(useImages) {
         if (!this.stalls || !this.numStalls || this.numStalls == 0) return '';
 
-        var summary = `${this.numStalls} ${this.stallType ?? ''} `;
+        var summary = `${this.numStalls} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
         if (this.plugType) {
             summary += useImages ? this.plugImg(this.plugType) : this.plugType.toUpperCase();
         } else {
@@ -102,7 +112,7 @@ export default class Supercharger {
         }
         // special case for MagicDock
         if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
-            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${this.stallType} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
+            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
         }
         return summary;
     }
@@ -120,7 +130,12 @@ export default class Supercharger {
     }
 
     getMarkerMultiplier() {
-        return (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) ? 1.2 : 1.0;
+        // squares
+        if (this.status === Status.PLAN || this.status === Status.VOTING) return 1.3;
+        // triangles
+        if (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) return 1.2;
+        // circles
+        return 1.0;
     }
 
     getTeslaLink() {

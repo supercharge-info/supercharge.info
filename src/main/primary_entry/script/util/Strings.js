@@ -26,6 +26,9 @@ export default class Strings {
         return s1 === null && s2 === null;
     }
 
+    static upperCaseInitial(s) {
+        if (typeof s !== 'string' || s === null) return null;
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    }
 
 }
-

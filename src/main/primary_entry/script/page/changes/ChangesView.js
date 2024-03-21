@@ -10,6 +10,7 @@ import Sites from "../../site/Sites";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import Objects from "../../util/Objects";
+import Strings from "../../util/Strings";
 
 export default class ChangesView {
 
@@ -116,9 +117,9 @@ export default class ChangesView {
             Object.keys(site.stalls).forEach(s => {
                 if (site.stalls[s] > 0) {
                     entries += ` • ${site.stalls[s]} `;
-                    if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="accessible" alt="accessible"/>';
-                    else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
-                    else entries += s;
+                    if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                    else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                    else entries += Strings.upperCaseInitial(s);
                 }
             });
             entries += '</li><li><b>Plugs:</b>';
@@ -137,9 +138,9 @@ export default class ChangesView {
                 const park = Sites.getParking().get(site.parkingId);
                 entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
             }
-            if (site.addressNotes) entries += `<li class="notes">${site.addressNotes}</li>`;
-            if (site.accessNotes) entries += `<li class="notes">${site.accessNotes}</li>`;
-
+            if (site.addressNotes) entries += `<li class="notes"><b>Address notes:</b><br/>${site.addressNotes}</li>`;
+            if (site.accessNotes) entries += `<li class="notes"><b>Access notes:</b><br/>${site.accessNotes}</li>`;
+    
             content = `
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">${content}
@@ -161,15 +162,15 @@ export default class ChangesView {
             site?.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${changeRow.siteId}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
         const teslaLink = site?.locationId ?
-            " • " + ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
+            ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
             '';
         const psLink = site?.plugshareId ?
-            " • " + ChangesView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
+            ChangesView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
             '';
         const osmLink = site?.osmId ?
-            " • " + ChangesView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
+            ChangesView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
             '';
-        return `${gmapLink} • ${discussLink}${teslaLink}${psLink}${osmLink}`;
+        return `${gmapLink} ${discussLink} ${teslaLink} ${psLink} ${osmLink}`;
     }
 
     static asLink(href, content, title) {

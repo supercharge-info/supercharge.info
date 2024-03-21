@@ -191,7 +191,7 @@ export default class InfoWindow {
             popupContent += _buildHistoryDiv(site);
         }
 
-        popupContent += _buildLinksDiv(site, this.showDetails);
+        popupContent += _buildLinksDiv(site, this.showDetails, this.showHistory);
 
         popupContent += "</div>";
         return popupContent;
@@ -206,7 +206,6 @@ export default class InfoWindow {
 function _buildHistoryDiv(site) {
     let div = "";
     div += `<div class='info-window-details' id='nearby-details-${site.id}'>`;
-    div += `<a style='position:absolute; right: 19px;' class='history-trigger' href='#${site.id}'>(hide)</a>`;
     div += "<table style='width:100%;'>";
 
     div += "<tr style='font-weight:bold;'><td>Date</td><td>Status</td></tr>";
@@ -222,9 +221,9 @@ function _buildHistoryDiv(site) {
     return div;
 }
 
-function _buildLinksDiv(site, showDetails) {
+function _buildLinksDiv(site, showDetails, showHistory) {
     return '<div class="links">'
-        + buildLinkDetailsOrHistory(site, showDetails)
+        + buildLinkDetailsOrHistory(site, showDetails, showHistory)
 
         // links that are always present
         + buildLinkZoom(site)
@@ -324,13 +323,18 @@ function buildLinkRemoveAllMarkers(site) {
     return '';
 }
 
-function buildLinkDetailsOrHistory(site, showDetails) {
+function buildLinkDetailsOrHistory(site, showDetails, showHistory) {
+    var content = '';
     if (!showDetails) {
-        return `<a class='details-trigger' href='#${site.id}'>details</a>`;
+        content = `<a class='details-trigger' href='#${site.id}'>details</a>`;
     } else if (Objects.isNotNullOrUndef(site.history)) {
-        return `<a class='history-trigger' href='#${site.id}'>history</a>`;
+        content = `<a class='history-trigger' href='#${site.id}'>history</a>`;
+        content += `<a class='details-trigger' href='#${site.id}'>(hide)</a>`;
     }
-    return '';
+    if (showHistory) {
+        content += `<a class='history-trigger' href='#${site.id}'>(hide)</a>`;
+    }
+    return content;
 }
 
 function buildPinMarker(site, isPinned) {

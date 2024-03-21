@@ -47,9 +47,9 @@ td span.status-select.OPEN {
     color: red;
 }
 
-td.links img, td img.details, .details img {
+.links img, td img.details, .details img {
     height: 22px;
-    margin: -6px -1px -2px -1px;
+    margin: -6px 0px -1px 0px;
     padding: 1px;
 }
 .links a {
