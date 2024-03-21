@@ -64,8 +64,6 @@ export default class DataView {
 
         //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
 
-        var content = site.getStallPlugSummary(true);
-
         var entries = '<li><b>Stalls:</b>';
         Object.keys(site.stalls).forEach(s => {
             if (site.stalls[s] > 0) {
@@ -96,7 +94,7 @@ export default class DataView {
 
         return `
             <div class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${content}<b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${site.getStallPlugSummary(true)} <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right">
                     ${entries}
                     <li class="notes"><div class="links">${DataView.buildLinks(site)}</div></li>
