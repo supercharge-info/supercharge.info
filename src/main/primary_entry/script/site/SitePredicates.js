@@ -5,9 +5,15 @@ const SitePredicates = {
 
     IS_OPEN: (site) => site.isOpen(),
 
+    IS_EXPANDING: (site) => site.isExpanding(),
+
     IS_CONSTRUCTION: (site) => site.isConstruction(),
 
     IS_PERMIT: (site) =>  site.isPermit(),
+
+    IS_PLAN: (site) =>  site.isPlan(),
+
+    IS_VOTING: (site) =>  site.isVoting(),
 
     IS_COUNTED: (site) => site.count,
 
@@ -15,7 +21,7 @@ const SitePredicates = {
 
     USER_ADDED: (site) => site.isUserAdded(),
 
-    IS_OPEN_AND_COUNTED: (site) => SitePredicates.IS_OPEN(site) && SitePredicates.IS_COUNTED(site),
+    IS_OPEN_AND_COUNTED: (site) => (SitePredicates.IS_OPEN(site) || SitePredicates.IS_EXPANDING(site)) && SitePredicates.IS_COUNTED(site),
 
     HAS_NO_MARKER: (site) => Objects.isNullOrUndef(site.marker),
 
