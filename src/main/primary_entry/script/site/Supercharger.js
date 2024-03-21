@@ -188,9 +188,12 @@ Supercharger.fromJSON = function (jsonObject) {
             delete supercharger.plugs.tpc;
         }
         for (const p of BASE_PLUGS) {
+            if (supercharger.plugs[p] > 0 && supercharger.plugType) {
+                delete supercharger.plugType;
+                break;
+            }
             if (supercharger.plugs[p] === supercharger.numStalls) {
                 supercharger.plugType = p;
-                break;
             }
         }
     }
