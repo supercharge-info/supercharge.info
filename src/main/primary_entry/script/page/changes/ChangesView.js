@@ -16,24 +16,29 @@ export default class ChangesView {
 
     constructor(filterDialog) {
         const table = $("#changes-table");
-        this.tableBody = table.find("tbody");
-        this.tableBody.on('click', ChangesView.handleChangeClick);
+        const tableBody = table.find("tbody");
+        tableBody.on('click', ChangesView.handleChangeClick);
 
         this.tableAPI = table.DataTable(this.initDataTableOptions());
-        $(this.tableAPI.table().container()).find('#changes-title').html('Supercharger Change History');
-
         const tableAPI = this.tableAPI;
-        this.tableBody.on('click', 'td.dt-control', (event) => {
-            const tr = event.target.closest('tr');
-            const row = tableAPI.row(tr);
-            if (row.child.isShown()) row.child.hide();
-            else {
-                row.child(this.buildChild(tr, row.data())).show();
-                $(".tooltip").tooltip("hide");
-                $("#changes-table .child img, #changes-table .child span.details").each(function (n, t) {
-                    $(t).tooltip({ "container": "body" });
-                });
+
+        $(tableAPI.table().container()).find('#changes-title').html('Supercharger Change History');
+
+        table.on('click', 'th.dt-control', (event) => {
+            const icon = event.target.closest('b');
+            if (icon.className.indexOf("right") > 0) {
+                tableBody.find("tr.odd, tr.even").each((n, tr) => ChangesView.handleDetailClick(tr, tableAPI, "show"));
+                icon.className = icon.className.replace("right", "down");
+                icon.title = "hide all details";
+            } else {
+                tableBody.find("tr.dt-hasChild").each((n, tr) => ChangesView.handleDetailClick(tr, tableAPI, "hide"));
+                icon.className = icon.className.replace("down", "right");
+                icon.title = "show all details";
             }
+        });
+
+        tableBody.on('click', 'td.dt-control', (event) => {
+            ChangesView.handleDetailClick(event.target.closest('tr'), tableAPI, '');
             event.preventDefault();
         });
 
@@ -68,10 +73,22 @@ export default class ChangesView {
         this.filterControl.updateVisibility();
     }
 
+    static handleDetailClick(tr, tableAPI, showHide) {
+        const row = tableAPI.row(tr);
+        if (showHide !== 'show' && row.child.isShown()) row.child.hide();
+        else if (showHide !== 'hide' && !row.child.isShown()) {
+            row.child(ChangesView.buildChild(tr, row.data())).show();
+            $(".tooltip").tooltip("hide");
+            $("#changes-table .child img, #changes-table .child span.details").each(function (n, t) {
+                $(t).tooltip({ "container": "body" });
+            });
+        }
+    }
+
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
-            if (!target.is('a, b, ul, li, img, .details, td.dt-control')) {
+            if (!target.is('a, b, ul, li, img, .details, .dt-control')) {
                 if (target.closest('table')?.find('div.open')?.length === 0) {
                     const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
                     if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);
@@ -130,7 +147,7 @@ export default class ChangesView {
         return content;
     }
 
-    buildChild(parentTR, changeRow) {
+    static buildChild(parentTR, changeRow) {
         const site = Sites.getById(changeRow.siteId);
         if (!site) return '';
 

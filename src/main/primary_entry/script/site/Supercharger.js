@@ -110,9 +110,11 @@ export default class Supercharger {
         } else {
             summary += 'stalls';
         }
-        // special case for MagicDock
+        // special cases for the most common multi-connector stalls (MagicDock and CCS2+TYPE2)
         if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
             summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
+        } else if (this.numStalls === this.plugs?.ccs2 && this.plugs?.ccs2 === this.plugs?.type2) {
+            summary = `<span class="details" title="Dual-cable CCS2+TYPE2">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/CCS2.svg"/><img src="/images/TYPE2.svg"/>' : 'CCS2+TYPE2'}</span>`;
         }
         return summary;
     }

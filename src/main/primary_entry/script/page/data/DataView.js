@@ -182,19 +182,6 @@ export default class DataView {
                 {"data": "address.zip", "width": "5%"},
                 {"data": "address.country", "width": "5%"},
                 {
-                    "data": (row, type, val, meta) => {
-                        return `${row.gps.latitude}, ${row.gps.longitude}`;
-                    },
-                    "className": "gps",
-                    //"orderable": false,
-                    "width": "5%"
-                },
-                {
-                    "data": "elevationMeters",
-                    "className": "number",
-                    "width": "1%"
-                },
-                {
                     "data": "stallCount",
                     "render": (data, type, row, meta) => {
                        return DataView.buildStalls(row);
@@ -207,6 +194,19 @@ export default class DataView {
                     "render": (data, type, row, meta) => {
                         return data || '';
                     },
+                    "className": "number",
+                    "width": "1%"
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return `${row.gps.latitude}, ${row.gps.longitude}`;
+                    },
+                    "className": "gps",
+                    //"orderable": false,
+                    "width": "5%"
+                },
+                {
+                    "data": "elevationMeters",
                     "className": "number",
                     "width": "1%"
                 },
