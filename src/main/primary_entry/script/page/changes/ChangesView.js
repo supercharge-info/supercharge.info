@@ -22,6 +22,21 @@ export default class ChangesView {
         this.tableAPI = table.DataTable(this.initDataTableOptions());
         $(this.tableAPI.table().container()).find('#changes-title').html('Supercharger Change History');
 
+        const tableAPI = this.tableAPI;
+        this.tableBody.on('click', 'td.dt-control', (event) => {
+            const tr = event.target.closest('tr');
+            const row = tableAPI.row(tr);
+            if (row.child.isShown()) row.child.hide();
+            else {
+                row.child(this.buildChild(tr, row.data())).show();
+                $(".tooltip").tooltip("hide");
+                $("#changes-table .child img, #changes-table .child span.details").each(function (n, t) {
+                    $(t).tooltip({ "container": "body" });
+                });
+            }
+            event.preventDefault();
+        });
+
         this.filterControl = new SiteFilterControl(
             $("#changes-filter"),
             this.filterControlCallback.bind(this),
@@ -56,7 +71,7 @@ export default class ChangesView {
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
-            if (!target.is('a, b, ul, li, img, .details')) {
+            if (!target.is('a, b, ul, li, img, .details, td.dt-control')) {
                 if (target.closest('table')?.find('div.open')?.length === 0) {
                     const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
                     if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);
@@ -73,9 +88,10 @@ export default class ChangesView {
         var hoverText = '';
         if (site.address.street)  hoverText += site.address.street;
         if (site.address.city)    hoverText += ' • ' + site.address.city;
-        if (site.address.state)   hoverText += ' • ' + site.address.state;
+        if (site.address.state)   hoverText += ' ' + site.address.state;
+        if (site.address.zip)     hoverText += ' ' + site.address.zip;
         if (site.address.country) hoverText += ' • ' + site.address.country;
-        return `<span title="${hoverText}">${changeRow.siteName}</span>`;
+        return `<span class="address" title="${hoverText}">${changeRow.siteName}</span>`;
     }
 
     static buildStatus(changeRow) {
@@ -99,7 +115,7 @@ export default class ChangesView {
             return `${changeRow.stallCount} stalls${kw}`;
         }
 
-        const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+        //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
 
         var content = site.getStallPlugSummary(true) + kw;
 
@@ -111,46 +127,49 @@ export default class ChangesView {
         if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
             content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
         }
-
-        if (showDetail) {
-            var entries = '<li><b>Stalls:</b>';
-            Object.keys(site.stalls).forEach(s => {
-                if (site.stalls[s] > 0) {
-                    entries += ` • ${site.stalls[s]} `;
-                    if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
-                    else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
-                    else entries += Strings.upperCaseInitial(s);
-                }
-            });
-            entries += '</li><li><b>Plugs:</b>';
-            Object.keys(site.plugs).forEach(p => {
-                if (site.plugs[p] > 0) {
-                    if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
-                }
-            });
-            entries += '</li>';
-            if (site.facilityName) {
-                entries += `<li><b>Host:</b> ${site.facilityName}`;
-                if (site.facilityHours) entries += ` • ${site.facilityHours}`;
-                entries += '</li>';
-            }
-            if (site.parkingId !== 1) {
-                const park = Sites.getParking().get(site.parkingId);
-                entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
-            }
-            if (site.addressNotes) entries += `<li class="notes"><b>Address notes:</b><br/>${site.addressNotes}</li>`;
-            if (site.accessNotes) entries += `<li class="notes"><b>Access notes:</b><br/>${site.accessNotes}</li>`;
-    
-            content = `
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${content}
-                        <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        ${entries}
-                    </ul>
-                </div>`;
-        }
         return content;
+    }
+
+    buildChild(parentTR, changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        if (!site) return '';
+
+        var address = $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+
+        var entries = '<b>Stalls:</b>';
+        Object.keys(site.stalls).forEach(s => {
+            if (site.stalls[s] > 0) {
+                entries += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else entries += Strings.upperCaseInitial(s);
+            }
+        });
+        entries += '<br/><b>Plugs:</b>';
+        Object.keys(site.plugs).forEach(p => {
+            if (site.plugs[p] > 0) {
+                if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+            }
+        });
+        if (site.facilityName) {
+            entries += `<br/><b>Host:</b> ${site.facilityName}`;
+            if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+        }
+        if (site.parkingId !== 1) {
+            const park = Sites.getParking().get(site.parkingId);
+            entries += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
+        }
+        if (site.addressNotes) address += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
+        if (site.accessNotes) entries += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
+
+        return `
+            <table class="child">
+                <tr>
+                    <td width="1%"></td>
+                    <td width="63%">${address}</td>
+                    <td width="36%">${entries}</td>
+                </tr>
+            </table>`;
     }
 
     static buildLinks(changeRow) {
@@ -219,10 +238,17 @@ export default class ChangesView {
             "rowId": "id",
             "columns": [
                 {
+                    "className": "dt-control",
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": "",
+                    "width": "1%"
+                },
+                {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
                     },
-                    "width": "40%"
+                    "width": "39%"
                 },
                 {
                     "data": (row, type, val, meta) => {

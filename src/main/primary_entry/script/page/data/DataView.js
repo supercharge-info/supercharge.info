@@ -195,8 +195,9 @@ export default class DataView {
                     "width": "1%"
                 },
                 {
-                    "data": (row, type, val, meta) => {
-                        return DataView.buildStalls(row);
+                    "data": "stallCount",
+                    "render": (data, type, row, meta) => {
+                       return DataView.buildStalls(row);
                     },
                     "className": "number",
                     "width": "7%"
@@ -232,7 +233,7 @@ export default class DataView {
                 $("li img.wait").addClass("show");
                 window.dataTooltips = performance.now();
                 window.dataIcons = [];
-                $("#supercharger-data-table img, #supercharger-data-table span.details").each(function () {
+                $("#supercharger-data-table th, #supercharger-data-table img, #supercharger-data-table span.details").each(function () {
                     window.dataIcons.push($(this));
                 });
                 clearInterval(window.dataInterval);

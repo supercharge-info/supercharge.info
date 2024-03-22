@@ -72,13 +72,14 @@
     text-decoration: none;
 }
 
-#changes-table .dropdown-menu {
-    width: max-content;
-    min-width: 50%;
-    max-width: 250%;
-    padding: 4px;
+#changes-table .child {
+    width: 100%;
+    cursor: auto;
     background-color: #ffe;
-    margin-right: 25%;
+}
+#changes-table .child tr, #changes-table .child td {
+    padding: 1px 8px;
+    vertical-align: top;
 }
 #changes-table li {
     white-space: pre;
