@@ -68,6 +68,14 @@ export default class InfoWindow {
 
     redraw() {
         this.popup.setContent(this._buildHtmlContent());
+        this.initTooltips();
+    }
+
+    initTooltips() {
+        $(".tooltip").tooltip("hide");
+        $(".info-window-content a, .info-window-content img, .info-window-content span.details").each(function (n, t) {
+            $(t).tooltip({ "container": "body" });
+        });
     }
 
     toggleDetails(showDetails) {
@@ -127,6 +135,7 @@ export default class InfoWindow {
             .openOn(this.mapApi);
         this.mapApi.on('popupclose', this._handleMapApiPopupCloseEvent, this);
         this.marker.popup = this.popup;
+        this.initTooltips();
     }
 
     _handleMapApiPopupCloseEvent(event) {
@@ -152,16 +161,8 @@ export default class InfoWindow {
         }
 
         if (!site.isUserAdded()) {
-            popupContent += "<div class='statusLine'>";
-
-            var sitestalls = (Object.keys(site.stalls)?.length == 1 ? `${site.numStalls} ${Object.keys(site.stalls)[0]}` : `${site.numStalls}`) +
-                (Object.keys(site.plugs)?.length == 1 ? ` ${site.plugImg(Object.keys(site.plugs)[0])}` : ' stalls');
-            // special case for MagicDock
-            if (site.numStalls === site.plugs?.nacs && site.plugs?.nacs === site.plugs?.ccs1) {
-                sitestalls = `<span title="MagicDock (NACS+CCS1)">${site.numStalls} ${Object.keys(site?.stalls)[0]} <img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/></span>`;
-            }
-            const kw = site.powerKilowatt > 0 ? ` • ${site.powerKilowatt} kW` : '';
-            popupContent += sitestalls + kw;
+            popupContent += `<div class='statusLine'>${site.getStallPlugSummary(true)}`;
+            popupContent += site.powerKilowatt > 0 ? ` • ${site.powerKilowatt} kW` : '';
     
             //
             // Status, other attributes, limited hours
@@ -326,13 +327,13 @@ function buildLinkRemoveAllMarkers(site) {
 function buildLinkDetailsOrHistory(site, showDetails, showHistory) {
     var content = '';
     if (!showDetails) {
-        content = `<a class='details-trigger' href='#${site.id}'>details</a>`;
+        content = `<a class='details-trigger' href='#${site.id}' title="show details">details</a>`;
     } else if (Objects.isNotNullOrUndef(site.history)) {
-        content = `<a class='history-trigger' href='#${site.id}'>history</a>`;
-        content += `<a class='details-trigger' href='#${site.id}'>(hide)</a>`;
+        content = `<a class='history-trigger' href='#${site.id}' title="show history">history</a>`;
+        content += `<a class='details-trigger' href='#${site.id}' title="hide details">×</a>`;
     }
     if (showHistory) {
-        content += `<a class='history-trigger' href='#${site.id}'>(hide)</a>`;
+        content += `<a class='history-trigger' href='#${site.id}' title="hide history">×</a>`;
     }
     return content;
 }

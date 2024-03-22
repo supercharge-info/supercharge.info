@@ -1,4 +1,5 @@
 import Objects from "../../../util/Objects";
+import Strings from "../../../util/Strings";
 import Units from "../../../util/Units";
 import Sites from "../../../site/Sites";
 
@@ -16,9 +17,10 @@ export default function buildDetailsDiv(site, displayUnit) {
         Object.keys(site.stalls).forEach(s => {
             if (site.stalls[s] > 0) {
                 div += ` • ${site.stalls[s]} `;
-                if (s === 'accessible') div += '<img src="/images/accessible.svg" title="accessible" alt="accessible"/>';
-                else if (s === 'trailerFriendly') div += '<img src="/images/trailer.svg" title="trailer-friendly" alt="trailer-friendly"/>';
-                else div += s;
+                if (s === 'accessible') div += '<img src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') div += '<img src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else div += Strings.upperCaseInitial(s);
+
             }
         });
         div += "</td></tr>";
