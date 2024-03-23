@@ -230,9 +230,9 @@ function _buildLinksDiv(site, showDetails, showHistory) {
         + buildLinkZoom(site)
         + buildLinkCircleToggle(site)
         + buildLinkAddToRoute(site)
-        + buildLinkDirectToSite(site)
 
         // links that are NOT always present.
+        + buildLinkDirectToSite(site)
         + buildLinkGMapURL(site)
         + buildLinkDiscussURL(site)
         + buildLinkTeslaURL(site)
@@ -270,7 +270,10 @@ function buildLinkAddToRoute(site) {
 }
 
 function buildLinkDirectToSite(site) {
-    return `<a class='direct-link-trigger' href='${site.id}'><img src="/images/link-symbol.svg" title="direct link" alt="direct link"/></a>`;
+    if (!site.isUserAdded()) {
+        return `<a class='direct-link-trigger' href='${site.id}'><img src="/images/link-symbol.svg" title="direct link" alt="direct link"/></a>`;
+    }
+    return '';
 }
 
 function buildLinkTeslaURL(site) {

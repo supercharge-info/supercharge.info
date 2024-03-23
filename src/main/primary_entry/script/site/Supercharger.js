@@ -184,12 +184,13 @@ Supercharger.fromJSON = function (jsonObject) {
     }
     supercharger.plugs = jsonObject.plugs;
     if (supercharger.plugs) {
-        // For now at least, treat TPC as NACS
+        // For now at least, treat TPC the same as NACS
         if (supercharger.plugs?.tpc > 0) {
             supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
             delete supercharger.plugs.tpc;
         }
         for (const p of BASE_PLUGS) {
+            // if we already found a plugType and there are more base plugs, get rid of the plugType and stop looking
             if (supercharger.plugs[p] > 0 && supercharger.plugType) {
                 delete supercharger.plugType;
                 break;
