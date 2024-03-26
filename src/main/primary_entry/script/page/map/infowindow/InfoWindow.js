@@ -192,7 +192,7 @@ export default class InfoWindow {
             popupContent += _buildHistoryDiv(site);
         }
 
-        popupContent += _buildLinksDiv(site, this.showDetails, this.showHistory);
+        popupContent += _buildLinksDiv(site, this.showDetails, this.showHistory, this.mapApi);
 
         popupContent += "</div>";
         return popupContent;
@@ -222,7 +222,7 @@ function _buildHistoryDiv(site) {
     return div;
 }
 
-function _buildLinksDiv(site, showDetails, showHistory) {
+function _buildLinksDiv(site, showDetails, showHistory, mapApi) {
     return '<div class="links">'
         + buildLinkDetailsOrHistory(site, showDetails, showHistory)
 
@@ -233,11 +233,11 @@ function _buildLinksDiv(site, showDetails, showHistory) {
 
         // links that are NOT always present.
         + buildLinkDirectToSite(site)
-        + buildLinkGMapURL(site)
+        + (site?.getGmapLink() ?? '')
+        + (site?.getPlugShareLink(mapApi) ?? '')
+        + (site?.getOsmLink(mapApi) ?? '')
         + buildLinkDiscussURL(site)
-        + buildLinkTeslaURL(site)
-        + buildLinkPSURL(site)
-        + buildLinkOSMURL(site)
+        + (site?.getTeslaLink() ?? '')
         + buildLinkRemoveMarker(site)
         + buildLinkRemoveAllMarkers(site)
         + "</div>";
@@ -276,39 +276,9 @@ function buildLinkDirectToSite(site) {
     return '';
 }
 
-function buildLinkTeslaURL(site) {
-    if (Objects.isNotNullOrUndef(site.locationId)) {
-        return `<a target='_blank' href='${site.getTeslaLink()}'><img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/></a>`;
-    }
-    return '';
-}
-
 function buildLinkDiscussURL(site) {
     if (site.urlDiscuss) {
         return `<a target='_blank' href='${ServiceURL.DISCUSS}?siteId=${site.id}'><img src="/images/forum.svg" title="forum"/></a>`;
-    }
-    return '';
-}
-
-function buildLinkGMapURL(site) {
-    if (Objects.isNotNullOrUndef(site.address.street)) {
-        const addr = site.address;
-        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
-    }
-    return '';
-}
-
-function buildLinkPSURL(site) {
-    if (site.plugshareId) {
-        return `<a href="https://api.plugshare.com/view/location/${site.plugshareId}" target="_blank"><img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/></a>`;
-    }
-    return '';
-}
-
-function buildLinkOSMURL(site) {
-    if (site.osmId) {
-        return `<a href="https://www.openstreetmap.org/node/${site.osmId}" target="_blank"><img src="/images/osm.svg" title="OpenStreetMap"/></a>`;
     }
     return '';
 }

@@ -191,22 +191,14 @@ export default class ChangesView {
 
     static buildLinks(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        const addr = site?.address;
-        const query = encodeURI(`${addr?.street||''} ${addr?.city||''} ${addr?.state||''} ${addr?.zip||''} ${addr?.country||''}`);
-        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>', site?.location?.toString());
+        const gmapLink = site?.getGmapLink() ?? '';
         const discussLink = ChangesView.asLink(
             site?.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${changeRow.siteId}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
-        const teslaLink = site?.locationId ?
-            ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
-            '';
-        const psLink = site?.plugshareId ?
-            ChangesView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
-            '';
-        const osmLink = site?.osmId ?
-            ChangesView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
-            '';
-        return `${gmapLink} ${discussLink} ${teslaLink} ${psLink} ${osmLink}`;
+        const teslaLink = site?.getTeslaLink() ?? '';
+        const psLink = site?.getPlugShareLink() ?? '';
+        const osmLink = site?.getOsmLink() ?? '';
+        return `${gmapLink} ${psLink} ${osmLink} ${discussLink} ${teslaLink}`;
     }
 
     static asLink(href, content, title) {

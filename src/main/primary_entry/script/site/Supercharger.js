@@ -141,12 +141,51 @@ export default class Supercharger {
     }
 
     getTeslaLink() {
-        return (this.address.isTeslaCN() ? ServiceURL.TESLA_CN_PAGE : ServiceURL.TESLA_WEB_PAGE) + this.locationId;
+        if (Objects.isNotNullOrUndef(this.locationId)) {
+            var teslaLink = (this.address?.isTeslaCN() ? ServiceURL.TESLA_CN_PAGE : ServiceURL.TESLA_WEB_PAGE) + this.locationId;
+            return `<a target='_blank' href='${teslaLink}'><img src="/images/red_dot_t.svg" title="tesla.${this.address?.isTeslaCN() ? 'cn' : 'com'}"/></a>`;
+        }
+        return '';
     }
 
     plugImg(plug) {
         const up = plug.toUpperCase();
         return `<img class="details" src="/images/${up}.svg" title="${up}" alt="${up}"/>`;
+    }
+
+    getGmapLink() {
+        if (Objects.isNotNullOrUndef(this.address.street)) {
+            const addr = this.address;
+            const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+            return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
+        }
+    }
+
+    getPlugShareLink(map) {
+        var psLink = "https://api.plugshare.com/view/", psClass = "", psTitle = "PlugShare";
+        if (this.plugshareId) {
+            psLink += `location/${this.plugshareId}`;
+        } else {
+            var bounds = map?.getBounds();
+            var spanLat = Math.min(0.05, Math.abs(bounds?.getNorthEast().lat - bounds?.getSouthWest().lat) ?? 0.05);
+            var spanLng = Math.min(0.05, Math.abs(bounds?.getNorthEast().lng - bounds?.getSouthWest().lng) ?? 0.05);
+            psLink += `map?latitude=${this.location.lat}&longitude=${this.location.lng}&spanLat=${spanLat}&spanLng=${spanLng}`;
+            psClass = "faded";
+            psTitle += " (map only)";
+        }
+        return `<a href="${psLink}" target="_blank"><img src="https://developer.plugshare.com/logo.svg" title="${psTitle}" class="${psClass}"/></a>`;
+    }
+
+    getOsmLink(map) {
+        var osmLink = "https://www.openstreetmap.org/", osmClass = "", osmTitle = "OpenStreetMap";
+        if (this.osmId) {
+            osmLink += `node/${this.osmId}`;
+        } else {
+            osmLink += `#map=${Math.max(15, map?.getZoom() ?? 15)}/${this.location.lat}/${this.location.lng}`;
+            osmClass = "faded";
+            osmTitle += " (map only)";
+        }
+        return `<a href="${osmLink}" target="_blank"><img src="/images/osm.svg" title="${osmTitle}" class="${osmClass}"/></a>`;
     }
 
 }

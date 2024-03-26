@@ -75,6 +75,10 @@ table .notes {
     border-top: 1px dotted #999 !important;
 }
 
+img.faded {
+    filter: grayscale(0.8);
+    opacity: 0.5;
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Layout

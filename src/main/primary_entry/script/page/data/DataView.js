@@ -118,23 +118,14 @@ export default class DataView {
     }
 
     static buildLinks(site) {
-        //const site = Supercharger.fromJSON(supercharger);
-        const addr = site.address;
-        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>');
+        const gmapLink = site.getGmapLink();
         const discussLink = DataView.asLink(
             site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
-        const teslaLink = site.locationId ?
-            " " + DataView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
-            '';
-            const psLink = site.plugshareId ?
-            " " + DataView.asLink(`https://api.plugshare.com/view/location/${site.plugshareId}`, '<img src="https://developer.plugshare.com/logo.svg" title="PlugShare"/>') :
-            '';
-        const osmLink = site.osmId ?
-            " " + DataView.asLink(`https://www.openstreetmap.org/node/${site.osmId}`, '<img src="/images/osm.svg" title="OpenStreetMap"/>') :
-            '';
-        return `${gmapLink} ${discussLink}${teslaLink}${psLink}${osmLink}`;
+        const teslaLink = site.getTeslaLink();
+        const psLink = site.getPlugShareLink();
+        const osmLink = site.getOsmLink();
+        return `${gmapLink} ${psLink} ${osmLink} ${discussLink} ${teslaLink}`;
     }
 
     initDataTableOptions() {
