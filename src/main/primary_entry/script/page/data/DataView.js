@@ -171,6 +171,7 @@ export default class DataView {
                     d.stalls = dataView.filterControl.getStalls();
                     d.power = dataView.filterControl.getPower();
                     d.otherEVs = dataView.filterControl.getOtherEVs();
+                    //d.search = dataView.filterControl.getSearch();
                 }
             },
             "rowId": "id",

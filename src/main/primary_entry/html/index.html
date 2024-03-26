@@ -484,53 +484,62 @@ PAGE: about
     </table>
 
     <h3 class="margin-top">Supercharger Status</h3>
-
-    <ul class="about-page-list">
-        <li title="Open">
-            <img src="images/red_dot.svg"/>
-            <b>Open</b> : It is possible to supercharge at the site at all times. <i>(Note that the host or other nearby facilities might not be open at all times.)</i>
-        </li>
-        <li title="Open - Limited Hours">
-            <img src="images/red_dot_limited.svg"/>
-            <b>Open - Limited Hours</b> : It is possible to supercharge at the site during limited times.
-        </li>
-        <li title="Expanding">
-            <img src="images/red_expand.svg"/>
-            <b>Expanding</b> : Site is at least partially open and is being updated or expanded.
-        </li>
-        <li title="Construction">
-            <img src="images/orange_triangle.svg"/>
-            <b>Construction</b> : Progress is visible at the site.
-        </li>
-        <li title="Permit">
-            <img src="images/blue_triangle.svg"/>
-            <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
-        </li>
-        <li title="Plan">
-            <img src="images/plan.svg"/>
-            <b>Plan</b> : Placeholder for expected or rumored site.
-        </li>
-        <li title="Voting">
-            <img src="images/vote.svg"/>
-            <b>Voting</b> : Recent winner of <a href="https://www.tesla.com/supercharger-voting" target="_blank">Supercharger Voting</a>.
-        </li>
-        <li title="Temporarily Closed">
-            <img src="images/gray_dot_x.svg"/>
-            <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
-        </li>
-        <li title="Permanently Closed">
-            <img src="images/black_dot_x.svg"/>
-            <b>Permanently Closed</b>* : Site is permanently closed. Charging not possible.
-        </li>
-        <li title="Custom">
-            <img src="images/custom_pin.svg"/>
-            <b>Custom</b> : User added custom marker. Right-click map to add at any location.
-        </li>
-    </ul>
-    <i>* Note that Permanently Closed sites are hidden by default on the map. To see them, use the Select All button or click directly on the Permanently Closed option in the Status filter.</i>
-
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <ul class="about-page-list" style="flex: 5;">
+            <li title="Open">
+                <img src="images/red_dot.svg"/>
+                <b>Open</b> : It is possible to supercharge at the site at all times. <i>(Note that the host or other nearby facilities might not be open at all times.)</i>
+            </li>
+            <li title="Open - Limited Hours">
+                <img src="images/red_dot_limited.svg"/>
+                <b>Open - Limited Hours</b> : It is possible to supercharge at the site during limited times.
+            </li>
+            <li title="Expanding">
+                <img src="images/red_expand.svg"/>
+                <b>Expanding</b> : Site is at least partially open and is being updated or expanded.
+            </li>
+            <li title="Construction">
+                <img src="images/orange_triangle.svg"/>
+                <b>Construction</b> : Progress is visible at the site.
+            </li>
+            <li title="Permit">
+                <img src="images/blue_triangle.svg"/>
+                <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
+            </li>
+            <li title="Plan">
+                <img src="images/plan.svg"/>
+                <b>Plan</b> : Placeholder for expected or rumored site.
+            </li>
+            <li title="Voting">
+                <img src="images/vote.svg"/>
+                <b>Voting</b> : Recent winner of <a href="https://www.tesla.com/supercharger-voting" target="_blank">Supercharger Voting</a>.
+            </li>
+            <li title="Temporarily Closed">
+                <img src="images/gray_dot_x.svg"/>
+                <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
+            </li>
+            <li title="Permanently Closed">
+                <img src="images/black_dot_x.svg"/>
+                <b>Permanently Closed</b> : Site is permanently closed. Charging not possible.
+            </li>
+            <li title="Custom">
+                <img src="images/custom_pin.svg"/>
+                <b>Custom</b> : User added custom marker. Right-click map to add at any location.
+            </li>
+        </ul>
+        <div class="notes" style="flex: 2; font-style: italic; font-size: 85%;">
+            <b>Additional FAQ + notes on status</b>
+            <hr/>
+            <img src="images/red_dot.svg"/> <b>Why does the site use <span style="color: red;">red</span> circles to indicate <span style="color: red;">Open</span> sites? The color red usually means "bad" or "stop" in other contexts.</b><br/>
+            The original decision to use red is lost to time, but a possible motivation was to match Tesla's stylized "T" logo or the color of the markers on Tesla's "Find Us" map.
+            <hr/>
+            <img src="images/black_dot_x.svg"/> <b>Permanently Closed sites are hidden by default on the map.</b><br/>
+            To see them, use the Select All button or click directly on the Permanently Closed option in the Status filter.
+        </div>
+    </div>
+    
     <h3>Plug icons</h3>
-    <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons</i>
+    <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons. (Click each name below for the source.)</i>
     <div class="details">
         • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">NACS</a>
         • <img src="/images/CCS1.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type1-ccs.svg" target="_blank">CCS1</a>
@@ -693,25 +702,27 @@ PAGE: profile
                                         </div>
                                     </td>
                                 </tr>
+                                <!--
                                 <tr>
-                                    <td><label>Primary "Open" Color</label></td>
+                                    <td><label>Theme</label></td>
                                     <td>
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label details">
                                                 <input class="form-check-input" type="radio" name="color" value="red" checked="true"/>
                                                 <img src="/images/red_dot.svg"/> <img src="/images/red_dot_limited.svg"/> <img src="/images/red_expand.svg"/>
-                                                Red (Tesla theme)
+                                                Default
                                             </label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label details">
                                                 <input class="form-check-input" type="radio" name="color" value="red" disabled="true"/>
                                                 <img src="/images/green_dot.svg"/> <img src="/images/green_dot_limited.svg"/> <img src="/images/green_expand.svg"/>
-                                                Green (coming soon)
+                                                Other (TBD)
                                             </label>
                                         </div>
                                     </td>
                                 </tr>
+                            -->
                                 <tr>
                                     <td><label>About</label></td>
                                     <td><textarea class="form-control" name="description" rows="3" cols="30"></textarea>
