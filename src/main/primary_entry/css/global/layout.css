@@ -49,7 +49,7 @@ td span.status-select.OPEN {
 
 .links img, td img.details, .details img {
     height: 22px;
-    margin: -6px 0px -1px 0px;
+    margin: -2px 0px 1px 0px;
     padding: 1px;
 }
 .links a {
@@ -68,7 +68,7 @@ td span.status-select.OPEN {
     padding-right: 0px !important;
 }
 
-table .notes {
+table .notes, .info-window-content .notes {
     white-space: pre-wrap !important;
     padding-top: 2px;
     margin-top: 2px;
@@ -76,8 +76,7 @@ table .notes {
 }
 
 img.faded {
-    filter: grayscale(0.8);
-    opacity: 0.5;
+    filter: grayscale(0.9) brightness(0.8) opacity(0.5) contrast(1.2);
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - -
