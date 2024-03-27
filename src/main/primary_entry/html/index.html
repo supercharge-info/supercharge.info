@@ -51,28 +51,28 @@ Navigation Bar
             -->
             <table id="total-count-table" class="nav navbar-nav">
                 <tr class="lab">
-                    <td title="Open" class="open">Open</td>
+                    <td title="Open or Expanding" class="open">Open</td>
                     <td title="Construction" class="construction">Constr</td>
-                    <td title="Permit" class="permit">Permit</td>
-                    <td title="Closed" class="closed">Closed</td>
+                    <td title="Voting, Plan, or Permit" class="permit">Plan</td>
+                    <td title="Temporarily or Permanently Closed" class="closed">Closed</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td title="Open" class="open">-</td>
+                    <td title="Open or Expanding" class="open">-</td>
                     <td title="Construction" class="construction">-</td>
-                    <td title="Permit" class="permit">-</td>
-                    <td title="Closed" class="closed">-</td>
+                    <td title="Voting, Plan, or Permit" class="permit">-</td>
+                    <td title="Temporarily or Permanently Closed" class="closed">-</td>
                     <td class="lab">World</td>
                 </tr>
                 <tr>
-                    <td title="Open" class="open">-</td>
+                    <td title="Open or Expanding" class="open">-</td>
                     <td title="Construction" class="construction">-</td>
-                    <td title="Permit" class="permit">-</td>
-                    <td title="Closed" class="closed">-</td>
+                    <td title="Voting, Plan, or Permit" class="permit">-</td>
+                    <td title="Temporarily or Permanently Closed" class="closed">-</td>
                     <td class="lab" title="Use map to see totals for a region"><span class="light">(region)</span></td>
                 </tr>
             </table>
-            
+
             <!-- This is what gets shown for the navbar when it collapses for small screens. -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -303,161 +303,6 @@ PAGE: map
         <!-- *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   *   * MAP -->
         <div id="map-canvas">
         </div>
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="0" height="0">
-            <defs>
-                <radialGradient id="blue_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#90c0ff" />
-                    <stop offset="50%" stop-color="#7090ee" />
-                    <stop offset="75%" stop-color="#5070d0" />
-                    <stop offset="100%" stop-color="#3050c0" />
-                </radialGradient>
-                <pattern id="blue_triangle" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <g transform="matrix(1.57 0 0 1.57 500 414)" id="843162">
-                        <path
-                            style="stroke: #000000; stroke-width: 30; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#blue_fill); fill-rule: nonzero; opacity: 1;"
-                            transform=" translate(-255.6984, -251.0068)"
-                            d="M 12.51 470.379 L 234.371 16.008 c 6.439 -13.187 25.17 -13.363 31.855 -0.299 l 232.51 454.371 c 6.064 11.849 -2.542 25.92 -15.853 25.92 H 28.512 C 15.348 496 6.734 482.209 12.51 470.379 z"
-                            stroke-linecap="round" />
-                    </g>
-                </pattern>
-                <radialGradient id="orange_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#ffffff" />
-                    <stop offset="50%" stop-color="#ffa500" />
-                    <stop offset="75%" stop-color="#dd8500" />
-                    <stop offset="100%" stop-color="#a56500" />
-                </radialGradient>
-                <pattern id="orange_triangle" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <g transform="matrix(1.57 0 0 1.57 500 414)" id="843162">
-                        <path
-                            style="stroke: #000000; stroke-width: 30; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#orange_fill); fill-rule: nonzero; opacity: 1;"
-                            transform=" translate(-255.6984, -251.0068)"
-                            d="M 12.51 470.379 L 234.371 16.008 c 6.439 -13.187 25.17 -13.363 31.855 -0.299 l 232.51 454.371 c 6.064 11.849 -2.542 25.92 -15.853 25.92 H 28.512 C 15.348 496 6.734 482.209 12.51 470.379 z"
-                            stroke-linecap="round" />
-                    </g>
-                </pattern>
-                <radialGradient id="red_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#ff6060" />
-                    <stop offset="50%" stop-color="#d02020" />
-                    <stop offset="90%" stop-color="#a00000" />
-                    <stop offset="100%" stop-color="#600000" />
-                </radialGradient>
-                <pattern id="red_dot" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="475" cx="500" cy="500" fill="url(#red_fill)" style="stroke: #000000; stroke-width: 50;"/>
-                </pattern>
-                <radialGradient id="red_fill_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#e00000" />
-                    <stop offset="50%" stop-color="#c00000" />
-                    <stop offset="90%" stop-color="#a00000" />
-                    <stop offset="100%" stop-color="#600000" />
-                </radialGradient>
-                <pattern id="red_dot_limited" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="475" cx="500" cy="500" fill="url(#red_fill_ltd)" style="stroke: #000000; stroke-width: 50;"/>
-                    <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
-                        <g>
-                            <g transform="matrix(12 0 0 12 0 -125)">
-                                <path
-                                    style="stroke: rgb(255,255,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
-                                    transform=" translate(-32, -22)" d="M 30 7 h 4 v 31 h -4 z" />
-                            </g>
-                            <g transform="matrix(12 0 0 12 -62.5 37.5)">
-                                <path
-                                    style="stroke: rgb(255,255,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
-                                    transform=" translate(-27, -35)" d="M 36.1 27 l 1.9 3.6 L 17.9 43 L 16 39.4 z" />
-                            </g>
-                            <g transform="matrix(18 0 0 18 0 0)">
-                                <circle
-                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
-                                    cx="0" cy="0" r="4" />
-                            </g>
-                            <g transform="matrix(15 0 0 15 0 0)">
-                                <circle
-                                    style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
-                                    cx="0" cy="0" r="3" />
-                            </g>
-                        </g>
-                    </g>
-                </pattern>
-                <radialGradient id="gray_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#e0e0e0" />
-                    <stop offset="50%" stop-color="#c0c0c0" />
-                    <stop offset="75%" stop-color="#a0a0a0" />
-                    <stop offset="100%" stop-color="#404040" />
-                </radialGradient>
-                <pattern id="gray_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="475" cx="500" cy="500" fill="url(#gray_fill)" style="stroke: #000000; stroke-width: 50;"/>
-                    <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
-                        <g>
-                            <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
-                                <line
-                                    style="stroke: #000000; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
-                                    x1="6" y1="-6" x2="-6" y2="6" />
-                            </g>
-                            <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
-                                <line
-                                    style="stroke: #000000; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
-                                    x1="-6" y1="-6" x2="6" y2="6" />
-                            </g>
-                        </g>
-                    </g>
-                </pattern>
-                 <radialGradient id="black_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#606060" />
-                    <stop offset="50%" stop-color="#404040" />
-                    <stop offset="75%" stop-color="#202020" />
-                    <stop offset="100%" stop-color="#000000" />
-                </radialGradient>
-                <pattern id="black_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="475" cx="500" cy="500" fill="url(#black_fill)" style="stroke: #000000; stroke-width: 50;"/>
-                    <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
-                        <g>
-                            <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
-                                <line
-                                    style="stroke: #ffffff; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
-                                    x1="6" y1="-6" x2="-6" y2="6" />
-                            </g>
-                            <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
-                                <line
-                                    style="stroke: #ffffff; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
-                                    x1="-6" y1="-6" x2="6" y2="6" />
-                            </g>
-                        </g>
-                    </g>
-                </pattern>
-                <radialGradient id="green_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#00ff00" />
-                    <stop offset="50%" stop-color="#00dd00" />
-                    <stop offset="75%" stop-color="#00bb00" />
-                    <stop offset="100%" stop-color="#009900" />
-                </radialGradient>
-                <pattern id="green_dot" viewBox="0,0,1000,1000" width="100%" height="100%">
-                    <circle r="475" cx="500" cy="500" fill="url(#green_fill)" style="stroke: #000000; stroke-width: 50;"/>
-                </pattern>
-                <radialGradient id="purple_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-                    <stop offset="0%" stop-color="#ff00ff" />
-                    <stop offset="50%" stop-color="#d020d0" />
-                    <stop offset="90%" stop-color="#a000a0" />
-                    <stop offset="100%" stop-color="#600060" />
-                </radialGradient>
-                <pattern id="custom_pin" viewBox="0,0,303,303" width="100%" height="100%">
-                    <g
-                    id="layer1"
-                    transform="translate(-295.5,-12)">
-                        <circle
-                            style="fill: url(#green_fill); fill-opacity: 1; fill-rule: nonzero; stroke: #000000; stroke-width: 16;"
-                            id="path4136"
-                            cx="446.73996"
-                            cy="163.17543"
-                            r="143" />
-                        <g transform="matrix(0.8 0 0 0.8 88 32)">
-                            <path
-                            id="path4159"
-                            d="m 548.80654,134.01734 c 0,-56.865669 -45.20091,-102.066581 -102.06658,-102.066581 -56.86567,0 -102.06658,45.200912 -102.06658,102.066581 0,20.41331 5.83237,37.91043 16.03903,53.94948 l 86.02755,106.44085 86.02754,-106.44085 c 10.20666,-16.03905 16.03904,-33.53617 16.03904,-53.94948 z m -102.06658,43.74282 c -23.32951,0 -43.74282,-20.41332 -43.74282,-43.74282 0,-23.32951 20.41331,-43.742827 43.74282,-43.742827 23.3295,0 43.74282,20.413317 43.74282,43.742827 0,23.3295 -20.41332,43.74282 -43.74282,43.74282 z"
-                            style="fill: #000000; fill-opacity: 1; stroke: none;" />
-                        </g>
-                    </g>
-                </pattern>
-            </defs>
-        </svg>
     </div>
 
 </div>
@@ -499,13 +344,12 @@ PAGE: data
             <th>State</th>
             <th title="Postal Code">Zip</th>
             <th>Country</th>
-            <th>Stalls</th>
-            <th title="Maximum Power (kilowatts)">kW</th>
+            <th class="number" title="Stall count + details">Stalls +</th>
+            <th class="number" title="Maximum Power (kilowatts)">kW</th>
             <th>GPS</th>
-            <th title="Elevation (meters)">Elev</th>
+            <th class="number" title="Elevation (meters)">Elev</th>
             <th>Status</th>
             <th title="Open Date (if any)">Opened</th>
-            <th>Links</th>
         </tr>
         </thead>
         <tbody>
@@ -580,14 +424,14 @@ PAGE: changes
             <span id="changes-result-count"></span>
         </form>
     </div>
-    <h4 style="margin: 0 auto;">Supercharger Change History</h4>
     <table id='changes-table' class='table table-condensed table-hover' style="width: 99%;">
         <thead>
         <tr>
-            <th>Site Name <span class="text-muted wide">(hover for address details)</span></th>
+            <th class="dt-control"><b class="glyphicon glyphicon-chevron-right btn-xs" title="show all details"></b></th>
+            <th>Site Name <span class="text-muted wide"> (hover or expand row for address details)</span></th>
             <th><span class="wide">Change </span>Date</th>
             <th class="status">Status<span class="wide"> Change</span></th>
-            <th><span class="wide">Site </span>Details</th>
+            <th><span class="wide">Site </span>Details <span class="text-muted wide"> (expand row for more)</span></th>
             <th><span class="wide">Site </span>Links</th>
         </tr>
         </thead>
@@ -608,13 +452,13 @@ PAGE: about
         Long-distance electric travel was not possible for decades until suddenly, Tesla made it practical.
         Supercharge.info is a community of enthusiasts who enjoy tracking this world-wide transition in transportation.
         To contribute news regarding supercharger construction or updates
-        <a href="https://supercharge.info/about?sign-in=true">create an account</a> and visit our forum at
-        <a href="https://forum.supercharge.info">forum.supercharge.info</a>.
+        <b><a href="https://supercharge.info/about?sign-in=true">create an account</a></b> and visit our forum at
+        <b><a href="https://forum.supercharge.info">forum.supercharge.info</a></b>.
     </p>
     <br/>
     <p>
-        View our <a id="features-dialog-trigger" href="#" data-toggle="modal" data-target="#features-dialog">latest feature updates</a>,
-        and follow <a href="https://twitter.com/superchargeinfo" target="_blank">@superchargeinfo on Twitter</a>.
+        View our <b><a id="features-dialog-trigger" href="#" data-toggle="modal" data-target="#features-dialog">latest feature updates</a></b>,
+        and follow <a href="https://twitter.com/superchargeinfo" target="_blank"><b>@superchargeinfo</b> on Twitter</a>.
     </p>
     <p></p><p></p>
     <p>
@@ -624,68 +468,104 @@ PAGE: about
     </p>
     <br/>
     <p>
-    Information on supercharge.info is neither provided nor validated by Tesla and we cannot confirm the accuracy of the information provided. For up to date and correct information on the Supercharger network please refer to the following sites from Tesla:
+    Information on supercharge.info is neither provided nor validated by Tesla and we cannot guarantee the accuracy of the information provided.<br/>
+    For official up to date and correct information on the Supercharger network, please refer to the following sites from Tesla:
+    </p>
 
     <table class="table table-condensed table-bordered">
         <tr>
             <td>Trip Planner</td>
-            <td><a href="https://www.tesla.com/trips">https://www.tesla.com/trips</a></td>
+            <td><a href="https://www.tesla.com/trips" target="_blank">https://www.tesla.com/trips</a></td>
         </tr>
         <tr>
             <td>Location Finder</td>
-            <td><a href="https://www.tesla.com/findus">https://www.tesla.com/findus</a></td>
+            <td><a href="https://www.tesla.com/findus" target="_blank">https://www.tesla.com/findus</a></td>
         </tr>
     </table>
 
-
     <h3 class="margin-top">Supercharger Status</h3>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <ul class="about-page-list" style="flex: 5;">
+            <li title="Open">
+                <img src="images/red_dot.svg"/>
+                <b>Open</b> : It is possible to supercharge at the site at all times. <i>(Note that the host or other nearby facilities might not be open at all times.)</i>
+            </li>
+            <li title="Open - Limited Hours">
+                <img src="images/red_dot_limited.svg"/>
+                <b>Open - Limited Hours</b> : It is possible to supercharge at the site during limited times.
+            </li>
+            <li title="Expanding">
+                <img src="images/red_expand.svg"/>
+                <b>Expanding</b> : Site is at least partially open and is being updated or expanded.
+            </li>
+            <li title="Construction">
+                <img src="images/orange_triangle.svg"/>
+                <b>Construction</b> : Progress is visible at the site.
+            </li>
+            <li title="Permit">
+                <img src="images/blue_triangle.svg"/>
+                <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
+            </li>
+            <li title="Plan">
+                <img src="images/plan.svg"/>
+                <b>Plan</b> : Placeholder for expected or rumored site.
+            </li>
+            <li title="Voting">
+                <img src="images/vote.svg"/>
+                <b>Voting</b> : Recent winner of <a href="https://www.tesla.com/supercharger-voting" target="_blank">Supercharger Voting</a>.
+            </li>
+            <li title="Temporarily Closed">
+                <img src="images/gray_dot_x.svg"/>
+                <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
+            </li>
+            <li title="Permanently Closed">
+                <img src="images/black_dot_x.svg"/>
+                <b>Permanently Closed</b> : Site is permanently closed. Charging not possible.
+            </li>
+            <li title="Custom">
+                <img src="images/custom_pin.svg"/>
+                <b>Custom</b> : User added custom marker. Right-click map (or long-press on a touchscreen) to add at any location.
+            </li>
+        </ul>
+        <div class="notes" style="flex: 2; font-style: italic; font-size: 85%;">
+            <b>Additional FAQ + notes on status</b>
+            <hr/>
+            <img src="images/red_dot.svg"/> <b>Why does the site use <span style="color: red;">red</span> circles to indicate <span style="color: red;">Open</span> sites? The color red usually means "bad" or "stop" in other contexts.</b><br/>
+            The original decision to use red is lost to time, but a possible motivation was to match Tesla's stylized "T" logo or the color of the markers on Tesla's "Find Us" map.
+            <hr/>
+            <img src="images/black_dot_x.svg"/> <b>Permanently Closed sites are hidden by default on the map.</b><br/>
+            To see them, use the Select All button or click directly on the Permanently Closed option in the Status filter.
+        </div>
+    </div>
+    
+    <h3>Plug icons</h3>
+    <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons. (Click each name below for the source.)</i>
+    <div class="details">
+        • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">NACS</a>
+        • <img src="/images/CCS1.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type1-ccs.svg" target="_blank">CCS1</a>
+        • <img src="/images/CCS2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Combo-ccs-eu.svg" target="_blank">CCS2</a>
+        • <img src="/images/TYPE2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type_2_mennekes.svg" target="_blank">Type2</a>
+        • <img src="/images/GBT.svg"/> <a href="https://commons.wikimedia.org/wiki/File:GBT_20234_%28DC_outline%29.svg" target="_blank">GB/T</a>
+    </div>
 
+    <h3>Other icons on the Changes and Data pages</h3>
     <ul class="about-page-list">
-        <li title="Open">
-            <img src="images/red_dot.svg"/>
-            <b>Open</b> : It is possible to supercharge at the site at all times.
-        </li>
-        <li title="Open - Limited Hours">
-            <img src="images/red_dot_limited.svg"/>
-            <b>Open - Limited Hours</b> : It is possible to supercharge at the site during limited times.
-        </li>
-        <li title="Construction">
-            <img src="images/orange_triangle.svg"/>
-            <b>Construction</b> : Progress is visible at the site.
-        </li>
-        <li title="Permit">
-            <img src="images/blue_triangle.svg"/>
-            <b>Permit</b> : Tesla has submitted a permit/plan/application for a specific address.
-        </li>
-        <li title="Temporarily Closed">
-            <img src="images/gray_dot_x.svg"/>
-            <b>Temporarily Closed</b> : Site is temporarily closed. Charging not possible.
-        </li>
-        <li title="Permanently Closed">
-            <img src="images/black_dot_x.svg"/>
-            <b>Permanently Closed</b>* : Site is permanently closed. Charging not possible.
-        </li>
-        <li title="Custom">
-            <img src="images/custom_pin.svg" alt="custom"/>
-            <b>Custom</b> : User added custom marker. Right-click map to add at any location.
-        </li>
-    </ul>
-    <i>* Note that Permanently Closed sites are hidden by default on the map. To see them, use the Select All button or click directly on the Permanently Closed option in the Status filter.</i>
-
-    <h4>Other icons on the Changes and Data pages</h4>
-    <ul class="about-page-list">
-        <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, and certain CCS locations in Europe.</li>
+        <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, NACS open to non-Tesla, and certain CCS locations in Europe.</li>
         <li title="solar canopy"><img src="/images/solar-power-variant.svg"/> <b>Solar canopy</b> : Site is at least partially covered by a solar canopy.</li>
         <li title="battery backup"><img src="/images/battery-charging.svg"/> <b>Battery backup</b> : Site includes battery backup power.</li>
+        <li title="accessible"><img src="/images/accessible.svg"/> <b>Accessible</b> : Site includes at least one accessible charging space.</li>
+        <li title="trailer-friendly"><img src="/images/trailer.svg"/> <b>Trailer-friendly</b> : Site includes at least one trailer-friendly charging space.</li>
         <li title="Google Map"><img src="/images/gmap.svg"/> <b>Google Map</b> : Link to Google Maps based on the site's address (which might be slightly different than the GPS coordinates).</li>
         <li title="Forum"><img src="/images/forum.svg"/> <b>Forum</b> : Link to the site's relevant thread on a discussion forum.</li>
         <li title="tesla.com or tesla.cn"><img src="/images/red_dot_t.svg"/> <b>Tesla.com</b> or <b>Tesla.cn</b> : Link to Tesla's "Find Us" page for the site.</li>
+        <li title="PlugShare"><img src="https://developer.plugshare.com/logo.svg"/> <img src="https://developer.plugshare.com/logo.svg" class="faded"/> <b>PlugShare</b> : Link to the site (and its details, if available) on PlugShare.com.</li>
+        <li title="OpenStreetMap"><img src="/images/osm.svg"/> <img src="/images/osm.svg" class="faded"/> <b>OpenStreetMap</b> : Link to the site (and its details, if available) on OpenStreetMap.org.</li>
     </ul>
 
     <h3 class="margin-top">Site Usage Tips</h3>
 
     <ul class="about-page-list">
-        <li>Right-click the map to add a custom marker and range circle.
+        <li>Right-click the map to add a custom marker and range circle, or to see the current location on different map services.
             (Long-press for 2-3 seconds on mobile/touchscreen devices.)
         </li>
         <li>Click a "Construction" or "Permit" Supercharger, then click <img src="/images/forum.svg"/>
@@ -698,8 +578,7 @@ PAGE: about
                 <li>Hover over a numbered marker to see details about the locations included, and click to zoom in.</li>
             </ul>
         </li>
-        <li>This site is tested using <a href="https://www.google.com/intl/en/chrome/">Google Chrome</a>
-            and consequently may perform best when viewed using that web browser.
+        <li>This site is tested using <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a> and <a href="https://www.mozilla.org/firefox/browsers/" target="_blank">Firefox</a> and may perform best when viewed using those web browsers.
         </li>
     </ul>
 
@@ -757,9 +636,10 @@ PAGE: about
     <div id="page-about-version-container"></div>
 
     <br/>
-    <h3 class="margin-top">Acknowledgements</h3>
+    <h3 class="margin-top">Additional acknowledgements</h3>
     <ul class="about-page-list">
         <li><a href="https://loading.io/icon/" target="_blank">icon 'ellipsis' from loading.io</a></li>
+        <li><a href="https://osmfoundation.org/wiki/Trademark_Policy" target="_blank">Maps and link icon from openstreetmap.org</a> are trademarks of the OpenStreetMap Foundation and are used with permission. Supercharge.info is not endorsed by or affiliated with the OpenStreetMap Foundation.</li>
     </ul>
 
 </div>
@@ -821,6 +701,27 @@ PAGE: profile
                                         </div>
                                     </td>
                                 </tr>
+                                <!--
+                                <tr>
+                                    <td><label>Theme</label></td>
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label details">
+                                                <input class="form-check-input" type="radio" name="color" value="red" checked="true"/>
+                                                <img src="/images/red_dot.svg"/> <img src="/images/red_dot_limited.svg"/> <img src="/images/red_expand.svg"/>
+                                                Default
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label details">
+                                                <input class="form-check-input" type="radio" name="color" value="red" disabled="true"/>
+                                                <img src="/images/green_dot.svg"/> <img src="/images/green_dot_limited.svg"/> <img src="/images/green_expand.svg"/>
+                                                Other (TBD)
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            -->
                                 <tr>
                                     <td><label>About</label></td>
                                     <td><textarea class="form-control" name="description" rows="3" cols="30"></textarea>

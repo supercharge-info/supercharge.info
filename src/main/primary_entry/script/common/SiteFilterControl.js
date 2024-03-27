@@ -26,8 +26,7 @@ export default class SiteFilterControl {
         this.isModal = this.modal === null;
         this.sel = {}, this.clear = {};
         this.filters = ['changetype', 'region', 'country', 'state', 'status', 'stalls', 'power', 'otherEVs'];
-        for (var f in this.filters) {
-            const field = this.filters[f];
+        for (const field of this.filters) {
             this.sel[field] = controlParent.find(`select.${field}-select`);
             this.sel[field].change(this.changeCallback.bind(this));
             // TODO: do we want shortcut "x" buttons next to each field to clear them?

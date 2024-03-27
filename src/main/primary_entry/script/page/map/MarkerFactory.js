@@ -42,10 +42,10 @@ export default class MarkerFactory {
         if (superchargers.length === 1) return this.createMarker(superchargers[0], 8, batch);
         var lat = 0, lng = 0, numStalls = 0;
         var sc = superchargers.sort((a,b) => ((b.numStalls || 1) * (b.powerKilowatt || 72)) - ((a.numStalls || 1) * (a.powerKilowatt || 72) ));
-        for (const s in sc) {
-            lat += superchargers[s].location.lat;
-            lng += superchargers[s].location.lng;
-            numStalls += superchargers[s].numStalls;
+        for (const site of sc) {
+            lat += site.location.lat;
+            lng += site.location.lng;
+            numStalls += site.numStalls;
         }
 
         // Click to zoom in 2-4 steps based on how many locations the cluster marker represents
@@ -75,8 +75,8 @@ export default class MarkerFactory {
         const marker = L.marker(markerLocation, markerOptions);
         marker.on('click', this._handleClusterZoom.bind(this, markerLocation, zoom + zoomIncrement));
         marker.bindTooltip(markerTitle, { className: "tooltip " + superchargers[0].status.className, opacity: 0.92 });
-        for (const s in superchargers) {
-            superchargers[s].marker = marker;
+        for (const site of superchargers) {
+            site.marker = marker;
         }
         if (batch) return marker;
         mapLayers.addToOverlay(marker);
@@ -88,11 +88,8 @@ export default class MarkerFactory {
             marker.infoWindow = new InfoWindow(this.mapApi, marker, supercharger);
         }
 
-        // If we click one that is already open, close it.
-        if(marker.infoWindow.isShown()) {
-            marker.infoWindow.closeWindow();
-            return;
-        }
+        // If we click one that is already open, do nothing.
+        if(marker.infoWindow.isShown()) return;
 
         MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
 

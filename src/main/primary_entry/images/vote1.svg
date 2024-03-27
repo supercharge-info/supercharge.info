@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 47.5 47.5">
+  <defs>
+    <clipPath id="vote_a">
+      <path d="M0 38h38V0H0v38z"/>
+    </clipPath>
+    <pattern id="vote" viewBox="0,0,47.5,47.5" width="100%" height="100%">
+      <g fill="#8800aa" clip-path="url(#vote_a)" transform="matrix(1.25 0 0 -1.25 0 47.5)">
+        <g transform="translate(37 5)">
+          <path d="M-32 32c-2.209 0-4-1.791-4-4V0c0-2.209 1.791-4 4-4h28c2.209 0 4 1.791 4 4v28c0 2.209-1.791 4-4 4h-28z" stroke="#000" stroke-width="2"/>
+          <path fill="#ffffff" d="M-7 23.5c.6397496 0 1.2865-.237 1.775-.725.976-.977.976-2.573 0-3.55l-15.5-15.5C-21.213 3.237-21.86 3-22.5 3c-.64 0-1.287.237-1.775.725l-6.5 6.5c-.976.977-.976 2.573 0 3.55.976.976 2.574.976 3.55 0l4.725-4.75 13.725 13.75c.4885.488 1.1352504.725 1.775.725z" stroke="#ffffff"/>
+        </g>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="47.5" height="47.5" fill="url(#vote)"/>
+</svg>

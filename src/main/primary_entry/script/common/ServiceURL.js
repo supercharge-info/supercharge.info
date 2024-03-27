@@ -10,6 +10,7 @@ export default {
     SITE_STALL_COUNT: base + '/site/stallCount',
     SITES_PAGE: base + '/sites',
     SITE_HISTORY: base + '/siteHistory',
+    PARKING: base + '/parking',
 
     USER_CONFIG: base + "/userConfig",
 
@@ -18,10 +19,7 @@ export default {
 
     CHANGES: base + '/changes',
 
-    COUNTRY: base + '/country',
-
     FEEDBACK: base + '/feedback',
-
 
     LOGIN: base + '/login',
     LOGIN_CHECK: base + '/login/check',
@@ -43,7 +41,6 @@ export default {
      * This is static content (large images, etc) not bundled with the app.
      */
     STATIC_CONTENT: window.location.origin + "/static",
-
 
     TESLA_WEB_PAGE: 'https://www.tesla.com/findus/location/supercharger/',
     TESLA_CN_PAGE: 'https://www.tesla.cn/findus/location/supercharger/',

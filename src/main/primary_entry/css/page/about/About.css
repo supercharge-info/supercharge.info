@@ -11,7 +11,16 @@
     list-style-type: disc;
 }
 
-.about-page-list li img {
+.about-page-list li img, #page-about .notes img {
     width: 20px;
     height: 20px;
+}
+
+#page-about .notes {
+    background-color: #ffd;
+    border-left: 4px dotted #999;
+    padding: 0px 4px;
+}
+#page-about .notes hr {
+    margin: 8px 0px;
 }

@@ -14,8 +14,7 @@ import QueryStrings from "../common/QueryStrings";
 import ShowSiteAction from "../page/map/action/ShowSiteAction";
 import FilterDialog from "../common/FilterDialog";
 import LoginDialog from "../common/login/LoginDialog";
-import Sites from "../site/Sites";
-
+import UpdateCheck from "../common/UpdateCheck";
 
 export default class NavBar {
 
@@ -107,8 +106,7 @@ export default class NavBar {
      * itself invoke any history API methods.
      */
     async changePage(newPageName) {
-        Sites.reloadCallback = null;
-        await Sites.checkReload();
+        await UpdateCheck.doCheck();
         const pages = this.pages;
         if (newPageName === null) {
             newPageName = this.currentPage;

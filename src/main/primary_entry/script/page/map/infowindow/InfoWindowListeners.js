@@ -7,7 +7,7 @@ import Analytics from "../../../util/Analytics";
 import RouteEvents from "../route/RouteEvents";
 import RoutingWaypoint from "../route/RoutingWaypoint";
 
-function toSupercharger(event) {
+function toSite(event) {
     const eventDetail = Events.eventDetail(event);
     const id = parseInt(eventDetail.actionName);
     return Sites.getById(id);
@@ -17,8 +17,8 @@ class InfoWindowListeners {
 
     constructor() {
         $(document).on('click', '.details-trigger', (event) => {
-            const supercharger = toSupercharger(event);
-            const infoWindow = supercharger.marker.infoWindow;
+            const site = toSite(event);
+            const infoWindow = site.marker.infoWindow;
 
             infoWindow.toggleHistory(false);
             infoWindow.toggleDetails();
@@ -27,8 +27,8 @@ class InfoWindowListeners {
         });
 
         $(document).on('click', '.history-trigger', (event) => {
-            const supercharger = toSupercharger(event);
-            const infoWindow = supercharger.marker.infoWindow;
+            const site = toSite(event);
+            const infoWindow = site.marker.infoWindow;
 
             infoWindow.toggleDetails(false);
             infoWindow.toggleHistory();
@@ -37,45 +37,46 @@ class InfoWindowListeners {
         });
 
         $(document).on('click', '.pin-marker-trigger', (event) => {
-            const supercharger = toSupercharger(event);
-            const infoWindow = supercharger.marker.infoWindow;
+            const site = toSite(event);
+            const infoWindow = site.marker.infoWindow;
             infoWindow.togglePin();
         });
 
         $(document).on('click', '.zoom-to-site-trigger', (event) => {
-            const supercharger = toSupercharger(event);
-            EventBus.dispatch("zoom-to-site-event", {supercharger: supercharger});
+            const site = toSite(event);
+            EventBus.dispatch("zoom-to-site-event", {site: site});
         });
 
         $(document).on('click', '.circle-toggle-trigger', (event) => {
             const eventDetail = Events.eventDetail(event);
-            const supercharger = toSupercharger(event);
+            const site = toSite(event);
 
-            if (supercharger.circle) {
-                eventDetail.link.text("circle on");
-                Analytics.sendEvent("map", "turn-off-single-circle");
-            } else {
-                eventDetail.link.text("circle off");
-                Analytics.sendEvent("map", "turn-on-single-circle");
+            var newLinkText = "off", sendEvent = "on";
+            if (site.circle) {
+                newLinkText = "on";
+                sendEvent = "off";
             }
-            EventBus.dispatch(MapEvents.toggle_circle, supercharger);
+            eventDetail.link.attr("title", `circle ${newLinkText}`);
+            eventDetail.link.attr("alt", `circle ${newLinkText}`);
+            Analytics.sendEvent("map", `turn-${sendEvent}-single-circle`);
+            EventBus.dispatch(MapEvents.toggle_circle, site);
         });
 
         $(document).on('click', '.add-to-route-trigger', (event) => {
-            const supercharger = toSupercharger(event);
-            EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(supercharger.location, supercharger.displayName));
+            const site = toSite(event);
+            EventBus.dispatch(RouteEvents.add_waypoint, new RoutingWaypoint(site.location, site.displayName));
             Analytics.sendEvent("route", "add-marker-to-route", "pop up");
         });
 
         $(document).on('click', '.direct-link-trigger', (event) => {
-            const supercharger = toSupercharger(event);
+            const site = toSite(event);
 
             const linkDialog = $("#link-dialog");
             const linkInput = $("#create-link-input");
             const goButton = $("#go-to-button");
 
             $("#link-dialog .modal-title").html("Link to Current Site");
-            linkInput.val(`${window.location.href.split('?')[0]}?siteID=${supercharger.id}`);
+            linkInput.val(`${window.location.href.split('?')[0]}?siteID=${site.id}`);
         
             // Go to URL when "Go to! button is pressed"
             goButton.on('click', function () {
