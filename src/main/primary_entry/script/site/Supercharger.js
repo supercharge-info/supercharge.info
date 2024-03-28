@@ -181,7 +181,8 @@ export default class Supercharger {
         if (this.osmId) {
             osmLink += `node/${this.osmId}`;
         } else {
-            osmLink += `#map=${Math.max(15, map?.getZoom() ?? 15)}/${this.location.lat}/${this.location.lng}`;
+            var zoom = Math.max(15, map?.getZoom());
+            osmLink += `#map=${Objects.isNumber(zoom) ? zoom : 15}/${this.location.lat}/${this.location.lng}`;
             osmClass = "faded";
             osmTitle += " (map only)";
         }
