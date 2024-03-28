@@ -167,9 +167,9 @@ export default class Supercharger {
             psLink += `location/${this.plugshareId}`;
         } else {
             var bounds = map?.getBounds();
-            var spanLat = Math.min(0.05, Math.abs(bounds?.getNorthEast().lat - bounds?.getSouthWest().lat) ?? 0.05);
-            var spanLng = Math.min(0.05, Math.abs(bounds?.getNorthEast().lng - bounds?.getSouthWest().lng) ?? 0.05);
-            psLink += `map?latitude=${this.location.lat}&longitude=${this.location.lng}&spanLat=${spanLat}&spanLng=${spanLng}`;
+            var spanLat = Math.min(0.05, Math.abs(bounds?.getNorthEast().lat - bounds?.getSouthWest().lat));
+            var spanLng = Math.min(0.05, Math.abs(bounds?.getNorthEast().lng - bounds?.getSouthWest().lng));
+            psLink += `map?latitude=${this.location.lat}&longitude=${this.location.lng}&spanLat=${Objects.isNumber(spanLat) ? spanLat : 0.05}&spanLng=${Objects.isNumber(spanLng) ? spanLng : 0.05}`;
             psClass = "faded";
             psTitle += " (map only)";
         }
