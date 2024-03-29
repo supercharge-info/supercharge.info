@@ -26,9 +26,9 @@ function sort(mapOne, mapTwo) {
         return (openAndConstruct2 - openAndConstruct1);
     }
 
-    // Then by open + construction + permit
-    const count1 = openAndConstruct1 + mapOne.permit;
-    const count2 = openAndConstruct2 + mapTwo.permit;
+    // Then by open + construction + plan
+    const count1 = openAndConstruct1 + mapOne.plan;
+    const count2 = openAndConstruct2 + mapTwo.plan;
     if (count1 !== count2) {
         return (count2 - count1);
     }
@@ -43,8 +43,8 @@ function sort(mapOne, mapTwo) {
  * RETURNED ARRAY:
  *
  *  [
- *   { key: 'USA',    open: 3, construction: 7, permit: 2  },
- *   { key: 'Germany',open: 3, construction: 4, permit: 1   }
+ *   { key: 'USA',    open: 3, construction: 7, plan: 2  },
+ *   { key: 'Germany',open: 3, construction: 4, plan: 1   }
  *  ]
  *
  * REFERENCE MAP:
@@ -58,18 +58,19 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction,
         returnedArray = [];
     let totalOpen = 0,
         totalConstruction = 0,
-        totalPermit = 0,
-        totalClosed = 0;
+        totalPlan = 0,
+        totalClosed = 0,
+        totalUnknown = 0;
 
     siteIterator.iterate(function (supercharger) {
             const aggregateKeyValue = supercharger.address[aggregateKey];
             if (!referenceMap[aggregateKeyValue]) {
-                const newEntry = {key: aggregateKeyValue, open: 0, construction: 0, permit: 0, closed: 0};
+                const newEntry = {key: aggregateKeyValue, open: 0, construction: 0, plan: 0, closed: 0};
                 referenceMap[aggregateKeyValue] = newEntry;
                 returnedArray.push(newEntry);
             }
             var incr = countStalls ? supercharger.numStalls : 1;
-            if (supercharger.isOpen()) {
+            if (supercharger.isOpen() || supercharger.isExpanding()) {
                 referenceMap[aggregateKeyValue].open += incr;
                 totalOpen += incr;
             }
@@ -77,20 +78,22 @@ SiteCount.getCountListImpl = function (siteIterator, aggregateKey, sortFunction,
                 referenceMap[aggregateKeyValue].construction += incr;
                 totalConstruction += incr;
             }
-            else if (supercharger.isPermit()) {
-                referenceMap[aggregateKeyValue].permit += incr;
-                totalPermit += incr;
+            else if (supercharger.isPermit() || supercharger.isPlan() || supercharger.isVoting()) {
+                referenceMap[aggregateKeyValue].plan += incr;
+                totalPlan += incr;
             }
             else if (supercharger.isClosedTemp() || supercharger.isClosedPerm()) {
                 referenceMap[aggregateKeyValue].closed += incr;
                 totalClosed += incr;
             } else {
-                throw new Error("unexpected supercharger status" + supercharger);
+                console.log("invalid status: " + supercharger.status);
+                referenceMap[aggregateKeyValue].unknown += incr;
+                totalUnknown += incr;
             }
         }
     );
 
-    returnedArray.push({key: 'World', open: totalOpen, construction: totalConstruction, permit: totalPermit, closed: totalClosed});
+    returnedArray.push({key: 'World', open: totalOpen, construction: totalConstruction, plan: totalPlan, closed: totalClosed, unknown: totalUnknown});
     returnedArray.sort(sortFunction);
     return returnedArray;
 };

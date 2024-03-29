@@ -11,30 +11,30 @@ export default class StatusDaysBarChart {
 
         const siteNameList = [];
         const constructionDaysList = [];
-        const permitDaysList = [];
+        const planDaysList = [];
 
         new SiteIterator()
-            .withPredicate(SitePredicates.or(SitePredicates.IS_CONSTRUCTION, SitePredicates.IS_PERMIT))
+            .withPredicate(SitePredicates.or(SitePredicates.IS_CONSTRUCTION, SitePredicates.IS_PERMIT, SitePredicates.IS_PLAN, SitePredicates.IS_VOTING))
             .withSort(SiteSorting.BY_STATUS_DAYS)
             .iterate((supercharger) => {
                 siteNameList.push(supercharger.displayName);
                 if (supercharger.isConstruction()) {
                     constructionDaysList.push(supercharger.statusDays);
-                    permitDaysList.push(0);
+                    planDaysList.push(0);
                 } else {
                     constructionDaysList.push(0);
-                    permitDaysList.push(supercharger.statusDays);
+                    planDaysList.push(supercharger.statusDays);
                 }
             });
 
 
         Highcharts.chart("status-days-bar-chart",
-            StatusDaysBarChart._options(siteNameList, constructionDaysList, permitDaysList));
+            StatusDaysBarChart._options(siteNameList, constructionDaysList, planDaysList));
 
 
     }
 
-    static _options(siteNameList, constructionDaysList, permitDaysList) {
+    static _options(siteNameList, constructionDaysList, planDaysList) {
         return {
             chart: {
                 style: {
@@ -50,7 +50,7 @@ export default class StatusDaysBarChart {
                 enabled: false
             },
             title: {
-                text: 'Construction/Permit Status Days'
+                text: 'Construction/Plan Status Days'
             },
             subtitle: {
                 text: null
@@ -80,9 +80,9 @@ export default class StatusDaysBarChart {
             },
             series: [
                 {
-                    name: "Permit",
-                    data: permitDaysList,
-                    color: ChartColor.STATUS_PERMIT
+                    name: "Plan",
+                    data: planDaysList,
+                    color: ChartColor.STATUS_PLAN
                 },
                 {
                     name: "Construction",

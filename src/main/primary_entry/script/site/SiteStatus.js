@@ -7,9 +7,9 @@ const Status = {
         displayName: "Permanently Closed",
         shortName: "Closed",
         className: "closed-perm",
-        getIcon: (supercharger) => "/images/black_dot_x.svg",
-        getFill: (supercharger) => "url(#black_dot_x)",
-        getTitle: (supercharger) => "Permanently Closed"
+        getIcon: (site) => "/images/black_dot_x.svg",
+        getFill: (site) => "url(#black_dot_x)",
+        getTitle: (site) => "Permanently Closed"
     },
     CLOSED_TEMP: {
         value: 'CLOSED_TEMP',
@@ -17,61 +17,113 @@ const Status = {
         displayName: "Temporarily Closed",
         shortName: "Closed",
         className: "closed-temp",
-        getIcon: (supercharger) => "/images/gray_dot_x.svg",
-        getFill: (supercharger) => "url(#gray_dot_x)",
-        getTitle: (supercharger) => "Temporarily Closed"
+        getIcon: (site) => "/images/gray_dot_x.svg",
+        getFill: (site) => "url(#gray_dot_x)",
+        getTitle: (site) => "Temporarily Closed"
+    },
+    VOTING: {
+        value: 'VOTING',
+        sort: 2,
+        displayName: "Voting",
+        shortName: "Voting",
+        className: "voting",
+        getIcon: (site) => "/images/vote.svg",
+        getFill: (site) => "url(#vote)",
+        getTitle: (site) => "Voting"
+    },
+    PLAN: {
+        value: 'PLAN',
+        sort: 3,
+        displayName: "Plan",
+        shortName: "Plan",
+        className: "plan",
+        getIcon: (site) => "/images/plan.svg",
+        getFill: (site) => "url(#plan)",
+        getTitle: (site) => "Plan"
     },
     PERMIT: {
         value: 'PERMIT',
-        sort: 2,
+        sort: 4,
         displayName: "Permit",
         shortName: "Permit",
         className: "permit",
-        getIcon: (supercharger) => "/images/blue_triangle.svg",
-        getFill: (supercharger) => "url(#blue_triangle)",
-        getTitle: (supercharger) => "Permit"
+        getIcon: (site) => "/images/blue_triangle.svg",
+        getFill: (site) => "url(#blue_triangle)",
+        getTitle: (site) => "Permit"
     },
     CONSTRUCTION: {
         value: 'CONSTRUCTION',
-        sort: 3,
+        sort: 5,
         displayName: "Construction",
         shortName: "Constr",
         className: "construction",
-        getIcon: (supercharger) => "/images/orange_triangle.svg",
-        getFill: (supercharger) => "url(#orange_triangle)",
-        getTitle: (supercharger) => "Construction"
+        getIcon: (site) => "/images/orange_triangle.svg",
+        getFill: (site) => "url(#orange_triangle)",
+        getTitle: (site) => "Construction"
+    },
+    EXPANDING: {
+        value: 'EXPANDING',
+        sort: 6,
+        displayName: "Expanding",
+        shortName: "Expand",
+        className: "expanding",
+        getIcon: (site) => "/images/red_expand.svg",
+        getFill: (site) => "url(#red_expand)",
+        getTitle: (site) => "Expanding"
     },
     OPEN: {
         value: 'OPEN',
-        sort: 4,
+        sort: 7,
         displayName: "Open",
         shortName: "Open",
         className: "open",
-        getIcon: (supercharger) => "/images/" + (Strings.isNotEmpty(supercharger?.hours) ? "red_dot_limited.svg" : "red_dot.svg"),
-        getFill: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)"),
-        getTitle: (supercharger) => (Strings.isNotEmpty(supercharger?.hours) ? "Open - limited hours" : "Open")
+        getIcon: (site) => "/images/" + (Strings.isNotEmpty(site?.hours) ? "red_dot_limited.svg" : "red_dot.svg"),
+        getFill: (site) => (Strings.isNotEmpty(site?.hours) ? "url(#red_dot_limited)" : "url(#red_dot)"),
+        getTitle: (site) => (Strings.isNotEmpty(site?.hours) ? "Open - limited hours" : "Open")
     },
     USER_ADDED: {
         value: 'USER_ADDED',
         displayName: "Custom",
         shortName: "Custom",
         className: "user",
-        getIcon: (supercharger) => "/images/custom_pin.svg",
-        getFill: (supercharger) => "url(#custom_pin)",
-        getTitle: (supercharger) => "Custom"
+        getIcon: (site) => "/images/custom_pin.svg",
+        getFill: (site) => "url(#custom_pin)",
+        getTitle: (site) => "Custom"
+    },
+    UNKNOWN: {
+        value: 'UNKNOWN',
+        displayName: "Unknown",
+        shortName: "Unknown",
+        className: "unknown",
+        getIcon: (site) => "/images/OTHER.svg",
+        getFill: (site) => "#aa0",
+        getTitle: (site) => "Unknown"
     }
 };
 
-Status.ALL = [Status.OPEN, Status.CONSTRUCTION, Status.PERMIT, Status.CLOSED_TEMP, Status.CLOSED_PERM];
+Status.ALL = [Status.OPEN, Status.EXPANDING, Status.CONSTRUCTION, Status.PERMIT, Status.PLAN, Status.VOTING, Status.CLOSED_TEMP, Status.CLOSED_PERM];
+
+Status.getImg = function (site, status, extraClasses) {
+    return '' +
+        `<span class='${status.value} status-select ${extraClasses ?? ''}'>` +
+            `<img src='${status.getIcon(site)}' title='${status.getTitle(site)}' alt='${status.getTitle(site)}'/>` +
+        `</span>`;
+};
 
 Status.fromString = function (string) {
     const s = string.trim();
     if (s === 'OPEN') {
         return Status.OPEN;
+    } else if (s === 'EXPANDING') {
+        return Status.EXPANDING;
     } else if (s === 'CONSTRUCTION') {
         return Status.CONSTRUCTION;
     } else if (s === 'PERMIT') {
         return Status.PERMIT;
+    } else if (s === 'PLAN') {
+        return Status.PLAN;
+    } else if (s === 'VOTING') {
+        return Status.VOTING;
     } else if (s === 'CLOSED_TEMP') {
         return Status.CLOSED_TEMP;
     } else if (s === 'CLOSED_PERM') {
@@ -79,7 +131,8 @@ Status.fromString = function (string) {
     } else if (s === 'USER_ADDED') {
         return Status.USER_ADDED;
     }
-    throw new Error("invalid status: " + string);
+    console.log("invalid status: " + string);
+    return Status.UNKNOWN;
 };
 
 export default Status;

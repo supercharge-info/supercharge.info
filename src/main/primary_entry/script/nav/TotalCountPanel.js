@@ -51,6 +51,8 @@ class TotalCountPanel {
             this.updateView(2, this.countMapCountry[Address.COUNTRY_USA]);
         } else if (TotalCountPanel.CANADA.contains(center)) {
             this.updateView(2, this.countMapCountry[Address.COUNTRY_CANADA]);
+        } else if (TotalCountPanel.SOUTHAMERICA.contains(center)) {
+            this.updateView(2, this.countMapRegion[Address.REGION_SOUTH_AMERICA]);
         } else if (TotalCountPanel.EUROPE.contains(center)) {
             this.updateView(2, this.countMapRegion[Address.REGION_EUROPE]);
         }
@@ -80,7 +82,7 @@ class TotalCountPanel {
         const nonControlCells = row1.find("td[rowspan!=2]");
         nonControlCells.eq(0).text(countMap.open);
         nonControlCells.eq(1).text(countMap.construction);
-        nonControlCells.eq(2).text(countMap.permit);
+        nonControlCells.eq(2).text(countMap.plan);
         nonControlCells.eq(3).text(countMap.closed);
         nonControlCells.eq(4).text(countMap.key);
     }

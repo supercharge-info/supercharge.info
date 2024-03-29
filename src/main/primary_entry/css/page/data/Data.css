@@ -18,6 +18,14 @@
     padding: 0;
 }
 
+#supercharger-data-table th.sorting::before, #supercharger-data-table th.sorting::after {
+    right: 2px;
+}
+
+#supercharger-data-table span.VOTING, #supercharger-data-table span.PLAN {
+    color: #8800aa;
+}
+
 #supercharger-data-table span.PERMIT {
     color: #0000ff;
 }
@@ -26,12 +34,12 @@
     color: orange;
 }
 
-#supercharger-data-table th {
+#supercharger-data-table th, #supercharger-data-table td {
     text-align: left;
+    padding: 4px 4px 3px 4px;
 }
-
-#supercharger-data-table td {
-    text-align: left;
+#supercharger-data-table th {
+    padding-right: 16px;
 }
 
 #supercharger-data-table td.gps {
@@ -39,6 +47,28 @@
     font-size: .75em;
 }
 
-#supercharger-data-table td.number {
-    text-align: right;
+#supercharger-data-table .dropdown {
+    margin-top: -1px;
+}
+
+#supercharger-data-table .dropdown a, #supercharger-data-table .dropdown b {
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 1px 0px 0px 0px;
+}
+
+#supercharger-data-table .dropdown-menu {
+    width: max-content;
+    min-width: 100%;
+    max-width: 500%;
+    padding: 8px;
+    background-color: #ffd;
+}
+
+#supercharger-data-table li {
+    white-space: pre;
+}
+#supercharger-data-table .links {
+    padding-top: 2px;
+    line-height: 24px;
 }

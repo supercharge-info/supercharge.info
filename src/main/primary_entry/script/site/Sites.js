@@ -1,6 +1,7 @@
 import Asserts from "../util/Asserts";
 import Supercharger from "./Supercharger";
 import ServiceURL from "../common/ServiceURL";
+import UpdateCheck from "../common/UpdateCheck";
 import $ from "jquery";
 
 const LIST = [];
@@ -10,12 +11,9 @@ const CountriesByRegion = new Map();
 const StatesByRegion = new Map();
 const StatesByCountry = new Map();
 const States = new Set();
-var loaded = Date.now();
+const Parking = new Map();
 
 export default class Sites {
-
-    static loading = true;
-    static reloadCallback = null;
 
     static getById(id) {
         Asserts.isInteger(id, "id must be an integer");
@@ -26,8 +24,8 @@ export default class Sites {
                 return supercharger;
             }
         }
-        // force a reload check if we can't find a site by its id, as that likely means data in the browser is stale
-        Sites.checkReload();
+        // check for DB updates if we can't find a site by its id, as that likely means data in the browser is stale
+        UpdateCheck.doCheck();
         return null;
     }
 
@@ -71,6 +69,9 @@ export default class Sites {
     static getStates() {
         return States;
     }
+    static getParking() {
+        return Parking;
+    }
 
 /*
 Regions: Map(name, id)
@@ -85,7 +86,10 @@ S-by-C: Map(cid, Set(sname))
      * Load all sites data.  This method must be called before any other in this class.
      */
     static load() {
-        Sites.loading = true;
+        $.getJSON(ServiceURL.PARKING).done(
+            (parkingList) => { parkingList.forEach((p) => Parking.set(p.parkingId, p)); }
+        );
+
         return $.getJSON(ServiceURL.SITES).done(
             (siteList) => {
                 siteList.forEach((site) => {
@@ -104,35 +108,6 @@ S-by-C: Map(cid, Set(sname))
                     StatesByRegion.get(s.address.regionId).add(s.address.state);
                     StatesByCountry.get(s.address.countryId).add(s.address.state);
                     States.add(s.address.state);
-                });
-                Sites.loading = false;
-            }
-        );
-    }
-
-    static checkReload() {
-        console.log(`checkReload loading=${Sites.loading}`);
-        if (Sites.loading) return false;
-        const prevLoaded = loaded;
-        return $.getJSON(ServiceURL.DB_INFO).done(
-            (dbInfo) => {
-                console.log(`checkReload loaded=${loaded} lastModified=${dbInfo.lastModified} reload=${loaded <= dbInfo.lastModified}`);
-                if (!dbInfo || loaded > dbInfo.lastModified) return;
-                Sites.loading = true;
-                loaded = Date.now();
-                console.log(`reloading all sites @ ${loaded}`);
-                LIST.length = 0;
-                Regions.clear();
-                Countries.clear();
-                CountriesByRegion.clear();
-                StatesByRegion.clear();
-                StatesByCountry.clear();
-                States.clear();
-                Sites.load().then(() => {
-                    // to avoid callback loops, don't call reloadCallback more than once per 10 seconds
-                    console.log(`reloaded ${LIST.length} sites t=${Date.now() - loaded} p=${loaded - prevLoaded}`);
-                    console.log(Sites.reloadCallback);
-                    if (Sites.reloadCallback && loaded - prevLoaded > 10000) Sites.reloadCallback();
                 });
             }
         );

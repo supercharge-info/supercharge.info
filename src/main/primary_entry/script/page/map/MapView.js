@@ -265,8 +265,8 @@ export default class MapView {
     }
 
     restoreInfoWindows(infoWindows) {
-        for (var i in infoWindows) {
-            var iw = infoWindows[i], s = iw.supercharger, m = iw.marker;
+        for (const iw of infoWindows) {
+            const s = iw.site, m = iw.marker;
             if (s.marker === null) {
                 iw.closeWindow();
             } else if (s.marker !== m) {
@@ -285,6 +285,7 @@ export default class MapView {
             if (this.pinnedSites.indexOf(supercharger) < 0) this.pinnedSites.push(supercharger);
             this.markerFactory.createMarker(supercharger, this.markerSize, false);
         }
+        supercharger.marker.fire('click');
     }
 
     unpinSites() {
@@ -435,15 +436,15 @@ export default class MapView {
 
     handleZoomToSite(event, data) {
         const newZoom = (this.zoom > 14 && this.zoom < 19 ? 19 : 15);
-        EventBus.dispatch(MapEvents.pan_zoom, { latLng: data.supercharger.location, zoom: newZoom });
+        EventBus.dispatch(MapEvents.pan_zoom, { latLng: data.site.location, zoom: newZoom });
     }
 
     handleMarkerRemove(event) {
         event.preventDefault();
         if (!confirm("Remove this custom marker? This cannot be undone.")) return;
         const id = parseInt($(event.target).attr('href'));
-        const supercharger = Sites.getById(id);
-        this.removeCustomMarker(supercharger);
+        const site = Sites.getById(id);
+        this.removeCustomMarker(site);
         Analytics.sendEvent("route", "remove-custom-marker");
     }
 
@@ -453,8 +454,8 @@ export default class MapView {
         const toRemoveList = [];
         new SiteIterator()
             .withPredicate(SitePredicates.USER_ADDED)
-            .iterate(function (supercharger) {
-                    toRemoveList.push(supercharger);
+            .iterate(function (site) {
+                    toRemoveList.push(site);
                 }
             );
         for (let i = 0; i < toRemoveList.length; i++) {
@@ -463,19 +464,19 @@ export default class MapView {
         Analytics.sendEvent("route", "remove-custom-marker");
     }
 
-    removeCustomMarker(supercharger) {
-        if (supercharger.marker) {
-            if (supercharger.marker.popup) {
-                supercharger.marker.popup.remove();
+    removeCustomMarker(site) {
+        if (site.marker) {
+            if (site.marker.popup) {
+                site.marker.popup.remove();
             }
-            supercharger.marker.remove();
+            site.marker.remove();
         }
-        if (supercharger.circle) {
-            supercharger.circle.remove();
+        if (site.circle) {
+            site.circle.remove();
         }
-        Sites.removeById(supercharger.id);
-        userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
-        userConfig.removeCustomMarker(supercharger.displayName, supercharger.location.lat, supercharger.location.lng);
+        Sites.removeById(site.id);
+        userConfig.removeCustomMarker(site.displayName, site.location.lat, site.location.lng);
+        userConfig.removeCustomMarker(site.displayName, site.location.lat, site.location.lng);
     }
 
     hideLeafletControls() {

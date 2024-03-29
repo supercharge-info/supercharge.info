@@ -18,8 +18,7 @@ export default class TotalOpenWorldLineChart {
         }
 
         new SiteIterator()
-            .withPredicate(SitePredicates.IS_OPEN)
-            .withPredicate(SitePredicates.IS_COUNTED)
+            .withPredicate(SitePredicates.IS_OPEN_AND_COUNTED)
             .withSort(SiteSorting.BY_OPENED_DATE)
             .iterate((supercharger) => {
                 const date = supercharger.dateOpened;

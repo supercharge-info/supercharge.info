@@ -20,6 +20,10 @@ class Address {
         return this.region === Address.REGION_NORTH_AMERICA;
     }
 
+    isSouthAmerica() {
+        return this.region === Address.REGION_SOUTH_AMERICA;
+    }
+
     isAsia() {
         return this.region === Address.REGION_ASIA_PACIFIC;
     }
@@ -48,6 +52,7 @@ Address.COUNTRY_WORLD = "World";
 
 Address.REGION_EUROPE = "Europe";
 Address.REGION_NORTH_AMERICA = "North America";
+Address.REGION_SOUTH_AMERICA = "South America";
 Address.REGION_ASIA_PACIFIC = "Asia Pacific";
 Address.REGION_MEA = "Middle East + Africa";
 
