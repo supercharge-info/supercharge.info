@@ -178,7 +178,7 @@
             id="layer1"
             transform="translate(-295.5,-12)">
                 <circle
-                    style="fill: url(#yellow_fill); fill-opacity: 1; fill-rule: nonzero; stroke: #000000; stroke-width: 16;"
+                    style="fill: url(#green_fill); fill-opacity: 1; fill-rule: nonzero; stroke: #000000; stroke-width: 16;"
                     id="path4136"
                     cx="446.73996"
                     cy="163.17543"
