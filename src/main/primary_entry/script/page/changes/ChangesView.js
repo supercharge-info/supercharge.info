@@ -15,6 +15,8 @@ import Strings from "../../util/Strings";
 export default class ChangesView {
 
     constructor(filterDialog) {
+        window.jquery = $;
+
         const table = $("#changes-table");
         const tableBody = table.find("tbody");
         tableBody.on('click', ChangesView.handleChangeClick);
@@ -70,6 +72,8 @@ export default class ChangesView {
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setSearch(this.filterControl.getSearch());
+        //console.log(`search='${userConfig.search}'`);
         this.filterControl.updateVisibility();
     }
 
@@ -242,6 +246,7 @@ export default class ChangesView {
                     d.stalls = changesView.filterControl.getStalls();
                     d.power = changesView.filterControl.getPower();
                     d.otherEVs = changesView.filterControl.getOtherEVs();
+                    d.search = changesView.filterControl.getSearch();
                 }
             },
             "rowId": "id",

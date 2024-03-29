@@ -4,6 +4,7 @@ import Strings from "../util/Strings";
 import Dates from "../util/Dates";
 import Units from "../util/Units";
 import unitConversion from "../util/UnitConversion";
+import Sites from "./Sites";
 import Status from "./SiteStatus";
 import L from 'leaflet';
 import ServiceURL from "../common/ServiceURL";
@@ -28,6 +29,57 @@ export default class Supercharger {
         // same default values for user-added and normal sites/markers.
         this.circleOn = false;
         this.markerSize = 8;
+    }
+
+    // This mirrors SiteDTO.matches() in the API repo
+    matches(search, anyWord) {
+        if (search === null || search === "") return true;
+        if (search.indexOf(" ") >= 0) {
+            for (var s of search.split(" ")) {
+                if (this.matches(s)) {
+                    if (anyWord) return true;
+                } else {
+                    if (!anyWord) return false;
+                }
+            }
+            return !anyWord;
+        }
+        search = search.toLowerCase();
+        if (this.id?.toString().indexOf(search) >= 0) return true;
+        if (this.displayName?.toLowerCase().indexOf(search) >= 0) return true;
+        if (Status.matches(this.status, search)) return true;
+        if (this.address?.street?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.address?.city?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.address?.state?.toLowerCase().indexOf(search) >= 0) return true;
+        if (Sites.StateAbbreviations[this.address?.state]?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.address?.zip?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.address?.country?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.address?.region?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.location?.lat?.toString().indexOf(search) >= 0) return true;
+        if (this.location?.lng?.toString().indexOf(search) >= 0) return true;
+        if (this.numStalls?.toString().indexOf(search) >= 0) return true;
+        if (this.hours?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.elevation?.toString().indexOf(search) >= 0) return true;
+        if (this.powerKilowatt?.toString().indexOf(search) >= 0) return true;
+        if (search === "v2" && this.stalls?.v2 > 0) return true;
+        if (search === "v3" && this.stalls?.v3 > 0) return true;
+        if (search === "v4" && this.stalls?.v4 > 0) return true;
+        if (search === "urban" && this.stalls?.urban > 0) return true;
+        if (search.indexOf("access") === 0 && this.stalls?.accessible > 0) return true;
+        if (search.indexOf("trailer") === 0 && this.stalls?.trailerFriendly > 0) return true;
+        if ((search === "tpc" || search === "nacs") && (this.plugs?.tpc > 0 || this.plugs?.nacs > 0)) return true;
+        if (search === "ccs1" && this.plugs?.ccs1 > 0) return true;
+        if (search === "ccs2" && this.plugs?.ccs2 > 0) return true;
+        if (search === "ccs" && (this.plugs?.ccs1 > 0 || this.plugs.ccs2 > 0)) return true;
+        if (search === "type2" && this.plugs?.type2 > 0) return true;
+        if (search.replace("/", "") === "gbt" && this.plugs?.gbt > 0) return true;
+        if (search === "multi" && this.plugs?.multi > 0) return true;
+        if (search.indexOf("magic") === 0 && (this.plugs?.tpc > 0 || this.plugs?.nacs > 0) && this.plugs?.ccs1 > 0 && this.plugs?.multi > 0) return true;
+        if (this.facilityName?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.facilityHours?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.accessNotes?.toLowerCase().indexOf(search) >= 0) return true;
+        if (this.addressNotes?.toLowerCase().indexOf(search) >= 0) return true;
+        return false;
     }
 
     isVoting() {

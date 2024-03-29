@@ -25,9 +25,9 @@ export default class SiteFilterControl {
         }
         this.isModal = this.modal === null;
         this.sel = {}, this.clear = {};
-        this.filters = ['changetype', 'region', 'country', 'state', 'status', 'stalls', 'power', 'otherEVs'];
+        this.filters = ['changetype', 'region', 'country', 'state', 'status', 'stalls', 'power', 'otherEVs', 'search'];
         for (const field of this.filters) {
-            this.sel[field] = controlParent.find(`select.${field}-select`);
+            this.sel[field] = controlParent.find(`select.${field}-select, input.${field}-input`);
             this.sel[field].change(this.changeCallback.bind(this));
             // TODO: do we want shortcut "x" buttons next to each field to clear them?
             /*
@@ -41,6 +41,10 @@ export default class SiteFilterControl {
         // can't handle region or country changes generically, so override those
         this.sel['region'].change(this.handleRegionChange.bind(this));
         this.sel['country'].change(this.handleCountryChange.bind(this));
+
+        // special handling for text input
+        this.sel['search'].keypress((event) => { if (event?.originalEvent?.code === 'Enter') event.preventDefault(); });
+        this.sel['search'].keyup(this.handleSearchInput.bind(this));
 
         this.resetButton = controlParent.find(".reset");
         this.resetButton.on("click", this.handleFilterReset.bind(this));
@@ -91,6 +95,8 @@ export default class SiteFilterControl {
         this.populateOtherEVsOptions();
         this.setOtherEVs(userConfig?.filter.otherEVs);
 
+        this.setSearch(userConfig?.filter.search);
+
         if (!this.isModal) {
             this.modal.getFilterControl().init();
             this.updateVisibility();
@@ -116,6 +122,7 @@ export default class SiteFilterControl {
         this.setVisible("stalls",   userConfig?.showAlways?.stalls   || this.getStalls()    !== null);
         this.setVisible("power",    userConfig?.showAlways?.power    || this.getPower()     !== null);
         this.setVisible("otherEVs", userConfig?.showAlways?.otherEVs || this.getOtherEVs()  !== null);
+        this.setVisible("search",   userConfig?.showAlways?.search   || this.getSearch()    !== null);
 
         // show Reset button if any field is populated
         for (var f in userConfig?.filter) {
@@ -128,7 +135,7 @@ export default class SiteFilterControl {
     }
 
     setVisible(field, isVisible) {
-        var selectDiv = this.controlParent.find(`div.${field}-select`);
+        var selectDiv = this.controlParent.find(`div.${field}-select, input.${field}-input`);
         if (isVisible) {
             selectDiv.removeClass("hidden");
             //this.clear[field].removeClass("hidden");
@@ -168,6 +175,14 @@ export default class SiteFilterControl {
         userConfig.initFilters();
         this.init();
         this.changeCallback();
+    }
+
+    handleSearchInput() {
+        if (this.textCallback) window.clearTimeout(this.textCallback);
+        this.textCallback = window.setTimeout(() => {
+            if (this.getSearch() !== this.lastSearch) this.changeCallback();
+            this.lastSearch = this.getSearch();
+        }, 1000);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -305,8 +320,17 @@ export default class SiteFilterControl {
         return otherEVs === "" ? null : otherEVs;
     }
 
+    getSearch() {
+        const search = this.sel['search'].val();
+        return search === "" ? null : search;
+    }
+
     setField(field, value) {
-        this.sel[field].selectpicker("val", value);
+        if (field === "search") {
+            this.sel[field].val(value);
+        } else {
+            this.sel[field].selectpicker("val", value);
+        }
         this.changeCallback();
     }
 
@@ -340,6 +364,10 @@ export default class SiteFilterControl {
 
     setOtherEVs(otherEVs) {
         this.sel['otherEVs'].selectpicker("val", otherEVs);
+    }
+
+    setSearch(search) {
+        this.sel['search'].val(search);
     }
 
 }

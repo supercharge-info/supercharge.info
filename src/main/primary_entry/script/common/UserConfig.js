@@ -34,7 +34,8 @@ class UserConfig {
             status: [],
             stalls: null,
             power: null,
-            otherEVs: null
+            otherEVs: null,
+            search: null
         };
     }
 
@@ -46,7 +47,8 @@ class UserConfig {
             status: true,
             stalls: false,
             power: false,
-            otherEVs: false
+            otherEVs: false,
+            search: true
         };
     }
 
@@ -103,6 +105,12 @@ class UserConfig {
 
     setOtherEVs(newOtherEVs) {
         this.filter.otherEVs = newOtherEVs;
+        this.scheduleSave();
+    }
+
+    setSearch(newSearch) {
+        console.log(`userconfig search '${newSearch}'`);
+        this.filter.search = newSearch;
         this.scheduleSave();
     }
 
@@ -165,7 +173,8 @@ class UserConfig {
             || this.filter.status.length> 0
             || this.filter.stalls !== null
             || this.filter.power !== null
-            || this.filter.otherEVs !== null;
+            || this.filter.otherEVs !== null
+            || this.filter.search !== null;
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -211,10 +220,11 @@ class UserConfig {
         this.filter.status     = json.filter?.status     || this.filter?.status;
         this.filter.stalls     = json.filter?.stalls     || this.filter?.stalls;
         this.filter.power      = json.filter?.power      || this.filter?.power;
-        this.filter.otherEVs =
+        this.filter.otherEVs   =
             typeof json.filter?.otherEVs === 'boolean'
                 ? String(json.filter?.otherEVs) 
                 : json.filter?.otherEVs || this.filter?.otherEVs;
+        this.filter.search     = json.filter?.search     || this.filter?.search;
 
         this.showAlways.region   = json.showAlways?.region   || this.showAlways?.region;
         this.showAlways.country  = json.showAlways?.country  || this.showAlways?.country;
@@ -223,6 +233,7 @@ class UserConfig {
         this.showAlways.stalls   = json.showAlways?.stalls   || this.showAlways?.stalls;
         this.showAlways.power    = json.showAlways?.power    || this.showAlways?.power;
         this.showAlways.otherEVs = json.showAlways?.otherEVs || this.showAlways?.otherEVs;
+        this.showAlways.search   = json.showAlways?.search   || this.showAlways?.search;
 
         this.customMarkers = json.customMarkers || this.customMarkers;
 

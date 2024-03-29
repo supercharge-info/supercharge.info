@@ -51,6 +51,7 @@ const SitePredicates = {
             if (filter.power !== null && site.powerKilowatt < filter.power) return false;
             if (filter.status !== null && filter.status.length > 0 && filter.status.indexOf(site.status.value) < 0) return false;
             if (filter.otherEVs !== null && String(site.otherEVs) !== filter.otherEVs) return false;
+            if ((filter.search) !== null && !site.matches(filter.search, false)) return false;
             if ((filter.status === null || filter.status.length === 0) && site.isClosedPerm()) return false; // for maps only, exclude Permanently Closed sites if "Any Status" is chosen in filters
             return true;
         };

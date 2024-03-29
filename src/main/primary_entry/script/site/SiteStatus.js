@@ -135,5 +135,10 @@ Status.fromString = function (string) {
     return Status.UNKNOWN;
 };
 
+Status.matches = function (status, search) {
+    if (Status.ALL.indexOf(status) < 0) return false;
+    return status.displayName.toLowerCase().indexOf(search) >= 0;
+};
+
 export default Status;
 

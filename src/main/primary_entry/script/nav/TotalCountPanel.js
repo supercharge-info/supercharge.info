@@ -80,11 +80,11 @@ class TotalCountPanel {
     updateView(row, countMap) {
         const row1 = this.table.find("tr").eq(row);
         const nonControlCells = row1.find("td[rowspan!=2]");
-        nonControlCells.eq(0).text(countMap.open);
-        nonControlCells.eq(1).text(countMap.construction);
-        nonControlCells.eq(2).text(countMap.plan);
-        nonControlCells.eq(3).text(countMap.closed);
-        nonControlCells.eq(4).text(countMap.key);
+        nonControlCells.eq(0).text(countMap?.open         ?? "-");
+        nonControlCells.eq(1).text(countMap?.construction ?? "-");
+        nonControlCells.eq(2).text(countMap?.plan         ?? "-");
+        nonControlCells.eq(3).text(countMap?.closed       ?? "-");
+        nonControlCells.eq(4).text(countMap?.key          ?? "(region)");
     }
 
 }

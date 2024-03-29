@@ -188,6 +188,7 @@ PAGE: map
                 <select class="form-control stalls-select hidden"></select>
                 <select class="form-control power-select hidden"></select>
                 <select class="form-control otherEVs-select hidden"></select>
+                <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text"/>
                 <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
                 <span id="map-result-count"></span>
             </form>
@@ -329,6 +330,7 @@ PAGE: data
             <select class="form-control stalls-select hidden"></select>
             <select class="form-control power-select hidden"></select>
             <select class="form-control otherEVs-select hidden"></select>
+            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text"/>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="data-result-count"></span>
         </form>
@@ -344,10 +346,10 @@ PAGE: data
             <th>State</th>
             <th title="Postal Code">Zip</th>
             <th>Country</th>
-            <th class="number" title="Stall count + details">Stalls +</th>
-            <th class="number" title="Maximum Power (kilowatts)">kW</th>
             <th>GPS</th>
             <th class="number" title="Elevation (meters)">Elev</th>
+            <th class="number" title="Stall count + details">Stalls +</th>
+            <th class="number" title="Maximum Power (kilowatts)">kW</th>
             <th>Status</th>
             <th title="Open Date (if any)">Opened</th>
         </tr>
@@ -418,6 +420,8 @@ PAGE: changes
             <button class="clear power-clear hidden" type="button">×</button>
             <select class="form-control otherEVs-select hidden"></select>
             <button class="clear otherEVs-clear hidden" type="button">×</button>
+            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text"/>
+            <button class="clear search-clear hidden" type="button">×</button>
             <select class="form-control changetype-select"></select>
             <button class="clear changetype-clear hidden">×</button>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
@@ -848,6 +852,13 @@ Dialogs
                                         data-container="body"></select></td>
                             <td class="btn-xs show-always">
                                 <input type="checkbox" role="switch" id="otherEVs-show" name="otherEVs-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Search Text</th>
+                            <td></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="search-show" name="search-show" checked/>
                             </td>
                         </tr>
                         <tr>

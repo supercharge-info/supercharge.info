@@ -64,10 +64,11 @@ button.reset span.glyphicon-filter {
 .bootstrap-select button.dropdown-toggle {
     background-color: #def;
 }
-.bootstrap-select button.dropdown-toggle.bs-placeholder {
+.bootstrap-select button.dropdown-toggle.bs-placeholder, input.form-control::placeholder {
     color: #bbb;
     border-color: #ddd;
     background-color: #fff;
+    font-style: italic;
 }
 .bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button.btn:hover {
     background-color: #e6e6e6;
@@ -101,7 +102,7 @@ ul.dropdown-menu.inner {
     color: lightsteelblue;
 }
 
-.form-inline button.form-control {
+.form-inline button.form-control, .form-inline input.form-control {
     display: inline-block;
     padding: 0 12px;
     height: 28px;
