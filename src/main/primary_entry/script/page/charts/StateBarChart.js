@@ -17,14 +17,14 @@ export default class CountryBarChart {
         const stateNameList = [];
         const stateOpenCountList = [];
         const stateConstructionCountList = [];
-        const statePermitCountList = [];
+        const statePlanCountList = [];
 
         $.each(stateSiteCountList, function (index, value) {
             if (value.key !== Address.COUNTRY_WORLD) {
                 stateNameList.push(value.key);
                 stateOpenCountList.push(value.open);
                 stateConstructionCountList.push(value.construction);
-                statePermitCountList.push(value.permit);
+                statePlanCountList.push(value.plan);
             }
         });
 
@@ -74,9 +74,9 @@ export default class CountryBarChart {
             },
             series: [
                 {
-                    name: "Permit",
-                    data: statePermitCountList,
-                    color: ChartColor.STATUS_PERMIT
+                    name: "Plan",
+                    data: statePlanCountList,
+                    color: ChartColor.STATUS_PLAN
                 },
                 {
                     name: "Construction",

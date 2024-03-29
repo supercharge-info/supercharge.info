@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0">
+    <defs>
+        <radialGradient id="blue_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#90c0ff" />
+            <stop offset="50%" stop-color="#7090ee" />
+            <stop offset="75%" stop-color="#5070d0" />
+            <stop offset="100%" stop-color="#3050c0" />
+        </radialGradient>
+        <pattern id="blue_triangle" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <g transform="matrix(1.57 0 0 1.57 500 414)" id="843162">
+                <path
+                    style="stroke: #000000; stroke-width: 30; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#blue_fill); fill-rule: nonzero; opacity: 1;"
+                    transform=" translate(-255.6984, -251.0068)"
+                    d="M 12.51 470.379 L 234.371 16.008 c 6.439 -13.187 25.17 -13.363 31.855 -0.299 l 232.51 454.371 c 6.064 11.849 -2.542 25.92 -15.853 25.92 H 28.512 C 15.348 496 6.734 482.209 12.51 470.379 z"
+                    stroke-linecap="round" />
+            </g>
+        </pattern>
+        <radialGradient id="orange_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="50%" stop-color="#ffa500" />
+            <stop offset="75%" stop-color="#dd8500" />
+            <stop offset="100%" stop-color="#a56500" />
+        </radialGradient>
+        <pattern id="orange_triangle" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <g transform="matrix(1.57 0 0 1.57 500 414)" id="843162">
+                <path
+                    style="stroke: #000000; stroke-width: 30; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#orange_fill); fill-rule: nonzero; opacity: 1;"
+                    transform=" translate(-255.6984, -251.0068)"
+                    d="M 12.51 470.379 L 234.371 16.008 c 6.439 -13.187 25.17 -13.363 31.855 -0.299 l 232.51 454.371 c 6.064 11.849 -2.542 25.92 -15.853 25.92 H 28.512 C 15.348 496 6.734 482.209 12.51 470.379 z"
+                    stroke-linecap="round" />
+            </g>
+        </pattern>
+        <radialGradient id="red_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#ff6060" />
+            <stop offset="50%" stop-color="#d02020" />
+            <stop offset="90%" stop-color="#a00000" />
+            <stop offset="100%" stop-color="#600000" />
+        </radialGradient>
+        <pattern id="red_dot" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle r="475" cx="500" cy="500" fill="url(#red_fill)" style="stroke: #000000; stroke-width: 50;"/>
+        </pattern>
+        <radialGradient id="red_fill_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#e00000" />
+            <stop offset="50%" stop-color="#c00000" />
+            <stop offset="90%" stop-color="#a00000" />
+            <stop offset="100%" stop-color="#600000" />
+        </radialGradient>
+        <pattern id="red_dot_limited" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle r="475" cx="500" cy="500" fill="url(#red_fill_ltd)" style="stroke: #000000; stroke-width: 50;"/>
+            <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
+                <g>
+                    <g transform="matrix(12 0 0 12 0 -125)">
+                        <path
+                            style="stroke: rgb(255,255,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
+                            transform=" translate(-32, -22)" d="M 30 7 h 4 v 31 h -4 z" />
+                    </g>
+                    <g transform="matrix(12 0 0 12 -62.5 37.5)">
+                        <path
+                            style="stroke: rgb(255,255,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
+                            transform=" translate(-27, -35)" d="M 36.1 27 l 1.9 3.6 L 17.9 43 L 16 39.4 z" />
+                    </g>
+                    <g transform="matrix(18 0 0 18 0 0)">
+                        <circle
+                            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
+                            cx="0" cy="0" r="4" />
+                    </g>
+                    <g transform="matrix(15 0 0 15 0 0)">
+                        <circle
+                            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                            cx="0" cy="0" r="3" />
+                    </g>
+                </g>
+            </g>
+        </pattern>
+        <radialGradient id="green_fill_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#009900" />
+            <stop offset="50%" stop-color="#007700" />
+            <stop offset="75%" stop-color="#005500" />
+            <stop offset="100%" stop-color="#004400" />
+        </radialGradient>
+        <pattern id="green_dot_limited" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle r="475" cx="500" cy="500" fill="url(#green_fill_ltd)" style="stroke: #000000; stroke-width: 50;"/>
+            <g transform="matrix(1.4 0 0 1.4 500 520)" id="579313">
+                <g>
+                    <g transform="matrix(12 0 0 12 0 -125)">
+                        <path
+                            style="stroke: rgb(255,255,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
+                            transform=" translate(-32, -22)" d="M 30 7 h 4 v 31 h -4 z" />
+                    </g>
+                    <g transform="matrix(12 0 0 12 -62.5 37.5)">
+                        <path
+                            style="stroke: rgb(255,255,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
+                            transform=" translate(-27, -35)" d="M 36.1 27 l 1.9 3.6 L 17.9 43 L 16 39.4 z" />
+                    </g>
+                    <g transform="matrix(18 0 0 18 0 0)">
+                        <circle
+                            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,0); fill-rule: nonzero; opacity: 1;"
+                            cx="0" cy="0" r="4" />
+                    </g>
+                    <g transform="matrix(15 0 0 15 0 0)">
+                        <circle
+                            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;"
+                            cx="0" cy="0" r="3" />
+                    </g>
+                </g>
+            </g>
+        </pattern>
+        <radialGradient id="gray_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#e0e0e0" />
+            <stop offset="50%" stop-color="#c0c0c0" />
+            <stop offset="75%" stop-color="#a0a0a0" />
+            <stop offset="100%" stop-color="#404040" />
+        </radialGradient>
+        <pattern id="gray_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle r="475" cx="500" cy="500" fill="url(#gray_fill)" style="stroke: #000000; stroke-width: 50;"/>
+            <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
+                <g>
+                    <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
+                        <line
+                            style="stroke: #000000; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                            x1="6" y1="-6" x2="-6" y2="6" />
+                    </g>
+                    <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
+                        <line
+                            style="stroke: #000000; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                            x1="-6" y1="-6" x2="6" y2="6" />
+                    </g>
+                </g>
+            </g>
+        </pattern>
+         <radialGradient id="black_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#606060" />
+            <stop offset="50%" stop-color="#404040" />
+            <stop offset="75%" stop-color="#202020" />
+            <stop offset="100%" stop-color="#000000" />
+        </radialGradient>
+        <pattern id="black_dot_x" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle r="475" cx="500" cy="500" fill="url(#black_fill)" style="stroke: #000000; stroke-width: 50;"/>
+            <g transform="matrix(1.25 0 0 1.25 500 500)" id="688950">
+                <g>
+                    <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
+                        <line
+                            style="stroke: #ffffff; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                            x1="6" y1="-6" x2="-6" y2="6" />
+                    </g>
+                    <g transform="matrix(33.3333 0 0 33.3333 -0.0002 -0.0002)">
+                        <line
+                            style="stroke: #ffffff; stroke-width: 2; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"
+                            x1="-6" y1="-6" x2="6" y2="6" />
+                    </g>
+                </g>
+            </g>
+        </pattern>
+        <radialGradient id="green_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#00ff00" />
+            <stop offset="50%" stop-color="#00dd00" />
+            <stop offset="75%" stop-color="#00bb00" />
+            <stop offset="100%" stop-color="#009900" />
+        </radialGradient>
+        <pattern id="green_dot" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle r="475" cx="500" cy="500" fill="url(#green_fill)" style="stroke: #000000; stroke-width: 50;"/>
+        </pattern>
+        <radialGradient id="purple_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#ff00ff" />
+            <stop offset="50%" stop-color="#d020d0" />
+            <stop offset="90%" stop-color="#a000a0" />
+            <stop offset="100%" stop-color="#600060" />
+        </radialGradient>
+        <radialGradient id="yellow_fill" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+            <stop offset="0%" stop-color="#ffff00" />
+            <stop offset="50%" stop-color="#ffdd00" />
+            <stop offset="75%" stop-color="#eecc00" />
+            <stop offset="100%" stop-color="#ccbb00" />
+        </radialGradient>
+        <pattern id="custom_pin" viewBox="0,0,303,303" width="100%" height="100%">
+            <g
+            id="layer1"
+            transform="translate(-295.5,-12)">
+                <circle
+                    style="fill: url(#green_fill); fill-opacity: 1; fill-rule: nonzero; stroke: #000000; stroke-width: 16;"
+                    id="path4136"
+                    cx="446.73996"
+                    cy="163.17543"
+                    r="143" />
+                <g transform="matrix(0.8 0 0 0.8 88 32)">
+                    <path
+                    id="path4159"
+                    d="m 548.80654,134.01734 c 0,-56.865669 -45.20091,-102.066581 -102.06658,-102.066581 -56.86567,0 -102.06658,45.200912 -102.06658,102.066581 0,20.41331 5.83237,37.91043 16.03903,53.94948 l 86.02755,106.44085 86.02754,-106.44085 c 10.20666,-16.03905 16.03904,-33.53617 16.03904,-53.94948 z m -102.06658,43.74282 c -23.32951,0 -43.74282,-20.41332 -43.74282,-43.74282 0,-23.32951 20.41331,-43.742827 43.74282,-43.742827 23.3295,0 43.74282,20.413317 43.74282,43.742827 0,23.3295 -20.41332,43.74282 -43.74282,43.74282 z"
+                    style="fill: #000000; fill-opacity: 1; stroke: none;" />
+                </g>
+            </g>
+        </pattern>
+        <linearGradient
+            id="vote_linearGradient4">
+            <stop
+                style="stop-color:#cc00ff;stop-opacity:1;"
+                offset="0"
+                id="stop4" />
+            <stop
+                style="stop-color:#660088;stop-opacity:1;"
+                offset="1"
+                id="stop5" />
+        </linearGradient>
+        <radialGradient
+            xlink:href="#vote_linearGradient4"
+            id="vote_radialGradient5"
+            cx="256.31413"
+            cy="256.31413"
+            fx="256.31413"
+            fy="256.31413"
+            r="256.24971"
+            gradientUnits="userSpaceOnUse" />
+        <pattern id="vote" viewBox="0,0,512,512" width="100%" height="100%">
+            <g
+                transform="matrix(0.79 0 0 0.79 55 55)"
+                id="layer1">
+            <rect
+                style="fill:url(#vote_radialGradient5);stroke:#000000;stroke-width:25;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                id="rect1"
+                width="487.49942"
+                height="487.49942"
+                x="12.564417"
+                y="12.564417"
+                ry="74.717957" />
+            <rect
+                style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:25.0175;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                id="rect5"
+                width="384.93207"
+                height="40.635265"
+                x="-195.39809"
+                y="374.7572"
+                rx="14.278688"
+                ry="40.635265"
+                transform="matrix(0.59760299,-0.80179216,0.76903388,0.63920802,0,0)" />
+            <rect
+                style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:50.3447;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                id="rect6"
+                width="184.25012"
+                height="18.9324"
+                x="-437.45853"
+                y="43.582943"
+                rx="6.8345828"
+                ry="18.9324"
+                transform="matrix(-0.55284328,-0.83328525,-0.73089649,0.68248833,0,0)" />
+            </g>
+        </pattern>
+        <linearGradient
+            id="plan_linearGradient4">
+            <stop
+                style="stop-color:#cc00ff;stop-opacity:1;"
+                offset="0"
+                id="stop4" />
+            <stop
+                style="stop-color:#660088;stop-opacity:1;"
+                offset="1"
+                id="stop5" />
+        </linearGradient>
+        <radialGradient
+            xlink:href="#plan_linearGradient4"
+            id="plan_radialGradient5"
+            cx="256.31413"
+            cy="256.31413"
+            fx="256.31413"
+            fy="256.31413"
+            r="256.24971"
+            gradientUnits="userSpaceOnUse" />
+        <pattern id="plan" viewBox="0,0,512,512" width="100%" height="100%">
+            <g
+                transform="matrix(0.79 0 0 0.79 55 55)"
+                id="layer1">
+                <rect
+                    style="fill:url(#plan_radialGradient5);stroke:#000000;stroke-width:25;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                    id="rect1"
+                    width="487.49942"
+                    height="487.49942"
+                    x="12.564417"
+                    y="12.564417"
+                    ry="74.717957" />
+                <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:488.533px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:10.4686;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                    x="133.12291"
+                    y="442.36331"
+                    id="text5"
+                    transform="scale(1.0482834,0.95394051)"><tspan
+                    id="tspan5"
+                    x="133.12291"
+                    y="442.36331"
+                    style="stroke-width:10.4686">?</tspan></text>
+            </g>
+        </pattern>
+        <pattern id="red_expand" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle
+                r="475"
+                cx="500"
+                cy="500"
+                fill="url(#red_fill_ltd)"
+                style="stroke: #000000; stroke-width: 50;"
+                id="circle4" />
+            <g
+                transform="matrix(16.8,0,0,16.8,500,469)"
+                id="g4"
+                style="stroke-width:4.28571429;stroke-dasharray:none">
+            <path
+                style="opacity:1;fill:#ffcc00;fill-rule:nonzero;stroke:#ffcc00;stroke-width:4.46428571;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1;stroke-opacity:1"
+                transform="translate(-32,-22)"
+                d="m 30,7 h 4 v 31 h -4 z"
+                id="path4" />
+            </g>
+            <g
+                transform="matrix(16.8,0,0,16.8,412.5,572.5)"
+                id="g5" />
+            <use
+                x="0"
+                y="0"
+                xlink:href="#g4"
+                id="use8"
+                transform="rotate(90,500.6135,476.78651)" />
+        </pattern>
+        <pattern id="green_expand" viewBox="0,0,1000,1000" width="100%" height="100%">
+            <circle
+                r="475"
+                cx="500"
+                cy="500"
+                fill="url(#green_fill_ltd)"
+                style="stroke: #000000; stroke-width: 50;"
+                id="circle4" />
+            <g
+                transform="matrix(16.8,0,0,16.8,500,469)"
+                id="g4"
+                style="stroke-width:4.28571429;stroke-dasharray:none">
+            <path
+                style="opacity:1;fill:#ffcc00;fill-rule:nonzero;stroke:#ffcc00;stroke-width:4.46428571;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1;stroke-opacity:1"
+                transform="translate(-32,-22)"
+                d="m 30,7 h 4 v 31 h -4 z"
+                id="path4" />
+            </g>
+            <g
+                transform="matrix(16.8,0,0,16.8,412.5,572.5)"
+                id="g5" />
+            <use
+                x="0"
+                y="0"
+                xlink:href="#g4"
+                id="use8"
+                transform="rotate(90,500.6135,476.78651)" />
+        </pattern>
+    </defs>
+</svg>

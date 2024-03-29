@@ -10,6 +10,7 @@ import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import ServiceURL from "../../common/ServiceURL";
 import Sites from "../../site/Sites";
+import Strings from "../../util/Strings";
 
 export default class DataView {
 
@@ -31,8 +32,7 @@ export default class DataView {
 
     syncFilters() {
         this.filterControl.init();
-        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
-        Sites.reloadCallback = () => this.tableAPI.draw(false);
+        setTimeout(this.tableAPI.draw, 100);
     }
 
     filterControlCallback() {
@@ -49,18 +49,63 @@ export default class DataView {
 
     static handleDataClick(event) {
         if (!WindowUtil.isTextSelected()) {
-            const clickTarget = $(event.target);
-            if (!clickTarget.is('a, b, ul, li, .links img')) {
-                const clickedSiteId = parseInt(clickTarget.closest('tr').attr('id'));
-                EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+            const target = $(event.target);
+            if (!target.is('a, b, ul, li, img, .details')) {
+                if (target.closest('table')?.find('div.open')?.length === 0) {
+                    const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
+                    if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+                }
             }
         }
+    }
+
+    static buildStalls(supercharger) {
+        const site = Supercharger.fromJSON(supercharger);
+
+        //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+
+        var entries = '<li><b>Stalls:</b>';
+        Object.keys(site.stalls).forEach(s => {
+            if (site.stalls[s] > 0) {
+                entries += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else entries += Strings.upperCaseInitial(s);
+            }
+        });
+        entries += '</li><li><b>Plugs:</b>';
+        Object.keys(site.plugs).forEach(p => {
+            if (site.plugs[p] > 0) {
+                if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+            }
+        });
+        entries += '</li>';
+        if (site.facilityName) {
+            entries += `<li><b>Host:</b> ${site.facilityName}`;
+            if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+            entries += '</li>';
+        }
+        if (site.parkingId !== 1) {
+            const park = Sites.getParking().get(site.parkingId);
+            entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
+        }
+        if (site.addressNotes) entries += `<li class="notes"><b>Address notes:</b><br/>${site.addressNotes}</li>`;
+        if (site.accessNotes) entries += `<li class="notes"><b>Access notes:</b><br/>${site.accessNotes}</li>`;
+
+        return `
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">${site.getStallPlugSummary(true)} <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    ${entries}
+                    <li class="notes"><div class="links">${DataView.buildLinks(site)}</div></li>
+                </ul>
+            </div>`;
     }
 
     static buildStatus(supercharger) {
         const site = Supercharger.fromJSON(supercharger);
         var s = Status.fromString(supercharger.status);
-        var content = site.getImg(s);
+        var content = Status.getImg(site, s);
         if (site.otherEVs)     content += '<img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site.solarCanopy)  content += '<img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site.battery)      content += '<img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
@@ -72,18 +117,15 @@ export default class DataView {
         return `<a href="${href.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
     }
 
-    static buildLinks(supercharger) {
-        const site = Supercharger.fromJSON(supercharger);
-        const addr = site.address;
-        const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
-        const gmapLink = DataView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>');
+    static buildLinks(site) {
+        const gmapLink = site.getGmapLink();
         const discussLink = DataView.asLink(
             site.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${site.id}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
-        const teslaLink = site.locationId ?
-            " • " + DataView.asLink(site.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site.address.isTeslaCN() ? 'cn' : 'com'}"/>`) :
-            '';
-        return `${gmapLink} • ${discussLink}${teslaLink}`;
+        const teslaLink = site.getTeslaLink();
+        const psLink = site.getPlugShareLink();
+        const osmLink = site.getOsmLink();
+        return `${gmapLink} ${psLink} ${osmLink} ${discussLink} ${teslaLink}`;
     }
 
     initDataTableOptions() {
@@ -96,10 +138,8 @@ export default class DataView {
             "serverSide": true,
             "deferLoading": 0,
             "order": [[11, "desc"], [0, "asc"]],
-            "lengthMenu": [
-                [10, 25, 50, 100, 500, 1000],
-                [10, 25, 50, 100, 500, 1000]],
-            "pageLength": 50,
+            "lengthMenu": [10, 20, 25, 50, 100, 500, 1000],
+            "pageLength": 20,
             "ajax": {
                 url: ServiceURL.SITES_PAGE,
                 dataFilter: function (data) {
@@ -122,6 +162,7 @@ export default class DataView {
                     d.stalls = dataView.filterControl.getStalls();
                     d.power = dataView.filterControl.getPower();
                     d.otherEVs = dataView.filterControl.getOtherEVs();
+                    //d.search = dataView.filterControl.getSearch();
                 }
             },
             "rowId": "id",
@@ -131,11 +172,14 @@ export default class DataView {
                 {"data": "address.city"},
                 {"data": "address.state", "width": "5%"},
                 {"data": "address.zip", "width": "5%"},
-                {"data": "address.country", "width": "7%"},
+                {"data": "address.country", "width": "5%"},
                 {
                     "data": "stallCount",
+                    "render": (data, type, row, meta) => {
+                       return DataView.buildStalls(row);
+                    },
                     "className": "number",
-                    "width": "1%"
+                    "width": "7%"
                 },
                 {
                     "data": "powerKilowatt",
@@ -151,7 +195,7 @@ export default class DataView {
                     },
                     "className": "gps",
                     //"orderable": false,
-                    "width": "1%"
+                    "width": "5%"
                 },
                 {
                     "data": "elevationMeters",
@@ -168,16 +212,12 @@ export default class DataView {
                     "data": "dateOpened",
                     "defaultContent": "",
                     "width": "5%"
-                },
-                {
-                    "data": (row, type, val, meta) => {
-                        return DataView.buildLinks(row);
-                    },
-                    "className": "links",
-                    "orderable": false,
-                    "width": "9%"
                 }
             ],
+            "createdRow": (row, data, index) => {
+                const rowJq = $(row);
+                rowJq.attr('data-siteid', data.id);
+            },
             "drawCallback": () => {
                 // Don't bother with tooltips on narrow (usually mobile) devices
                 if (window.innerWidth <= 928) return;
@@ -185,7 +225,7 @@ export default class DataView {
                 $("li img.wait").addClass("show");
                 window.dataTooltips = performance.now();
                 window.dataIcons = [];
-                $("#supercharger-data-table img").each(function () {
+                $("#supercharger-data-table th, #supercharger-data-table img, #supercharger-data-table span.details").each(function () {
                     window.dataIcons.push($(this));
                 });
                 clearInterval(window.dataInterval);

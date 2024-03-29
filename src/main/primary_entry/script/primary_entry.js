@@ -25,24 +25,38 @@ import "../images/link-symbol.svg";
 import "../images/history-icon.svg";
 import "../images/plus-circle.svg";
 import "../images/minus-circle.svg";
+import "../images/zoom-to-site.svg";
+import "../images/route.svg";
+
 import "../images/gmap.svg";
 import "../images/forum.svg";
+import "../images/osm.svg";
 import "../images/solar-power-variant.svg";
 import "../images/battery-charging.svg";
 import "../images/car-electric.svg";
+import "../images/accessible.svg";
+import "../images/trailer.svg";
+import "../images/NACS.svg";
+import "../images/CCS1.svg";
+import "../images/CCS2.svg";
+import "../images/TYPE2.svg";
+import "../images/GBT.svg";
+import "../images/OTHER.svg";
 
 import "../images/blue_triangle.svg";
 import "../images/black_dot_x.svg";
 import "../images/gray_dot_x.svg";
-import "../images/green_dot.svg";
 import "../images/red_dot.svg";
 import "../images/red_dot_t.svg";
 import "../images/red_dot_limited.svg";
+import "../images/red_expand.svg";
+import "../images/green_dot.svg";
+import "../images/green_dot_limited.svg";
+import "../images/green_expand.svg";
 import "../images/orange_triangle.svg";
 import "../images/custom_pin.svg";
-
-import "../images/red_dot_expansion_permit.svg";
-import "../images/red_dot_expansion_construction.svg";
+import "../images/plan.svg";
+import "../images/vote.svg";
 
 /**
  * This is the main entry point into the application.  It is called AFTER google maps loads.

@@ -1,5 +1,6 @@
 import Address from "./Address";
 import Objects from "../util/Objects";
+import Strings from "../util/Strings";
 import Dates from "../util/Dates";
 import Units from "../util/Units";
 import unitConversion from "../util/UnitConversion";
@@ -7,6 +8,9 @@ import Status from "./SiteStatus";
 import L from 'leaflet';
 import ServiceURL from "../common/ServiceURL";
 
+
+const BASE_STALLS = ['v2', 'v3', 'v4', 'urban'];
+const BASE_PLUGS = ['nacs', 'ccs1', 'ccs2', 'type2', 'gbt'];
 
 /**
  * Properties:
@@ -26,11 +30,20 @@ export default class Supercharger {
         this.markerSize = 8;
     }
 
+    isVoting() {
+        return this.status === Status.VOTING;
+    }
+    isPlan() {
+        return this.status === Status.PLAN;
+    }
     isPermit() {
         return this.status === Status.PERMIT;
     }
     isConstruction() {
         return this.status === Status.CONSTRUCTION;
+    }
+    isExpanding() {
+        return this.status === Status.EXPANDING;
     }
     isOpen() {
         return this.status === Status.OPEN;
@@ -88,10 +101,29 @@ export default class Supercharger {
         return Objects.isNullOrUndef(this.powerKilowatt) ? "" : this.powerKilowatt;
     }
 
+    getStallPlugSummary(useImages) {
+        if (!this.stalls || !this.numStalls || this.numStalls == 0) return '';
+
+        var summary = `${this.numStalls} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
+        if (this.plugType) {
+            summary += useImages ? this.plugImg(this.plugType) : this.plugType.toUpperCase();
+        } else {
+            summary += 'stalls';
+        }
+        // special cases for the most common multi-connector stalls (MagicDock and CCS2+TYPE2)
+        if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
+            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
+        } else if (this.numStalls === this.plugs?.ccs2 && this.plugs?.ccs2 === this.plugs?.type2) {
+            summary = `<span class="details" title="Dual-cable CCS2+TYPE2">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/CCS2.svg"/><img src="/images/TYPE2.svg"/>' : 'CCS2+TYPE2'}</span>`;
+        }
+        return summary;
+    }
+
     getMarkerTitle() {
+        const sitestalls = this.getStallPlugSummary(false);
         return `<div>${this.displayName} (${this.status?.displayName})</div>` +
             (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
-            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${this.numStalls} stalls`) +
+            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${sitestalls}`) +
             (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : ` • ${this.powerKilowatt} kW`);
 	}
 
@@ -100,18 +132,61 @@ export default class Supercharger {
     }
 
     getMarkerMultiplier() {
-        return (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) ? 1.2 : 1.0;
-    }
-
-    getImg(status, extraClasses) {
-        return '' +
-            `<span class='${status.value} status-select ${extraClasses}'>` +
-                `<img src='${status.getIcon(this)}' title='${status.getTitle(this)}' alt='${status.getTitle(this)}'/>` +
-            `</span>`;
+        // squares
+        if (this.status === Status.PLAN || this.status === Status.VOTING) return 1.3;
+        // triangles
+        if (this.status === Status.PERMIT || this.status === Status.CONSTRUCTION) return 1.2;
+        // circles
+        return 1.0;
     }
 
     getTeslaLink() {
-        return (this.address.isTeslaCN() ? ServiceURL.TESLA_CN_PAGE : ServiceURL.TESLA_WEB_PAGE) + this.locationId;
+        if (Objects.isNotNullOrUndef(this.locationId)) {
+            var teslaLink = (this.address?.isTeslaCN() ? ServiceURL.TESLA_CN_PAGE : ServiceURL.TESLA_WEB_PAGE) + this.locationId;
+            return `<a target='_blank' href='${teslaLink}'><img src="/images/red_dot_t.svg" title="tesla.${this.address?.isTeslaCN() ? 'cn' : 'com'}"/></a>`;
+        }
+        return '';
+    }
+
+    plugImg(plug) {
+        const up = plug.toUpperCase();
+        return `<img class="details" src="/images/${up}.svg" title="${up}" alt="${up}"/>`;
+    }
+
+    getGmapLink() {
+        if (Objects.isNotNullOrUndef(this.address.street)) {
+            const addr = this.address;
+            const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+            return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
+        }
+    }
+
+    getPlugShareLink(map) {
+        var psLink = "https://api.plugshare.com/view/", psClass = "", psTitle = "PlugShare";
+        if (this.plugshareId) {
+            psLink += `location/${this.plugshareId}`;
+        } else {
+            var bounds = map?.getBounds();
+            var spanLat = Math.min(0.05, Math.abs(bounds?.getNorthEast().lat - bounds?.getSouthWest().lat));
+            var spanLng = Math.min(0.05, Math.abs(bounds?.getNorthEast().lng - bounds?.getSouthWest().lng));
+            psLink += `map?latitude=${this.location.lat}&longitude=${this.location.lng}&spanLat=${Objects.isNumber(spanLat) ? spanLat : 0.05}&spanLng=${Objects.isNumber(spanLng) ? spanLng : 0.05}`;
+            psClass = "faded";
+            psTitle += " (map only)";
+        }
+        return `<a href="${psLink}" target="_blank"><img src="https://developer.plugshare.com/logo.svg" title="${psTitle}" class="${psClass}"/></a>`;
+    }
+
+    getOsmLink(map) {
+        var osmLink = "https://www.openstreetmap.org/", osmClass = "", osmTitle = "OpenStreetMap";
+        if (this.osmId) {
+            osmLink += `node/${this.osmId}`;
+        } else {
+            var zoom = Math.max(15, map?.getZoom());
+            osmLink += `#map=${Objects.isNumber(zoom) ? zoom : 15}/${this.location.lat}/${this.location.lng}`;
+            osmClass = "faded";
+            osmTitle += " (map only)";
+        }
+        return `<a href="${osmLink}" target="_blank"><img src="/images/osm.svg" title="${osmTitle}" class="${osmClass}"/></a>`;
     }
 
 }
@@ -138,8 +213,42 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.solarCanopy = jsonObject.solarCanopy;
     supercharger.battery = jsonObject.battery;
     supercharger.otherEVs = jsonObject.otherEVs;
+    supercharger.stalls = jsonObject.stalls;
+    if (supercharger.stalls) {
+        for (const s of BASE_STALLS) {
+            if (supercharger.stalls[s] === supercharger.numStalls) {
+                supercharger.stallType = s;
+                break;
+            }
+        }
+    }
+    supercharger.plugs = jsonObject.plugs;
+    if (supercharger.plugs) {
+        // For now at least, treat TPC the same as NACS
+        if (supercharger.plugs?.tpc > 0) {
+            supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
+            delete supercharger.plugs.tpc;
+        }
+        for (const p of BASE_PLUGS) {
+            // if we already found a plugType and there are more base plugs, get rid of the plugType and stop looking
+            if (supercharger.plugs[p] > 0 && supercharger.plugType) {
+                delete supercharger.plugType;
+                break;
+            }
+            if (supercharger.plugs[p] === supercharger.numStalls) {
+                supercharger.plugType = p;
+            }
+        }
+    }
+    supercharger.parkingId = jsonObject.parkingId;
+    supercharger.facilityName = jsonObject.facilityName;
+    supercharger.facilityHours = jsonObject.facilityHours;
+    supercharger.accessNotes = jsonObject.accessNotes;
+    supercharger.addressNotes = jsonObject.addressNotes;
+    supercharger.plugshareId = jsonObject.plugshareId;
+    supercharger.osmId = jsonObject.osmId;
     supercharger.history =
-        jsonObject.status == 'OPEN' ?
+        jsonObject.status == 'OPEN' || jsonObject.status == 'EXPANDING' ?
             [{ siteStatus: jsonObject.status, date: jsonObject.dateOpened }]
         : jsonObject.statusDays ? [{
             siteStatus: jsonObject.status,

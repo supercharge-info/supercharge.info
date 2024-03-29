@@ -1,9 +1,9 @@
 <svg version="1.1" width="1000" height="1000" xmlns="http://www.w3.org/2000/svg">
  <defs>
     <radialGradient id="green_fill_ltd" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
-        <stop offset="0%" stop-color="#00aa00" />
-        <stop offset="50%" stop-color="#008800" />
-        <stop offset="75%" stop-color="#006600" />
+        <stop offset="0%" stop-color="#009900" />
+        <stop offset="50%" stop-color="#007700" />
+        <stop offset="75%" stop-color="#005500" />
         <stop offset="100%" stop-color="#004400" />
     </radialGradient>
  </defs>

@@ -43,7 +43,7 @@ module.exports = (env) => {
             primary: './src/main/primary_entry/script/primary_entry.js'
         },
         infrastructureLogging: {
-            debug: env.api && [name => name.includes('webpack-dev-server')]
+            debug: !env.api && [name => name.includes('webpack-dev-server')]
         },
         module: {
             rules: [
@@ -177,13 +177,15 @@ module.exports = (env) => {
                 ]
             }),
             new ESLintPlugin(),
-            new MiniCssExtractPlugin({
-                filename: "[name].[contenthash].css",
-                chunkFilename: "[id].[contenthash].css"
-            })
+            process.env.NODE_ENV === 'development'
+                ? new MiniCssExtractPlugin()
+                : new MiniCssExtractPlugin({
+                    filename: "[name].[contenthash].css",
+                    chunkFilename: "[id].[contenthash].css"
+                })
         ]
     }
-    if (env.WEBPACK_SERVE) {
+    if (process.env.NODE_ENV === 'development') {
         console.log("Using config:");
         console.log(config.devServer);
     }

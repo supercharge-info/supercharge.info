@@ -1,7 +1,20 @@
+#changes-table_length {
+    text-align: right;
+    padding-right: 12px !important;
+}
+#changes-title {
+    text-align: center;
+    font-size: 144%;
+}
+
 #changes-filter {
     text-align: left;
-    margin: 2px 0 0.3em 0.5em;
+    margin: 2px 0 0 0.5em;
     padding-left: 2px;
+}
+
+#changes-table_wrapper table.dataTable {
+    margin-top: -4px !important;
 }
 
 #changes-table_wrapper .row {
@@ -17,16 +30,29 @@
     cursor: pointer;
 }
 
+#changes-table th, #changes-table td {
+    padding-top: 4px;
+    padding-bottom: 3px;
+}
 #changes-table .status {
     text-align: right;
     padding-right: 8px;
 }
 
+#changes-table td .VOTING {
+    color: #8800aa;
+}
+#changes-table td .PLAN {
+    color: #8800aa; /* TODO: distinguish? */
+}
 #changes-table td .PERMIT {
     color: #0000ff;
 }
 #changes-table td .CONSTRUCTION {
     color: orange;
+}
+#changes-table td .EXPANDING {
+    color: red; /* TODO: distinguish? */
 }
 #changes-table td .CLOSED_TEMP {
     color: gray;
@@ -34,30 +60,31 @@
 #changes-table td .CLOSED_PERM {
     color: black;
 }
-#changes-table .dropdown .OPEN {
+#changes-table td .OPEN {
     color: red;
+}
+
+#changes-table .dropdown {
+    margin-top: -1px;
 }
 
 #changes-table .dropdown a, #changes-table .dropdown b {
     text-decoration: none;
 }
 
-#changes-table .dropdown-menu {
-    min-width: 50%;
-    max-width: 150%;
-    padding: 3px;
-    margin: 0 auto;
-    background-color: #ffe;
+#changes-table .child {
+    width: 99%;
+    cursor: auto;
+    background-color: #ffd;
+    margin-left: 4px;
+    border-left: 4px dotted #999;
+}
+#changes-table .child tr, #changes-table .child td {
+    padding: 1px 8px;
+    vertical-align: top;
 }
 #changes-table li {
-    white-space: nowrap;
-}
-#changes-table li.connectors {
-    padding-left: 20px;
-    border-bottom: 1px dotted #ccc;
-}
-#changes-table li.connectors:last-child {
-    border-bottom: 0px;
+    white-space: pre;
 }
 
 #changes-table .text-muted img {

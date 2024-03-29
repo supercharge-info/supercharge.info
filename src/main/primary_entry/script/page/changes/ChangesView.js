@@ -10,15 +10,37 @@ import Sites from "../../site/Sites";
 import MapEvents from "../map/MapEvents";
 import WindowUtil from "../../util/WindowUtil";
 import Objects from "../../util/Objects";
+import Strings from "../../util/Strings";
 
 export default class ChangesView {
 
     constructor(filterDialog) {
         const table = $("#changes-table");
-        this.tableBody = table.find("tbody");
-        this.tableBody.click(ChangesView.handleChangeClick);
+        const tableBody = table.find("tbody");
+        tableBody.on('click', ChangesView.handleChangeClick);
 
         this.tableAPI = table.DataTable(this.initDataTableOptions());
+        const tableAPI = this.tableAPI;
+
+        $(tableAPI.table().container()).find('#changes-title').html('Supercharger Change History');
+
+        table.on('click', 'th.dt-control', (event) => {
+            const icon = event.target.closest('b');
+            if (icon.className.indexOf("right") > 0) {
+                tableBody.find("tr.odd, tr.even").each((n, tr) => ChangesView.handleDetailClick(tr, tableAPI, "show"));
+                icon.className = icon.className.replace("right", "down");
+                icon.title = "hide all details";
+            } else {
+                tableBody.find("tr.dt-hasChild").each((n, tr) => ChangesView.handleDetailClick(tr, tableAPI, "hide"));
+                icon.className = icon.className.replace("down", "right");
+                icon.title = "show all details";
+            }
+        });
+
+        tableBody.on('click', 'td.dt-control', (event) => {
+            ChangesView.handleDetailClick(event.target.closest('tr'), tableAPI, '');
+            event.preventDefault();
+        });
 
         this.filterControl = new SiteFilterControl(
             $("#changes-filter"),
@@ -31,8 +53,7 @@ export default class ChangesView {
 
     syncFilters() {
         this.filterControl.init();
-        setTimeout(this.tableAPI.draw, Sites.loading ? 1000 : 1);
-        Sites.reloadCallback = () => this.tableAPI.draw(false);
+        setTimeout(this.tableAPI.draw, 100);
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -52,14 +73,25 @@ export default class ChangesView {
         this.filterControl.updateVisibility();
     }
 
+    static handleDetailClick(tr, tableAPI, showHide) {
+        const row = tableAPI.row(tr);
+        if (showHide !== 'show' && row.child.isShown()) row.child.hide();
+        else if (showHide !== 'hide' && !row.child.isShown()) {
+            row.child(ChangesView.buildChild(tr, row.data())).show();
+            $(".tooltip").tooltip("hide");
+            $("#changes-table .child img, #changes-table .child span.details").each(function (n, t) {
+                $(t).tooltip({ "container": "body" });
+            });
+        }
+    }
+
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
-            if (!target.is('a, b, ul, li, .links img')) {
-                // TODO: decide whether this should be closest('table') or closest('tr')
-                if (target.closest('table').find('div.open').length === 0) {
-                    const clickedSiteId = parseInt(target.closest('tr').data('siteid'));
-                    EventBus.dispatch(MapEvents.show_location, clickedSiteId);
+            if (!target.is('a, b, ul, li, img, .details, .dt-control')) {
+                if (target.closest('table')?.find('div.open')?.length === 0) {
+                    const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
+                    if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);
                 }
             }
         }
@@ -67,107 +99,43 @@ export default class ChangesView {
 
     static buildSiteName(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) return changeRow.siteName;
+        if (Objects.isNullOrUndef(site) || Objects.isNullOrUndef(site.address)) {
+            return changeRow.siteName;
+        }
         var hoverText = '';
         if (site.address.street)  hoverText += site.address.street;
         if (site.address.city)    hoverText += ' • ' + site.address.city;
-        if (site.address.state)   hoverText += ' • ' + site.address.state;
+        if (site.address.state)   hoverText += ' ' + site.address.state;
+        if (site.address.zip)     hoverText += ' ' + site.address.zip;
         if (site.address.country) hoverText += ' • ' + site.address.country;
-        return `<span title="${hoverText}">${changeRow.siteName}</span>`;
-    }
-
-    static buildChangeType(changeRow) {
-        const site = Sites.getById(changeRow.siteId);
-        const s = Status.fromString(changeRow.siteStatus);
-        var chg = changeRow.changeType.toLowerCase();
-        return (changeRow.statusText ? `<span title="${changeRow.statusText}">${chg}*</span>` : chg)
-            + (s === site?.status ? '' : ' <span class="text-muted">(old)</span>');
+        return `<span class="address" title="${hoverText}">${changeRow.siteName}</span>`;
     }
 
     static buildStatus(changeRow) {
-        const isUpdate = changeRow.changeType.toLowerCase() === 'update';
         const site = Sites.getById(changeRow.siteId);
+
+        const isUpdate = changeRow.changeType.toLowerCase() === 'update';
         const s = Status.fromString(changeRow.siteStatus);
+
         // includes title (for fancy tooltip) and alt (for copy/paste as text)
         var prev = isUpdate && changeRow.prevStatus ?
-            site?.getImg(Status.fromString(changeRow.prevStatus), 'text-muted') :
+            Status.getImg(site, Status.fromString(changeRow.prevStatus), 'text-muted') :
             (isUpdate ? "?" : "");
-        return `${prev} ${isUpdate ? "➜" : "+"} ${site?.getImg(s)}`;
+        return `${prev} ${isUpdate ? "➜" : "+"} ${Status.getImg(site, s)}`;
     }
     
     static buildDetails(changeRow) {
+        const kw = changeRow.powerKilowatt > 0 ? ` • ${changeRow.powerKilowatt} kW` : '';
+
         const site = Sites.getById(changeRow.siteId);
-
-        // mock stall details for now
-        /*
-        if (Math.random() > 0.8) {
-            changeRow.summary = "Something changed!";
-            changeRow.stallGroups = [
-                {
-                    "count": site.numStalls,
-                    "power": site.powerKilowatt,
-                    "type": "Tesla V3",
-                    "connector": "NACS",
-                    "status": changeRow.siteStatus,
-                },
-                {
-                    "count": 4,
-                    "power": 120,
-                    "type": "V2 - Tesla",
-                    "status": "CLOSED_TEMP",
-                    "connector": "NACS"
-                },
-                {
-                    "count": 8,
-                    "power": 250,
-                    "type": "V3 - Tesla",
-                    "status": "CONSTRUCTION",
-                    "connector": "Magic"
-                }
-            ];
-        } else if (Math.random() > 0.5) {
-            changeRow.summary = "Something changed?";
-            changeRow.stallGroups = [
-                {
-                    "count": site.numStalls,
-                    "power": site.powerKilowatt,
-                    "type": "Vn - Tesla",
-                    "status": changeRow.siteStatus,
-                    "connector": "NACS"
-                }
-            ];
+        if (!site) {
+            return `${changeRow.stallCount} stalls${kw}`;
         }
-        if (Math.random() > 0.8) {
-            row.statusText = "Editor's note goes here";
-        }
-        */
-        const sitestalls = `${site?.numStalls} stalls`;
-        const sitekw = site?.powerKilowatt > 0 ?
-            ` • ${site?.powerKilowatt} kW` :
-            '';
-        const sitenote = changeRow.summary ? ' • ' + changeRow.summary : '';
 
-        var content = "";
-        if (!changeRow.stallGroups) {
-            content = sitestalls + sitekw + sitenote;
-        } else {
-            var entries = `<li class="${changeRow.siteStatus} connectors"><b>${changeRow.summary}</b></li>`;
-            changeRow.stallGroups.forEach(sg => {
-                entries += `
-                <li class="${sg.status}">${sg.count} @ ${sg.power} kW → ${Status.fromString(sg.status).displayName}
-                    <li class="${sg.status} connectors">${sg.type} • ${sg.connector}</li>
-                </li>`;
-            });
+        //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
 
-            content = `
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${sitestalls}${sitekw}
-                        <b class="glyphicon glyphicon-chevron-down btn-xs"></b></a>
-                    <ul class="dropdown-menu">
-                        ${entries}
-                    </ul>
-                </div>`;
-        }
+        var content = site.getStallPlugSummary(true) + kw;
+
         if (site?.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site?.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site?.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
@@ -179,23 +147,63 @@ export default class ChangesView {
         return content;
     }
 
+    static buildChild(parentTR, changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        if (!site) return '';
+
+        var address = $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+
+        var entries = '<b>Stalls:</b>';
+        Object.keys(site.stalls).forEach(s => {
+            if (site.stalls[s] > 0) {
+                entries += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else entries += Strings.upperCaseInitial(s);
+            }
+        });
+        entries += '<br/><b>Plugs:</b>';
+        Object.keys(site.plugs).forEach(p => {
+            if (site.plugs[p] > 0) {
+                if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+            }
+        });
+        if (site.facilityName) {
+            entries += `<br/><b>Host:</b> ${site.facilityName}`;
+            if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+        }
+        if (site.parkingId !== 1) {
+            const park = Sites.getParking().get(site.parkingId);
+            entries += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
+        }
+        if (site.addressNotes) address += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
+        if (site.accessNotes) entries += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
+
+        return `
+            <table class="child">
+                <tr>
+                    <td width="1%"></td>
+                    <td width="63%">${address}</td>
+                    <td width="36%">${entries}</td>
+                </tr>
+            </table>`;
+    }
+
     static buildLinks(changeRow) {
         const site = Sites.getById(changeRow.siteId);
-        const addr = site?.address;
-        const query = encodeURI(`${addr?.street||''} ${addr?.city||''} ${addr?.state||''} ${addr?.zip||''} ${addr?.country||''}`);
-        const gmapLink = ChangesView.asLink(`https://www.google.com/maps/search/?api=1&query=${query}`, '<img src="/images/gmap.svg" title="Google Map"/>', site?.location?.toString());
+        const gmapLink = site?.getGmapLink() ?? '';
         const discussLink = ChangesView.asLink(
             site?.urlDiscuss ? `${ServiceURL.DISCUSS}?siteId=${changeRow.siteId}` : ServiceURL.DEFAULT_DISCUSS_URL,
             '<img src="/images/forum.svg" title="forum"/>');
-        const teslaLink = site?.locationId ?
-            " • " + ChangesView.asLink(site?.getTeslaLink(), `<img src="/images/red_dot_t.svg" title="tesla.${site?.address?.isTeslaCN() ? 'cn' : 'com'}"/>`) :
-            '';
-        return `${gmapLink} • ${discussLink}${teslaLink}`;
+        const teslaLink = site?.getTeslaLink() ?? '';
+        const psLink = site?.getPlugShareLink() ?? '';
+        const osmLink = site?.getOsmLink() ?? '';
+        return `${gmapLink} ${psLink} ${osmLink} ${discussLink} ${teslaLink}`;
     }
 
     static asLink(href, content, title) {
         const titleAttr = title ? `title='${title}'` : '';
-        return `<a href="${href?.replace(/"/g, '%22')}" ${titleAttr} target="_blank">${content}</a>`;
+        return `<a href="${href?.replace(/"/g, '%22')}" ${titleAttr} target="scinfolink">${content}</a>`;
     }
 
     initDataTableOptions() {
@@ -209,14 +217,11 @@ export default class ChangesView {
             "serverSide": true,
             "deferLoading": 0,
             "deferRender": true,
-            "lengthMenu": [
-                [10, 25, 50, 100, 500, 1000],
-                [10, 25, 50, 100, 500, 1000]],
-            "pageLength": 50,
+            "lengthMenu": [10, 20, 25, 50, 100, 500, 1000],
+            "pageLength": 25,
             "ajax": {
                 url: ServiceURL.CHANGES,
                 dataFilter: (data) => {
-                    Sites.checkReload();
                     const json = JSON.parse(data);
                     json.draw = json.pageId;
                     json.recordsTotal = json.recordCountTotal;
@@ -242,10 +247,17 @@ export default class ChangesView {
             "rowId": "id",
             "columns": [
                 {
+                    "className": "dt-control",
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": "",
+                    "width": "1%"
+                },
+                {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
                     },
-                    "width": "40%"
+                    "width": "39%"
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -288,7 +300,7 @@ export default class ChangesView {
                 $("li img.wait").addClass("show");
                 window.changesTooltips = performance.now();
                 window.changesIcons = [];
-                $("#changes-table img").each(function () {
+                $("#changes-table img, #changes-table span.details").each(function () {
                     window.changesIcons.push($(this));
                 });
                 clearInterval(window.changesInterval);
@@ -308,11 +320,10 @@ export default class ChangesView {
                 }, 100);
             },
             "dom": "" +
+                "<'row'<'col-sm-3'><'#changes-title.col-sm-6'><'col-sm-3'l>>" +
                 "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-12 text-center'l>>" +
                 "<'row'<'col-sm-12 text-center'p>>" +
-                "<'row'<'col-sm-12 text-center'i>>" +
-                ""
+                "<'row'<'col-sm-12 text-center'i>>"
         };
 
     }

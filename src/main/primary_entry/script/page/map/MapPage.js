@@ -12,6 +12,7 @@ import RoutingAction from "./route/RoutingAction";
 import CreateLinkAction from "./action/CreateLinkAction";
 import AddCustomMarkerAction from "./action/AddCustomMarkerAction";
 import MapView from "./MapView";
+import MarkerFactory from "./MarkerFactory";
 import FilterControlView from "./FilterControlView";
 import RangeControlView from "./RangeControlView";
 import RenderControlView from "./RenderControlView";
@@ -20,11 +21,18 @@ import rangeModel from "./RangeModel";
 import Sites from "../../site/Sites";
 import $ from "jquery";
 import "../../lib/jquery.doTimeout";
+import MapDefs from "../../../images/map-defs.svg";
 
 
 export default class MapPage {
     constructor(filterDialog) {
         MapPage.filterControlView = new FilterControlView(filterDialog);
+        $.ajax({
+            url: MapDefs
+        }).done((data) => {
+            $("#map-main-content").append(data.documentElement);
+        });
+        
     }
 
     /**
@@ -43,6 +51,7 @@ export default class MapPage {
 
     onPageHide() {
         $("#navbar-map-dropdown").hide();
+        MarkerFactory.CloseAllOpenUnpinnedInfoWindows();
     }
 
     initialize() {
