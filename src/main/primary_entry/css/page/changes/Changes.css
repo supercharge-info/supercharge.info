@@ -98,7 +98,7 @@
 #changes-table .wide {
     display: inline;
 }
-@media (max-width: 928px) {
+@media (max-width: 1050px) {
     #changes-table .narrow {
         display: inline !important;
     }

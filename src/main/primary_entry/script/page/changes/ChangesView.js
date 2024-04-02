@@ -15,8 +15,6 @@ import Strings from "../../util/Strings";
 export default class ChangesView {
 
     constructor(filterDialog) {
-        window.jquery = $;
-
         const table = $("#changes-table");
         const tableBody = table.find("tbody");
         tableBody.on('click', ChangesView.handleChangeClick);
@@ -190,15 +188,16 @@ export default class ChangesView {
         if (site.accessNotes) entries += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
         const content = site.hours
-            ? `<td width="39%">${address}</td>
+            ? `<td width="35%">${address}</td>
                <td width="24%"><div class="${site.hours ? 'limited' : ''}">${site.hours ?? ''}</div></td>`
-            : `<td width="63%"${address}</td>`;
+            : `<td width="59%"${address}</td>`;
         return `
             <table class="child">
                 <tr>
                     <td width="1%"></td>
                     ${content}
-                    <td width="36%">${entries}</td>
+                    <td width="1%"></td>
+                    <td width="39%">${entries}</td>
                 </tr>
             </table>`;
     }
@@ -277,7 +276,7 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
                     },
-                    "width": "39%"
+                    "width": "35%"
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -296,7 +295,7 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildDetails(row);
                     },
-                    "width": "24%"
+                    "width": "28%"
                 },
                 {
                     "data": (row, type, val, meta) => {
