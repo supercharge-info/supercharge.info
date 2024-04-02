@@ -184,11 +184,26 @@ PAGE: map
                         data-live-search="true"></select>
                 <select class="form-control status-select hidden"
                         multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
                         title="Any Status"></select>
                 <select class="form-control stalls-select hidden"></select>
                 <select class="form-control power-select hidden"></select>
+                <select class="form-control stallType-select hidden"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
+                        title="Any Stalls"></select>
+                <select class="form-control plugType-select hidden"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
+                        title="Any Plugs"></select>
+                <select class="form-control parking-select hidden"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 1"
+                        title="Any Parking"></select>
                 <select class="form-control otherEVs-select hidden"></select>
-                <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text"/>
+                <select class="form-control solar-select hidden"></select>
+                <select class="form-control battery-select hidden"></select>
+                <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="8"/>
                 <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
                 <span id="map-result-count"></span>
             </form>
@@ -329,8 +344,22 @@ PAGE: data
                     title="Any Status"></select>
             <select class="form-control stalls-select hidden"></select>
             <select class="form-control power-select hidden"></select>
+            <select class="form-control stallType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Stalls"></select>
+            <select class="form-control plugType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Plugs"></select>
+            <select class="form-control parking-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 1"
+                    title="Any Parking"></select>
             <select class="form-control otherEVs-select hidden"></select>
-            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text"/>
+            <select class="form-control solar-select hidden"></select>
+            <select class="form-control battery-select hidden"></select>
+            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="12"/>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="data-result-count"></span>
         </form>
@@ -418,12 +447,31 @@ PAGE: changes
             <button class="clear stalls-clear hidden" type="button">×</button>
             <select class="form-control power-select hidden"></select>
             <button class="clear power-clear hidden" type="button">×</button>
+            <select class="form-control stallType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Stalls"></select>
+            <button class="clear stallType-clear hidden" type="button">×</button>
+            <select class="form-control plugType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Plugs"></select>
+            <button class="clear plugType-clear hidden" type="button">×</button>
+            <select class="form-control parking-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 1"
+                    title="Any Parking"></select>
+            <button class="clear parking-clear hidden" type="button">×</button>
             <select class="form-control otherEVs-select hidden"></select>
             <button class="clear otherEVs-clear hidden" type="button">×</button>
-            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text"/>
-            <button class="clear search-clear hidden" type="button">×</button>
+            <select class="form-control solar-select hidden"></select>
+            <button class="clear solar-clear hidden" type="button">×</button>
+            <select class="form-control battery-select hidden"></select>
+            <button class="clear battery-clear hidden" type="button">×</button>
             <select class="form-control changetype-select"></select>
             <button class="clear changetype-clear hidden">×</button>
+            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="12"/>
+            <button class="clear search-clear hidden" type="button">×</button>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="changes-result-count"></span>
         </form>
@@ -545,7 +593,7 @@ PAGE: about
     <h3>Plug icons</h3>
     <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons. (Click each name below for the source.)</i>
     <div class="details">
-        • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">NACS</a>
+        • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">Tesla/NACS</a>
         • <img src="/images/CCS1.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type1-ccs.svg" target="_blank">CCS1</a>
         • <img src="/images/CCS2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Combo-ccs-eu.svg" target="_blank">CCS2</a>
         • <img src="/images/TYPE2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type_2_mennekes.svg" target="_blank">Type2</a>
@@ -824,6 +872,7 @@ Dialogs
                             <th>Status</th>
                             <td><select class="form-control status-select"
                                         multiple data-actions-box="true"
+                                        data-selected-text-format="count > 5"
                                         data-container="body"
                                         title="Any Status"></select></td>
                             <td class="btn-xs show-always">
@@ -831,7 +880,7 @@ Dialogs
                             </td>
                         </tr>
                         <tr>
-                            <th>Stalls</th>
+                            <th>Stall Count</th>
                             <td><select class="form-control stalls-select"
                                         data-container="body"></select></td>
                             <td class="btn-xs show-always">
@@ -847,6 +896,39 @@ Dialogs
                             </td>
                         </tr>
                         <tr>
+                            <th>Stall Type</th>
+                            <td><select class="form-control stallType-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 3"
+                                        data-container="body"
+                                        title="Any Stalls"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="stallType-show" name="stallType-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Plug Type</th>
+                            <td><select class="form-control plugType-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 3"
+                                        data-container="body"
+                                        title="Any Plugs"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="plugType-show" name="plugType-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Parking</th>
+                            <td><select class="form-control parking-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 1"
+                                        data-container="body"
+                                        title="Any Parking"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="parking-show" name="parking-show"/>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Vehicles</th>
                             <td><select class="form-control otherEVs-select"
                                         data-container="body"></select></td>
@@ -855,8 +937,24 @@ Dialogs
                             </td>
                         </tr>
                         <tr>
+                            <th>Solar</th>
+                            <td><select class="form-control solar-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="solar-show" name="solar-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Battery</th>
+                            <td><select class="form-control battery-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="battery-show" name="battery-show"/>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Search Text</th>
-                            <td></td>
+                            <td><input class="form-control search-input" title="Search Text" placeholder="Search Text"/></td>
                             <td class="btn-xs show-always">
                                 <input type="checkbox" role="switch" id="search-show" name="search-show" checked/>
                             </td>

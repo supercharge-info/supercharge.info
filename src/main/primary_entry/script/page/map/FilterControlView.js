@@ -33,7 +33,12 @@ export default class FilterControlView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
+        userConfig.setStallType(this.filterControl.getStallType());
+        userConfig.setPlugType(this.filterControl.getPlugType());
+        userConfig.setParking(this.filterControl.getParking());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setSolar(this.filterControl.getSolar());
+        userConfig.setBattery(this.filterControl.getBattery());
         userConfig.setSearch(this.filterControl.getSearch());
         this.filterControl.updateVisibility();
         EventBus.dispatch("unpin-sites-event");

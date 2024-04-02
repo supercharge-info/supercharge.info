@@ -43,7 +43,12 @@ export default class DataView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
+        userConfig.setStallType(this.filterControl.getStallType());
+        userConfig.setPlugType(this.filterControl.getPlugType());
+        userConfig.setParking(this.filterControl.getParking());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setSolar(this.filterControl.getSolar());
+        userConfig.setBattery(this.filterControl.getBattery());
         userConfig.setSearch(this.filterControl.getSearch());
         this.filterControl.updateVisibility();
     }
@@ -86,10 +91,8 @@ export default class DataView {
             if (site.facilityHours) entries += ` • ${site.facilityHours}`;
             entries += '</li>';
         }
-        if (site.parkingId !== 1) {
-            const park = Sites.getParking().get(site.parkingId);
-            entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
-        }
+        const park = Sites.getParking().get(site.parkingId);
+        entries += `<li title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</li>`;
         if (site.addressNotes) entries += `<li class="notes"><b>Address notes:</b><br/>${site.addressNotes}</li>`;
         if (site.accessNotes) entries += `<li class="notes"><b>Access notes:</b><br/>${site.accessNotes}</li>`;
 
@@ -101,6 +104,12 @@ export default class DataView {
                     <li class="notes"><div class="links">${DataView.buildLinks(site)}</div></li>
                 </ul>
             </div>`;
+    }
+
+    static buildPower(supercharger) {
+        const site = Supercharger.fromJSON(supercharger);
+        return (site.stallType && site.plugType ? '' : '≤ ') + site.powerKilowatt;
+
     }
 
     static buildStatus(supercharger) {
@@ -162,7 +171,12 @@ export default class DataView {
                     d.status = dataView.filterControl.getStatus().join(",");
                     d.stalls = dataView.filterControl.getStalls();
                     d.power = dataView.filterControl.getPower();
+                    d.stallType = dataView.filterControl.getStallType()?.join(",");
+                    d.plugType = dataView.filterControl.getPlugType()?.join(",");
+                    d.parking = dataView.filterControl.getParking()?.join(",");
                     d.otherEVs = dataView.filterControl.getOtherEVs();
+                    d.solarCanopy = dataView.filterControl.getSolar();
+                    d.battery = dataView.filterControl.getBattery();
                     d.search = dataView.filterControl.getSearch();
                 }
             },
@@ -198,7 +212,7 @@ export default class DataView {
                 {
                     "data": "powerKilowatt",
                     "render": (data, type, row, meta) => {
-                        return data || '';
+                        return DataView.buildPower(row);
                     },
                     "className": "number",
                     "width": "1%"

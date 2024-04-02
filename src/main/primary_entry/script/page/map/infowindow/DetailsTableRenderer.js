@@ -45,10 +45,8 @@ export default function buildDetailsDiv(site, displayUnit) {
     }
 
     // Parking
-    if (site.parkingId) {
-        const park = Sites.getParking().get(site.parkingId);
-        div += `<tr title='${park?.description ?? '(unknown)'}'><th>Parking</th><td>${park?.name ?? '(unknown)'}</td></tr>`;
-    }
+    const park = Sites.getParking().get(site.parkingId);
+    div += `<tr title='${park?.description ?? '(unknown)'}'><th>Parking</th><td>${park?.name ?? '(unknown)'}</td></tr>`;
 
     // Date Opened
     if (!Objects.isNullOrUndef(site.dateOpened)) {
@@ -89,8 +87,8 @@ export default function buildDetailsDiv(site, displayUnit) {
     div += "</table>";
 
     // Notes
-    if (site.addressNotes) div += `<div class="notes"><b>Address Notes:</b><br/>${site.addressNotes}</div>`;
-    if (site.accessNotes) div += `<div class="notes"><b>Access Notes:</b><br/>${site.accessNotes}</div>`;
+    if (site.addressNotes) div += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
+    if (site.accessNotes) div += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
     div += '<hr/></div>';
 
     return div;

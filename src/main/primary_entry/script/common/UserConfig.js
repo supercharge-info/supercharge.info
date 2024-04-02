@@ -35,19 +35,29 @@ class UserConfig {
             stalls: null,
             power: null,
             otherEVs: null,
+            stallType: [],
+            plugType: [],
+            parking: [],
+            solar: null,
+            battery: null,
             search: null
         };
     }
 
     initShowAlways() {
         this.showAlways = {
-            region: true,
+            region: false,
             country: false,
             state: false,
             status: true,
             stalls: false,
             power: false,
             otherEVs: false,
+            stallType: false,
+            plugType: false,
+            parking: false,
+            solar: false,
+            battery: false,
             search: true
         };
     }
@@ -108,8 +118,32 @@ class UserConfig {
         this.scheduleSave();
     }
 
+    setStallType(newStallType) {
+        this.filter.stallType = newStallType;
+        this.scheduleSave();
+    }
+
+    setPlugType(newPlugType) {
+        this.filter.plugType = newPlugType;
+        this.scheduleSave();
+    }
+
+    setParking(newParking) {
+        this.filter.parking = newParking;
+        this.scheduleSave();
+    }
+
+    setSolar(newSolar) {
+        this.filter.solar = newSolar;
+        this.scheduleSave();
+    }
+
+    setBattery(newBattery) {
+        this.filter.battery = newBattery;
+        this.scheduleSave();
+    }
+
     setSearch(newSearch) {
-        console.log(`userconfig search '${newSearch}'`);
         this.filter.search = newSearch;
         this.scheduleSave();
     }
@@ -174,6 +208,11 @@ class UserConfig {
             || this.filter.stalls !== null
             || this.filter.power !== null
             || this.filter.otherEVs !== null
+            || this.filter.stallType.length > 0
+            || this.filter.plugType.length > 0
+            || this.filter.parking > 0
+            || this.filter.solar !== null
+            || this.filter.battery !== null
             || this.filter.search !== null;
     }
 
@@ -220,20 +259,33 @@ class UserConfig {
         this.filter.status     = json.filter?.status     || this.filter?.status;
         this.filter.stalls     = json.filter?.stalls     || this.filter?.stalls;
         this.filter.power      = json.filter?.power      || this.filter?.power;
-        this.filter.otherEVs   =
-            typeof json.filter?.otherEVs === 'boolean'
-                ? String(json.filter?.otherEVs) 
-                : json.filter?.otherEVs || this.filter?.otherEVs;
+        this.filter.stallType  = json.filter?.stallType  || this.filter?.stallType;
+        this.filter.plugType   = json.filter?.plugType   || this.filter?.plugType;
+        this.filter.parking    = json.filter?.parking    || this.filter?.parking;
+        this.filter.otherEVs   = typeof json.filter?.otherEVs === 'boolean'
+            ? String(json.filter?.otherEVs) 
+            : json.filter?.otherEVs || this.filter?.otherEVs;
+        this.filter.solar      = typeof json.filter?.solar === 'boolean'
+            ? String(json.filter?.solar) 
+            : json.filter?.solar || this.filter?.solar;
+        this.filter.battery    = typeof json.filter?.battery === 'boolean'
+            ? String(json.filter?.battery) 
+            : json.filter?.battery || this.filter?.battery;
         this.filter.search     = json.filter?.search     || this.filter?.search;
 
-        this.showAlways.region   = json.showAlways?.region   || this.showAlways?.region;
-        this.showAlways.country  = json.showAlways?.country  || this.showAlways?.country;
-        this.showAlways.state    = json.showAlways?.state    || this.showAlways?.state;
-        this.showAlways.status   = json.showAlways?.status   || this.showAlways?.status;
-        this.showAlways.stalls   = json.showAlways?.stalls   || this.showAlways?.stalls;
-        this.showAlways.power    = json.showAlways?.power    || this.showAlways?.power;
-        this.showAlways.otherEVs = json.showAlways?.otherEVs || this.showAlways?.otherEVs;
-        this.showAlways.search   = json.showAlways?.search   || this.showAlways?.search;
+        this.showAlways.region    = json.showAlways?.region    || this.showAlways?.region;
+        this.showAlways.country   = json.showAlways?.country   || this.showAlways?.country;
+        this.showAlways.state     = json.showAlways?.state     || this.showAlways?.state;
+        this.showAlways.status    = json.showAlways?.status    || this.showAlways?.status;
+        this.showAlways.stalls    = json.showAlways?.stalls    || this.showAlways?.stalls;
+        this.showAlways.power     = json.showAlways?.power     || this.showAlways?.power;
+        this.showAlways.stallType = json.showAlways?.stallType || this.showAlways?.stallType;
+        this.showAlways.plugType  = json.showAlways?.plugType  || this.showAlways?.plugType;
+        this.showAlways.parking   = json.showAlways?.parking   || this.showAlways?.parking;
+        this.showAlways.otherEVs  = json.showAlways?.otherEVs  || this.showAlways?.otherEVs;
+        this.showAlways.solar     = json.showAlways?.solar     || this.showAlways?.solar;
+        this.showAlways.battery   = json.showAlways?.battery   || this.showAlways?.battery;
+        this.showAlways.search    = json.showAlways?.search    || this.showAlways?.search;
 
         this.customMarkers = json.customMarkers || this.customMarkers;
 

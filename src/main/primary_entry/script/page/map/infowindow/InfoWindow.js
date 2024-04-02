@@ -161,8 +161,7 @@ export default class InfoWindow {
         }
 
         if (!site.isUserAdded()) {
-            popupContent += `<div class='statusLine'>${site.getStallPlugSummary(true)}`;
-            popupContent += site.powerKilowatt > 0 ? ` • ${site.powerKilowatt} kW` : '';
+            popupContent += `<div class='statusLine'>${site.getStallPlugSummary(true)}${site.formatPower(' • ')}`;
     
             //
             // Status, other attributes, limited hours

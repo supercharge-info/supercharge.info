@@ -3,11 +3,12 @@
     max-height: 98%;
 }
 #filter-dialog .modal-body {
+    padding-top: 5px;
     max-height: calc(100vh - 125px);
 }
 
 #filter-dialog td {
-    padding: 8px;
+    padding: 6px 8px;
     white-space: nowrap;
 }
 #filter-dialog select, #filter-dialog button, #filter-dialog td {
@@ -61,7 +62,7 @@ button.reset span.glyphicon-filter {
 .bootstrap-select .dropdown-toggle .caret {
     position: inherit;
 }
-.bootstrap-select button.dropdown-toggle {
+.bootstrap-select button.dropdown-toggle, input.form-control.filled {
     background-color: #def;
 }
 .bootstrap-select button.dropdown-toggle.bs-placeholder, input.form-control::placeholder {
@@ -70,7 +71,7 @@ button.reset span.glyphicon-filter {
     background-color: #fff;
     font-style: italic;
 }
-.bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button.btn:hover {
+.bootstrap-select button.dropdown-toggle.bs-placeholder:hover, .form-inline button.btn:hover, input.form-control:hover, input.form-control:hover::placeholder {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
@@ -83,11 +84,11 @@ ul.dropdown-menu.inner {
     overflow-y: auto;
 }
 
-.status-select .filter-option-inner-inner span {
+.filter-option-inner-inner span {
     font-size: 0px;
 }
 
-.status-select img, button.form-control.filter img {
+.filter-option-inner-inner img, .dropdown-menu.inner img, button.form-control.filter img {
     width: 18px;
     height: 18px;
     margin: -3px 2px 0 2px;
@@ -108,6 +109,11 @@ ul.dropdown-menu.inner {
     height: 28px;
     width: auto;
     vertical-align: middle;
+}
+
+input.form-control {
+    border: 1px solid #ddd;
+    height: 28px;
 }
 
 button.clear {

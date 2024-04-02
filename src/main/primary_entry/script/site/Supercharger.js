@@ -11,7 +11,8 @@ import ServiceURL from "../common/ServiceURL";
 
 
 const BASE_STALLS = ['v2', 'v3', 'v4', 'urban'];
-const BASE_PLUGS = ['nacs', 'ccs1', 'ccs2', 'type2', 'gbt'];
+const BASE_PLUGS = ['tpc', 'nacs', 'ccs1', 'ccs2', 'type2', 'gbt'];
+const PLUG_DISPLAY = {'tpc': 'Tesla', 'nacs': 'NACS', 'ccs1': 'CCS1', 'ccs2': 'CCS2', 'type2': 'Type2', 'gbt': 'GB/T'};
 
 /**
  * Properties:
@@ -67,7 +68,9 @@ export default class Supercharger {
         if (search === "urban" && this.stalls?.urban > 0) return true;
         if (search.indexOf("access") === 0 && this.stalls?.accessible > 0) return true;
         if (search.indexOf("trailer") === 0 && this.stalls?.trailerFriendly > 0) return true;
-        if ((search === "tpc" || search === "nacs") && (this.plugs?.tpc > 0 || this.plugs?.nacs > 0)) return true;
+        if (search === "tesla" && (this.plugs?.tpc > 0 || this.plugs?.nacs > 0)) return true;
+        if (search === "tpc" && this.plugs?.tpc > 0) return true;
+        if (search === "nacs" && this.plugs?.nacs > 0) return true;
         if (search === "ccs1" && this.plugs?.ccs1 > 0) return true;
         if (search === "ccs2" && this.plugs?.ccs2 > 0) return true;
         if (search === "ccs" && (this.plugs?.ccs1 > 0 || this.plugs.ccs2 > 0)) return true;
@@ -149,16 +152,18 @@ export default class Supercharger {
         return Objects.isNullOrUndef(this.hours) ? "24/7" : this.hours;
     }
 
-    formatPower() {
-        return Objects.isNullOrUndef(this.powerKilowatt) ? "" : this.powerKilowatt;
+    formatPower(prefix) {
+        if (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt === 0) return '';
+        return `${prefix}${this.stallType && this.plugType && this.stallType.indexOf('+') < 0 ? '' : 'up to '}${this.powerKilowatt} kW`;
     }
 
-    getStallPlugSummary(useImages) {
-        if (!this.stalls || !this.numStalls || this.numStalls == 0) return '';
+    getStallPlugSummary(useImages, count) {
+        count = count ?? this.numStalls;
+        if (!this.stalls || !count || count === 0) return '';
 
-        var summary = `${this.numStalls} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
+        var summary = `${count} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
         if (this.plugType) {
-            summary += useImages ? this.plugImg(this.plugType) : this.plugType.toUpperCase();
+            summary += useImages ? this.plugImg(this.plugType) : PLUG_DISPLAY[this.plugType];
         } else {
             summary += 'stalls';
         }
@@ -175,12 +180,12 @@ export default class Supercharger {
         const sitestalls = this.getStallPlugSummary(false);
         return `<div>${this.displayName} (${this.status?.displayName})</div>` +
             (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
-            (Objects.isNullOrUndef(this.numStalls) || this.numStalls == 0 ? "" : ` • ${sitestalls}`) +
-            (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt == 0 ? "" : ` • ${this.powerKilowatt} kW`);
+            (Objects.isNullOrUndef(this.numStalls) || this.numStalls === 0 ? "" : ` • ${sitestalls}`) +
+            this.formatPower(' • ');
 	}
-
+    
     getShortMarkerTitle() {
-        return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} @ ${this.powerKilowatt || '?'} kW)`);
+        return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} ${this.stallType && this.plugType ? '@' : '@ ≤'} ${this.powerKilowatt || '?'} kW)`);
     }
 
     getMarkerMultiplier() {
@@ -201,8 +206,7 @@ export default class Supercharger {
     }
 
     plugImg(plug) {
-        const up = plug.toUpperCase();
-        return `<img class="details" src="/images/${up}.svg" title="${up}" alt="${up}"/>`;
+        return `<img class="details" src="/images/${plug.toUpperCase()}.svg" title="${PLUG_DISPLAY[plug]}" alt="${PLUG_DISPLAY[plug]}"/>`;
     }
 
     getGmapLink() {
@@ -268,19 +272,17 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.stalls = jsonObject.stalls;
     if (supercharger.stalls) {
         for (const s of BASE_STALLS) {
-            if (supercharger.stalls[s] === supercharger.numStalls) {
-                supercharger.stallType = s;
-                break;
-            }
+           if (supercharger.stalls[s] > 0 && !supercharger.stallType) supercharger.stallType = Strings.upperCaseInitial(s);
+           else if (supercharger.stalls[s] > 0) supercharger.stallType += '+' + Strings.upperCaseInitial(s);
         }
     }
     supercharger.plugs = jsonObject.plugs;
     if (supercharger.plugs) {
         // For now at least, treat TPC the same as NACS
-        if (supercharger.plugs?.tpc > 0) {
-            supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
-            delete supercharger.plugs.tpc;
-        }
+        //if (supercharger.plugs?.tpc > 0) {
+        //    supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
+        //    delete supercharger.plugs.tpc;
+        //}
         for (const p of BASE_PLUGS) {
             // if we already found a plugType and there are more base plugs, get rid of the plugType and stop looking
             if (supercharger.plugs[p] > 0 && supercharger.plugType) {

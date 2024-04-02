@@ -71,9 +71,14 @@ export default class ChangesView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
+        userConfig.setStallType(this.filterControl.getStallType());
+        userConfig.setPlugType(this.filterControl.getPlugType());
+        userConfig.setParking(this.filterControl.getParking());
         userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setSolar(this.filterControl.getSolar());
+        userConfig.setBattery(this.filterControl.getBattery());
         userConfig.setSearch(this.filterControl.getSearch());
-        //console.log(`search='${userConfig.search}'`);
+        this.filterControl.handleSearchInput();
         this.filterControl.updateVisibility();
     }
 
@@ -129,22 +134,23 @@ export default class ChangesView {
     }
     
     static buildDetails(changeRow) {
-        const kw = changeRow.powerKilowatt > 0 ? ` • ${changeRow.powerKilowatt} kW` : '';
-
         const site = Sites.getById(changeRow.siteId);
+        const count = changeRow.prevCount > 0 && changeRow.prevCount !== changeRow.stallCount 
+            ? `${changeRow.prevCount}➜<b>${changeRow.stallCount}</b>`
+            : changeRow.stallCount;
+            
         if (!site) {
-            return `${changeRow.stallCount} stalls${kw}`;
+            const kw = changeRow.powerKilowatt > 0 ? ` • up to ${changeRow.powerKilowatt} kW` : '';
+            return `${count} stalls${kw}`;
         }
 
-        //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+        var content = site.getStallPlugSummary(true, count) + site.formatPower(' • ');
 
-        var content = site.getStallPlugSummary(true) + kw;
-
-        if (site?.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
-        if (site?.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
-        if (site?.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
+        if (site.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
+        if (site.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
         
-        const s = site?.status;
+        const s = site.status;
         if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
             content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
         }
@@ -183,11 +189,15 @@ export default class ChangesView {
         if (site.addressNotes) address += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
         if (site.accessNotes) entries += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
+        const content = site.hours
+            ? `<td width="39%">${address}</td>
+               <td width="24%"><div class="${site.hours ? 'limited' : ''}">${site.hours ?? ''}</div></td>`
+            : `<td width="63%"${address}</td>`;
         return `
             <table class="child">
                 <tr>
                     <td width="1%"></td>
-                    <td width="63%">${address}</td>
+                    ${content}
                     <td width="36%">${entries}</td>
                 </tr>
             </table>`;
@@ -245,7 +255,12 @@ export default class ChangesView {
                     d.status = changesView.filterControl.getStatus().join(",");
                     d.stalls = changesView.filterControl.getStalls();
                     d.power = changesView.filterControl.getPower();
+                    d.stallType = changesView.filterControl.getStallType()?.join(",");
+                    d.plugType = changesView.filterControl.getPlugType()?.join(",");
+                    d.parking = changesView.filterControl.getParking()?.join(",");
                     d.otherEVs = changesView.filterControl.getOtherEVs();
+                    d.solarCanopy = changesView.filterControl.getSolar();
+                    d.battery = changesView.filterControl.getBattery();
                     d.search = changesView.filterControl.getSearch();
                 }
             },
