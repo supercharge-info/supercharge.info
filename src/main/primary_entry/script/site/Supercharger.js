@@ -270,15 +270,15 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.battery = jsonObject.battery;
     supercharger.otherEVs = jsonObject.otherEVs;
     supercharger.stalls = jsonObject.stalls;
-    if (supercharger.stalls) {
+    if (supercharger.stalls && (supercharger.stalls.other ?? 0) === 0) {
         for (const s of BASE_STALLS) {
            if (supercharger.stalls[s] > 0 && !supercharger.stallType) supercharger.stallType = Strings.upperCaseInitial(s);
            else if (supercharger.stalls[s] > 0) supercharger.stallType += '+' + Strings.upperCaseInitial(s);
         }
     }
     supercharger.plugs = jsonObject.plugs;
-    if (supercharger.plugs) {
-        // For now at least, treat TPC the same as NACS
+    if (supercharger.plugs && (supercharger.plugs.other ?? 0) === 0) {
+        // If we decide to treat TPC the same as NACS:
         //if (supercharger.plugs?.tpc > 0) {
         //    supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
         //    delete supercharger.plugs.tpc;

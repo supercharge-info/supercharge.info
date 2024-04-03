@@ -72,17 +72,6 @@
     text-decoration: none;
 }
 
-#changes-table .child {
-    width: 99%;
-    cursor: auto;
-    background-color: #ffd;
-    margin-left: 4px;
-    border-left: 4px dotted #999;
-}
-#changes-table .child tr, #changes-table .child td {
-    padding: 1px 8px;
-    vertical-align: top;
-}
 #changes-table li {
     white-space: pre;
 }

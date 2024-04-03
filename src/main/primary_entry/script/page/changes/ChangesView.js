@@ -159,45 +159,41 @@ export default class ChangesView {
         const site = Sites.getById(changeRow.siteId);
         if (!site) return '';
 
-        var address = $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+        var left = site.hours ? `<div class="limited">${site.hours}</div>` : '';
+        var right = `<div><b>Stalls:</b>`;
 
-        var entries = '<b>Stalls:</b>';
+        left += $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+
         Object.keys(site.stalls).forEach(s => {
             if (site.stalls[s] > 0) {
-                entries += ` • ${site.stalls[s]} `;
-                if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
-                else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
-                else entries += Strings.upperCaseInitial(s);
+                right += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') right += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') right += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else right += Strings.upperCaseInitial(s);
             }
         });
-        entries += '<br/><b>Plugs:</b>';
+        right += '<br/><b>Plugs:</b>';
         Object.keys(site.plugs).forEach(p => {
             if (site.plugs[p] > 0) {
-                if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+                if (p !== 'multi') right += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
             }
         });
         if (site.facilityName) {
-            entries += `<br/><b>Host:</b> ${site.facilityName}`;
-            if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+            right += `<br/><b>Host:</b> ${site.facilityName}`;
+            if (site.facilityHours) right += ` • ${site.facilityHours}`;
         }
-        if (site.parkingId !== 1) {
-            const park = Sites.getParking().get(site.parkingId);
-            entries += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
-        }
-        if (site.addressNotes) address += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
-        if (site.accessNotes) entries += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
+        const park = Sites.getParking().get(site.parkingId);
+        right += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
+        if (site.addressNotes) left += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
+        if (site.accessNotes) right += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
-        const content = site.hours
-            ? `<td width="35%">${address}</td>
-               <td width="24%"><div class="${site.hours ? 'limited' : ''}">${site.hours ?? ''}</div></td>`
-            : `<td width="59%"${address}</td>`;
         return `
             <table class="child">
                 <tr>
                     <td width="1%"></td>
-                    ${content}
+                    <td width="59%">${left}</td>
                     <td width="1%"></td>
-                    <td width="39%">${entries}</td>
+                    <td width="39%">${right}</td>
                 </tr>
             </table>`;
     }
@@ -322,6 +318,11 @@ export default class ChangesView {
                 $("#changes-table img, #changes-table span.details").each(function () {
                     window.changesIcons.push($(this));
                 });
+
+                const icon = $('#changes-table th.dt-control b')[0];
+                icon.className = icon.className.replace("down", "right");
+                icon.title = "show all details";
+
                 clearInterval(window.changesInterval);
                 window.changesInterval = setInterval(() => {
                     // Asynchronously initialize tooltips, starting from both ends of the table and working toward the middle
