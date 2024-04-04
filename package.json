@@ -52,6 +52,7 @@
     "core-js": "^3.31.1",
     "datatables.net": "^1.13.5",
     "datatables.net-bs": "^1.13.5",
+    "dayjs": "^1.11.10",
     "highcharts": "^10.3.3",
     "jquery": "3.5.1",
     "jquery-validation": "^1.19.5",

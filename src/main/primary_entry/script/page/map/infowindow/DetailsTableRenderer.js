@@ -7,9 +7,7 @@ import Sites from "../../../site/Sites";
  * This is the content in the InfoWindow that shows up when the user clicks 'details'.
  */
 export default function buildDetailsDiv(site, displayUnit) {
-    let div = "";
-    div += "<div class='info-window-details'>";
-    div += "<table>";
+    var div = "<div class='info-window-details details'><table>";
 
     // Stalls
     if (site.stalls) {
@@ -20,7 +18,10 @@ export default function buildDetailsDiv(site, displayUnit) {
                 if (s === 'accessible') div += '<img src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
                 else if (s === 'trailerFriendly') div += '<img src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
                 else div += Strings.upperCaseInitial(s);
-
+            } else if (s === 'accessible') {
+                div += ' • <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+            } else if (s === 'trailerFriendly') {
+                div += ' • <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
             }
         });
         div += "</td></tr>";

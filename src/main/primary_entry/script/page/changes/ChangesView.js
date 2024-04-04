@@ -142,17 +142,17 @@ export default class ChangesView {
             return `${count} stalls${kw}`;
         }
 
-        var content = site.getStallPlugSummary(true, count) + site.formatPower(' • ');
+        var content = '<span class="details">' + site.getStallPlugSummary(true, count) + site.formatPower(' • ');
 
-        if (site.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
-        if (site.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
-        if (site.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
+        if (site.otherEVs)     content += ' <img title="other EVs OK" src="/images/car-electric.svg"/>';
+        if (site.solarCanopy)  content += ' <img title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)      content += ' <img title="battery backup" src="/images/battery-charging.svg"/>';
         
         const s = site.status;
         if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
             content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
         }
-        return content;
+        return content + '</span>';
     }
 
     static buildChild(parentTR, changeRow) {
@@ -160,16 +160,20 @@ export default class ChangesView {
         if (!site) return '';
 
         var left = site.hours ? `<div class="limited">${site.hours}</div>` : '';
-        var right = `<div><b>Stalls:</b>`;
-
         left += $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+        if (site.addressNotes) left += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
 
+        var right = `<b>Stalls:</b>`;
         Object.keys(site.stalls).forEach(s => {
             if (site.stalls[s] > 0) {
                 right += ` • ${site.stalls[s]} `;
-                if (s === 'accessible') right += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
-                else if (s === 'trailerFriendly') right += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                if (s === 'accessible') right += '<img src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') right += '<img src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
                 else right += Strings.upperCaseInitial(s);
+            } else if (s === 'accessible') {
+                right += ' • <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+            } else if (s === 'trailerFriendly') {
+                right += ' • <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
             }
         });
         right += '<br/><b>Plugs:</b>';
@@ -184,7 +188,6 @@ export default class ChangesView {
         }
         const park = Sites.getParking().get(site.parkingId);
         right += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
-        if (site.addressNotes) left += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
         if (site.accessNotes) right += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
         return `
@@ -193,7 +196,7 @@ export default class ChangesView {
                     <td width="1%"></td>
                     <td width="59%">${left}</td>
                     <td width="1%"></td>
-                    <td width="39%">${right}</td>
+                    <td width="39%" class="details">${right}</td>
                 </tr>
             </table>`;
     }

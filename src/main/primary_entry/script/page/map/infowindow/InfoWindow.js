@@ -3,6 +3,7 @@ import Analytics from "../../../util/Analytics";
 import rangeModel from "../RangeModel";
 import $ from "jquery";
 import L from "leaflet";
+import dayjs from "dayjs";
 import ServiceURL from "../../../common/ServiceURL";
 import EventBus from "../../../util/EventBus";
 import buildDetailsDiv from "./DetailsTableRenderer";
@@ -14,6 +15,8 @@ import "./InfoWindowListeners";
 export default class InfoWindow {
 
     constructor(mapApi, marker, site) {
+        var relativeTime = require('dayjs/plugin/relativeTime');
+        dayjs.extend(relativeTime);
 
         // reference fields
         this.marker = marker;
@@ -73,7 +76,7 @@ export default class InfoWindow {
 
     initTooltips() {
         $(".tooltip").tooltip("hide");
-        $(".info-window-content a, .info-window-content img, .info-window-content span.details").each(function (n, t) {
+        $(".info-window-content a, .info-window-content img, .info-window-content span").each(function (n, t) {
             $(t).tooltip({ "container": "body" });
         });
     }
@@ -166,9 +169,10 @@ export default class InfoWindow {
             //
             // Status, other attributes, limited hours
             //
-            var days = site.isOpen() ? Math.floor((Date.now() - new Date(site.dateOpened)) / 86400000): site.statusDays;
-            popupContent += ` • <span class='${site.status.className}'><img class="status" src='${site.status.getIcon(site)}' title='${site.status.getTitle(site)}'/> `;
-            popupContent += `${days} day${days == 1 ? "" : "s"}</span>`;
+            var statusDate = site.isOpen() ? dayjs(site.dateOpened) : dayjs().subtract(site.statusDays, 'd');
+            var dur = dayjs().to(statusDate, true), days = dayjs().diff(statusDate, 'd');
+            popupContent += ` • <span class="${site.status.className}" title="${site.status.getTitle(site)}${dur.indexOf('day') < 0 ? ` ${days} days` : ''}">`;
+            popupContent += `<img class="status" src="${site.status.getIcon(site)}"/> ${dur}</span>`;
     
             if (site.otherEVs || site.solarCanopy || site.battery) popupContent += ' • ';
             if (site.otherEVs)     popupContent += '<img title="other EVs OK" src="/images/car-electric.svg"/>';
@@ -206,14 +210,14 @@ export default class InfoWindow {
 function _buildHistoryDiv(site) {
     let div = "";
     div += `<div class='info-window-details' id='nearby-details-${site.id}'>`;
-    div += "<table style='width:100%;'>";
+    div += '<table style="width: 100%;"">';
 
-    div += "<tr style='font-weight:bold;'><td>Date</td><td>Status</td></tr>";
+    div += '<tr style="font-weight:bold;"><td>Date</td><td>Status</td><td class="number">Stalls</td></tr>';
 
     if (!site.history.length) {
-        div += `<tr><td>Unknown</td><td class='${site.status.value.toLowerCase().replace('_','-')}'>${site.status.value}</td></tr>`;
+        div += `<tr><td>Unknown</td><td class="${site.status.value.toLowerCase().replace('_','-')}">${site.status.value}</td></tr>`;
     } else {
-        div += site.history.map(a => `<tr><td>${a.date}</td><td class='${a.siteStatus.toLowerCase().replace('_','-')}'>${a.siteStatus}</td></tr>`).join('');
+        div += site.history.map(a => `<tr class="notes"><td>${a.date}</td><td class="${a.siteStatus.toLowerCase().replace('_','-')}">${a.siteStatus}</td><td class="number">${a.stallCount}</td></tr>`).join('');
     }
 
     div += "</table>";

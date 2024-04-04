@@ -79,7 +79,7 @@ export default class DataView {
         else if (showHide !== 'hide' && !row.child.isShown()) {
             row.child(DataView.buildChild(tr, row.data())).show();
             $(".tooltip").tooltip("hide");
-            $("#changes-table .child img, #changes-table .child span.details").each(function (n, t) {
+            $("#supercharger-data-table .child img, #supercharger-data-table .child span").each(function (n, t) {
                 $(t).tooltip({ "container": "body" });
             });
         }
@@ -101,23 +101,6 @@ export default class DataView {
         const site = Supercharger.fromJSON(dataRow);
 
         var left = site.hours ? `<div class="limited">${site.hours}</div>` : '';
-        var right = `<div><b>Stalls:</b>`;
-
-        Object.keys(site.stalls).forEach(s => {
-            if (site.stalls[s] > 0) {
-                right += ` • ${site.stalls[s]} `;
-                if (s === 'accessible') right += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
-                else if (s === 'trailerFriendly') right += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
-                else right += Strings.upperCaseInitial(s);
-            }
-        });
-        right += '</div><div><b>Plugs:</b>';
-        Object.keys(site.plugs).forEach(p => {
-            if (site.plugs[p] > 0) {
-                if (p !== 'multi') right += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
-            }
-        });
-        right += "</div>";
         if (site.facilityName) {
             left += `<div><b>Host:</b> ${site.facilityName}`;
             if (site.facilityHours) left += ` • ${site.facilityHours}`;
@@ -125,10 +108,28 @@ export default class DataView {
         }
         const park = Sites.getParking().get(site.parkingId);
         left += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
-
         if (site.addressNotes) left += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
-        if (site.accessNotes) right += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
+        var right = `<b>Stalls:</b>`;
+        Object.keys(site.stalls).forEach(s => {
+            if (site.stalls[s] > 0) {
+                right += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') right += '<img src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') right += '<img src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else right += Strings.upperCaseInitial(s);
+            } else if (s === 'accessible') {
+                right += ' • <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+            } else if (s === 'trailerFriendly') {
+                right += ' • <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
+            }
+        });
+        right += '<br/><b>Plugs:</b>';
+        Object.keys(site.plugs).forEach(p => {
+            if (site.plugs[p] > 0) {
+                if (p !== 'multi') right += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+            }
+        });
+        if (site.accessNotes) right += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
         return `
             <table class="child">
@@ -136,7 +137,7 @@ export default class DataView {
                     <td width="1%"></td>
                     <td width="49%">${left}</td>
                     <td width="1%"></td>
-                    <td width="39%">${right}</td>
+                    <td width="39%" class="details">${right}</td>
                     <td width="1%"></td>
                     <td width="9%" class="links">${DataView.buildLinks(site)}</td>
                 </tr>
@@ -256,7 +257,7 @@ export default class DataView {
                     "render": (data, type, row, meta) => {
                        return DataView.buildStalls(row);
                     },
-                    "className": "number",
+                    "className": "number details",
                     "width": "7%"
                 },
                 {

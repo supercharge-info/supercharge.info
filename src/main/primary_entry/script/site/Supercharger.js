@@ -161,17 +161,22 @@ export default class Supercharger {
         count = count ?? this.numStalls;
         if (!this.stalls || !count || count === 0) return '';
 
-        var summary = `${count} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
+        var summary = `<span class="details">${count} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
         if (this.plugType) {
             summary += useImages ? this.plugImg(this.plugType) : PLUG_DISPLAY[this.plugType];
         } else {
             summary += 'stalls';
         }
+        if (this.stalls.accessible === 0 && useImages) summary += ' <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+        if (this.stalls.trailerFriendly === 0 && useImages) summary += ' <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
+
         // special cases for the most common multi-connector stalls (MagicDock and CCS2+TYPE2)
         if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
             summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
         } else if (this.numStalls === this.plugs?.ccs2 && this.plugs?.ccs2 === this.plugs?.type2) {
             summary = `<span class="details" title="Dual-cable CCS2+TYPE2">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/CCS2.svg"/><img src="/images/TYPE2.svg"/>' : 'CCS2+TYPE2'}</span>`;
+        } else {
+            summary += '</span>';
         }
         return summary;
     }
@@ -206,7 +211,7 @@ export default class Supercharger {
     }
 
     plugImg(plug) {
-        return `<img class="details" src="/images/${plug.toUpperCase()}.svg" title="${PLUG_DISPLAY[plug]}" alt="${PLUG_DISPLAY[plug]}"/>`;
+        return `<img src="/images/${plug.toUpperCase()}.svg" title="${PLUG_DISPLAY[plug]}" alt="${PLUG_DISPLAY[plug]}"/>`;
     }
 
     getGmapLink() {
@@ -278,11 +283,11 @@ Supercharger.fromJSON = function (jsonObject) {
     }
     supercharger.plugs = jsonObject.plugs;
     if (supercharger.plugs && (supercharger.plugs.other ?? 0) === 0) {
-        // If we decide to treat TPC the same as NACS:
-        //if (supercharger.plugs?.tpc > 0) {
-        //    supercharger.plugs.nacs = (supercharger.plugs.nacs ?? 0) + supercharger.plugs.tpc;
-        //    delete supercharger.plugs.tpc;
-        //}
+        // For now at least, label every NACS plug as TPC ("Tesla") at all sites that are not marked as open to other EVs
+        if (supercharger.plugs?.nacs > 0 && !supercharger.otherEVs) {
+            supercharger.plugs.tpc = (supercharger.plugs.tpc ?? 0) + supercharger.plugs.nacs;
+            delete supercharger.plugs.nacs;
+        }
         for (const p of BASE_PLUGS) {
             // if we already found a plugType and there are more base plugs, get rid of the plugType and stop looking
             if (supercharger.plugs[p] > 0 && supercharger.plugType) {
