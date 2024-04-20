@@ -80,9 +80,10 @@ export default function buildDetailsDiv(site, displayUnit) {
     }
 
     // Other EVs
-    // TODO: distinguish NACS vs others?
     if (site.otherEVs) {
-        div += "<tr><th>Other EVs</th><td>Yes</td></tr>";
+        div += "<tr><th>Other EVs</th><td>Yes";
+        if (site.plugs?.nacs > 0 && (site.plugs?.ccs1 ?? 0) === 0) div += " (with NACS port or adapter)";
+        div += "</td></tr>";
     }
 
 
