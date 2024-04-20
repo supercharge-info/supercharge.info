@@ -185,9 +185,6 @@ export default class Supercharger {
         } else {
             summary += 'stalls';
         }
-        if (this.stalls.accessible === 0 && useImages) summary += ' <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
-        if (this.stalls.trailerFriendly === 0 && useImages) summary += ' <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
-
         // special cases for the most common multi-connector stalls (MagicDock and CCS2+TYPE2)
         if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
             summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
@@ -196,6 +193,14 @@ export default class Supercharger {
         } else {
             summary += '</span>';
         }
+
+        if (useImages) {
+            if (this.stalls.accessible === 0) summary += ' <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+            else if (this.stalls.accessible > 0) summary += ` <img src="/images/accessible.svg" title="${this.stalls.accessible} Accessible"/>`;
+            if (this.stalls.trailerFriendly === 0) summary += ' <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
+            else if (this.stalls.trailerFriendly > 0) summary += ` <img src="/images/trailer.svg" title="${this.stalls.trailerFriendly} Trailer-friendly"/>`;
+        }
+
         return summary;
     }
 
