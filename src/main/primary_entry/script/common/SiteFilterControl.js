@@ -141,7 +141,7 @@ export default class SiteFilterControl {
         this.setVisible("stallType", userConfig?.showAlways?.stallType || this.getStallType()?.length > 0);
         this.setVisible("plugType",  userConfig?.showAlways?.plugType  || this.getPlugType()?.length > 0);
         this.setVisible("parking",   userConfig?.showAlways?.parking   || this.getParking()?.length > 0);
-        this.setVisible("openTo",    userConfig?.showAlways?.openTo    || this.getOpenTo()    !== null);
+        this.setVisible("openTo",    userConfig?.showAlways?.openTo    || this.getOpenTo()?.length > 0);
         this.setVisible("solar",     userConfig?.showAlways?.solar     || this.getSolar()     !== null);
         this.setVisible("battery",   userConfig?.showAlways?.battery   || this.getBattery()   !== null);
         this.setVisible("search",    userConfig?.showAlways?.search    || this.getSearch()    !== null);
