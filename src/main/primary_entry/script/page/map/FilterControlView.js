@@ -36,7 +36,7 @@ export default class FilterControlView {
         userConfig.setStallType(this.filterControl.getStallType());
         userConfig.setPlugType(this.filterControl.getPlugType());
         userConfig.setParking(this.filterControl.getParking());
-        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setOpenTo(this.filterControl.getOpenTo());
         userConfig.setSolar(this.filterControl.getSolar());
         userConfig.setBattery(this.filterControl.getBattery());
         userConfig.setSearch(this.filterControl.getSearch());

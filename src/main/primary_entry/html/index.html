@@ -200,7 +200,9 @@ PAGE: map
                         multiple data-actions-box="true"
                         data-selected-text-format="count > 1"
                         title="Any Parking"></select>
-                <select class="form-control otherEVs-select hidden"></select>
+                <select class="form-control openTo-select hidden"
+                        multiple data-actions-box="true"
+                        title="Open To..."></select>
                 <select class="form-control solar-select hidden"></select>
                 <select class="form-control battery-select hidden"></select>
                 <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="8"/>
@@ -356,7 +358,9 @@ PAGE: data
                     multiple data-actions-box="true"
                     data-selected-text-format="count > 1"
                     title="Any Parking"></select>
-            <select class="form-control otherEVs-select hidden"></select>
+            <select class="form-control openTo-select hidden"
+                    multiple data-actions-box="true"
+                    title="Open To..."></select>
             <select class="form-control solar-select hidden"></select>
             <select class="form-control battery-select hidden"></select>
             <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="12"/>
@@ -463,8 +467,10 @@ PAGE: changes
                     data-selected-text-format="count > 1"
                     title="Any Parking"></select>
             <button class="clear parking-clear hidden" type="button">×</button>
-            <select class="form-control otherEVs-select hidden"></select>
-            <button class="clear otherEVs-clear hidden" type="button">×</button>
+            <select class="form-control openTo-select hidden"
+                    multiple data-actions-box="true"
+                    title="Open To..."></select>
+            <button class="clear openTo-clear hidden" type="button">×</button>
             <select class="form-control solar-select hidden"></select>
             <button class="clear solar-clear hidden" type="button">×</button>
             <select class="form-control battery-select hidden"></select>
@@ -477,14 +483,15 @@ PAGE: changes
             <span id="changes-result-count"></span>
         </form>
     </div>
-    <table id='changes-table' class='table table-condensed table-hover' style="width: 99%;">
+    <table id='changes-table' class='table table-condensed table-hover' style="width: 100%;">
         <thead>
         <tr>
             <th class="dt-control"><b class="glyphicon glyphicon-chevron-right btn-xs" title="show all details"></b></th>
             <th>Site Name <span class="text-muted wide"> (hover or expand row for address details)</span></th>
             <th><span class="narrow">Δ</span><span class="wide">Change</span> Date</th>
-            <th class="status">Status <span class="narrow">Δ</span><span class="wide">Change</span></th>
-            <th><span class="wide">Site </span>Details <span class="text-muted wide"> (expand row for more)</span></th>
+            <th class="status">Status Δ</th>
+            <th>Stalls<span class="wide"> + Plugs</span></th>
+            <th><span class="wide">Power + </span>Details</th>
             <th><span class="wide">Site </span>Links</th>
         </tr>
         </thead>
@@ -592,15 +599,21 @@ PAGE: about
     </div>
     
     <h3>Plug icons</h3>
-    <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons. (Click each name below for the source.)</i>
     <div class="details">
-        • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">Tesla/NACS</a>
+        • <img src="/images/TPC.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">Tesla</a>
+        • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">NACS</a>
         • <img src="/images/CCS1.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type1-ccs.svg" target="_blank">CCS1</a>
         • <img src="/images/CCS2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Combo-ccs-eu.svg" target="_blank">CCS2</a>
         • <img src="/images/TYPE2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type_2_mennekes.svg" target="_blank">Type2</a>
         • <img src="/images/GBT.svg"/> <a href="https://commons.wikimedia.org/wiki/File:GBT_20234_%28DC_outline%29.svg" target="_blank">GB/T</a>
     </div>
-
+    <div class="details">
+        <b style="color: #990000;">Red</b> icons represent Tesla-only plugs.<br/>
+        <b style="color: #0055ff;">Blue</b> icons represent standards generally open to non-Tesla EVs.<br/>
+        <b>Black</b> icons represent standards that <i>might</i> be open to non-Tesla EVs. (Look for the <img title="other EVs OK" src="/images/car-electric.svg"/> "Other EVs OK" marker or use the "Open To" filter.)<br/>
+        <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons. (Click each name above for the source.)</i>
+    </div>
+    
     <h3>Other icons on the Changes and Data pages</h3>
     <ul class="about-page-list">
         <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, NACS open to non-Tesla, and certain CCS locations in Europe.</li>
@@ -930,11 +943,13 @@ Dialogs
                             </td>
                         </tr>
                         <tr>
-                            <th>Vehicles</th>
-                            <td><select class="form-control otherEVs-select"
-                                        data-container="body"></select></td>
+                            <th>Open To</th>
+                            <td><select class="form-control openTo-select"
+                                        multiple data-actions-box="true"
+                                        data-container="body"
+                                        title="Open To..."></select></td>
                             <td class="btn-xs show-always">
-                                <input type="checkbox" role="switch" id="otherEVs-show" name="otherEVs-show"/>
+                                <input type="checkbox" role="switch" id="openTo-show" name="openTo-show"/>
                             </td>
                         </tr>
                         <tr>

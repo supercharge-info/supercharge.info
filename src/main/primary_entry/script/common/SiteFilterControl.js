@@ -25,7 +25,7 @@ export default class SiteFilterControl {
         }
         this.isModal = this.modal === null;
         this.sel = {}, this.clear = {};
-        this.filters = ['changetype', 'region', 'country', 'state', 'status', 'stalls', 'power', 'otherEVs', 'stallType', 'plugType', 'parking', 'solar', 'battery', 'search'];
+        this.filters = ['changetype', 'region', 'country', 'state', 'status', 'stalls', 'power', 'openTo', 'stallType', 'plugType', 'parking', 'solar', 'battery', 'search'];
         for (const field of this.filters) {
             this.sel[field] = controlParent.find(`select.${field}-select, input.${field}-input`);
             this.sel[field].change(this.changeCallback.bind(this));
@@ -102,8 +102,8 @@ export default class SiteFilterControl {
         this.populateParkingOptions();
         this.setParking(userConfig?.filter.parking);
 
-        this.populateOtherEVsOptions();
-        this.setOtherEVs(userConfig?.filter.otherEVs);
+        this.populateOpenToOptions();
+        this.setOpenTo(userConfig?.filter.openTo);
 
         this.populateSolarOptions();
         this.setSolar(userConfig?.filter.solar);
@@ -141,7 +141,7 @@ export default class SiteFilterControl {
         this.setVisible("stallType", userConfig?.showAlways?.stallType || this.getStallType()?.length > 0);
         this.setVisible("plugType",  userConfig?.showAlways?.plugType  || this.getPlugType()?.length > 0);
         this.setVisible("parking",   userConfig?.showAlways?.parking   || this.getParking()?.length > 0);
-        this.setVisible("otherEVs",  userConfig?.showAlways?.otherEVs  || this.getOtherEVs()  !== null);
+        this.setVisible("openTo",    userConfig?.showAlways?.openTo    || this.getOpenTo()    !== null);
         this.setVisible("solar",     userConfig?.showAlways?.solar     || this.getSolar()     !== null);
         this.setVisible("battery",   userConfig?.showAlways?.battery   || this.getBattery()   !== null);
         this.setVisible("search",    userConfig?.showAlways?.search    || this.getSearch()    !== null);
@@ -331,18 +331,18 @@ export default class SiteFilterControl {
         const parking = Sites.getParking();
         this.sel['parking'].html('<option value="0">(unknown)</option>');
         parking.forEach(p => {
-            this.sel['parking'].append(`<option value="${p.parkingId}">${p.name}</option>`);
+            this.sel['parking'].append(`<option value="${p.parkingId}" data-subtext='${p.description}'>${p.name}</option>`);
         });
         this.sel['parking'].selectpicker("refresh");
     }
 
-    populateOtherEVsOptions() {
-        this.sel['otherEVs'].html(`
-            <option value="">Choose Vehicles</option>
-            <option value="false">Teslas Only</option>
-            <option value="true">Teslas + Other EVs</option>
-        `);
-        this.sel['otherEVs'].selectpicker("refresh");
+    populateOpenToOptions() {
+        const openTo = Sites.getOpenTo();
+        this.sel['openTo'].html("");
+        openTo.forEach(o => {
+            this.sel['openTo'].append(`<option value="${o.openToId}" data-subtext='${o.description}'>${o.name}</option>`);
+        });
+        this.sel['openTo'].selectpicker("refresh");
     }
 
     populateSolarOptions() {
@@ -417,9 +417,9 @@ export default class SiteFilterControl {
         return parking === "" ? null : parking;
     }
 
-    getOtherEVs() {
-        const otherEVs = this.sel['otherEVs'].val();
-        return otherEVs === "" ? null : otherEVs;
+    getOpenTo() {
+        const openTo = this.sel['openTo'].val();
+        return openTo === "" ? null : openTo;
     }
 
     getSolar() {
@@ -474,8 +474,8 @@ export default class SiteFilterControl {
         this.sel['power'].selectpicker("val", power);
     }
 
-    setOtherEVs(otherEVs) {
-        this.sel['otherEVs'].selectpicker("val", otherEVs);
+    setOpenTo(openTo) {
+        this.sel['openTo'].selectpicker("val", openTo);
     }
 
     setStallType(stallType) {

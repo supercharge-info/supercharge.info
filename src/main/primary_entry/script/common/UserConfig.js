@@ -34,7 +34,7 @@ class UserConfig {
             status: [],
             stalls: null,
             power: null,
-            otherEVs: null,
+            openTo: [],
             stallType: [],
             plugType: [],
             parking: [],
@@ -52,7 +52,7 @@ class UserConfig {
             status: true,
             stalls: false,
             power: false,
-            otherEVs: false,
+            openTo: false,
             stallType: false,
             plugType: false,
             parking: false,
@@ -113,8 +113,8 @@ class UserConfig {
         this.scheduleSave();
     }
 
-    setOtherEVs(newOtherEVs) {
-        this.filter.otherEVs = newOtherEVs;
+    setOpenTo(newOpenTo) {
+        this.filter.openTo = newOpenTo;
         this.scheduleSave();
     }
 
@@ -207,7 +207,7 @@ class UserConfig {
             || this.filter.status.length> 0
             || this.filter.stalls !== null
             || this.filter.power !== null
-            || this.filter.otherEVs !== null
+            || this.filter.openTo.length > 0
             || this.filter.stallType.length > 0
             || this.filter.plugType.length > 0
             || this.filter.parking > 0
@@ -262,9 +262,7 @@ class UserConfig {
         this.filter.stallType  = json.filter?.stallType  || this.filter?.stallType;
         this.filter.plugType   = json.filter?.plugType   || this.filter?.plugType;
         this.filter.parking    = json.filter?.parking    || this.filter?.parking;
-        this.filter.otherEVs   = typeof json.filter?.otherEVs === 'boolean'
-            ? String(json.filter?.otherEVs) 
-            : json.filter?.otherEVs || this.filter?.otherEVs;
+        this.filter.openTo     = json.filter?.openTo     || this.filter?.openTo;
         this.filter.solar      = typeof json.filter?.solar === 'boolean'
             ? String(json.filter?.solar) 
             : json.filter?.solar || this.filter?.solar;
@@ -282,7 +280,7 @@ class UserConfig {
         this.showAlways.stallType = json.showAlways?.stallType || this.showAlways?.stallType;
         this.showAlways.plugType  = json.showAlways?.plugType  || this.showAlways?.plugType;
         this.showAlways.parking   = json.showAlways?.parking   || this.showAlways?.parking;
-        this.showAlways.otherEVs  = json.showAlways?.otherEVs  || this.showAlways?.otherEVs;
+        this.showAlways.openTo    = json.showAlways?.openTo    || this.showAlways?.openTo;
         this.showAlways.solar     = json.showAlways?.solar     || this.showAlways?.solar;
         this.showAlways.battery   = json.showAlways?.battery   || this.showAlways?.battery;
         this.showAlways.search    = json.showAlways?.search    || this.showAlways?.search;

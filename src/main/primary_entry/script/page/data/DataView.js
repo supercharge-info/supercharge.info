@@ -66,7 +66,7 @@ export default class DataView {
         userConfig.setStallType(this.filterControl.getStallType());
         userConfig.setPlugType(this.filterControl.getPlugType());
         userConfig.setParking(this.filterControl.getParking());
-        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setOpenTo(this.filterControl.getOpenTo());
         userConfig.setSolar(this.filterControl.getSolar());
         userConfig.setBattery(this.filterControl.getBattery());
         userConfig.setSearch(this.filterControl.getSearch());
@@ -159,6 +159,7 @@ export default class DataView {
         const site = Supercharger.fromJSON(supercharger);
         var s = Status.fromString(supercharger.status);
         var content = Status.getImg(site, s);
+        // TODO: distinguish NACS vs others?
         if (site.otherEVs)     content += '<img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site.solarCanopy)  content += '<img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site.battery)      content += '<img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
@@ -217,7 +218,7 @@ export default class DataView {
                     d.stallType = dataView.filterControl.getStallType()?.join(",");
                     d.plugType = dataView.filterControl.getPlugType()?.join(",");
                     d.parking = dataView.filterControl.getParking()?.join(",");
-                    d.otherEVs = dataView.filterControl.getOtherEVs();
+                    d.openTo = dataView.filterControl.getOpenTo()?.join(",");
                     d.solarCanopy = dataView.filterControl.getSolar();
                     d.battery = dataView.filterControl.getBattery();
                     d.search = dataView.filterControl.getSearch();

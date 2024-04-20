@@ -80,6 +80,7 @@ export default function buildDetailsDiv(site, displayUnit) {
     }
 
     // Other EVs
+    // TODO: distinguish NACS vs others?
     if (site.otherEVs) {
         div += "<tr><th>Other EVs</th><td>Yes</td></tr>";
     }

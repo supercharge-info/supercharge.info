@@ -85,6 +85,24 @@ export default class Supercharger {
         return false;
     }
 
+    isOpenTo(openTo) {
+        // If no filter is selected, don't skip any site
+        if (openTo === null || openTo.length === 0) return true;
+
+        // If "Tesla" filter is checked, include the site if it's marked as NOT allowing other EVs
+        if (openTo.indexOf("1") >= 0 && !this.otherEVs) return true;
+
+        if (this.otherEVs && this.plugs !== null) {
+            // If "NACS" filter is checked, include the site if it's marked as allowing other EVs AND has at least one NACS plug
+            if (openTo.indexOf("2") >= 0 && this.plugs.nacs > 0) return true;
+
+            // If "Other" filter is checked, include the site if it's marked as allowing other EVs AND has at least one non-Tesla-specific plug other than NACS
+            if (openTo.indexOf("3") >= 0 && (this.plugs.ccs1 > 0 || this.plugs.ccs2 > 0 || this.plugs.gbt > 0)) return true;
+        }
+
+        return false;
+    }
+
     isVoting() {
         return this.status === Status.VOTING;
     }
@@ -154,7 +172,7 @@ export default class Supercharger {
 
     formatPower(prefix) {
         if (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt === 0) return '';
-        return `${prefix}${this.stallType && this.plugType && this.stallType.indexOf('+') < 0 ? '' : 'up to '}${this.powerKilowatt} kW`;
+        return `${prefix}${this.stallType && this.plugType && this.stallType.indexOf('+') < 0 ? '' : '≤ '}${this.powerKilowatt} kW`;
     }
 
     getStallPlugSummary(useImages, count) {

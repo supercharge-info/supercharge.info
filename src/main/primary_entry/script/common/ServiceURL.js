@@ -11,6 +11,7 @@ export default {
     SITES_PAGE: base + '/sites',
     SITE_HISTORY: base + '/siteHistory',
     PARKING: base + '/parking',
+    OPEN_TO: base + '/openTo',
 
     USER_CONFIG: base + "/userConfig",
 

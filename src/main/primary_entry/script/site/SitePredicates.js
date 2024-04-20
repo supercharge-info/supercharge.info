@@ -75,7 +75,7 @@ const SitePredicates = {
                 if (!match) return false;
             }
             if (filter.parking?.length > 0 && filter.parking.indexOf(site.parkingId?.toString() ?? "0") < 0) return false;
-            if (filter.otherEVs !== null && String(site.otherEVs) !== filter.otherEVs) return false;
+            if (filter.openTo !== null && !site.isOpenTo(filter.openTo)) return false;
             if (filter.solar !== null && String(site.solarCanopy) !== filter.solar) return false;
             if (filter.battery !== null && String(site.battery) !== filter.battery) return false;
             if (filter.search !== null && !site.matches(filter.search, false)) return false;

@@ -72,7 +72,7 @@ export default class ChangesView {
         userConfig.setStallType(this.filterControl.getStallType());
         userConfig.setPlugType(this.filterControl.getPlugType());
         userConfig.setParking(this.filterControl.getParking());
-        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setOpenTo(this.filterControl.getOpenTo());
         userConfig.setSolar(this.filterControl.getSolar());
         userConfig.setBattery(this.filterControl.getBattery());
         userConfig.setSearch(this.filterControl.getSearch());
@@ -130,7 +130,36 @@ export default class ChangesView {
             (isUpdate ? "?" : "");
         return `${prev} ${isUpdate ? "➜" : "+"} ${Status.getImg(site, s)}`;
     }
-    
+
+    static buildStallPlugSummary(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        const count = changeRow.prevCount > 0 && changeRow.prevCount !== changeRow.stallCount 
+            ? `${changeRow.prevCount}➜<b>${changeRow.stallCount}</b>`
+            : changeRow.stallCount;
+            
+        if (!site) {
+            return `${count} stalls`;
+        }
+
+        return site.getStallPlugSummary(true, count) + (site.otherEVs ? ' <img title="other EVs OK" src="/images/car-electric.svg"/>' : '');
+    }
+
+    static buildSiteDetails(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        if (!site) return changeRow.powerKilowatt > 0 ? `≤ ${changeRow.powerKilowatt} kW` : '';
+
+        var content = site.formatPower('');
+        if (site.solarCanopy)  content += ' <img title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)      content += ' <img title="battery backup" src="/images/battery-charging.svg"/>';
+        
+        const s = site.status;
+        if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
+            content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
+        }
+        return content;
+    }
+
+    /*
     static buildDetails(changeRow) {
         const site = Sites.getById(changeRow.siteId);
         const count = changeRow.prevCount > 0 && changeRow.prevCount !== changeRow.stallCount 
@@ -144,6 +173,7 @@ export default class ChangesView {
 
         var content = '<span class="details">' + site.getStallPlugSummary(true, count) + site.formatPower(' • ');
 
+        // TODO: distinguish NACS vs others?
         if (site.otherEVs)     content += ' <img title="other EVs OK" src="/images/car-electric.svg"/>';
         if (site.solarCanopy)  content += ' <img title="solar canopy" src="/images/solar-power-variant.svg"/>';
         if (site.battery)      content += ' <img title="battery backup" src="/images/battery-charging.svg"/>';
@@ -154,6 +184,7 @@ export default class ChangesView {
         }
         return content + '</span>';
     }
+    */
 
     static buildChild(parentTR, changeRow) {
         const site = Sites.getById(changeRow.siteId);
@@ -194,9 +225,9 @@ export default class ChangesView {
             <table class="child">
                 <tr>
                     <td width="1%"></td>
-                    <td width="59%">${left}</td>
+                    <td width="55%">${left}</td>
                     <td width="1%"></td>
-                    <td width="39%" class="details">${right}</td>
+                    <td width="43%" class="details">${right}</td>
                 </tr>
             </table>`;
     }
@@ -256,7 +287,7 @@ export default class ChangesView {
                     d.stallType = changesView.filterControl.getStallType()?.join(",");
                     d.plugType = changesView.filterControl.getPlugType()?.join(",");
                     d.parking = changesView.filterControl.getParking()?.join(",");
-                    d.otherEVs = changesView.filterControl.getOtherEVs();
+                    d.openTo = changesView.filterControl.getOpenTo()?.join(",");
                     d.solarCanopy = changesView.filterControl.getSolar();
                     d.battery = changesView.filterControl.getBattery();
                     d.search = changesView.filterControl.getSearch();
@@ -275,7 +306,7 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
                     },
-                    "width": "35%"
+                    "width": "36%"
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -288,13 +319,21 @@ export default class ChangesView {
                         return ChangesView.buildStatus(row);
                     },
                     "className": "status",
-                    "width": "12%"
+                    "width": "8%"
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return ChangesView.buildDetails(row);
+                        return ChangesView.buildStallPlugSummary(row);
                     },
-                    "width": "28%"
+                    "className": "details",
+                    "width": "15%"
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return ChangesView.buildSiteDetails(row);
+                    },
+                    "className": "details",
+                    "width": "16%"
                 },
                 {
                     "data": (row, type, val, meta) => {

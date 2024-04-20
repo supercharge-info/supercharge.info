@@ -175,6 +175,7 @@ export default class InfoWindow {
             popupContent += `<img class="status" src="${site.status.getIcon(site)}"/> ${dur}</span>`;
     
             if (site.otherEVs || site.solarCanopy || site.battery) popupContent += ' • ';
+            // TODO: distinguish NACS vs others?
             if (site.otherEVs)     popupContent += '<img title="other EVs OK" src="/images/car-electric.svg"/>';
             if (site.solarCanopy)  popupContent += '<img title="solar canopy" src="/images/solar-power-variant.svg"/>';
             if (site.battery)      popupContent += '<img title="battery backup" src="/images/battery-charging.svg"/>';

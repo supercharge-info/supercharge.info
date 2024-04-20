@@ -67,7 +67,7 @@ export default class FilterDialog {
         userConfig.filter.stallType = this.filterControl.getStallType();
         userConfig.filter.plugType = this.filterControl.getPlugType();
         userConfig.filter.parking = this.filterControl.getParking();
-        userConfig.filter.otherEVs = this.filterControl.getOtherEVs();
+        userConfig.filter.openTo = this.filterControl.getOpenTo();
         userConfig.filter.solar = this.filterControl.getSolar();
         userConfig.filter.battery = this.filterControl.getBattery();
         userConfig.filter.search = this.filterControl.getSearch();

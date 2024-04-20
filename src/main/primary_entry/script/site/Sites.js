@@ -12,6 +12,7 @@ const StatesByRegion = new Map();
 const StatesByCountry = new Map();
 const States = new Set();
 const Parking = new Map();
+const OpenTo = new Map();
 
 export default class Sites {
 
@@ -72,6 +73,9 @@ export default class Sites {
     static getParking() {
         return Parking;
     }
+    static getOpenTo() {
+        return OpenTo;
+    }
 
 /*
 Regions: Map(name, id)
@@ -88,6 +92,9 @@ S-by-C: Map(cid, Set(sname))
     static load() {
         $.getJSON(ServiceURL.PARKING).done(
             (parkingList) => { parkingList.forEach((p) => Parking.set(p.parkingId, p)); }
+        );
+        $.getJSON(ServiceURL.OPEN_TO).done(
+            (openToList) => { openToList.forEach((o) => OpenTo.set(o.openToId, o)); }
         );
 
         return $.getJSON(ServiceURL.SITES).done(
