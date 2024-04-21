@@ -346,7 +346,7 @@ export default class ChangesView {
             "createdRow": (row, data, index) => {
                 const rowJq = $(row);
                 rowJq.attr('data-siteid', data.siteId);
-                if (data.siteStatus === 'OPEN') {
+                if (data.siteStatus === 'OPEN' || data.siteStatus === 'EXPANDING') {
                     rowJq.addClass('success');
                 }
             },
