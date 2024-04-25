@@ -184,10 +184,28 @@ PAGE: map
                         data-live-search="true"></select>
                 <select class="form-control status-select hidden"
                         multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
                         title="Any Status"></select>
                 <select class="form-control stalls-select hidden"></select>
                 <select class="form-control power-select hidden"></select>
-                <select class="form-control otherEVs-select hidden"></select>
+                <select class="form-control stallType-select hidden"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
+                        title="Any Stalls"></select>
+                <select class="form-control plugType-select hidden"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 3"
+                        title="Any Plugs"></select>
+                <select class="form-control parking-select hidden"
+                        multiple data-actions-box="true"
+                        data-selected-text-format="count > 1"
+                        title="Any Parking"></select>
+                <select class="form-control openTo-select hidden"
+                        multiple data-actions-box="true"
+                        title="Open To..."></select>
+                <select class="form-control solar-select hidden"></select>
+                <select class="form-control battery-select hidden"></select>
+                <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="8"/>
                 <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
                 <span id="map-result-count"></span>
             </form>
@@ -328,7 +346,24 @@ PAGE: data
                     title="Any Status"></select>
             <select class="form-control stalls-select hidden"></select>
             <select class="form-control power-select hidden"></select>
-            <select class="form-control otherEVs-select hidden"></select>
+            <select class="form-control stallType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Stalls"></select>
+            <select class="form-control plugType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Plugs"></select>
+            <select class="form-control parking-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 1"
+                    title="Any Parking"></select>
+            <select class="form-control openTo-select hidden"
+                    multiple data-actions-box="true"
+                    title="Open To..."></select>
+            <select class="form-control solar-select hidden"></select>
+            <select class="form-control battery-select hidden"></select>
+            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="12"/>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="data-result-count"></span>
         </form>
@@ -338,16 +373,17 @@ PAGE: data
     <table id="supercharger-data-table" class="table table-striped table-hover table-bordered" style="width: 100%;">
         <thead>
         <tr>
+            <th class="dt-control" data-dt-order="disable"><b class="glyphicon glyphicon-chevron-right btn-xs" title="show all details"></b></th>
             <th>Site Name</th>
             <th>Street Address</th>
             <th>City</th>
             <th>State</th>
             <th title="Postal Code">Zip</th>
             <th>Country</th>
-            <th class="number" title="Stall count + details">Stalls +</th>
-            <th class="number" title="Maximum Power (kilowatts)">kW</th>
             <th>GPS</th>
             <th class="number" title="Elevation (meters)">Elev</th>
+            <th class="number" title="Stall count + details">Stalls</th>
+            <th class="number" title="Maximum Power (kilowatts)">kW</th>
             <th>Status</th>
             <th title="Open Date (if any)">Opened</th>
         </tr>
@@ -416,22 +452,46 @@ PAGE: changes
             <button class="clear stalls-clear hidden" type="button">×</button>
             <select class="form-control power-select hidden"></select>
             <button class="clear power-clear hidden" type="button">×</button>
-            <select class="form-control otherEVs-select hidden"></select>
-            <button class="clear otherEVs-clear hidden" type="button">×</button>
+            <select class="form-control stallType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Stalls"></select>
+            <button class="clear stallType-clear hidden" type="button">×</button>
+            <select class="form-control plugType-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 3"
+                    title="Any Plugs"></select>
+            <button class="clear plugType-clear hidden" type="button">×</button>
+            <select class="form-control parking-select hidden"
+                    multiple data-actions-box="true"
+                    data-selected-text-format="count > 1"
+                    title="Any Parking"></select>
+            <button class="clear parking-clear hidden" type="button">×</button>
+            <select class="form-control openTo-select hidden"
+                    multiple data-actions-box="true"
+                    title="Open To..."></select>
+            <button class="clear openTo-clear hidden" type="button">×</button>
+            <select class="form-control solar-select hidden"></select>
+            <button class="clear solar-clear hidden" type="button">×</button>
+            <select class="form-control battery-select hidden"></select>
+            <button class="clear battery-clear hidden" type="button">×</button>
             <select class="form-control changetype-select"></select>
             <button class="clear changetype-clear hidden">×</button>
+            <input class="form-control search-input hidden" title="Search Text" placeholder="Search Text" size="12"/>
+            <button class="clear search-clear hidden" type="button">×</button>
             <button class="form-control btn-danger reset hidden" title="Reset filters" type="button">Reset</button>
             <span id="changes-result-count"></span>
         </form>
     </div>
-    <table id='changes-table' class='table table-condensed table-hover' style="width: 99%;">
+    <table id='changes-table' class='table table-condensed table-hover' style="width: 100%;">
         <thead>
         <tr>
             <th class="dt-control"><b class="glyphicon glyphicon-chevron-right btn-xs" title="show all details"></b></th>
             <th>Site Name <span class="text-muted wide"> (hover or expand row for address details)</span></th>
-            <th><span class="wide">Change </span>Date</th>
-            <th class="status">Status<span class="wide"> Change</span></th>
-            <th><span class="wide">Site </span>Details <span class="text-muted wide"> (expand row for more)</span></th>
+            <th><span class="narrow">Δ</span><span class="wide">Change</span> Date</th>
+            <th class="status">Status Δ</th>
+            <th>Stalls<span class="wide"> + Plugs</span></th>
+            <th><span class="wide">Power + </span>Details</th>
             <th><span class="wide">Site </span>Links</th>
         </tr>
         </thead>
@@ -539,22 +599,28 @@ PAGE: about
     </div>
     
     <h3>Plug icons</h3>
-    <i>All plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons. (Click each name below for the source.)</i>
     <div class="details">
-        • <img src="/images/NACS.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Tesla-hpwc-model-s.svg" target="_blank">NACS</a>
-        • <img src="/images/CCS1.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type1-ccs.svg" target="_blank">CCS1</a>
-        • <img src="/images/CCS2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Combo-ccs-eu.svg" target="_blank">CCS2</a>
+        • <img src="/images/TPC.svg"/> <a href="https://www.iconarchive.com/show/material-icons-by-pictogrammers/ev-plug-tesla-icon.html" target="_blank">Tesla</a>
+        • <img src="/images/NACS.svg"/> <a href="https://www.iconarchive.com/show/material-icons-by-pictogrammers/ev-plug-tesla-icon.html" target="_blank">NACS</a>
+        • <img src="/images/CCS1.svg"/> <a href="https://www.iconarchive.com/show/material-icons-by-pictogrammers/ev-plug-ccs1-icon.html" target="_blank">CCS1</a>
+        • <img src="/images/CCS2.svg"/> <a href="https://www.iconarchive.com/show/material-icons-by-pictogrammers/ev-plug-ccs2-icon.html" target="_blank">CCS2</a>
         • <img src="/images/TYPE2.svg"/> <a href="https://commons.wikimedia.org/wiki/File:Type_2_mennekes.svg" target="_blank">Type2</a>
         • <img src="/images/GBT.svg"/> <a href="https://commons.wikimedia.org/wiki/File:GBT_20234_%28DC_outline%29.svg" target="_blank">GB/T</a>
     </div>
-
+    <div class="details">
+        <b style="color: #900;">Red</b> icons represent Tesla-only plugs.<br/>
+        <b style="color: #49f;">Blue</b> icons represent standards generally open to non-Tesla EVs.<br/>
+        <b>Black</b> icons represent standards that <i>might</i> be open to non-Tesla EVs. (Look for the <img title="other EVs OK" src="/images/car-electric.svg"/> "Other EVs OK" marker or use the "Open To" filter.)<br/>
+        <i>Plug icons used under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank">CC BY-SA 4.0</a> license via Wikimedia Commons, or <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0</a> license via iconarchive.com. (Click each name above for the source.)</i>
+    </div>
+    
     <h3>Other icons on the Changes and Data pages</h3>
     <ul class="about-page-list">
         <li title="other EVs OK"><img src="/images/car-electric.svg"/> <b>Other EVs OK</b> : Site allows non-Tesla vehicles to charge - for example, locations with Magic Dock, NACS open to non-Tesla, and certain CCS locations in Europe.</li>
-        <li title="solar canopy"><img src="/images/solar-power-variant.svg"/> <b>Solar canopy</b> : Site is at least partially covered by a solar canopy.</li>
-        <li title="battery backup"><img src="/images/battery-charging.svg"/> <b>Battery backup</b> : Site includes battery backup power.</li>
-        <li title="accessible"><img src="/images/accessible.svg"/> <b>Accessible</b> : Site includes at least one accessible charging space.</li>
-        <li title="trailer-friendly"><img src="/images/trailer.svg"/> <b>Trailer-friendly</b> : Site includes at least one trailer-friendly charging space.</li>
+        <li title="solar canopy"><img src="/images/solar-power-variant.svg"/> <img src="/images/no-solar.svg"/> <b>Solar canopy</b> : Whether the site is at least partially covered by a solar canopy.</li>
+        <li title="battery backup"><img src="/images/battery-charging.svg"/> <img src="/images/no-battery.svg"/> <b>Battery backup</b> : Whether the site includes battery backup power.</li>
+        <li title="accessible"><img src="/images/accessible.svg"/> <img src="/images/no-accessible.svg"/> <b>Accessible</b> : Whether the site includes designated accessible charging space(s).</li>
+        <li title="trailer-friendly"><img src="/images/trailer.svg"/> <img src="/images/no-trailer.svg"/> <b>Trailer-friendly</b> : Whether the site includes trailer-friendly charging space(s).</li>
         <li title="Google Map"><img src="/images/gmap.svg"/> <b>Google Map</b> : Link to Google Maps based on the site's address (which might be slightly different than the GPS coordinates).</li>
         <li title="Forum"><img src="/images/forum.svg"/> <b>Forum</b> : Link to the site's relevant thread on a discussion forum.</li>
         <li title="tesla.com or tesla.cn"><img src="/images/red_dot_t.svg"/> <b>Tesla.com</b> or <b>Tesla.cn</b> : Link to Tesla's "Find Us" page for the site.</li>
@@ -820,6 +886,7 @@ Dialogs
                             <th>Status</th>
                             <td><select class="form-control status-select"
                                         multiple data-actions-box="true"
+                                        data-selected-text-format="count > 5"
                                         data-container="body"
                                         title="Any Status"></select></td>
                             <td class="btn-xs show-always">
@@ -827,7 +894,7 @@ Dialogs
                             </td>
                         </tr>
                         <tr>
-                            <th>Stalls</th>
+                            <th>Stall Count</th>
                             <td><select class="form-control stalls-select"
                                         data-container="body"></select></td>
                             <td class="btn-xs show-always">
@@ -843,11 +910,69 @@ Dialogs
                             </td>
                         </tr>
                         <tr>
-                            <th>Vehicles</th>
-                            <td><select class="form-control otherEVs-select"
+                            <th>Stall Type</th>
+                            <td><select class="form-control stallType-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 3"
+                                        data-container="body"
+                                        title="Any Stalls"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="stallType-show" name="stallType-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Plug Type</th>
+                            <td><select class="form-control plugType-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 3"
+                                        data-container="body"
+                                        title="Any Plugs"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="plugType-show" name="plugType-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Parking</th>
+                            <td><select class="form-control parking-select"
+                                        multiple data-actions-box="true"
+                                        data-selected-text-format="count > 1"
+                                        data-container="body"
+                                        title="Any Parking"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="parking-show" name="parking-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Open To</th>
+                            <td><select class="form-control openTo-select"
+                                        multiple data-actions-box="true"
+                                        data-container="body"
+                                        title="Open To..."></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="openTo-show" name="openTo-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Solar</th>
+                            <td><select class="form-control solar-select"
                                         data-container="body"></select></td>
                             <td class="btn-xs show-always">
-                                <input type="checkbox" role="switch" id="otherEVs-show" name="otherEVs-show"/>
+                                <input type="checkbox" role="switch" id="solar-show" name="solar-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Battery</th>
+                            <td><select class="form-control battery-select"
+                                        data-container="body"></select></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="battery-show" name="battery-show"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Search Text</th>
+                            <td><input class="form-control search-input" title="Search Text" placeholder="Search Text"/></td>
+                            <td class="btn-xs show-always">
+                                <input type="checkbox" role="switch" id="search-show" name="search-show" checked/>
                             </td>
                         </tr>
                         <tr>

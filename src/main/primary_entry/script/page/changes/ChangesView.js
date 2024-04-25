@@ -69,7 +69,14 @@ export default class ChangesView {
         userConfig.setStatus(this.filterControl.getStatus());
         userConfig.setStalls(this.filterControl.getStalls());
         userConfig.setPower(this.filterControl.getPower());
-        userConfig.setOtherEVs(this.filterControl.getOtherEVs());
+        userConfig.setStallType(this.filterControl.getStallType());
+        userConfig.setPlugType(this.filterControl.getPlugType());
+        userConfig.setParking(this.filterControl.getParking());
+        userConfig.setOpenTo(this.filterControl.getOpenTo());
+        userConfig.setSolar(this.filterControl.getSolar());
+        userConfig.setBattery(this.filterControl.getBattery());
+        userConfig.setSearch(this.filterControl.getSearch());
+        this.filterControl.handleSearchInput();
         this.filterControl.updateVisibility();
     }
 
@@ -123,68 +130,104 @@ export default class ChangesView {
             (isUpdate ? "?" : "");
         return `${prev} ${isUpdate ? "➜" : "+"} ${Status.getImg(site, s)}`;
     }
-    
-    static buildDetails(changeRow) {
-        const kw = changeRow.powerKilowatt > 0 ? ` • ${changeRow.powerKilowatt} kW` : '';
 
+    static buildStallPlugSummary(changeRow) {
         const site = Sites.getById(changeRow.siteId);
+        const count = changeRow.prevCount > 0 && changeRow.prevCount !== changeRow.stallCount 
+            ? `${changeRow.prevCount}➜<b>${changeRow.stallCount}</b>`
+            : changeRow.stallCount;
+            
         if (!site) {
-            return `${changeRow.stallCount} stalls${kw}`;
+            return `${count} stalls`;
         }
 
-        //const showDetail = site && (Object.keys(site.stalls)?.length > 1 || Object.keys(site.plugs)?.length > 1 || site.accessNotes || site.addressNotes || site.facilityName || site.parkingId !== 1);
+        return site.getStallPlugSummary(true, count) + (site.otherEVs ? ' <img title="other EVs OK" src="/images/car-electric.svg"/>' : '');
+    }
 
-        var content = site.getStallPlugSummary(true) + kw;
+    static buildSiteDetails(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        if (!site) return changeRow.powerKilowatt > 0 ? `≤ ${changeRow.powerKilowatt} kW` : '';
 
-        if (site?.otherEVs)     content += ' <img class="details" title="other EVs OK" src="/images/car-electric.svg"/>';
-        if (site?.solarCanopy)  content += ' <img class="details" title="solar canopy" src="/images/solar-power-variant.svg"/>';
-        if (site?.battery)      content += ' <img class="details" title="battery backup" src="/images/battery-charging.svg"/>';
+        var content = site.formatPower('');
+        if (site.solarCanopy)  content += ' <img title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)      content += ' <img title="battery backup" src="/images/battery-charging.svg"/>';
         
-        const s = site?.status;
+        const s = site.status;
         if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
             content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
         }
         return content;
     }
 
+    /*
+    static buildDetails(changeRow) {
+        const site = Sites.getById(changeRow.siteId);
+        const count = changeRow.prevCount > 0 && changeRow.prevCount !== changeRow.stallCount 
+            ? `${changeRow.prevCount}➜<b>${changeRow.stallCount}</b>`
+            : changeRow.stallCount;
+            
+        if (!site) {
+            const kw = changeRow.powerKilowatt > 0 ? ` • up to ${changeRow.powerKilowatt} kW` : '';
+            return `${count} stalls${kw}`;
+        }
+
+        var content = '<span class="details">' + site.getStallPlugSummary(true, count) + site.formatPower(' • ');
+
+        // TODO: distinguish NACS vs others?
+        if (site.otherEVs)     content += ' <img title="other EVs OK" src="/images/car-electric.svg"/>';
+        if (site.solarCanopy)  content += ' <img title="solar canopy" src="/images/solar-power-variant.svg"/>';
+        if (site.battery)      content += ' <img title="battery backup" src="/images/battery-charging.svg"/>';
+        
+        const s = site.status;
+        if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
+            content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
+        }
+        return content + '</span>';
+    }
+    */
+
     static buildChild(parentTR, changeRow) {
         const site = Sites.getById(changeRow.siteId);
         if (!site) return '';
 
-        var address = $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+        var left = site.hours ? `<div class="limited">${site.hours}</div>` : '';
+        left += $(parentTR).find(".address").attr("title").replace(/•/g, "<br/>");
+        if (site.addressNotes) left += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
 
-        var entries = '<b>Stalls:</b>';
+        var right = `<b>Stalls:</b>`;
         Object.keys(site.stalls).forEach(s => {
             if (site.stalls[s] > 0) {
-                entries += ` • ${site.stalls[s]} `;
-                if (s === 'accessible') entries += '<img class="details" src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
-                else if (s === 'trailerFriendly') entries += '<img class="details" src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
-                else entries += Strings.upperCaseInitial(s);
+                right += ` • ${site.stalls[s]} `;
+                if (s === 'accessible') right += '<img src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
+                else if (s === 'trailerFriendly') right += '<img src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
+                else right += Strings.upperCaseInitial(s);
+            } else if (s === 'accessible') {
+                right += ' • <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+            } else if (s === 'trailerFriendly') {
+                right += ' • <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
             }
         });
-        entries += '<br/><b>Plugs:</b>';
+        right += '<br/><b>Plugs:</b>';
         Object.keys(site.plugs).forEach(p => {
             if (site.plugs[p] > 0) {
-                if (p !== 'multi') entries += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
+                if (p !== 'multi') right += ` • ${site.plugs[p]} ${site.plugImg(p)}`;
             }
         });
         if (site.facilityName) {
-            entries += `<br/><b>Host:</b> ${site.facilityName}`;
-            if (site.facilityHours) entries += ` • ${site.facilityHours}`;
+            right += `<br/><b>Host:</b> ${site.facilityName}`;
+            if (site.facilityHours) right += ` • ${site.facilityHours}`;
         }
-        if (site.parkingId !== 1) {
-            const park = Sites.getParking().get(site.parkingId);
-            entries += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
-        }
-        if (site.addressNotes) address += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
-        if (site.accessNotes) entries += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
+        const park = Sites.getParking().get(site.parkingId);
+        right += `<div title='${park?.description ?? '(unknown)'}'><b>Parking:</b> ${park?.name ?? '(unknown)'}</div>`;
+        if (site.accessNotes) right += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
 
         return `
             <table class="child">
                 <tr>
                     <td width="1%"></td>
-                    <td width="63%">${address}</td>
-                    <td width="36%">${entries}</td>
+                    <td width="55%">${left}</td>
+                    <td width="1%"></td>
+                    <td width="43%" class="details">${right}</td>
                 </tr>
             </table>`;
     }
@@ -241,7 +284,13 @@ export default class ChangesView {
                     d.status = changesView.filterControl.getStatus().join(",");
                     d.stalls = changesView.filterControl.getStalls();
                     d.power = changesView.filterControl.getPower();
-                    d.otherEVs = changesView.filterControl.getOtherEVs();
+                    d.stallType = changesView.filterControl.getStallType()?.join(",");
+                    d.plugType = changesView.filterControl.getPlugType()?.join(",");
+                    d.parking = changesView.filterControl.getParking()?.join(",");
+                    d.openTo = changesView.filterControl.getOpenTo()?.join(",");
+                    d.solarCanopy = changesView.filterControl.getSolar();
+                    d.battery = changesView.filterControl.getBattery();
+                    d.search = changesView.filterControl.getSearch();
                 }
             },
             "rowId": "id",
@@ -257,7 +306,7 @@ export default class ChangesView {
                     "data": (row, type, val, meta) => {
                         return ChangesView.buildSiteName(row);
                     },
-                    "width": "39%"
+                    "width": "36%"
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -270,13 +319,21 @@ export default class ChangesView {
                         return ChangesView.buildStatus(row);
                     },
                     "className": "status",
-                    "width": "12%"
+                    "width": "8%"
                 },
                 {
                     "data": (row, type, val, meta) => {
-                        return ChangesView.buildDetails(row);
+                        return ChangesView.buildStallPlugSummary(row);
                     },
-                    "width": "24%"
+                    "className": "details",
+                    "width": "15%"
+                },
+                {
+                    "data": (row, type, val, meta) => {
+                        return ChangesView.buildSiteDetails(row);
+                    },
+                    "className": "details",
+                    "width": "16%"
                 },
                 {
                     "data": (row, type, val, meta) => {
@@ -289,7 +346,7 @@ export default class ChangesView {
             "createdRow": (row, data, index) => {
                 const rowJq = $(row);
                 rowJq.attr('data-siteid', data.siteId);
-                if (data.siteStatus === 'OPEN') {
+                if (data.siteStatus === 'OPEN' || data.siteStatus === 'EXPANDING') {
                     rowJq.addClass('success');
                 }
             },
@@ -303,6 +360,11 @@ export default class ChangesView {
                 $("#changes-table img, #changes-table span.details").each(function () {
                     window.changesIcons.push($(this));
                 });
+
+                const icon = $('#changes-table th.dt-control b')[0];
+                icon.className = icon.className.replace("down", "right");
+                icon.title = "show all details";
+
                 clearInterval(window.changesInterval);
                 window.changesInterval = setInterval(() => {
                     // Asynchronously initialize tooltips, starting from both ends of the table and working toward the middle

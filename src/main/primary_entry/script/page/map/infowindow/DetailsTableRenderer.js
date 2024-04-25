@@ -7,9 +7,7 @@ import Sites from "../../../site/Sites";
  * This is the content in the InfoWindow that shows up when the user clicks 'details'.
  */
 export default function buildDetailsDiv(site, displayUnit) {
-    let div = "";
-    div += "<div class='info-window-details'>";
-    div += "<table>";
+    var div = "<div class='info-window-details details'><table>";
 
     // Stalls
     if (site.stalls) {
@@ -20,7 +18,10 @@ export default function buildDetailsDiv(site, displayUnit) {
                 if (s === 'accessible') div += '<img src="/images/accessible.svg" title="Accessible" alt="Accessible"/>';
                 else if (s === 'trailerFriendly') div += '<img src="/images/trailer.svg" title="Trailer-friendly" alt="Trailer-friendly"/>';
                 else div += Strings.upperCaseInitial(s);
-
+            } else if (s === 'accessible') {
+                div += ' • <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
+            } else if (s === 'trailerFriendly') {
+                div += ' • <img src="/images/no-trailer.svg" title="NOT Trailer-friendly"/>';
             }
         });
         div += "</td></tr>";
@@ -45,10 +46,8 @@ export default function buildDetailsDiv(site, displayUnit) {
     }
 
     // Parking
-    if (site.parkingId) {
-        const park = Sites.getParking().get(site.parkingId);
-        div += `<tr title='${park?.description ?? '(unknown)'}'><th>Parking</th><td>${park?.name ?? '(unknown)'}</td></tr>`;
-    }
+    const park = Sites.getParking().get(site.parkingId);
+    div += `<tr title='${park?.description ?? '(unknown)'}'><th>Parking</th><td>${park?.name ?? '(unknown)'}</td></tr>`;
 
     // Date Opened
     if (!Objects.isNullOrUndef(site.dateOpened)) {
@@ -82,15 +81,17 @@ export default function buildDetailsDiv(site, displayUnit) {
 
     // Other EVs
     if (site.otherEVs) {
-        div += "<tr><th>Other EVs</th><td>Yes</td></tr>";
+        div += "<tr><th>Other EVs</th><td>Yes";
+        if (site.plugs?.nacs > 0 && (site.plugs?.ccs1 ?? 0) === 0) div += " (with NACS port or adapter)";
+        div += "</td></tr>";
     }
 
 
     div += "</table>";
 
     // Notes
-    if (site.addressNotes) div += `<div class="notes"><b>Address Notes:</b><br/>${site.addressNotes}</div>`;
-    if (site.accessNotes) div += `<div class="notes"><b>Access Notes:</b><br/>${site.accessNotes}</div>`;
+    if (site.addressNotes) div += `<div class="notes"><b>Address notes:</b><br/>${site.addressNotes}</div>`;
+    if (site.accessNotes) div += `<div class="notes"><b>Access notes:</b><br/>${site.accessNotes}</div>`;
     div += '<hr/></div>';
 
     return div;

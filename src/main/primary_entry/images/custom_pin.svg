@@ -8,7 +8,7 @@
       <stop offset="50%" stop-color="#00dd00" />
       <stop offset="75%" stop-color="#00bb00" />
       <stop offset="100%" stop-color="#009900" />
-   </radialGradient>
+  </radialGradient>
   </defs>
   <g
      id="layer1"
