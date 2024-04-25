@@ -1,6 +1,6 @@
 {
   "name": "supercharge.info",
-  "version": "3.9.0",
+  "version": "4.0.0",
   "description": "map",
   "scripts": {
     "build": "echo use 'npm run prodbuild' or 'npm run devbuild'",
@@ -52,6 +52,7 @@
     "core-js": "^3.31.1",
     "datatables.net": "^1.13.5",
     "datatables.net-bs": "^1.13.5",
+    "dayjs": "^1.11.10",
     "highcharts": "^10.3.3",
     "jquery": "3.5.1",
     "jquery-validation": "^1.19.5",
