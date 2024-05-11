@@ -95,7 +95,7 @@ export default class ChangesView {
     static handleChangeClick(event) {
         if (!WindowUtil.isTextSelected()) {
             const target = $(event.target);
-            if (!target.is('a, b, ul, li, img, .details, .dt-control')) {
+            if (!target.is('a, b, ul, li, img, .dt-control')) {
                 if (target.closest('table')?.find('div.open')?.length === 0) {
                     const clickedSiteId = parseInt(target.closest('tr')?.data('siteid') ?? 0);
                     if (clickedSiteId > 0) EventBus.dispatch(MapEvents.show_location, clickedSiteId);

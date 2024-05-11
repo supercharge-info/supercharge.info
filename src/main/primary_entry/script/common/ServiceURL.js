@@ -19,6 +19,7 @@ export default {
     USER_ROUTE_COUNT: base + "/userRoute/count",
 
     CHANGES: base + '/changes',
+    CHANGES_BY_DATE: base + '/changesByDate',
 
     FEEDBACK: base + '/feedback',
 

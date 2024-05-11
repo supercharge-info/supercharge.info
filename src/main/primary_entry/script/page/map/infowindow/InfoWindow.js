@@ -105,7 +105,7 @@ export default class InfoWindow {
         }
     }
 
-    togglePin() {
+    togglePin(event) {
         this.pinned = !this.pinned;
         if (this.isPinned()) {
             $(event.target).removeClass('pin');
@@ -171,6 +171,7 @@ export default class InfoWindow {
             //
             var statusDate = site.isOpen() ? dayjs(site.dateOpened) : dayjs().subtract(site.statusDays, 'd');
             var dur = dayjs().to(statusDate, true), days = dayjs().diff(statusDate, 'd');
+            if (days <= 0) dur = "today";
             popupContent += ` • <span class="${site.status.className}" title="${site.status.getTitle(site)}${dur.indexOf('day') < 0 ? ` ${days} days` : ''}">`;
             popupContent += `<img class="status" src="${site.status.getIcon(site)}"/> ${dur}</span>`;
     

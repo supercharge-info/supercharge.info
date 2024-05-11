@@ -172,7 +172,7 @@ export default class Supercharger {
 
     formatPower(prefix) {
         if (Objects.isNullOrUndef(this.powerKilowatt) || this.powerKilowatt === 0) return '';
-        return `${prefix}${this.stallType && this.plugType && this.stallType.indexOf('+') < 0 ? '' : '≤ '}${this.powerKilowatt} kW`;
+        return `${prefix}${this.stallType && this.stallType.indexOf('+') < 0 ? '' : '≤ '}${this.powerKilowatt} kW`;
     }
 
     getStallPlugSummary(useImages, count) {
@@ -213,7 +213,7 @@ export default class Supercharger {
 	}
     
     getShortMarkerTitle() {
-        return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} ${this.stallType && this.plugType ? '@' : '@ ≤'} ${this.powerKilowatt || '?'} kW)`);
+        return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} ${this.stallType && this.stallType.indexOf('+') < 0 ? '@' : '@ ≤'} ${this.powerKilowatt || '?'} kW)`);
     }
 
     getMarkerMultiplier() {
@@ -238,7 +238,9 @@ export default class Supercharger {
     }
 
     getGmapLink() {
-        if (Objects.isNotNullOrUndef(this.address.street)) {
+        if (Objects.isNotNullOrUndef(this.location)) {
+            return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${this.location.lat}%2C${this.location.lng}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
+        } else if (Objects.isNotNullOrUndef(this.address.street)) {
             const addr = this.address;
             const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
             return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
