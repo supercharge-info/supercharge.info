@@ -55,10 +55,6 @@ export default class TotalOpenWorldLineChart {
             },
             xAxis: {
                 type: 'datetime',
-                dateTimeLabelFormats: {
-                    month: '%b %e',
-                    year: '%b'
-                },
                 plotLines: plotLinesArray
             },
             yAxis: {
@@ -68,13 +64,9 @@ export default class TotalOpenWorldLineChart {
                 min: 0
             },
             tooltip: {
-                formatter: function () {
-                    return '<b>World Wide</b><br/>' +
-                        Highcharts.dateFormat('%b %e %Y', this.x) + '<br/>' +
-                        "superchargers: " + this.y;
-                }
+                headerFormat: '<b>World Wide</b><br/>',
+                pointFormat: '{point.x:%b %e %Y}<br/>superchargers: <b>{point.y:,.0f}</b>'
             },
-
             series: [
                 {
                     data: livePerDate,
