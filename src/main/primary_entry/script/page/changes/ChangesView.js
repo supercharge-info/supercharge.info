@@ -159,33 +159,6 @@ export default class ChangesView {
         return content;
     }
 
-    /*
-    static buildDetails(changeRow) {
-        const site = Sites.getById(changeRow.siteId);
-        const count = changeRow.prevCount > 0 && changeRow.prevCount !== changeRow.stallCount 
-            ? `${changeRow.prevCount}➜<b>${changeRow.stallCount}</b>`
-            : changeRow.stallCount;
-            
-        if (!site) {
-            const kw = changeRow.powerKilowatt > 0 ? ` • up to ${changeRow.powerKilowatt} kW` : '';
-            return `${count} stalls${kw}`;
-        }
-
-        var content = '<span class="details">' + site.getStallPlugSummary(true, count) + site.formatPower(' • ');
-
-        // TODO: distinguish NACS vs others?
-        if (site.otherEVs)     content += ' <img title="other EVs OK" src="/images/car-electric.svg"/>';
-        if (site.solarCanopy)  content += ' <img title="solar canopy" src="/images/solar-power-variant.svg"/>';
-        if (site.battery)      content += ' <img title="battery backup" src="/images/battery-charging.svg"/>';
-        
-        const s = site.status;
-        if (Objects.isNotNullOrUndef(s) && s !== Status.fromString(changeRow.siteStatus)) {
-            content += ` • <span class='text-muted status-select ${s.value}'>now <img src='${s.getIcon(site)}' title='${s.getTitle(site)}' alt='${s.getTitle(site)}'/></span>`;
-        }
-        return content + '</span>';
-    }
-    */
-
     static buildChild(parentTR, changeRow) {
         const site = Sites.getById(changeRow.siteId);
         if (!site) return '';
@@ -346,7 +319,7 @@ export default class ChangesView {
             "createdRow": (row, data, index) => {
                 const rowJq = $(row);
                 rowJq.attr('data-siteid', data.siteId);
-                if (data.siteStatus === 'OPEN' || data.siteStatus === 'EXPANDING') {
+                if (data.siteStatus === 'OPEN') {
                     rowJq.addClass('success');
                 }
             },
