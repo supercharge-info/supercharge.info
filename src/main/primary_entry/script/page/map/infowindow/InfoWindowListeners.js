@@ -39,7 +39,7 @@ class InfoWindowListeners {
         $(document).on('click', '.pin-marker-trigger', (event) => {
             const site = toSite(event);
             const infoWindow = site.marker.infoWindow;
-            infoWindow.togglePin();
+            infoWindow.togglePin(event);
         });
 
         $(document).on('click', '.zoom-to-site-trigger', (event) => {

@@ -16,6 +16,7 @@ export default class SiteFilterControl {
         this.controlParent = controlParent;
         this.changeCallback = changeCallback;
         this.modal = null;
+        this.lastSearch = null;
         if (typeof filterDialog?.getFilterControl === 'function') {
             this.modal = filterDialog;
             this.modal.dialog.on("hide.bs.modal", () => {
@@ -197,10 +198,6 @@ export default class SiteFilterControl {
         userConfig.initFilters();
         this.init();
         this.changeCallback();
-    }
-
-    handleSiteOptions() {
-        console.log("TODO: handleSiteOptions");
     }
 
     handleSearchInput() {

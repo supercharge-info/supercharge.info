@@ -16,8 +16,8 @@ TotalOpen.buildVerticalYearPlotLines = function () {
                     text: year,
                     align: 'left',
                     style: {
-                        color: 'gray',
-                        fontSize: '1.7em'
+                        color: 'lightgray',
+                        fontSize: '1.5em'
 
                     }
                 }

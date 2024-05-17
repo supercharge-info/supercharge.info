@@ -32,7 +32,8 @@ export default class MarkerFactory {
         supercharger.marker = marker;
         marker.tooltipText = supercharger.getMarkerTitle();
         marker.tooltipClass = "tooltip " + supercharger.status.className;
-        marker.on('click', this._handleMarkerClick.bind(this, marker, supercharger));
+        marker.site = supercharger;
+        marker.on('click', this._handleMarkerClick.bind(this, marker));
         marker.bindTooltip(marker.tooltipText, { className: marker.tooltipClass, opacity: 0.92 });
         if (batch) return marker;
         mapLayers.addToOverlay(marker);
@@ -82,10 +83,10 @@ export default class MarkerFactory {
         mapLayers.addToOverlay(marker);
     }
 
-    _handleMarkerClick(marker, supercharger) {
+    _handleMarkerClick(marker) {
         // create if necessary
         if (!marker.infoWindow) {
-            marker.infoWindow = new InfoWindow(this.mapApi, marker, supercharger);
+            marker.infoWindow = new InfoWindow(this.mapApi, marker, marker.site);
         }
 
         // If we click one that is already open, do nothing.

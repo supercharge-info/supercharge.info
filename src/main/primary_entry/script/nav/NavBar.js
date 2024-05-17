@@ -60,6 +60,9 @@ export default class NavBar {
 
         // body style is set to display: none initially to make initial rendering cleaner
         $("body")[0].style.display = "";
+
+        // For people who keep the site open, check for DB updates every hour
+        setInterval(() => UpdateCheck.doCheck(), 3600000);
     }
 
     initListeners() {
