@@ -6,6 +6,7 @@ import CountryPieChart from "./CountryPieChart";
 import StateBarChart from "./StateBarChart";
 import StatusDaysBarChart from "./StatusDaysBarChart";
 import StallCountChart from "./StallCountChart";
+import StatusPaceChart from "./StatusPaceChart";
 import Highcharts from "highcharts";
 import $ from "jquery";
 
@@ -16,6 +17,7 @@ export default class ChartsPage {
             // TODO: enable accessibility on all charts
             new TotalOpenWorldLineChart().draw();
             new TotalOpenRegionLineChart().draw();
+            new StatusPaceChart().draw();
             new StallCountChart().draw();
             new CountryPieChart().draw();
             new CountryBarChart().draw();

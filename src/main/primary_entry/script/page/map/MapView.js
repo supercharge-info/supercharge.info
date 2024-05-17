@@ -155,7 +155,13 @@ export default class MapView {
 
         // geocode (search) control
         //
-        L.Control.geocoder().addTo(this.mapApi);
+        L.Control.geocoder({
+            iconLabel: "Address Search",
+            placeholder: "Address Search",
+            showResultIcons: false
+        }).addTo(this.mapApi);
+
+        $(".leaflet-control-geocoder button").tooltip({ placement: "left", title: "Address Search - enter address to find on the map" });
 
         // scale control TODO: update scale unit when user changes it on profile/UI.
         //
@@ -256,9 +262,12 @@ export default class MapView {
         new SiteIterator()
         .withPredicate(SitePredicates.HAS_MARKER)
         .iterate((supercharger) => {
-            supercharger.marker.remove();
-            supercharger.marker = null;
-            removed++;
+            if (!supercharger.marker.infoWindow?.isPinned()) {
+                supercharger.marker.infoWindow?.closeWindow();
+                supercharger.marker.remove();
+                supercharger.marker = null;
+                removed++;
+            }
         });
         console.log(`zoom=${this.zoom} removed=${removed} t=${(performance.now() - t)}`);
         return infoWindows;
@@ -286,9 +295,17 @@ export default class MapView {
             this.markerFactory.createMarker(supercharger, this.markerSize, false);
         }
         supercharger.marker.fire('click');
+        $.doTimeout('pinSite', 10, () => {
+            supercharger.marker.infoWindow.pinned = true;
+            supercharger.marker.infoWindow.redraw();
+        });
     }
 
     unpinSites() {
+        for (const s of this.pinnedSites) {
+            s.marker.infoWindow.pinned = false;
+            s.marker.infoWindow.redraw();
+        }
         this.pinnedSites = [];
     }
 

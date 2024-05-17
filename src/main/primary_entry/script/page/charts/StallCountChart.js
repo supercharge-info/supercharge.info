@@ -2,6 +2,7 @@ import Highcharts from "highcharts";
 import ServiceURL from "../../common/ServiceURL";
 import $ from "jquery";
 import Dates from "../../util/Dates";
+import TotalOpen from "./TotalOpen";
 
 export default class StallCountChart {
 
@@ -13,6 +14,8 @@ export default class StallCountChart {
     drawImpl(counts) {
 
         const stallCounts = [];
+
+        const plotLinesArray = TotalOpen.buildVerticalYearPlotLines();
 
         counts.forEach((count) => {
             const date = Dates.fromString(count.date);
@@ -35,7 +38,7 @@ export default class StallCountChart {
                 enabled: false
             },
             title: {
-                text: 'Open Superchargers <b>Stalls</b> Globally'
+                text: 'Open Supercharger <b>Stalls</b> Globally'
             },
             subtitle: {
                 text: null
@@ -45,12 +48,7 @@ export default class StallCountChart {
             },
             xAxis: {
                 type: 'datetime',
-                dateTimeLabelFormats: {
-                    day: '%b %e',
-                    week: '%b %e',
-                    month: '%b %e',
-                    year: '%b %e'
-                }
+                plotLines: plotLinesArray
             },
             yAxis: {
                 title: {
@@ -58,11 +56,8 @@ export default class StallCountChart {
                 }
             },
             tooltip: {
-                formatter: function () {
-                    return '<b>Open Stalls</b><br/>' +
-                        Highcharts.dateFormat('%b %e %Y', this.x) + '<br/>' +
-                        this.y;
-                }
+                headerFormat: '<b>Open Stalls</b><br/>',
+                pointFormat: '{point.x:%b %e %Y}<br/><b>{point.y:,.0f}</b>'
             },
 
             series: [

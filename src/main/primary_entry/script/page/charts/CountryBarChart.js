@@ -82,7 +82,10 @@ export default class CountryBarChart {
                     data: countryOpenCountList,
                     color: ChartColor.STATUS_OPEN
                 }
-            ]
+            ],
+            tooltip: {
+                shared: true
+            }
         });
 
 

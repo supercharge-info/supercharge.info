@@ -77,10 +77,6 @@ export default class TotalOpenRegionChart {
             },
             xAxis: {
                 type: 'datetime',
-                dateTimeLabelFormats: {
-                    month: '%b %e',
-                    year: '%b'
-                },
                 plotLines: plotLinesArray
             },
             yAxis: {
@@ -90,11 +86,8 @@ export default class TotalOpenRegionChart {
                 min: 0
             },
             tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
-                        Highcharts.dateFormat('%b %e %Y', this.x) + '<br/>' +
-                        "superchargers: " + this.y;
-                }
+                headerFormat: '<b>{series.name}</b><br/>',
+                pointFormat: '{point.x:%b %e %Y}<br/>superchargers: <b>{point.y:,.0f}</b>'
             },
 
             series: [

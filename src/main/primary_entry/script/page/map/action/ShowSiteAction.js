@@ -21,8 +21,9 @@ export default class ShowSiteAction {
 
         // Change page to the map page.
         EventBus.dispatch("nav-change-page-event", 'map');
+        EventBus.dispatch("viewport-changed-event");
 
-        const supercharger = Sites.getById(clickedSiteId);
+        const site = Sites.getById(clickedSiteId);
 
         /*
          * If user navigated directly to changes page then map page may not be initialized yet.  Wait for it.
@@ -38,7 +39,7 @@ export default class ShowSiteAction {
             }
 
             //console.log(`${supercharger.id} calling pan_zoom`);
-            EventBus.dispatch(MapEvents.pan_zoom, { latLng: supercharger.location, minZoom: 10 });
+            EventBus.dispatch(MapEvents.pan_zoom, { latLng: site.location, minZoom: 10 });
 
             /* Now the map is initialized, but the selected marker may not be because we initialize markers
              * in response to viewport changes on the map. */
@@ -49,14 +50,14 @@ export default class ShowSiteAction {
                     return true;
                 }
 
-                if (supercharger?.marker?.infoWindow?.isShown()) {
+                if (site?.marker?.infoWindow?.isShown()) {
                     //console.log(`${supercharger.id} infowindow shown - DONE`);
                     return false;
                 }
 
-                if (supercharger) {
+                if (site) {
                     //console.log(`${supercharger.id} calling pinSite`);
-                    EventBus.dispatch("pin-site-event", supercharger);
+                    EventBus.dispatch("pin-site-event", site);
                 }
 
                 //console.log(`${supercharger.id} inner retry`);
