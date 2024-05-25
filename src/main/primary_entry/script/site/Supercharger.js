@@ -175,11 +175,11 @@ export default class Supercharger {
         return `${prefix}${this.stallType && this.stallType.indexOf('+') < 0 ? '' : '≤ '}${this.powerKilowatt} kW`;
     }
 
-    getStallPlugSummary(useImages, count) {
-        count = count ?? this.numStalls;
-        if (!this.stalls || !count || count === 0) return '';
+    getStallPlugSummary(useImages, countDisplay) {
+        countDisplay = countDisplay ?? this.numStalls;
+        if (!this.stalls || !countDisplay || countDisplay === 0) return '';
 
-        var summary = `<span class="details">${count} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
+        var summary = `<span class="details">${countDisplay} ${Strings.upperCaseInitial(this.stallType) ?? ''} `;
         if (this.plugType) {
             summary += useImages ? this.plugImg(this.plugType) : PLUG_DISPLAY[this.plugType];
         } else {
@@ -187,12 +187,11 @@ export default class Supercharger {
         }
         // special cases for the most common multi-connector stalls (MagicDock and CCS2+TYPE2)
         if (this.numStalls === this.plugs?.nacs && this.plugs?.nacs === this.plugs?.ccs1) {
-            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}</span>`;
+            summary = `<span class="details" title="MagicDock (NACS+CCS1)">${countDisplay} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}`;
         } else if (this.numStalls === this.plugs?.ccs2 && this.plugs?.ccs2 === this.plugs?.type2) {
-            summary = `<span class="details" title="Dual-cable CCS2+TYPE2">${this.numStalls} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/CCS2.svg"/><img src="/images/TYPE2.svg"/>' : 'CCS2+TYPE2'}</span>`;
-        } else {
-            summary += '</span>';
-        }
+            summary = `<span class="details" title="Dual-cable CCS2+TYPE2">${countDisplay} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/CCS2.svg"/><img src="/images/TYPE2.svg"/>' : 'CCS2+TYPE2'}`;
+        } 
+        summary += '</span>';
 
         if (useImages) {
             if (this.stalls.accessible === 0) summary += ' <img src="/images/no-accessible.svg" title="NOT Accessible"/>';
