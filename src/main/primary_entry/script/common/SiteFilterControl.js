@@ -292,7 +292,7 @@ export default class SiteFilterControl {
 
     populatePowerOptions() {
         this.sel['power'].html("<option value=''>Any Power</option>");
-        const power = [72, 120, 150, 250, 325];
+        const power = [72, 120, 150, 250, 325, 500];
         power.forEach(p => {
             this.sel['power'].append(`<option value="${p}">&ge; ${p} kW</option>`);
         });
