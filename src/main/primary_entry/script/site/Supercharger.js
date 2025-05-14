@@ -92,12 +92,19 @@ export default class Supercharger {
         // If "Tesla" filter is checked, include the site if it's marked as NOT allowing other EVs
         if (openTo.indexOf("1") >= 0 && !this.otherEVs) return true;
 
-        if (this.otherEVs && this.plugs !== null) {
+        if (this.otherEVs && this.plugs !== (null || undefined)) {
             // If "NACS" filter is checked, include the site if it's marked as allowing other EVs AND has at least one NACS plug
             if (openTo.indexOf("2") >= 0 && this.plugs.nacs > 0) return true;
 
             // If "Other" filter is checked, include the site if it's marked as allowing other EVs AND has at least one non-Tesla-specific plug other than NACS
             if (openTo.indexOf("3") >= 0 && (this.plugs.ccs1 > 0 || this.plugs.ccs2 > 0 || this.plugs.gbt > 0)) return true;
+        }
+
+        if (this.otherEVs && this.plugs === (null || undefined)) {
+            // Case for sites that are marked as allowing other EVs but have no plugs listed (EG: ones in planning stage)
+
+            // If "Other" filter is checked, include the site as it's marked as allowing other EVs
+            if (openTo.indexOf("3") >= 0) return true;
         }
 
         return false;
