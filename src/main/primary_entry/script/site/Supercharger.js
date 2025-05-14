@@ -12,7 +12,7 @@ import ServiceURL from "../common/ServiceURL";
 
 const BASE_STALLS = ['v2', 'v3', 'v4', 'urban'];
 const BASE_PLUGS = ['tpc', 'nacs', 'ccs1', 'ccs2', 'type2', 'gbt'];
-const PLUG_DISPLAY = {'tpc': 'Tesla', 'nacs': 'NACS', 'ccs1': 'CCS1', 'ccs2': 'CCS2', 'type2': 'Type2', 'gbt': 'GB/T'};
+const PLUG_DISPLAY = { 'tpc': 'Tesla', 'nacs': 'NACS', 'ccs1': 'CCS1', 'ccs2': 'CCS2', 'type2': 'Type2', 'gbt': 'GB/T' };
 
 /**
  * Properties:
@@ -92,12 +92,19 @@ export default class Supercharger {
         // If "Tesla" filter is checked, include the site if it's marked as NOT allowing other EVs
         if (openTo.indexOf("1") >= 0 && !this.otherEVs) return true;
 
-        if (this.otherEVs && this.plugs !== null) {
+        if (this.otherEVs && this.plugs !== (null || undefined)) {
             // If "NACS" filter is checked, include the site if it's marked as allowing other EVs AND has at least one NACS plug
             if (openTo.indexOf("2") >= 0 && this.plugs.nacs > 0) return true;
 
             // If "Other" filter is checked, include the site if it's marked as allowing other EVs AND has at least one non-Tesla-specific plug other than NACS
             if (openTo.indexOf("3") >= 0 && (this.plugs.ccs1 > 0 || this.plugs.ccs2 > 0 || this.plugs.gbt > 0)) return true;
+        }
+
+        if (this.otherEVs && this.plugs === (null || undefined)) {
+            // Case for sites that are marked as allowing other EVs but have no plugs listed (EG: ones in planning stage)
+
+            // If "Other" filter is checked, include the site as it's marked as allowing other EVs
+            if (openTo.indexOf("3") >= 0) return true;
         }
 
         return false;
@@ -190,7 +197,7 @@ export default class Supercharger {
             summary = `<span class="details" title="MagicDock (NACS+CCS1)">${countDisplay} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/NACS.svg"/><img src="/images/CCS1.svg"/>' : 'MagicDock'}`;
         } else if (this.numStalls === this.plugs?.ccs2 && this.plugs?.ccs2 === this.plugs?.type2) {
             summary = `<span class="details" title="Dual-cable CCS2+TYPE2">${countDisplay} ${Strings.upperCaseInitial(this.stallType)} ${useImages ? '<img src="/images/CCS2.svg"/><img src="/images/TYPE2.svg"/>' : 'CCS2+TYPE2'}`;
-        } 
+        }
         summary += '</span>';
 
         if (useImages) {
@@ -209,8 +216,8 @@ export default class Supercharger {
             (Objects.isNullOrUndef(this.hours) ? "" : `<div class="limited">Hours: ${this.hours}</div>`) +
             (Objects.isNullOrUndef(this.numStalls) || this.numStalls === 0 ? "" : ` • ${sitestalls}`) +
             this.formatPower(' • ');
-	}
-    
+    }
+
     getShortMarkerTitle() {
         return `• ${this.displayName}` + (this.isUserAdded() ? "" : ` (${this.numStalls || '?'} ${this.stallType && this.stallType.indexOf('+') < 0 ? '@' : '@ ≤'} ${this.powerKilowatt || '?'} kW)`);
     }
@@ -241,7 +248,7 @@ export default class Supercharger {
             return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${this.location.lat}%2C${this.location.lng}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
         } else if (Objects.isNotNullOrUndef(this.address.street)) {
             const addr = this.address;
-            const query = encodeURI(`${addr.street||''} ${addr.city||''} ${addr.state||''} ${addr.zip||''} ${addr.country||''}`);
+            const query = encodeURI(`${addr.street || ''} ${addr.city || ''} ${addr.state || ''} ${addr.zip || ''} ${addr.country || ''}`);
             return `<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${query.replace(/"/g, '%22')}"><img src="/images/gmap.svg" title="Google Map"/></a>`;
         }
     }
@@ -301,8 +308,8 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.stalls = jsonObject.stalls;
     if (supercharger.stalls && (supercharger.stalls.other ?? 0) === 0) {
         for (const s of BASE_STALLS) {
-           if (supercharger.stalls[s] > 0 && !supercharger.stallType) supercharger.stallType = Strings.upperCaseInitial(s);
-           else if (supercharger.stalls[s] > 0) supercharger.stallType += '+' + Strings.upperCaseInitial(s);
+            if (supercharger.stalls[s] > 0 && !supercharger.stallType) supercharger.stallType = Strings.upperCaseInitial(s);
+            else if (supercharger.stalls[s] > 0) supercharger.stallType += '+' + Strings.upperCaseInitial(s);
         }
     }
     supercharger.plugs = jsonObject.plugs;
@@ -333,10 +340,10 @@ Supercharger.fromJSON = function (jsonObject) {
     supercharger.history =
         jsonObject.status == 'OPEN' || jsonObject.status == 'EXPANDING' ?
             [{ siteStatus: jsonObject.status, date: jsonObject.dateOpened }]
-        : jsonObject.statusDays ? [{
-            siteStatus: jsonObject.status,
-            date: new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() - jsonObject.statusDays)).toISOString().split('T')[0]
-        }] : [];
+            : jsonObject.statusDays ? [{
+                siteStatus: jsonObject.status,
+                date: new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() - jsonObject.statusDays)).toISOString().split('T')[0]
+            }] : [];
     supercharger.historyLoaded = false;
     return supercharger;
 };
