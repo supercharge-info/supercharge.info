@@ -12,6 +12,7 @@ import "../css/main.css";
 // image file to something like [md5].png and have the below import statements return the actual path (with the md5),
 // this for perfect caching.  For now let's keep it simple, webpack is configured not to change the image names.
 import "../images/logo.svg";
+import "../images/logo.png";
 import "../images/avatar-placeholder.png";
 import "../images/feed-icon.png";
 import "../images/become_a_patron_button@2x.png";

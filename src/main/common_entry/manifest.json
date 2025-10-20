@@ -1,0 +1,7 @@
+{
+    "name": "supercharge.info",
+    "icons": [{"src":"/images/logo.png"}],
+    "start_url": "/",
+    "display": "standalone",
+    "scope": "/"
+}
