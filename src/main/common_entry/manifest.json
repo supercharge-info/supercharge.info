@@ -1,6 +1,6 @@
 {
     "name": "supercharge.info",
-    "icons": [{"src":"/images/logo.png"}],
+    "icons": [{"src":"/images/icon.svg","sizes":"any"}],
     "start_url": "/",
     "display": "standalone",
     "scope": "/"
