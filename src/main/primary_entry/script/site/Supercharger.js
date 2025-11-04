@@ -247,14 +247,14 @@ export default class Supercharger {
     }
 
     getPlugShareLink(map) {
-        var psLink = "https://api.plugshare.com/view/", psClass = "", psTitle = "PlugShare";
+        var psLink = "https://www.plugshare.com/", psClass = "", psTitle = "PlugShare";
         if (this.plugshareId) {
             psLink += `location/${this.plugshareId}`;
         } else {
             var bounds = map?.getBounds();
             var spanLat = Math.min(0.05, Math.abs(bounds?.getNorthEast().lat - bounds?.getSouthWest().lat));
             var spanLng = Math.min(0.05, Math.abs(bounds?.getNorthEast().lng - bounds?.getSouthWest().lng));
-            psLink += `map?latitude=${this.location.lat}&longitude=${this.location.lng}&spanLat=${Objects.isNumber(spanLat) ? spanLat : 0.05}&spanLng=${Objects.isNumber(spanLng) ? spanLng : 0.05}`;
+            psLink += `?latitude=${this.location.lat}&longitude=${this.location.lng}&spanLat=${Objects.isNumber(spanLat) ? spanLat : 0.05}&spanLng=${Objects.isNumber(spanLng) ? spanLng : 0.05}`;
             psClass = "faded";
             psTitle += " (map only)";
         }

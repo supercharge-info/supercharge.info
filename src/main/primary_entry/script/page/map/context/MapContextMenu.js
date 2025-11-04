@@ -40,7 +40,7 @@ export default class MapContextMenu {
             var center = this.popup.getLatLng();
             var spanLat = Math.abs(map.getBounds().getNorthEast().lat - map.getBounds().getSouthWest().lat);
             var spanLng = Math.abs(map.getBounds().getNorthEast().lng - map.getBounds().getSouthWest().lng);
-            event.target.href = `https://api.plugshare.com/view/map?latitude=${center.lat}&longitude=${center.lng}&spanLat=${spanLat}&spanLng=${spanLng}`;
+            event.target.href = `https://www.plugshare.com/?latitude=${center.lat}&longitude=${center.lng}&spanLat=${spanLat}&spanLng=${spanLng}`;
             event.target.target = "_blank";
             this.popup.close();
         });

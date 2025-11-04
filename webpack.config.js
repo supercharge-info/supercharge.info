@@ -70,7 +70,7 @@ module.exports = (env) => {
                 // This is here only so that webpack doesn't try to process font files referenced by bootstrap css.
                 // https://github.com/webpack-contrib/url-loader
                 {
-                    test: /(\.woff?$|\.woff2?$|\.ttf?$|\.eot?$)/,
+                    test: /\.(woff2?|ttf|eot)$/,
                     exclude: /node_modules/,
                     loader: 'asset/resource'
                 },
@@ -173,7 +173,8 @@ module.exports = (env) => {
                 patterns: [
                     {from: 'src/main/common_entry/.htaccess'},
                     {from: 'src/main/common_entry/favicon.ico'},
-                    {from: 'src/main/common_entry/sitemap.xml'}
+                    {from: 'src/main/common_entry/sitemap.xml'},
+                    {from: 'src/main/common_entry/manifest.json'}
                 ]
             }),
             new ESLintPlugin(),
